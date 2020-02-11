@@ -1,13 +1,6 @@
 ﻿////////////////////////////////////////////////
 // 読み取得
 ////////////////////////////////////////////////
-// kuromoji.js
-let GROBAL_TOKENIZER = null
-kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
-    if(!err){
-        GROBAL_TOKENIZER = _tokenizer;
-    }
-});
 
 function setYomi(inputLines){
     const outputArea = document.form_toYomi.textarea2;
