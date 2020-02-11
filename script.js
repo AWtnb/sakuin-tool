@@ -10,6 +10,8 @@ kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
 });
 
 function setYomi(inputLines){
+    const outputArea = document.form_toYomi.textarea2;
+    outputArea.value = "（🤔よみがな計算中…）";
     const promise = new Promise((resolve, reject) => {
         kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
             if (err) {
@@ -20,7 +22,6 @@ function setYomi(inputLines){
             }
         });
     });
-
     promise.then((tokenizer) => {
         let yomiArray = inputLines.split(/\n/).map(line => {
             let parsed = tokenizer.tokenize(line);
@@ -38,11 +39,12 @@ function setYomi(inputLines){
                 }
                 return token.reading;
             });
-            return yomi.join("")
+            return yomi.join("");
         });
-        document.form_toYomi.textarea2.value = yomiArray.join("\n")
+        outputArea.value = yomiArray.join("\n")
     })
     .catch((e) => {
+        outputArea.value = "解析失敗…\nやり直してみてください！";
         console.log(e);
     });
 }
