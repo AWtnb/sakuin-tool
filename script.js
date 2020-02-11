@@ -12,20 +12,21 @@ kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
 function getYomi(inputLines){
     if (! GROBAL_TOKENIZER) {
         console.log("failed to load tokenizer...");
-        return
+        return "取得できませんでした。もう一度やり直してみてください！"
     }
     let yomiArray = inputLines.split(/\n/).map(line => {
         let parsed = GROBAL_TOKENIZER.tokenize(line);
         let yomi = parsed.map(token => {
+            console.log(token.surface_form, token.word_type, token.pos, token.reading);
             let surface = token.surface_form;
             if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
                 return surface;
             }
-            if (token.word_type != "KNOWN") {
-                return "■";
-            }
             if (token.pos == "記号") {
                 return "";
+            }
+            if (token.word_type != "KNOWN") {
+                return token.surface_form;
             }
             return token.reading;
         });

@@ -36,16 +36,18 @@ a {
 
 <div style="display:inline-flex"><form name="form_toYomi">
 <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-
-<input type="button" value="取得" onclick="clickBtn_yomi()" />
-
+<input type="button" value="取得" onclick="clickBtn_yomi()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="ここに結果が表示されます" readonly></textarea>
+<input type="button" value="全選択" onclick="clickBtn_yomi_select()"/>
 </form></div>
 
 <script>
 function clickBtn_yomi () {
     let lines = document.form_toYomi.textarea1.value;
     document.form_toYomi.textarea2.value = getYomi(lines);
+}
+function clickBtn_yomi_select () {
+    document.form_toYomi.textarea2.select()
 }
 </script>
 
@@ -63,10 +65,9 @@ function clickBtn_yomi () {
 
 <div style="display:inline-flex"><form name="form_toHairetsu">
 <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-
-<input type="button" value="変換" onclick="clickBtn_hairetsu()" />
-
+<input type="button" value="変換" onclick="clickBtn_hairetsu()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" readonly placeholder="ここに結果が表示されます"></textarea>
+<input type="button" value="全選択" onclick="clickBtn_hairetsu_select()"/>
 </form></div>
 
 <script>
@@ -82,6 +83,9 @@ function clickBtn_hairetsu() {
     }
     const msg = converted.join("\n");
     document.form_toHairetsu.textarea2.value = msg;
+}
+function clickBtn_hairetsu_select() {
+    document.form_toHairetsu.textarea2.select();
 }
 </script>
 
@@ -101,11 +105,9 @@ function clickBtn_hairetsu() {
 
 <div style="display:inline-flex"><form name="form_toNayose">
 <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-
-<input type="button" value="名寄せ" onclick="clickBtn_nayose()" />
-
+<input type="button" value="名寄せ" onclick="clickBtn_nayose()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-
+<input type="button" value="全選択" onclick="clickBtn_nayose_select()"/>
 </form></div>
 
 <script>
@@ -114,6 +116,9 @@ function clickBtn_nayose() {
     const nys = nayose(lines_toNayose);
     const msg = nys.join("\n");
     document.form_toNayose.textarea2.value = msg;
+}
+function clickBtn_nayose_select() {
+    document.form_toNayose.textarea2.select();
 }
 </script>
 
@@ -134,10 +139,9 @@ function clickBtn_nayose() {
 
 <div style="display:inline-flex"><form name="form_toConvert">
 <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-
-<input type="button" value="変換" onclick="clickBtn_katahira()" />
-
+<input type="button" value="変換" onclick="clickBtn_katahira()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+<input type="button" value="全選択" onclick="clickBtn_katahira_select()"/>
 </form></div>
 
 <script>
@@ -153,6 +157,9 @@ function clickBtn_katahira() {
         msg = kata2hira(lines_toConvert);
     }
     document.form_toConvert.textarea2.value = msg;
+}
+function clickBtn_katahira_select() {
+    document.form_toConvert.textarea2.select();
 }
 </script>
 
