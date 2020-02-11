@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////
 // kuromoji.js
 let GROBAL_TOKENIZER = null
-kuromoji.builder({ dicPath: "./script/dict" }).build(function(err, _tokenizer){
+kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
     if(!err){
         GROBAL_TOKENIZER = _tokenizer;
     }
