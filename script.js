@@ -12,7 +12,7 @@ kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
 function getYomi(inputLines){
     if (! GROBAL_TOKENIZER) {
         console.log("failed to load tokenizer...");
-        return "取得できませんでした。もう一度やり直してみてください！"
+        return "取得できませんでした…\nもう一度やり直すか画面を更新してみてください！"
     }
     let yomiArray = inputLines.split(/\n/).map(line => {
         let parsed = GROBAL_TOKENIZER.tokenize(line);
