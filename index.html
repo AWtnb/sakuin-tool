@@ -44,7 +44,7 @@ a {
 <script>
 function clickBtn_yomi () {
     let lines = document.form_toYomi.textarea1.value;
-    document.form_toYomi.textarea2.value = getYomi(lines);
+    setYomi(lines);
 }
 function clickBtn_yomi_select () {
     document.form_toYomi.textarea2.select()

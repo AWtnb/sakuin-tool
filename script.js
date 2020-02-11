@@ -9,30 +9,42 @@ kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
     }
 });
 
-function getYomi(inputLines){
-    if (! GROBAL_TOKENIZER) {
-        console.log("failed to load tokenizer...");
-        return "取得できませんでした…\nもう一度やり直すか画面を更新してみてください！"
-    }
-    let yomiArray = inputLines.split(/\n/).map(line => {
-        let parsed = GROBAL_TOKENIZER.tokenize(line);
-        let yomi = parsed.map(token => {
-            console.log(token.surface_form, token.word_type, token.pos, token.reading);
-            let surface = token.surface_form;
-            if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
-                return surface;
+function setYomi(inputLines){
+    const promise = new Promise((resolve, reject) => {
+        kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
+            if (err) {
+                reject("failed to build tokenizer...");
             }
-            if (token.pos == "記号") {
-                return "";
+            else {
+                resolve(_tokenizer);
             }
-            if (token.word_type != "KNOWN") {
-                return token.surface_form;
-            }
-            return token.reading;
         });
-        return yomi.join("")
     });
-    return yomiArray.join("\n")
+
+    promise.then((tokenizer) => {
+        let yomiArray = inputLines.split(/\n/).map(line => {
+            let parsed = tokenizer.tokenize(line);
+            let yomi = parsed.map(token => {
+                console.log(token.surface_form, token.word_type, token.pos, token.reading);
+                let surface = token.surface_form;
+                if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
+                    return surface;
+                }
+                if (token.pos == "記号") {
+                    return "";
+                }
+                if (token.word_type != "KNOWN") {
+                    return token.surface_form;
+                }
+                return token.reading;
+            });
+            return yomi.join("")
+        });
+        document.form_toYomi.textarea2.value = yomiArray.join("\n")
+    })
+    .catch((e) => {
+        console.log(e);
+    });
 }
 
 ////////////////////////////////////////////////
