@@ -19,6 +19,7 @@ function setYomi(inputLines){
         let yomiArray = inputLines.split(/\n/).map(line => {
             let parsed = tokenizer.tokenize(line);
             let yomi = parsed.map(token => {
+                console.log("----------");
                 console.log(token.surface_form, token.word_type, token.pos, token.reading);
                 let surface = token.surface_form;
                 if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
