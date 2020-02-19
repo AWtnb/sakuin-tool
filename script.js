@@ -103,7 +103,7 @@ function nayose (str) {
         if (item && item.replace(/\s/g, "")) {
             let pair = item.split("\t");
             if (pair[0] in table) {
-                table[pair[0]] = (table[pair[0]] + "，" + pair[1]);
+                table[pair[0]] = (table[pair[0]] + ", " + pair[1]);
             }
             else {
                 table[pair[0]] = pair[1];
