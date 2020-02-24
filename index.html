@@ -39,7 +39,7 @@ a {
 <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
 <input type="button" value="取得" onclick="clickBtn_yomi()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="ここに結果が表示されます" readonly></textarea>
-<input type="button" value="全選択" onclick="clickBtn_yomi_select()"/>
+<input type="button" value="コピー" onclick="clickBtn_yomi_copy()"/>
 </form></div>
 
 <script>
@@ -47,8 +47,10 @@ function clickBtn_yomi () {
     let lines = document.form_toYomi.textarea1.value;
     setYomi(lines);
 }
-function clickBtn_yomi_select () {
+function clickBtn_yomi_copy () {
     document.form_toYomi.textarea2.select()
+    document.execCommand("Copy");
+    alert("コピーしました！");
 }
 </script>
 
