@@ -70,7 +70,7 @@ function clickBtn_yomi_copy () {
 <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
 <input type="button" value="変換" onclick="clickBtn_hairetsu()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" readonly placeholder="ここに結果が表示されます"></textarea>
-<input type="button" value="全選択" onclick="clickBtn_hairetsu_select()"/>
+<input type="button" value="コピー"" onclick="clickBtn_hairetsu_copy()"/>
 </form></div>
 
 <script>
@@ -87,8 +87,10 @@ function clickBtn_hairetsu() {
     const msg = converted.join("\n");
     document.form_toHairetsu.textarea2.value = msg;
 }
-function clickBtn_hairetsu_select() {
+function clickBtn_hairetsu_copy() {
     document.form_toHairetsu.textarea2.select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
 }
 </script>
 
@@ -110,7 +112,7 @@ function clickBtn_hairetsu_select() {
 <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
 <input type="button" value="名寄せ" onclick="clickBtn_nayose()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-<input type="button" value="全選択" onclick="clickBtn_nayose_select()"/>
+<input type="button" value="コピー" onclick="clickBtn_nayose_copy()"/>
 </form></div>
 
 <script>
@@ -120,8 +122,10 @@ function clickBtn_nayose() {
     const msg = nys.join("\n");
     document.form_toNayose.textarea2.value = msg;
 }
-function clickBtn_nayose_select() {
+function clickBtn_nayose_copy() {
     document.form_toNayose.textarea2.select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
 }
 </script>
 
@@ -144,8 +148,9 @@ function clickBtn_nayose_select() {
 <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
 <input type="button" value="変換" onclick="clickBtn_katahira()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-<input type="button" value="全選択" onclick="clickBtn_katahira_select()"/>
+<input type="button" value="コピー" onclick="clickBtn_katahira_copy()"/>
 </form></div>
+
 
 <script>
 function clickBtn_katahira() {
@@ -161,8 +166,10 @@ function clickBtn_katahira() {
     }
     document.form_toConvert.textarea2.value = msg;
 }
-function clickBtn_katahira_select() {
+function clickBtn_katahira_copy() {
     document.form_toConvert.textarea2.select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
 }
 </script>
 
