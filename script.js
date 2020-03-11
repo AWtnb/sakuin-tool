@@ -139,10 +139,11 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
             releasedArray.push(line + "\t");
             return
         }
-        let pair = line.split(delimiter);
+        let pair = line.split(regDelimiter);
         let name = String(pair[0]);
         let nombre = String(pair[1]);
         if (nombre.match(regConnector)) {
+            nombre = nombre.replace(/\s/g, "");
             let nombreArray = nombre.split(regConnector);
             nombreArray.forEach(n => {
                 releasedArray.push(name + "\t" + n);

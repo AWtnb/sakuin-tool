@@ -156,7 +156,7 @@ function clickBtn_nayose_copy() {
 「ノンブル」列のカンマの種類：
 <form name="form_nombreConnector">
     <input type="radio" name="connect1" value="，" checked> 全角モノ
-    <input type="radio" name="connect1" value="\," > 半角モノ
+    <input type="radio" name="connect1" value="," > 半角モノ
 </form>
 
 
@@ -188,7 +188,6 @@ function clickBtn_nayose_copy() {
         }
         const linesToRelease = document.form_toRelease.textarea1.value;
         const releasedArray = releaseNayoseLines(linesToRelease, nombreConnector, delimiter);
-        console.log(releasedArray);
         document.form_toRelease.textarea2.value = releasedArray.join("\n");
     }
     function clickBtn_release_copy() {
