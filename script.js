@@ -124,3 +124,38 @@ function nayose (str) {
     }
     return ret;
 }
+
+////////////////////////////////////////////////
+// 名開き
+////////////////////////////////////////////////
+
+function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
+    const regConnector = new RegExp(nombreConnector);
+    const regDelimiter = new RegExp(delimiter);
+    const releasedArray = [];
+    const lines = multiLines.split(/[\r\n]+/g);
+    lines.filter(element => element.match(/./g)).forEach(line => {
+        if (! line.match(regDelimiter)) {
+            releasedArray.push(line + "\t");
+            return
+        }
+        let pair = line.split(delimiter);
+        let name = String(pair[0]);
+        let nombre = String(pair[1]);
+        if (nombre.match(regConnector)) {
+            let nombreArray = nombre.split(regConnector);
+            nombreArray.forEach(n => {
+                releasedArray.push(name + "\t" + n);
+            });
+        }
+        else {
+            if (typeof nombre === 'undefined') {
+                releasedArray.push(name + "\t");
+            }
+            else {
+                releasedArray.push(name + "\t" + nombre);
+            }
+        }
+    });
+    return releasedArray
+}
