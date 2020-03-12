@@ -46,11 +46,11 @@ b {
 </form></div>
 
 <script>
-function clickBtn_yomi () {
+function clickBtn_yomi() {
     let lines = document.form_toYomi.textarea1.value;
     setYomi(lines);
 }
-function clickBtn_yomi_copy () {
+function clickBtn_yomi_copy() {
     document.form_toYomi.textarea2.select()
     document.execCommand("Copy");
     alert("コピーしました！");
@@ -168,7 +168,7 @@ function clickBtn_nayose_copy() {
 </form></div>
 
 <script>
-    function clickBtn_release () {
+    function clickBtn_release() {
         let delimiter = "\t"
         const delimRadioBtn = document.form_delimiter.delim1;
         for (let i = 0; i < delimRadioBtn.length; i++){
