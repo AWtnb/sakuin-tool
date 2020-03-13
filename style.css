@@ -8,3 +8,27 @@ a {
 b {
     color: #FF0066;
 }
+form, img {
+    margin-left: 1em;
+}
+
+h1 {
+    border: solid 3px white;
+    padding: .5em;
+    border-radius: .5em;
+    font-size: 28pt;
+}
+h2 {
+    padding: 0.25em 0.5em;
+    background: transparent;
+    border-left: solid 5px white;
+    border-bottom: solid 1px white;
+    font-size: 18pt;
+}
+h3 {
+    font-size: 12pt;
+}
+h3::before {
+    font-size: 14pt;
+    content: "◆";
+}
