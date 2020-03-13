@@ -4,31 +4,21 @@
 <head>
     <meta charset="utf-8">
     <title>sakuin-tool</title>
-    <!--  この順番で読み込むこと↓ -->
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script src="./kuromoji.js"></script>
     <script type="text/javascript" src="./script.js"></script>
 </head>
 
-<style>
-body {
-    background-color: darkslategrey;
-    color: ghostwhite;
-}
-a {
-    color: aquamarine;
-}
-b {
-    color: #FF0066;
-}
-</style>
-
 <body> 
 <h1>索引作成補助ツール</h1>
+
+<h2>■ 新規作成用ツール</h2>
 
 <!-- ======================================== 
 読み情報の取得
 ======================================== -->
-<h2>■読みがなの取得</h2>
+<h3>◆ 読みがなの取得</h3>
+
 <div>
 <ul>
 <li><b>Internet explorer では動作しません！</b></li>
@@ -57,13 +47,10 @@ function clickBtn_yomi_copy() {
 }
 </script>
 
-
-<hr>
-
 <!-- ======================================== 
 配列読みの取得
 ======================================== -->
-<h2>■配列読みに変換</h2>
+<h3>◆ 配列読みに変換</h3>
 <p>テキストボックスに入力された文字列を配列読みに変換します。</p>
 <form name="form_removeFlag">
 <input type="checkbox" name="removeFlag" value="remove"> ひらがな・カタカナ・数字以外を削除する
@@ -97,12 +84,10 @@ function clickBtn_hairetsu_copy() {
 }
 </script>
 
-<hr>
-
 <!-- ======================================== 
 名寄せ
 ======================================== -->
-<h2>■名寄せ</h2>
+<h3>◆ 名寄せ</h3>
 <ul>
 <li>ソート機能はありません。上から表示されている順番通りに名寄せします。</li>
 <li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
@@ -132,12 +117,56 @@ function clickBtn_nayose_copy() {
 }
 </script>
 
+<!-- ======================================== 
+カタカナひらがな相互変換
+======================================== -->
+<h3>◆ カタカナひらがな相互変換</h3>
+<p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
+
+<form id="form_katahiraFlag">
+<label><input type="radio" name="radio1" value="toKata" checked>ひらがな→カタカナ</label>
+<label><input type="radio" name="radio1" value="toHira"        >カタカナ→ひらがな</label>
+</form>
+
+<p></p>
+
+<div style="display:inline-flex"><form name="form_toConvert">
+<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
+<input type="button" value="変換" onclick="clickBtn_katahira()"/>
+<textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+<input type="button" value="コピー" onclick="clickBtn_katahira_copy()"/>
+</form></div>
+
+
+<script>
+function clickBtn_katahira() {
+    const lines_toConvert = document.form_toConvert.textarea1.value;
+    let element = document.getElementById("form_katahiraFlag");
+    let radioList = element.radio1;
+    let mode = radioList.value;
+    if (mode == "toKata") {
+        msg = hira2kata(lines_toConvert);
+    }
+    else {
+        msg = kata2hira(lines_toConvert);
+    }
+    document.form_toConvert.textarea2.value = msg;
+}
+function clickBtn_katahira_copy() {
+    document.form_toConvert.textarea2.select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+</script>
+
 <hr>
+
+<h2>■ 旧版再利用ツール</h2>
 
 <!-- ======================================== 
 名開き
 ======================================== -->
-<h2>■名開き</h2>
+<h3>◆ 名開き</h3>
 <img src="https://i.gyazo.com/1cf1286b016173909636921bdf18d68e.png" height="300">
 <div>
     <ul>
@@ -195,50 +224,6 @@ function clickBtn_nayose_copy() {
         document.execCommand("Copy");
         alert("コピーしました！ Excel に貼り付けてください。");
     }
-</script>
-
-<hr>
-
-<!-- ======================================== 
-カタカナひらがな相互変換
-======================================== -->
-<h2>■カタカナひらがな相互変換</h2>
-<p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
-
-<form id="form_katahiraFlag">
-<label><input type="radio" name="radio1" value="toKata" checked>ひらがな→カタカナ</label>
-<label><input type="radio" name="radio1" value="toHira"        >カタカナ→ひらがな</label>
-</form>
-
-<p></p>
-
-<div style="display:inline-flex"><form name="form_toConvert">
-<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-<input type="button" value="変換" onclick="clickBtn_katahira()"/>
-<textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-<input type="button" value="コピー" onclick="clickBtn_katahira_copy()"/>
-</form></div>
-
-
-<script>
-function clickBtn_katahira() {
-    const lines_toConvert = document.form_toConvert.textarea1.value;
-    let element = document.getElementById("form_katahiraFlag");
-    let radioList = element.radio1;
-    let mode = radioList.value;
-    if (mode == "toKata") {
-        msg = hira2kata(lines_toConvert);
-    }
-    else {
-        msg = kata2hira(lines_toConvert);
-    }
-    document.form_toConvert.textarea2.value = msg;
-}
-function clickBtn_katahira_copy() {
-    document.form_toConvert.textarea2.select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
-}
 </script>
 
 <hr>
