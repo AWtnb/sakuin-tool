@@ -2,11 +2,17 @@ body {
     background-color: darkslategrey;
     color: ghostwhite;
 }
+#container{
+    width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 a {
     color: aquamarine;
 }
 b {
-    color: #FF0066;
+    color: tomato;
 }
 form, img {
     margin-left: 1em;
@@ -26,9 +32,7 @@ h2 {
     font-size: 18pt;
 }
 h3 {
-    font-size: 12pt;
-}
-h3::before {
     font-size: 14pt;
-    content: "◆";
+    padding-left: .5em;
+    border-left: solid 4px white;
 }
