@@ -132,11 +132,11 @@ function nayose (str) {
 function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
     const regConnector = new RegExp(nombreConnector);
     const regDelimiter = new RegExp(delimiter);
-    const releasedArray = [];
+    const releasedObj = [];
     const lines = multiLines.split(/[\r\n]+/g);
     lines.filter(element => element.match(/./g)).forEach(line => {
         if (! line.match(regDelimiter)) {
-            releasedArray.push(line + "\t");
+            releasedObj.push({name: line, nombre: ""});
             return
         }
         let pair = line.split(regDelimiter);
@@ -146,17 +146,17 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
             nombre = nombre.replace(/\s/g, "");
             let nombreArray = nombre.split(regConnector);
             nombreArray.forEach(n => {
-                releasedArray.push(name + "\t" + n);
+                releasedObj.push({name: name, nombre: n});
             });
         }
         else {
             if (typeof nombre === 'undefined') {
-                releasedArray.push(name + "\t");
+                releasedObj.push({name: name, nombre: ""});
             }
             else {
-                releasedArray.push(name + "\t" + nombre);
+                releasedObj.push({name: name, nombre: nombre});
             }
         }
     });
-    return releasedArray
+    return releasedObj
 }

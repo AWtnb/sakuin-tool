@@ -14,7 +14,7 @@ a {
 b {
     color: tomato;
 }
-form, img {
+form, img, table {
     margin-left: 1em;
 }
 
