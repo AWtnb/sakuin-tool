@@ -13,9 +13,12 @@
 <div id="container">
 <h1>索引作成補助ツール</h1>
 
+<!-- ======================================================================
+新規作成用
+====================================================================== -->
 <h2>新規作成用ツール</h2>
 
-<!-- ======================================== 
+<!-- ========================================
 読み情報の取得
 ======================================== -->
 <h3>読みがなの取得</h3>
@@ -48,7 +51,7 @@ function clickBtn_yomi_copy() {
 }
 </script>
 
-<!-- ======================================== 
+<!-- ========================================
 配列読みの取得
 ======================================== -->
 <h3>配列読みに変換</h3>
@@ -85,7 +88,7 @@ function clickBtn_hairetsu_copy() {
 }
 </script>
 
-<!-- ======================================== 
+<!-- ========================================
 名寄せ
 ======================================== -->
 <h3>名寄せ</h3>
@@ -118,7 +121,7 @@ function clickBtn_nayose_copy() {
 }
 </script>
 
-<!-- ======================================== 
+<!-- ========================================
 カタカナひらがな相互変換
 ======================================== -->
 <h3>カタカナひらがな相互変換</h3>
@@ -159,9 +162,60 @@ function clickBtn_katahira_copy() {
 }
 </script>
 
+<!-- ======================================================================
+旧版の活用
+====================================================================== -->
 <h2>旧版再利用ツール</h2>
 
-<!-- ======================================== 
+<!-- ========================================
+子項目の復元
+======================================== -->
+<h3>子項目の復元</h3>
+<img src="https://i.gyazo.com/2bbc343e73bcd735473dd7082abbba43.png" height="200">
+<div>
+    <ul>
+    <li><b>Internet explorer 非推奨！</b></li>
+    <li>索引項目中の子項目を復元します（上図）。</li>
+    <li>ノンブルが入っていても動作します。</li>
+    <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
+    </ul>
+</div>
+
+項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：
+<form name="form_delim">
+    <input type="radio" name="delim1" value="　　" checked> 二倍アキ
+    <input type="radio" name="delim1" value="\t" > タブ文字（Excel）
+</form>
+
+<div style="display:inline-flex"><form name="form_toComplete">
+<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引を貼り付けてください"></textarea>
+<input type="button" value="復元" onclick="clickBtn_complete()"/>
+<textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+<input type="button" value="コピー" onclick="clickBtn_complete_copy()"/>
+</form></div>
+
+<script>
+    function clickBtn_complete() {
+        let delimiter = "　　"
+        const delimRadioBtn = document.form_delim.delim1;
+        for (let i = 0; i < delimRadioBtn.length; i++){
+            if(delimRadioBtn[i].checked){
+                delimiter = delimRadioBtn[i].value;
+                break;
+            }
+        }
+        const lines_toComplete = document.form_toComplete.textarea1.value;
+        const completedArray = completeChildItem(lines_toComplete, delimiter);
+        document.form_toComplete.textarea2.value = completedArray.join("\n");
+    }
+    function clickBtn_complete_copy() {
+        document.form_toComplete.textarea2.select();
+        document.execCommand("Copy");
+        alert("コピーしました！");
+    }
+</script>
+
+<!-- ========================================
 名開き
 ======================================== -->
 <h3>名開き</h3>
@@ -245,54 +299,6 @@ function clickBtn_katahira_copy() {
         const selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(range);
-        document.execCommand("Copy");
-        alert("コピーしました！");
-    }
-</script>
-
-<!-- ======================================== 
-子項目の復元
-======================================== -->
-<h3>子項目の復元</h3>
-<img src="https://i.gyazo.com/2bbc343e73bcd735473dd7082abbba43.png" height="200">
-<div>
-    <ul>
-    <li><b>Internet explorer 非推奨！</b></li>
-    <li>索引項目中の子項目を復元します（上図）。</li>
-    <li>ノンブルが入っていても動作します。</li>
-    <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
-    </ul>
-</div>
-
-項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：
-<form name="form_delim">
-    <input type="radio" name="delim1" value="　　" checked> 二倍アキ
-    <input type="radio" name="delim1" value="\t" > タブ文字（Excel）
-</form>
-
-<div style="display:inline-flex"><form name="form_toComplete">
-<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引を貼り付けてください"></textarea>
-<input type="button" value="復元" onclick="clickBtn_complete()"/>
-<textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-<input type="button" value="コピー" onclick="clickBtn_complete_copy()"/>
-</form></div>
-
-<script>
-    function clickBtn_complete() {
-        let delimiter = "　　"
-        const delimRadioBtn = document.form_delim.delim1;
-        for (let i = 0; i < delimRadioBtn.length; i++){
-            if(delimRadioBtn[i].checked){
-                delimiter = delimRadioBtn[i].value;
-                break;
-            }
-        }
-        const lines_toComplete = document.form_toComplete.textarea1.value;
-        const completedArray = completeChildItem(lines_toComplete, delimiter);
-        document.form_toComplete.textarea2.value = completedArray.join("\n");
-    }
-    function clickBtn_complete_copy() {
-        document.form_toComplete.textarea2.select();
         document.execCommand("Copy");
         alert("コピーしました！");
     }
