@@ -173,7 +173,7 @@ function clickBtn_katahira_copy() {
     <li>子項目や見よ項目はそのまま残ります。</li>
     <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
     </ul>
-    </div>
+</div>
 
 「項目」と「ノンブル」の間の文字：
 <form name="form_delimiter">
@@ -188,7 +188,7 @@ function clickBtn_katahira_copy() {
 
 
 <form name="form_toRelease">
-<textarea name="textarea1" cols="40" rows="20" value="1" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
+<textarea name="textarea1" cols="40" rows="10" value="1" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
 <input type="button" value="名開き" onclick="clickBtn_release()"/>
 <input type="button" value="表をコピー" onclick="clickBtn_release_copy()"/>
 </form>
@@ -254,20 +254,55 @@ function clickBtn_katahira_copy() {
 子項目の復元
 ======================================== -->
 <h3>子項目の復元</h3>
+<img src="https://i.gyazo.com/2bbc343e73bcd735473dd7082abbba43.png" height="200">
+<div>
+    <ul>
+    <li><b>Internet explorer 非推奨！</b></li>
+    <li>索引項目中の子項目を復元します（上図）。</li>
+    <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
+    </ul>
+</div>
+
+見出し項目の代わりに入っている横線の種類：
+<form name="form_filler">
+    <input type="radio" name="filler1" value="――" checked> ――（ホリゾンタルバー×2）
+    <input type="radio" name="filler1" value="──" > ──（横罫線×2）
+</form>
+
 <div style="display:inline-flex"><form name="form_toComplete">
 <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引の項目を貼り付けてください"></textarea>
-<input type="button" value="子項目を復元" onclick="clickBtn_complete()"/>
+<input type="button" value="復元" onclick="clickBtn_complete()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
 <input type="button" value="コピー" onclick="clickBtn_complete_copy()"/>
 </form></div>
 
-
+<script>
+    function clickBtn_complete() {
+        let fillerType = "――"
+        const fillerRadioBtn = document.form_filler.filler1;
+        for (let i = 0; i < fillerRadioBtn.length; i++){
+            if(fillerRadioBtn[i].checked){
+                fillerType = fillerRadioBtn[i].value;
+                break;
+            }
+        }
+        const lines_toComplete = document.form_toComplete.textarea1.value;
+        const completedArray = completehildItem(lines_toComplete, fillerType);
+        document.form_toComplete.textarea2.value = completedArray.join("\n");
+    }
+    function clickBtn_complete_copy() {
+        document.form_toComplete.textarea2.select();
+        document.execCommand("Copy");
+        alert("コピーしました！");
+    }
+</script>
 
 </div>
 </body>
+<!-- ========================================
+footer
+======================================== -->
 <footer>
-
 <p><img src="https://img.icons8.com/small/16/000000/github.png"/> <a href="https://github.com/AWtnb/sakuin-tool" target="_blank">Github repository</a></p>
-
 </footer>
 </html>

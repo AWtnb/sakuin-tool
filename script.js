@@ -134,7 +134,7 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
     const regDelimiter = new RegExp(delimiter);
     const releasedObj = [];
     const lines = multiLines.split(/[\r\n]+/g);
-    lines.filter(element => element.match(/./g)).forEach(line => {
+    lines.filter(line => line.match(/./g)).forEach(line => {
         if (! line.match(regDelimiter)) {
             releasedObj.push({name: line, nombre: ""});
             return
@@ -159,4 +159,29 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
         }
     });
     return releasedObj
+}
+
+
+////////////////////////////////////////////////
+// 子項目復活
+////////////////////////////////////////////////
+
+function completehildItem (multiLines, fillerType) {
+    const lines = multiLines.split(/[\r\n]+/g).filter(line => line.match(/./g));
+    const regFiller = new RegExp(fillerType, "g");
+    const completedArray = [];
+    let lastParentItem = lines[0];
+    completedArray.push(lastParentItem);
+    for (let i = 1; i < lines.length; i++) {
+        const currentLine = lines[i];
+        if (currentLine.match(regFiller)) {
+            let completedItem = currentLine.replace(/^\s/, "").replace(regFiller, lastParentItem);
+            completedArray.push(completedItem);
+        }
+        else {
+            completedArray.push(currentLine);
+            lastParentItem = currentLine
+        }
+    }
+    return completedArray
 }
