@@ -138,7 +138,6 @@ function clickBtn_nayose_copy() {
 <input type="button" value="コピー" onclick="clickBtn_katahira_copy()"/>
 </form></div>
 
-
 <script>
 function clickBtn_katahira() {
     const lines_toConvert = document.form_toConvert.textarea1.value;
@@ -255,14 +254,20 @@ function clickBtn_katahira_copy() {
 子項目の復元
 ======================================== -->
 <h3>子項目の復元</h3>
+<div style="display:inline-flex"><form name="form_toComplete">
+<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引の項目を貼り付けてください"></textarea>
+<input type="button" value="子項目を復元" onclick="clickBtn_complete()"/>
+<textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+<input type="button" value="コピー" onclick="clickBtn_complete_copy()"/>
+</form></div>
 
 
-<!-- ======================================== 
-補足情報
-======================================== -->
-<hr>
 
-<img src="https://img.icons8.com/small/16/000000/github.png"/> <a href="https://github.com/AWtnb/sakuin-tool" target="_blank">Github repository</a>
 </div>
 </body>
+<footer>
+
+<p><img src="https://img.icons8.com/small/16/000000/github.png"/> <a href="https://github.com/AWtnb/sakuin-tool" target="_blank">Github repository</a></p>
+
+</footer>
 </html>
