@@ -259,18 +259,19 @@ function clickBtn_katahira_copy() {
     <ul>
     <li><b>Internet explorer 非推奨！</b></li>
     <li>索引項目中の子項目を復元します（上図）。</li>
+    <li>ノンブルが入っていても動作します。</li>
     <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
     </ul>
 </div>
 
-見出し項目の代わりに入っている横線の種類：
-<form name="form_filler">
-    <input type="radio" name="filler1" value="――" checked> ――（ホリゾンタルバー×2）
-    <input type="radio" name="filler1" value="──" > ──（横罫線×2）
+項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：
+<form name="form_delim">
+    <input type="radio" name="delim1" value="　　" checked> 二倍アキ
+    <input type="radio" name="delim1" value="\t" > タブ文字（Excel）
 </form>
 
 <div style="display:inline-flex"><form name="form_toComplete">
-<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引の項目を貼り付けてください"></textarea>
+<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引を貼り付けてください"></textarea>
 <input type="button" value="復元" onclick="clickBtn_complete()"/>
 <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
 <input type="button" value="コピー" onclick="clickBtn_complete_copy()"/>
@@ -278,16 +279,16 @@ function clickBtn_katahira_copy() {
 
 <script>
     function clickBtn_complete() {
-        let fillerType = "――"
-        const fillerRadioBtn = document.form_filler.filler1;
-        for (let i = 0; i < fillerRadioBtn.length; i++){
-            if(fillerRadioBtn[i].checked){
-                fillerType = fillerRadioBtn[i].value;
+        let delimiter = "　　"
+        const delimRadioBtn = document.form_delim.delim1;
+        for (let i = 0; i < delimRadioBtn.length; i++){
+            if(delimRadioBtn[i].checked){
+                delimiter = delimRadioBtn[i].value;
                 break;
             }
         }
         const lines_toComplete = document.form_toComplete.textarea1.value;
-        const completedArray = completehildItem(lines_toComplete, fillerType);
+        const completedArray = completeChildItem(lines_toComplete, delimiter);
         document.form_toComplete.textarea2.value = completedArray.join("\n");
     }
     function clickBtn_complete_copy() {

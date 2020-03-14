@@ -166,21 +166,22 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
 // 子項目復活
 ////////////////////////////////////////////////
 
-function completehildItem (multiLines, fillerType) {
+function completeChildItem (multiLines, delimiter) {
     const lines = multiLines.split(/[\r\n]+/g).filter(line => line.match(/./g));
-    const regFiller = new RegExp(fillerType, "g");
+    const regAfterDelim = new RegExp("(" + delimiter + ").+", "g");
+    const regFiller = new RegExp("(\u2500|\u2015|\u2500)+");
     const completedArray = [];
-    let lastParentItem = lines[0];
-    completedArray.push(lastParentItem);
+    completedArray.push(lines[0]);
+    let lastParentItem = lines[0].replace(regAfterDelim, "");
     for (let i = 1; i < lines.length; i++) {
         const currentLine = lines[i];
         if (currentLine.match(regFiller)) {
-            let completedItem = currentLine.replace(/^\s/, "").replace(regFiller, lastParentItem);
+            let completedItem = currentLine.replace(/^\s+/, "").replace(regFiller, lastParentItem);
             completedArray.push(completedItem);
         }
         else {
             completedArray.push(currentLine);
-            lastParentItem = currentLine
+            lastParentItem = currentLine.replace(regAfterDelim, "");
         }
     }
     return completedArray
