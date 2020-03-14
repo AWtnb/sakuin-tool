@@ -23,6 +23,10 @@ form, img, table {
 footer {
     padding-top: .25em;
     padding-bottom: 1em;
+    width: 700px;
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 h1 {
