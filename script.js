@@ -1,4 +1,19 @@
-﻿////////////////////////////////////////////////
+﻿
+
+function copyTable(elementId) {
+    const range = document.createRange();
+    const result = document.getElementById(elementId);
+    range.selectNodeContents(result);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+
+
+
+////////////////////////////////////////////////
 // 読み取得
 ////////////////////////////////////////////////
 
@@ -185,4 +200,24 @@ function completeChildItem (multiLines, delimiter) {
         }
     }
     return completedArray
+}
+
+////////////////////////////////////////////////
+// 索引テンプレート生成
+////////////////////////////////////////////////
+
+function generateTemplare(multiLines) {
+    const lines = multiLines.split(/[\r\n]+/g).filter(line => line.match(/./g));
+    const templateArray = [];
+    lines.forEach(line => {
+        let pair = line.split("\t");
+        let page = pair[0];
+        let nItem = pair[1];
+        if (String(nItem) != "0" && nItem.match(/^\d+$/)) {
+            for (let i = 0; i < Number(nItem); i++) {
+                templateArray.push(page);
+            }
+        }
+    });
+    return templateArray
 }

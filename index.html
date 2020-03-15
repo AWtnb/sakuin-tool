@@ -11,12 +11,71 @@
 
 <body>
 <div id="container">
+
 <h1>索引作成補助ツール</h1>
+<div class="caption">
+    <p><b>注：Internet explorer では動作しません！</b></p>
+</div>
 
 <!-- ======================================================================
 新規作成用
 ====================================================================== -->
 <h2>新規作成用ツール</h2>
+
+<!-- ========================================
+入力テンプレートの作成
+======================================== -->
+<h3>索引拾いのテンプレート生成</h3>
+
+<div class="caption">
+    <img src="https://i.gyazo.com/4cb522e9dfe14011e64580154cadc6c7.png">
+    <ul>
+        <li>索引拾いのための Excel テンプレートを作成します。</li>
+        <li>各ページの項目数を上図のように Excel に整理して下記ボックスに貼り付けてください。</li>
+    </ul>
+</div>
+
+<div class="inputarea">
+    <div class="horizontal">
+        <form name="form_toGenerate">
+            <textarea name="textarea1" cols="40" rows="10" value="1" placeholder="図のように Excel から貼り付けてください"></textarea>
+            <input type="button" value="生成" onclick="clickBtn_generate()" class="button">
+            <input type="button" value="表をコピー" onclick="clickBtn_generate_copy()" class="button">
+        </form>
+    </div>
+
+    <table id="templateTable" border="double">
+        <tr>
+            <td>ページ</td>
+            <td>項目</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function clickBtn_generate() {
+        const linestoGenerate = document.form_toGenerate.textarea1.value;
+        const templateArray = generateTemplare(linestoGenerate);
+
+        const resultTable = document.getElementById("templateTable");
+        const maxRow = resultTable.rows.length;
+        if (maxRow > 1) {
+            for (let r = maxRow - 1; r >= 1; r--) {
+                resultTable.deleteRow(r);
+            }
+        }
+        templateArray.forEach(line => {
+            let row = resultTable.insertRow(-1);
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1); 
+            cell1.innerHTML = line;
+            cell2.innerHTML = "";
+        });
+    }
+    function clickBtn_generate_copy() {
+        copyTable("templateTable");
+    }
+</script>
 
 <!-- ========================================
 読み情報の取得
@@ -25,7 +84,6 @@
 
 <div class="caption">
     <ul>
-        <li><b>Internet explorer では動作しません！</b></li>
         <li>最初の計算時は解析辞書読み込みのために少し時間がかかります。</li>
         <li>正しくよみがなが取得できているか必ず事後確認をしてください。</li>
     </ul>
@@ -78,24 +136,24 @@ function clickBtn_yomi_copy() {
 </div>
 
 <script>
-function clickBtn_hairetsu() {
-    const lines_toHairetsu = document.form_toHairetsu.textarea1.value;
-    const removeFlag = document.form_removeFlag.removeFlag;
-    let converted = [];
-    if (removeFlag.checked) {
-        converted = toHairetsu(lines_toHairetsu, true);
+    function clickBtn_hairetsu() {
+        const lines_toHairetsu = document.form_toHairetsu.textarea1.value;
+        const removeFlag = document.form_removeFlag.removeFlag;
+        let converted = [];
+        if (removeFlag.checked) {
+            converted = toHairetsu(lines_toHairetsu, true);
+        }
+        else {
+            converted = toHairetsu(lines_toHairetsu, false);
+        }
+        const msg = converted.join("\n");
+        document.form_toHairetsu.textarea2.value = msg;
     }
-    else {
-        converted = toHairetsu(lines_toHairetsu, false);
+    function clickBtn_hairetsu_copy() {
+        document.form_toHairetsu.textarea2.select();
+        document.execCommand("Copy");
+        alert("コピーしました！");
     }
-    const msg = converted.join("\n");
-    document.form_toHairetsu.textarea2.value = msg;
-}
-function clickBtn_hairetsu_copy() {
-    document.form_toHairetsu.textarea2.select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
-}
 </script>
 
 <!-- ========================================
@@ -193,7 +251,6 @@ function clickBtn_katahira_copy() {
 <div class="caption">
     <img src="https://i.gyazo.com/2bbc343e73bcd735473dd7082abbba43.png" height="200">
     <ul>
-        <li><b>Internet explorer 非推奨！</b></li>
         <li>索引項目中の子項目を復元します（上図）。</li>
         <li>ノンブルが入っていても動作します。</li>
         <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
@@ -245,7 +302,6 @@ function clickBtn_katahira_copy() {
 <div class="caption">
     <img src="https://i.gyazo.com/1cf1286b016173909636921bdf18d68e.png" height="300">
     <ul>
-        <li><b>Internet explorer 非推奨！</b></li>
         <li>名寄せされた状態の索引を「項目－ノンブル」の1対1対応に戻します（上図）。</li>
         <li>子項目や見よ項目はそのまま残ります。</li>
         <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
@@ -319,14 +375,7 @@ function clickBtn_katahira_copy() {
     }
 
     function clickBtn_release_copy() {
-        const range = document.createRange();
-        const result = document.getElementById("releaseTable");
-        range.selectNodeContents(result);
-        const selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
-        document.execCommand("Copy");
-        alert("コピーしました！");
+        copyTable("releaseTable");
     }
 </script>
 
