@@ -23,21 +23,24 @@
 ======================================== -->
 <h3>読みがなの取得</h3>
 
-<div>
-<ul>
-<li><b>Internet explorer では動作しません！</b></li>
-<li>最初の計算時は解析辞書読み込みのために少し時間がかかります。</li>
-<li>正しくよみがなが取得できているか必ず事後確認をしてください。</li>
-</ul>
+<div class="caption">
+    <ul>
+        <li><b>Internet explorer では動作しません！</b></li>
+        <li>最初の計算時は解析辞書読み込みのために少し時間がかかります。</li>
+        <li>正しくよみがなが取得できているか必ず事後確認をしてください。</li>
+    </ul>
 </div>
 
-
-<div style="display:inline-flex"><form name="form_toYomi">
-<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-<input type="button" value="取得" onclick="clickBtn_yomi()"/>
-<textarea name="textarea2" cols="25" rows="20" value="1" placeholder="ここに結果が表示されます" readonly></textarea>
-<input type="button" value="コピー" onclick="clickBtn_yomi_copy()"/>
-</form></div>
+<div class="inputarea">
+    <div class="horizontal">
+        <form name="form_toYomi">
+            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="取得" onclick="clickBtn_yomi()"/>
+            <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="ここに結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_yomi_copy()"/>
+        </form>
+    </div>
+</div>
 
 <script>
 function clickBtn_yomi() {
@@ -55,17 +58,24 @@ function clickBtn_yomi_copy() {
 配列読みの取得
 ======================================== -->
 <h3>配列読みに変換</h3>
-<p>テキストボックスに入力された文字列を配列読みに変換します。</p>
-<form name="form_removeFlag">
-<input type="checkbox" name="removeFlag" value="remove"> ひらがな・カタカナ・数字以外を削除する
-</form>
 
-<div style="display:inline-flex"><form name="form_toHairetsu">
-<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-<input type="button" value="変換" onclick="clickBtn_hairetsu()"/>
-<textarea name="textarea2" cols="25" rows="20" value="1" readonly placeholder="ここに結果が表示されます"></textarea>
-<input type="button" value="コピー" onclick="clickBtn_hairetsu_copy()"/>
-</form></div>
+<div class="caption">
+    <p>テキストボックスに入力された文字列を配列読みに変換します。</p>
+</div>
+
+<div class="inputarea">
+    <form name="form_removeFlag">
+        <input type="checkbox" name="removeFlag" value="remove"> ひらがな・カタカナ・数字以外を削除する
+    </form>
+    <div class="horizontal">
+        <form name="form_toHairetsu">
+            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="変換" onclick="clickBtn_hairetsu()"/>
+            <textarea name="textarea2" cols="25" rows="20" value="1" readonly placeholder="ここに結果が表示されます"></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_hairetsu_copy()"/>
+        </form>
+    </div>
+</div>
 
 <script>
 function clickBtn_hairetsu() {
@@ -92,20 +102,25 @@ function clickBtn_hairetsu_copy() {
 名寄せ
 ======================================== -->
 <h3>名寄せ</h3>
-<ul>
-<li>ソート機能はありません。上から表示されている順番通りに名寄せします。</li>
-<li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
-<li>子項目は手動で作成してください。</li>
-</ul>
+<div class="caption">
+    <ul>
+        <li>ソート機能はありません。上から表示されている順番通りに名寄せします。</li>
+        <li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
+        <li>子項目は手動で作成してください。</li>
+    </ul>
+    <img src = "https://i.gyazo.com/3ab3b7d640fa94adb97b06fc96658789.png">
+</div>
 
-<p><img src = "https://i.gyazo.com/3ab3b7d640fa94adb97b06fc96658789.png"></p>
-
-<div style="display:inline-flex"><form name="form_toNayose">
-<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-<input type="button" value="名寄せ" onclick="clickBtn_nayose()"/>
-<textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-<input type="button" value="コピー" onclick="clickBtn_nayose_copy()"/>
-</form></div>
+<div class="inputarea">
+    <div class="horizontal">
+        <form name="form_toNayose">
+            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="名寄せ" onclick="clickBtn_nayose()"/>
+            <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_nayose_copy()"/>
+        </form>
+    </div>
+</div>
 
 <script>
 function clickBtn_nayose() {
@@ -125,21 +140,24 @@ function clickBtn_nayose_copy() {
 カタカナひらがな相互変換
 ======================================== -->
 <h3>カタカナひらがな相互変換</h3>
-<p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
+<div class="caption">
+    <p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
+</div>
 
-<form id="form_katahiraFlag">
-<label><input type="radio" name="radio1" value="toKata" checked>ひらがな→カタカナ</label>
-<label><input type="radio" name="radio1" value="toHira"        >カタカナ→ひらがな</label>
-</form>
-
-<p></p>
-
-<div style="display:inline-flex"><form name="form_toConvert">
-<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-<input type="button" value="変換" onclick="clickBtn_katahira()"/>
-<textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-<input type="button" value="コピー" onclick="clickBtn_katahira_copy()"/>
-</form></div>
+<div class="inputarea">
+    <form id="form_katahiraFlag">
+        <label><input type="radio" name="radio1" value="toKata" checked>ひらがな→カタカナ</label>
+        <label><input type="radio" name="radio1" value="toHira"        >カタカナ→ひらがな</label>
+    </form>
+    <div class="horizontal">
+        <form name="form_toConvert">
+            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="変換" onclick="clickBtn_katahira()"/>
+            <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_katahira_copy()"/>
+        </form>
+    </div>
+</div>
 
 <script>
 function clickBtn_katahira() {
@@ -171,28 +189,32 @@ function clickBtn_katahira_copy() {
 子項目の復元
 ======================================== -->
 <h3>子項目の復元</h3>
-<img src="https://i.gyazo.com/2bbc343e73bcd735473dd7082abbba43.png" height="200">
-<div>
+
+<div class="caption">
+    <img src="https://i.gyazo.com/2bbc343e73bcd735473dd7082abbba43.png" height="200">
     <ul>
-    <li><b>Internet explorer 非推奨！</b></li>
-    <li>索引項目中の子項目を復元します（上図）。</li>
-    <li>ノンブルが入っていても動作します。</li>
-    <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
+        <li><b>Internet explorer 非推奨！</b></li>
+        <li>索引項目中の子項目を復元します（上図）。</li>
+        <li>ノンブルが入っていても動作します。</li>
+        <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
     </ul>
 </div>
 
-項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：
-<form name="form_delim">
-    <input type="radio" name="delim1" value="　　" checked> 二倍アキ
-    <input type="radio" name="delim1" value="\t" > タブ文字（Excel）
-</form>
-
-<div style="display:inline-flex"><form name="form_toComplete">
-<textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引を貼り付けてください"></textarea>
-<input type="button" value="復元" onclick="clickBtn_complete()"/>
-<textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-<input type="button" value="コピー" onclick="clickBtn_complete_copy()"/>
-</form></div>
+<div class="inputarea">
+    項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：
+    <form name="form_delim">
+        <input type="radio" name="delim1" value="　　" checked> 二倍アキ
+        <input type="radio" name="delim1" value="\t" > タブ文字（Excel）
+    </form>
+    <div class="horizontal">
+        <form name="form_toComplete">
+            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引を貼り付けてください"></textarea>
+            <input type="button" value="復元" onclick="clickBtn_complete()"/>
+            <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_complete_copy()"/>
+        </form>
+    </div>
+</div>
 
 <script>
     function clickBtn_complete() {
@@ -219,33 +241,37 @@ function clickBtn_katahira_copy() {
 名開き
 ======================================== -->
 <h3>名開き</h3>
-<img src="https://i.gyazo.com/1cf1286b016173909636921bdf18d68e.png" height="300">
-<div>
+
+<div class="caption">
+    <img src="https://i.gyazo.com/1cf1286b016173909636921bdf18d68e.png" height="300">
     <ul>
-    <li><b>Internet explorer 非推奨！</b></li>
-    <li>名寄せされた状態の索引を「項目－ノンブル」の1対1対応に戻します（上図）。</li>
-    <li>子項目や見よ項目はそのまま残ります。</li>
-    <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
+        <li><b>Internet explorer 非推奨！</b></li>
+        <li>名寄せされた状態の索引を「項目－ノンブル」の1対1対応に戻します（上図）。</li>
+        <li>子項目や見よ項目はそのまま残ります。</li>
+        <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
     </ul>
 </div>
 
-「項目」と「ノンブル」の間の文字：
-<form name="form_delimiter">
-    <input type="radio" name="delim1" value="　　" checked> 2倍アキ
-    <input type="radio" name="delim1" value="\t" > タブ（Excel）
-</form>
-「ノンブル」列のカンマの種類：
-<form name="form_nombreConnector">
-    <input type="radio" name="connect1" value="，" checked> 全角モノ
-    <input type="radio" name="connect1" value="," > 半角モノ
-</form>
+<div class="inputarea">
+    「項目」と「ノンブル」の間の文字：
+    <form name="form_delimiter">
+        <input type="radio" name="delim1" value="　　" checked> 2倍アキ
+        <input type="radio" name="delim1" value="\t" > タブ（Excel）
+    </form>
+    「ノンブル」列のカンマの種類：
+    <form name="form_nombreConnector">
+        <input type="radio" name="connect1" value="，" checked> 全角モノ
+        <input type="radio" name="connect1" value="," > 半角モノ
+    </form>
 
-
-<form name="form_toRelease">
-<textarea name="textarea1" cols="40" rows="10" value="1" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
-<input type="button" value="名開き" onclick="clickBtn_release()"/>
-<input type="button" value="表をコピー" onclick="clickBtn_release_copy()"/>
-</form>
+    <div class="horizontal">
+        <form name="form_toRelease">
+            <textarea name="textarea1" cols="40" rows="10" value="1" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
+            <input type="button" value="名開き" onclick="clickBtn_release()"/>
+            <input type="button" value="表をコピー" onclick="clickBtn_release_copy()"/>
+        </form>
+    </div>
+</div>
 
 <table id="releaseTable" border="double">
     <tr>
