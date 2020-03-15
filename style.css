@@ -54,42 +54,65 @@ body {
     border: solid 1px #859900;
     border-radius: 8px;
 }
-.inputarea > .horizontal {
+.inputarea .horizontal {
     display: inline-flex;
     margin-top: .5em;
     margin-bottom: .5em;
 }
-.inputarea > .horizontal > form {
+.inputarea .horizontal form {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 0;
     margin-bottom: .5em;
 }
-.inputarea > .horizontal > form > textarea {
+.inputarea .horizontal form textarea {
     transition: 0.3s;
     border: 1px dotted #d33682;
     border-radius: 6px;
 }
-.inputarea > .horizontal > form > textarea:focus {
+.inputarea .horizontal form textarea:focus {
     border: 1px solid #d33682;
     outline: none;
     box-shadow: 0 0 5px 1px rgba(211, 54, 130, 0.48);
 }
-.inputarea > .horizontal > form > textarea, input {
+.inputarea .horizontal form textarea, input {
     margin-left: .5em;
+}
+.inputarea table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: .5em;
+    margin-left: .5em;
+    border: #586e75;
+    font-size: 10pt;
+    max-height: 120px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.inputarea table td {
+    min-width: 150px;
+    max-width: 250px;
+    padding-left: .75em;
+}
+.inputarea thead, tbody {
+    display: block;
+}
+.inputarea tbody {
+    max-height: 100px;
+    overflow-y: scroll;
 }
 
 .caption {
     margin-left: 1em;
 }
-.caption > ul {
+.caption ul {
     padding-left: 1em;
     margin-left: 1em;
     padding-top: 0;
     padding-bottom: .5em;
 }
-.caption > img {
+.caption img {
     margin-left: 2em;
     margin-top: 0;
     margin-bottom: .5em;
@@ -102,15 +125,6 @@ a {
 
 b {
     color: #cb4b16;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    margin-bottom: .5em;
-    margin-left: 1em;
-    border: #586e75;
-    font-size: 10pt;
 }
 
 footer {
