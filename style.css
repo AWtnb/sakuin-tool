@@ -3,6 +3,8 @@
 black: #073642
 white: #fdf6e3
 brwhite: #eee8d5
+brblue: #839496
+brcyan: #93a1a1
 gray: #586e75
 orange: #cb4b16
 blue: #268bd2
@@ -11,11 +13,14 @@ cyan: #2aa198
 yellow: #b58900
 magenta: #d33682
 violet: #6c71c4
+red: #dc322f
 */
+
 
 body {
     background-color: #fdf6e3;
     color: #073642;
+    font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
 }
 
 #container{
@@ -24,6 +29,17 @@ body {
     margin-right: auto;
     padding-bottom: 2em;
     border-bottom: 4px double #002b36;
+}
+
+.button {
+    font-size: 10pt;
+    padding-left: .5em;
+    padding-right: .5em;
+    padding-top: .25em;
+    padding-bottom: .25em;
+    text-decoration: none;
+    background: #eee8d5;
+    color: #dc322f;
 }
 
 .inputarea {
@@ -39,6 +55,16 @@ body {
     display: inline-flex;
     margin-top: .5em;
     margin-bottom: .5em;
+}
+.inputarea > .horizontal > form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: .5em;
+}
+.inputarea > .horizontal > form > textarea, input {
+    margin-left: .5em;
 }
 
 .caption {
@@ -72,6 +98,7 @@ table {
     margin-bottom: .5em;
     margin-left: 2em;
     border: #586e75;
+    font-size: 10pt;
 }
 
 footer {

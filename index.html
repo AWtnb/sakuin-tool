@@ -35,9 +35,9 @@
     <div class="horizontal">
         <form name="form_toYomi">
             <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="取得" onclick="clickBtn_yomi()"/>
+            <input type="button" value="取得" onclick="clickBtn_yomi()" class="button">
             <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="ここに結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_yomi_copy()"/>
+            <input type="button" value="コピー" onclick="clickBtn_yomi_copy()" class="button">
         </form>
     </div>
 </div>
@@ -70,9 +70,9 @@ function clickBtn_yomi_copy() {
     <div class="horizontal">
         <form name="form_toHairetsu">
             <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="変換" onclick="clickBtn_hairetsu()"/>
+            <input type="button" value="変換" onclick="clickBtn_hairetsu()" class="button">
             <textarea name="textarea2" cols="25" rows="20" value="1" readonly placeholder="ここに結果が表示されます"></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_hairetsu_copy()"/>
+            <input type="button" value="コピー" onclick="clickBtn_hairetsu_copy()" class="button">
         </form>
     </div>
 </div>
@@ -115,9 +115,9 @@ function clickBtn_hairetsu_copy() {
     <div class="horizontal">
         <form name="form_toNayose">
             <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="名寄せ" onclick="clickBtn_nayose()"/>
+            <input type="button" value="名寄せ" onclick="clickBtn_nayose()" class="button">
             <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_nayose_copy()"/>
+            <input type="button" value="コピー" onclick="clickBtn_nayose_copy()" class="button">
         </form>
     </div>
 </div>
@@ -152,9 +152,9 @@ function clickBtn_nayose_copy() {
     <div class="horizontal">
         <form name="form_toConvert">
             <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="変換" onclick="clickBtn_katahira()"/>
+            <input type="button" value="変換" onclick="clickBtn_katahira()" class="button">
             <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_katahira_copy()"/>
+            <input type="button" value="コピー" onclick="clickBtn_katahira_copy()" class="button">
         </form>
     </div>
 </div>
@@ -209,9 +209,9 @@ function clickBtn_katahira_copy() {
     <div class="horizontal">
         <form name="form_toComplete">
             <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引を貼り付けてください"></textarea>
-            <input type="button" value="復元" onclick="clickBtn_complete()"/>
+            <input type="button" value="復元" onclick="clickBtn_complete()" class="button">
             <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_complete_copy()"/>
+            <input type="button" value="コピー" onclick="clickBtn_complete_copy()" class="button">
         </form>
     </div>
 </div>
@@ -267,8 +267,8 @@ function clickBtn_katahira_copy() {
     <div class="horizontal">
         <form name="form_toRelease">
             <textarea name="textarea1" cols="40" rows="10" value="1" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
-            <input type="button" value="名開き" onclick="clickBtn_release()"/>
-            <input type="button" value="表をコピー" onclick="clickBtn_release_copy()"/>
+            <input type="button" value="名開き" onclick="clickBtn_release()" class="button">
+            <input type="button" value="表をコピー" onclick="clickBtn_release_copy()" class="button">
         </form>
     </div>
 </div>
@@ -336,6 +336,6 @@ function clickBtn_katahira_copy() {
 footer
 ======================================== -->
 <footer>
-<p><img src="https://img.icons8.com/small/16/000000/github.png"/> <a href="https://github.com/AWtnb/sakuin-tool" target="_blank">Github repository</a></p>
+<p><img src="https://img.icons8.com/small/16/000000/github.png"> <a href="https://github.com/AWtnb/sakuin-tool" target="_blank">Github repository</a></p>
 </footer>
 </html>
