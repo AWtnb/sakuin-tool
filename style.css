@@ -39,7 +39,8 @@ body {
     padding-bottom: .25em;
     text-decoration: none;
     background: #eee8d5;
-    color: #dc322f;
+    color: #002b36;
+    letter-spacing: 1px;
 }
 
 .inputarea {
@@ -62,6 +63,16 @@ body {
     align-items: center;
     margin-top: 0;
     margin-bottom: .5em;
+}
+.inputarea > .horizontal > form > textarea {
+    transition: 0.3s;
+    border: 1px dotted #d33682;
+    border-radius: 8px;
+}
+.inputarea > .horizontal > form > textarea:focus {
+    border: 1px solid #d33682;
+    outline: none;
+    box-shadow: 0 0 5px 1px rgba(211, 54, 130, 0.48);
 }
 .inputarea > .horizontal > form > textarea, input {
     margin-left: .5em;
