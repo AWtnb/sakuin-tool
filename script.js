@@ -1,4 +1,7 @@
 ﻿
+////////////////////////////////////////////////
+// 汎用関数
+////////////////////////////////////////////////
 
 function copyTable(elementId) {
     const range = document.createRange();
@@ -10,8 +13,6 @@ function copyTable(elementId) {
     document.execCommand("Copy");
     alert("コピーしました！");
 }
-
-
 
 ////////////////////////////////////////////////
 // 読み取得
@@ -206,13 +207,19 @@ function completeChildItem (multiLines, delimiter) {
 // 索引テンプレート生成
 ////////////////////////////////////////////////
 
+function toHankaku(str) {
+    return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
+        return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+    });
+}
+
 function generateTemplare(multiLines) {
     const lines = multiLines.split(/[\r\n]+/g).filter(line => line.match(/./g));
     const templateArray = [];
     lines.forEach(line => {
         let pair = line.split("\t");
         let page = pair[0];
-        let nItem = pair[1];
+        let nItem = toHankaku(pair[1]);
         if (String(nItem) != "0" && nItem.match(/^\d+$/)) {
             for (let i = 0; i < Number(nItem); i++) {
                 templateArray.push(page);
