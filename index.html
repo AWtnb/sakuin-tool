@@ -28,7 +28,10 @@
 <h3>索引拾いのテンプレート生成</h3>
 
 <div class="caption">
-    <img src="https://i.gyazo.com/4cb522e9dfe14011e64580154cadc6c7.png">
+    <div class="imagebox">
+        <div class="boxtitle">SAMPLE</div>
+        <img src="https://i.gyazo.com/4cb522e9dfe14011e64580154cadc6c7.png">
+    </div>
     <ul>
         <li>索引拾いのための Excel テンプレートを作成します。</li>
         <li>各ページの項目数を上図のように Excel に整理して下記ボックスに貼り付けてください。</li>
@@ -166,13 +169,16 @@ function clickBtn_yomi_copy() {
         <li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
         <li>子項目は手動で作成してください。</li>
     </ul>
-    <img src = "https://i.gyazo.com/3ab3b7d640fa94adb97b06fc96658789.png">
+    <div class="imagebox">
+        <div class="boxtitle">SAMPLE</div>
+        <img src = "https://i.gyazo.com/3ab3b7d640fa94adb97b06fc96658789.png">
+    </div>
 </div>
 
 <div class="inputarea">
     <div class="horizontal">
         <form name="form_toNayose">
-            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
+            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
             <input type="button" value="名寄せ" onclick="clickBtn_nayose()" class="button">
             <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_nayose_copy()" class="button">
@@ -249,7 +255,10 @@ function clickBtn_katahira_copy() {
 <h3>子項目の復元</h3>
 
 <div class="caption">
-    <img src="https://i.gyazo.com/2bbc343e73bcd735473dd7082abbba43.png" height="200">
+    <div class="imagebox">
+        <div class="boxtitle">SAMPLE</div>
+        <img src="https://i.gyazo.com/2bbc343e73bcd735473dd7082abbba43.png" height="200">
+    </div>
     <ul>
         <li>索引項目中の子項目を復元します（上図）。</li>
         <li>ノンブルが入っていても動作します。</li>
@@ -299,8 +308,10 @@ function clickBtn_katahira_copy() {
 ======================================== -->
 <h3>名開き</h3>
 
-<div class="caption">
-    <img src="https://i.gyazo.com/1cf1286b016173909636921bdf18d68e.png" height="300">
+<div class="caption"><div class="imagebox">
+    <div class="boxtitle">SAMPLE</div>
+        <img src="https://i.gyazo.com/1cf1286b016173909636921bdf18d68e.png" height="300">
+    </div>
     <ul>
         <li>名寄せされた状態の索引を「項目－ノンブル」の1対1対応に戻します（上図）。</li>
         <li>子項目や見よ項目はそのまま残ります。</li>
@@ -312,7 +323,7 @@ function clickBtn_katahira_copy() {
     「項目」と「ノンブル」の間の文字：
     <form name="form_delimiter">
         <input type="radio" name="delim1" value="　　" checked> 2倍アキ
-        <input type="radio" name="delim1" value="\t" > タブ（Excel）
+        <input type="radio" name="delim1" value="\t" > タブ文字（Excel）
     </form>
     「ノンブル」列のカンマの種類：
     <form name="form_nombreConnector">

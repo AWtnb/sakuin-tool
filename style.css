@@ -108,15 +108,30 @@ body {
 }
 .caption ul {
     padding-left: 1em;
+    padding-bottom: .25em;
     margin-left: 1em;
-    padding-top: 0;
-    padding-bottom: .5em;
 }
-.caption img {
-    margin-left: 2em;
-    margin-top: 0;
-    margin-bottom: .5em;
-    border: solid 1px #586e75;
+.caption .imagebox {
+    display: inline-flex;
+    position: relative;
+    margin-top: .75em;
+    margin-bottom: .75em;
+    margin-left: .75em;
+    padding: .75em;
+    border: 1px solid #839496;
+    border-radius: 8px;
+}
+.caption .imagebox .boxtitle {
+    color: #839496;
+    font-size: 10pt;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-left: .5em;
+    padding-right: .5em;
+    margin: 0;
+    background-color: #fdf6e3;
+    transform: translateY(-50%) translateX(1em);
 }
 
 a {
