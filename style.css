@@ -70,6 +70,7 @@ body {
     transition: 0.3s;
     border: 1px dotted #d33682;
     border-radius: 6px;
+    padding: .5em;
 }
 .inputarea .horizontal form textarea:focus {
     border: 1px solid #d33682;
