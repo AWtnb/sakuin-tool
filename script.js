@@ -18,9 +18,8 @@ function copyTable(elementId) {
 // 読み取得
 ////////////////////////////////////////////////
 
-function setYomi(inputLines){
-    const outputArea = document.form_toYomi.textarea2;
-    outputArea.value = "（🤔よみがな計算中…）";
+function setYomi(outputArea, inputLines){
+    outputArea.value = "（\u{1f914}よみがな計算中…）";
     const promise = new Promise((resolve, reject) => {
         kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
             if (err) {
@@ -111,11 +110,12 @@ function toHairetsu (str, removeNoise) {
 ////////////////////////////////////////////////
 // 名寄せ
 ////////////////////////////////////////////////
-function nayose (str) {
+
+function nayose (lines) {
     let table = {};
-    let lines = str.split(/[\r\n]+/g);
+    let lineArray = lines.split(/[\r\n]+/g);
     // 集約
-    lines.forEach(item => {
+    lineArray.forEach(item => {
         if (item && item.replace(/\s/g, "")) {
             let pair = item.split("\t");
             if (pair[0] in table) {
@@ -184,7 +184,7 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
 
 function completeChildItem (multiLines, delimiter) {
     const lines = multiLines.split(/[\r\n]+/g).filter(line => line.match(/./g));
-    const regAfterDelim = new RegExp("(" + delimiter + ").+", "g");
+    const regAfterDelim = new RegExp(`${delimiter}.+$`, "g");
     const regFiller = new RegExp("(\u2500|\u2015|\u2500)+");
     const completedArray = [];
     completedArray.push(lines[0]);

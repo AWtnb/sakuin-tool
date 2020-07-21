@@ -86,7 +86,7 @@
         templateArray.forEach(line => {
             let row = resultTable.insertRow(-1);
             let cell1 = row.insertCell(0);
-            let cell2 = row.insertCell(1); 
+            let cell2 = row.insertCell(1);
             cell1.innerHTML = line;
             cell2.innerHTML = "";
         });
@@ -124,8 +124,9 @@
 
 <script>
 function clickBtn_yomi() {
-    let lines = document.form_toYomi.textarea1.value;
-    setYomi(lines);
+    const lines = document.form_toYomi.textarea1.value;
+    const outputArea = document.form_toYomi.textarea2;
+    setYomi(outputArea, lines);
 }
 function clickBtn_yomi_copy() {
     document.form_toYomi.textarea2.select()
@@ -414,7 +415,7 @@ function clickBtn_katahira_copy() {
         for (let item in releasedObj) {
             let row = resultTable.insertRow(-1);
             let cell1 = row.insertCell(0);
-            let cell2 = row.insertCell(1); 
+            let cell2 = row.insertCell(1);
             cell1.innerHTML = releasedObj[item].name;
             cell2.innerHTML = releasedObj[item].nombre;
         }
