@@ -132,7 +132,7 @@ function toHairetsu (str, removeNoise) {
         }
         let ktkn = hira2kata(line);
         for (let t in table) {
-            let reg = new RegExp(t, "g")
+            let reg = new RegExp(t, "g");
             ktkn = ktkn.replace(reg, table[t]);
         }
         if (removeNoise == true) {
@@ -333,8 +333,8 @@ function generateTemplare(multiLines) {
 }
 
 function clickBtn_generate() {
-    const linestoGenerate = document.querySelector("#inputarea_toGenerate form.generate .input").value;
-    const templateArray = generateTemplare(linestoGenerate);
+    const linesToGenerate = document.querySelector("#inputarea_toGenerate form.generate .input").value;
+    const templateArray = generateTemplare(linesToGenerate);
 
     const outputTable = document.querySelector("#inputarea_toGenerate .outputTable");
     resetTable(outputTable)
@@ -350,4 +350,38 @@ function clickBtn_generate() {
 function clickBtn_generate_copy() {
     const templateTable = document.querySelector("#inputarea_toGenerate .outputTable");
     copyTable(templateTable);
+}
+
+////////////////////////////////////////////////
+// 子項目候補の確認
+////////////////////////////////////////////////
+
+function highlightChildItem(multilines) {
+    const lines = multilines.split(/[\r\n]+/g);
+    const nonMiyoItems = lines.filter(line => !line.match(/→/g));
+    const indexItems = nonMiyoItems
+        .filter(line => line.match(/./g))
+        .filter(line => !line.match(/^　/g))
+        .map(line => line.replace(/　　\d.*$/g, ""));
+    let array = [];
+    indexItems.forEach(item => {
+        let itemBaseName = item.replace(/（.*?）|［.*?］/g, "");
+        let escaped = itemBaseName.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
+        let reg = new RegExp(`^${escaped}|${escaped}$`, "g");
+        let grep = indexItems.filter(line => line.match(reg));
+        if (grep.length > 1) {
+            let markup = grep
+                .filter(line => !(line == item))
+                .map(line => line.replace(reg, "<b class=\"blue\">$&</b>"))
+                .join("<br>");
+            array.push(`<b>${item}</b> を含む項目：<br>${markup}`);
+        }
+    });
+    return array.map(item => `<p>${item}</p>`).join("\n");
+}
+
+function clickBtn_check() {
+    const lines = document.querySelector("#inputarea_forCheck form.check .input").value;
+    const markup = highlightChildItem(lines);
+    document.querySelector("#inputarea_forCheck .output").innerHTML = markup;
 }

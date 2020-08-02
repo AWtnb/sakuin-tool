@@ -119,7 +119,10 @@ body {
 a {
   color: #2aa198;
 }
-b {
+b.blue {
+  color: #268bd2;
+}
+b.red {
   color: #dc322f;
 }
 footer {
@@ -139,6 +142,8 @@ h1 {
 }
 h2 {
   padding: 0.25em 0.5em;
+  margin-top: 3em;
+  margin-bottom: 1em;
   background: transparent;
   border-left: solid 6px #268bd2;
   border-bottom: solid 2px #839496;
@@ -146,8 +151,9 @@ h2 {
 }
 h3 {
   font-size: 14pt;
-  padding-left: 0.5em;
-  margin-top: 1em;
+  padding-left: 0.25em;
+  margin-top: 3em;
+  margin-left: 1em;
   border-left: solid 6px #268bd2;
 }
 hr {
@@ -171,7 +177,7 @@ hr {
   font-weight: bold;
 }
 .back2top {
-  margin: 1em 0.5em 0.1em 0;
+  margin: 1em -1em 0.1em 0;
   text-align: end;
 }
 .back2top a {

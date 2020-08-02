@@ -143,7 +143,10 @@ a {
     color: @cyan;
 }
 
-b {
+b.blue {
+    color: @blue;
+}
+b.red {
     color: @red;
 }
 
@@ -162,10 +165,11 @@ h1 {
     background: @brwhite;
     border-left: solid 6px @blue;
     border-bottom: solid 4px @brblue;
-    
 }
 h2 {
     padding: 0.25em 0.5em;
+    margin-top: 3em;
+    margin-bottom: 1em;
     background: transparent;
     border-left: solid 6px @blue;
     border-bottom: solid 2px @brblue;
@@ -173,8 +177,9 @@ h2 {
 }
 h3 {
     font-size: 14pt;
-    padding-left: .5em;
-    margin-top: 1em;
+    padding-left: .25em;
+    margin-top: 3em;
+    margin-left: 1em;
     border-left: solid 6px @blue;
 }
 
@@ -201,7 +206,7 @@ hr {
 }
 
 .back2top {
-    margin: 1em .5em .1em 0;
+    margin: 1em -1em .1em 0;
     text-align: end;
     a {
         &::after {

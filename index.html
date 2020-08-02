@@ -15,7 +15,7 @@
 
 <h1>索引作成補助ツール</h1>
 <div class="caption">
-    <p><b>注：Internet explorer では動作しません！</b></p>
+    <p><b class="red">注：Internet explorer では動作しません！</b></p>
 </div>
 <div id="navi" class="navigation">
     <ol>
@@ -24,8 +24,9 @@
                 <li><a href="#index_forTemplate">索引拾いのテンプレート生成</a></li>
                 <li><a href="#index_forYomi">読みがなの取得</a></li>
                 <li><a href="#index_forHairetsu">配列読みに変換</a></li>
-                <li><a href="#index_forNayose">名寄せ</a></li>
                 <li><a href="#index_forKatahira">カタカナひらがな相互変換</a></li>
+                <li><a href="#index_forNayose">名寄せ</a></li>
+                <li><a href="#index_forCheckChild">子項目候補の確認</a></li>
             </ol>
         <li><a href="#index_forReuse">旧版再利用ツール</a></li>
             <ol>
@@ -73,7 +74,7 @@
 </div>
 
 <div class="back2top"><a href="#navi">目次に戻る</a></div>
-<hr>
+
 
 <!-- ========================================
 読み情報の取得
@@ -99,7 +100,7 @@
 </div>
 
 <div class="back2top"><a href="#navi">目次に戻る</a></div>
-<hr>
+
 
 <!-- ========================================
 配列読みの取得
@@ -125,7 +126,33 @@
 </div>
 
 <div class="back2top"><a href="#navi">目次に戻る</a></div>
-<hr>
+
+
+<!-- ========================================
+カタカナひらがな相互変換
+======================================== -->
+<h3 id="index_forKatahira">カタカナひらがな相互変換</h3>
+<div class="caption">
+    <p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
+</div>
+
+<div class="inputarea" id="inputarea_forKatahira">
+    <form class="katahiraFlag">
+        <label><input type="radio" name="radio1" value="toKata" checked>ひらがな→カタカナ</label>
+        <label><input type="radio" name="radio1" value="toHira"        >カタカナ→ひらがな</label>
+    </form>
+    <div class="horizontal">
+        <form class="convert">
+            <textarea class="input" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="変換" onclick="clickBtn_katahira()" class="button">
+            <textarea class="output" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_katahira_copy()" class="button">
+        </form>
+    </div>
+</div>
+
+<div class="back2top"><a href="#navi">目次に戻る</a></div>
+
 
 <!-- ========================================
 名寄せ
@@ -155,31 +182,29 @@
 </div>
 
 <div class="back2top"><a href="#navi">目次に戻る</a></div>
-<hr>
 
 <!-- ========================================
-カタカナひらがな相互変換
+子項目候補の確認
 ======================================== -->
-<h3 id="index_forKatahira">カタカナひらがな相互変換</h3>
+
+<h3 id="index_forCheckChild">子項目候補の確認</h3>
 <div class="caption">
-    <p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
+    <ul>
+        <li>名寄せ済みの索引に対して子項目の候補を探します。</li>
+    </ul>
 </div>
 
-<div class="inputarea" id="inputarea_forKatahira">
-    <form class="katahiraFlag">
-        <label><input type="radio" name="radio1" value="toKata" checked>ひらがな→カタカナ</label>
-        <label><input type="radio" name="radio1" value="toHira"        >カタカナ→ひらがな</label>
-    </form>
+<div class="inputarea" id="inputarea_forCheck">
     <div class="horizontal">
-        <form class="convert">
-            <textarea class="input" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="変換" onclick="clickBtn_katahira()" class="button">
-            <textarea class="output" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_katahira_copy()" class="button">
+        <form class="check">
+            <textarea class="input" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
+            <input type="button" value="チェック" onclick="clickBtn_check()" class="button">
         </form>
     </div>
-</div>
 
+    <div class="output">
+    </div>
+</div>
 
 <div class="back2top"><a href="#navi">目次に戻る</a></div>
 
@@ -222,7 +247,7 @@
 </div>
 
 <div class="back2top"><a href="#navi">目次に戻る</a></div>
-<hr>
+
 
 <!-- ========================================
 名開き
