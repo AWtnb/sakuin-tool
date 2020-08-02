@@ -57,8 +57,8 @@
 
 <div class="inputarea" id="inputarea_toGenerate">
     <div class="horizontal">
-        <form name="form_toGenerate">
-            <textarea cols="40" rows="10" value="1" class="input" placeholder="図のように Excel から貼り付けてください"></textarea>
+        <form class="generate">
+            <textarea cols="40" rows="10" class="input" placeholder="図のように Excel から貼り付けてください"></textarea>
             <input type="button" value="生成" onclick="clickBtn_generate()" class="button">
             <input type="button" value="表をコピー" onclick="clickBtn_generate_copy()" class="button">
         </form>
@@ -89,7 +89,7 @@
 
 <div class="inputarea" id="inputarea_forYomi">
     <div class="horizontal">
-        <form name="form_toYomi">
+        <form class="yomi">
             <textarea cols="25" rows="20" class="input" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="取得" onclick="clickBtn_yomi()" class="button">
             <textarea cols="25" rows="20" class="output" placeholder="ここに結果が表示されます" readonly></textarea>
@@ -111,11 +111,11 @@
 </div>
 
 <div class="inputarea" id="inputarea_forHairetsu">
-    <form name="form_removeFlag">
+    <form class="removeFlag">
         <input type="checkbox" class="removeFlag"> ひらがな・カタカナ・数字以外を削除する
     </form>
     <div class="horizontal">
-        <form name="form_toHairetsu">
+        <form name="hairetsu">
             <textarea cols="25" rows="20" class="input" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="変換" onclick="clickBtn_hairetsu()" class="button">
             <textarea cols="25" rows="20" class="output" readonly placeholder="ここに結果が表示されます"></textarea>
@@ -145,7 +145,7 @@
 
 <div class="inputarea" id="inputarea_forNayose">
     <div class="horizontal">
-        <form name="form_toNayose">
+        <form class="nayose">
             <textarea cols="25" rows="20" class="input" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
             <input type="button" value="名寄せ" onclick="clickBtn_nayose()" class="button">
             <textarea cols="25" rows="20" class="output" placeholder="結果が表示されます" readonly></textarea>
@@ -166,12 +166,12 @@
 </div>
 
 <div class="inputarea" id="inputarea_forKatahira">
-    <form class="form_katahiraFlag">
+    <form class="katahiraFlag">
         <label><input type="radio" name="radio1" value="toKata" checked>ひらがな→カタカナ</label>
         <label><input type="radio" name="radio1" value="toHira"        >カタカナ→ひらがな</label>
     </form>
     <div class="horizontal">
-        <form name="form_toConvert">
+        <form class="convert">
             <textarea cols="25" rows="20" class="input" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="変換" onclick="clickBtn_katahira()" class="button">
             <textarea cols="25" rows="20" class="output" placeholder="結果が表示されます" readonly></textarea>

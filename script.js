@@ -67,12 +67,12 @@ function setYomi(outputArea, inputLines){
 }
 
 function clickBtn_yomi() {
-    const lines = document.querySelector("#inputarea_forYomi .input").value;
-    const outputArea = document.querySelector("#inputarea_forYomi .output");
+    const lines = document.querySelector("#inputarea_forYomi form.yomi .input").value;
+    const outputArea = document.querySelector("#inputarea_forYomi form.yomi .output");
     setYomi(outputArea, lines);
 }
 function clickBtn_yomi_copy() {
-    document.form_toYomi.textarea2.select()
+    document.querySelector("#inputarea_forYomi form.yomi .output").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -96,16 +96,16 @@ function kata2hira(str){
 }
 
 function clickBtn_katahira() {
-    const lines_toConvert = document.querySelector("#inputarea_forKatahira .input").value;
-    let mode = document.querySelector("#inputarea_forKatahira > .form_katahiraFlag").radio1.value;
+    const lines_toConvert = document.querySelector("#inputarea_forKatahira form.convert .input").value;
+    const mode = document.querySelector("#inputarea_forKatahira form.katahiraFlag").radio1.value;
     let msg = kata2hira(lines_toConvert);
     if (mode == "toKata") {
         msg = hira2kata(lines_toConvert);
     }
-    document.querySelector("#inputarea_forKatahira .output").value = msg;
+    document.querySelector("#inputarea_forKatahira form.convert .output").value = msg;
 }
 function clickBtn_katahira_copy() {
-    document.querySelector("#inputarea_forKatahira .output").select();
+    document.querySelector("#inputarea_forKatahira form.convert .output").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -144,8 +144,8 @@ function toHairetsu (str, removeNoise) {
 }
 
 function clickBtn_hairetsu() {
-    const lines_toHairetsu = document.querySelector("#inputarea_forHairetsu .input").value;
-    const removeFlag = document.querySelector("#inputarea_forHairetsu form .removeFlag");
+    const lines_toHairetsu = document.querySelector("#inputarea_forHairetsu form.hairetsu .input").value;
+    const removeFlag = document.querySelector("#inputarea_forHairetsu form.removeFlag .removeFlag");
 
     let converted = [];
     if (removeFlag.checked) {
@@ -155,10 +155,10 @@ function clickBtn_hairetsu() {
         converted = toHairetsu(lines_toHairetsu, false);
     }
     const msg = converted.join("\n");
-    document.querySelector("#inputarea_forHairetsu .output").value = msg;
+    document.querySelector("#inputarea_forHairetsu form.hairetsu .output").value = msg;
 }
 function clickBtn_hairetsu_copy() {
-    document.querySelector("#inputarea_forHairetsu .output").select();
+    document.querySelector("#inputarea_forHairetsu form.hairetsu .output").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -198,13 +198,13 @@ function nayose (lines) {
 }
 
 function clickBtn_nayose() {
-    const lines_toNayose = document.querySelector("#inputarea_forNayose .input").value;
+    const lines_toNayose = document.querySelector("#inputarea_forNayose form.nayose .input").value;
     const nys = nayose(lines_toNayose);
     const msg = nys.join("\n");
-    document.querySelector("#inputarea_forNayose .output").value = msg;
+    document.querySelector("#inputarea_forNayose form.nayose .output").value = msg;
 }
 function clickBtn_nayose_copy() {
-    document.querySelector("#inputarea_forNayose .output").select();
+    document.querySelector("#inputarea_forNayose form.nayose .output").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -333,7 +333,7 @@ function generateTemplare(multiLines) {
 }
 
 function clickBtn_generate() {
-    const linestoGenerate = document.querySelector("#inputarea_toGenerate .input").value;
+    const linestoGenerate = document.querySelector("#inputarea_toGenerate form.generate .input").value;
     const templateArray = generateTemplare(linestoGenerate);
 
     const outputTable = document.querySelector("#inputarea_toGenerate .outputTable");
