@@ -3,10 +3,9 @@
 // 汎用関数
 ////////////////////////////////////////////////
 
-function copyTable(elementId) {
+function copyTable(tableElem) {
     const range = document.createRange();
-    const result = document.getElementById(elementId);
-    range.selectNodeContents(result);
+    range.selectNodeContents(tableElem);
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
@@ -14,7 +13,14 @@ function copyTable(elementId) {
     alert("コピーしました！");
 }
 
-function resetTable() {}
+function resetTable(tableElem) {
+    const maxRow = tableElem.rows.length;
+    if (maxRow > 1) {
+        for (let r = maxRow - 1; r >= 1; r--) {
+            tableElem.deleteRow(r);
+        }
+    }
+}
 
 ////////////////////////////////////////////////
 // 読み取得
@@ -61,8 +67,8 @@ function setYomi(outputArea, inputLines){
 }
 
 function clickBtn_yomi() {
-    const lines = document.form_toYomi.textarea1.value;
-    const outputArea = document.form_toYomi.textarea2;
+    const lines = document.querySelector("#inputarea_forYomi .input").value;
+    const outputArea = document.querySelector("#inputarea_forYomi .output");
     setYomi(outputArea, lines);
 }
 function clickBtn_yomi_copy() {
@@ -90,7 +96,7 @@ function kata2hira(str){
 }
 
 function clickBtn_katahira() {
-    const lines_toConvert = document.form_toConvert.textarea1.value;
+    const lines_toConvert = document.querySelector("#inputarea_forKatahira .input").value;
     let mode = document.querySelector("#inputarea_forKatahira > .form_katahiraFlag").radio1.value;
     let msg = kata2hira(lines_toConvert);
     if (mode == "toKata") {
@@ -138,8 +144,9 @@ function toHairetsu (str, removeNoise) {
 }
 
 function clickBtn_hairetsu() {
-    const lines_toHairetsu = document.form_toHairetsu.textarea1.value;
-    const removeFlag = document.form_removeFlag.removeFlag;
+    const lines_toHairetsu = document.querySelector("#inputarea_forHairetsu .input").value;
+    const removeFlag = document.querySelector("#inputarea_forHairetsu form .removeFlag");
+
     let converted = [];
     if (removeFlag.checked) {
         converted = toHairetsu(lines_toHairetsu, true);
@@ -148,10 +155,10 @@ function clickBtn_hairetsu() {
         converted = toHairetsu(lines_toHairetsu, false);
     }
     const msg = converted.join("\n");
-    document.form_toHairetsu.textarea2.value = msg;
+    document.querySelector("#inputarea_forHairetsu .output").value = msg;
 }
 function clickBtn_hairetsu_copy() {
-    document.form_toHairetsu.textarea2.select();
+    document.querySelector("#inputarea_forHairetsu .output").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -191,13 +198,13 @@ function nayose (lines) {
 }
 
 function clickBtn_nayose() {
-    const lines_toNayose = document.form_toNayose.textarea1.value;
+    const lines_toNayose = document.querySelector("#inputarea_forNayose .input").value;
     const nys = nayose(lines_toNayose);
     const msg = nys.join("\n");
-    document.form_toNayose.textarea2.value = msg;
+    document.querySelector("#inputarea_forNayose .output").value = msg;
 }
 function clickBtn_nayose_copy() {
-    document.form_toNayose.textarea2.select();
+    document.querySelector("#inputarea_forNayose .output").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -239,35 +246,17 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
 }
 
 function clickBtn_release() {
-    let delimiter = "\t"
-    const delimRadioBtn = document.form_delimiter.delim1;
-    for (let i = 0; i < delimRadioBtn.length; i++){
-        if(delimRadioBtn[i].checked){
-            delimiter = delimRadioBtn[i].value;
-            break;
-        }
-    }
+    const delimiter = document.querySelector("#inputarea_forRelease form.delimiter").radio1.value;
+    const nombreConnector = document.querySelector("#inputarea_forRelease form.nombreConnector").radio1.value;
 
-    let nombreConnector = "，"
-    const commaRadioBtn = document.form_nombreConnector.connect1;
-    for (let j = 0; j < commaRadioBtn.length; j++){
-        if(commaRadioBtn[j].checked){
-            nombreConnector = commaRadioBtn[j].value;
-            break;
-        }
-    }
-    const linesToRelease = document.form_toRelease.textarea1.value;
+    const linesToRelease = document.querySelector("#inputarea_forRelease form.release .input").value;
     const releasedObj = releaseNayoseLines(linesToRelease, nombreConnector, delimiter);
 
-    const resultTable = document.getElementById("releaseTable");
-    const maxRow = resultTable.rows.length;
-    if (maxRow > 1) {
-        for (let r = maxRow - 1; r >= 1; r--) {
-            resultTable.deleteRow(r);
-        }
-    }
+    const outputTable = document.querySelector("#inputarea_forRelease .outputTable");
+    resetTable(outputTable);
+
     for (let item in releasedObj) {
-        let row = resultTable.insertRow(-1);
+        let row = outputTable.insertRow(-1);
         let cell1 = row.insertCell(0);
         let cell2 = row.insertCell(1);
         cell1.innerHTML = releasedObj[item].name;
@@ -275,7 +264,8 @@ function clickBtn_release() {
     }
 }
 function clickBtn_release_copy() {
-    copyTable("releaseTable");
+    const outputTable = document.querySelector("#inputarea_forRelease .outputTable");
+    copyTable(outputTable);
 }
 
 
@@ -305,13 +295,13 @@ function completeChildItem (multiLines, delimiter) {
 }
 
 function clickBtn_complete() {
-    let delimiter = document.querySelector("#form_delim_toComplete").radio1.value;
-    const lines_toComplete = document.form_toComplete.textarea1.value;
+    const delimiter = document.querySelector("#inputarea_toComplete form.delimiter").radio1.value;
+    const lines_toComplete = document.querySelector("#inputarea_toComplete form.complete .input").value;
     const completedArray = completeChildItem(lines_toComplete, delimiter);
-    document.form_toComplete.textarea2.value = completedArray.join("\n");
+    document.querySelector("#inputarea_toComplete form.complete .output").value = completedArray.join("\n");
 }
 function clickBtn_complete_copy() {
-    document.form_toComplete.textarea2.select();
+    document.querySelector("#inputarea_toComplete form.complete .input").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -346,15 +336,11 @@ function clickBtn_generate() {
     const linestoGenerate = document.querySelector("#inputarea_toGenerate .input").value;
     const templateArray = generateTemplare(linestoGenerate);
 
-    const resultTable = document.getElementById("templateTable");
-    const maxRow = resultTable.rows.length;
-    if (maxRow > 1) {
-        for (let r = maxRow - 1; r >= 1; r--) {
-            resultTable.deleteRow(r);
-        }
-    }
+    const outputTable = document.querySelector("#inputarea_toGenerate .outputTable");
+    resetTable(outputTable)
+
     templateArray.forEach(line => {
-        let row = resultTable.insertRow(-1);
+        let row = outputTable.insertRow(-1);
         let cell1 = row.insertCell(0);
         let cell2 = row.insertCell(1);
         cell1.innerHTML = line;
@@ -362,5 +348,6 @@ function clickBtn_generate() {
     });
 }
 function clickBtn_generate_copy() {
-    copyTable("templateTable");
+    const templateTable = document.querySelector("#inputarea_toGenerate .outputTable");
+    copyTable(templateTable);
 }

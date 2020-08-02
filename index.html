@@ -64,7 +64,7 @@
         </form>
     </div>
 
-    <table id="templateTable" border="double">
+    <table border="double" class="outputTable">
         <tr>
             <td>ページ</td>
             <td>項目</td>
@@ -90,9 +90,9 @@
 <div class="inputarea" id="inputarea_forYomi">
     <div class="horizontal">
         <form name="form_toYomi">
-            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
+            <textarea cols="25" rows="20" class="input" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="取得" onclick="clickBtn_yomi()" class="button">
-            <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="ここに結果が表示されます" readonly></textarea>
+            <textarea cols="25" rows="20" class="output" placeholder="ここに結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_yomi_copy()" class="button">
         </form>
     </div>
@@ -112,13 +112,13 @@
 
 <div class="inputarea" id="inputarea_forHairetsu">
     <form name="form_removeFlag">
-        <input type="checkbox" name="removeFlag" value="remove"> ひらがな・カタカナ・数字以外を削除する
+        <input type="checkbox" class="removeFlag"> ひらがな・カタカナ・数字以外を削除する
     </form>
     <div class="horizontal">
         <form name="form_toHairetsu">
-            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
+            <textarea cols="25" rows="20" class="input" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="変換" onclick="clickBtn_hairetsu()" class="button">
-            <textarea name="textarea2" cols="25" rows="20" value="1" readonly placeholder="ここに結果が表示されます"></textarea>
+            <textarea cols="25" rows="20" class="output" readonly placeholder="ここに結果が表示されます"></textarea>
             <input type="button" value="コピー" onclick="clickBtn_hairetsu_copy()" class="button">
         </form>
     </div>
@@ -146,9 +146,9 @@
 <div class="inputarea" id="inputarea_forNayose">
     <div class="horizontal">
         <form name="form_toNayose">
-            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
+            <textarea cols="25" rows="20" class="input" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
             <input type="button" value="名寄せ" onclick="clickBtn_nayose()" class="button">
-            <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+            <textarea cols="25" rows="20" class="output" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_nayose_copy()" class="button">
         </form>
     </div>
@@ -172,9 +172,9 @@
     </form>
     <div class="horizontal">
         <form name="form_toConvert">
-            <textarea cols="25" rows="20" value="1" class="input" placeholder="文字列を貼り付けてください"></textarea>
+            <textarea cols="25" rows="20" class="input" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="変換" onclick="clickBtn_katahira()" class="button">
-            <textarea cols="25" rows="20" value="1" class="output" placeholder="結果が表示されます" readonly></textarea>
+            <textarea cols="25" rows="20" class="output" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_katahira_copy()" class="button">
         </form>
     </div>
@@ -207,15 +207,15 @@
 
 <div class="inputarea" id="inputarea_toComplete">
     項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：
-    <form id="form_delim_toComplete">
+    <form class="delimiter">
         <input type="radio" name="radio1" value="　　" checked> 二倍アキ
-        <input type="radio" name="radio1" value="\t" > タブ文字（Excel）
+        <input type="radio" name="radio1" value="\t"          > タブ文字（Excel）
     </form>
     <div class="horizontal">
-        <form name="form_toComplete">
-            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="索引を貼り付けてください"></textarea>
+        <form class="complete">
+            <textarea cols="25" rows="20" class="input" placeholder="索引を貼り付けてください"></textarea>
             <input type="button" value="復元" onclick="clickBtn_complete()" class="button">
-            <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+            <textarea cols="25" rows="20" class="output" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_complete_copy()" class="button">
         </form>
     </div>
@@ -242,25 +242,25 @@
 
 <div class="inputarea" id="inputarea_forRelease">
     「項目」と「ノンブル」の間の文字：
-    <form name="form_delimiter">
-        <input type="radio" name="delim1" value="　　" checked> 2倍アキ
-        <input type="radio" name="delim1" value="\t" > タブ文字（Excel）
+    <form class="delimiter">
+        <input type="radio" name="radio1" value="　　" checked> 2倍アキ
+        <input type="radio" name="radio1" value="\t"          > タブ文字（Excel）
     </form>
     「ノンブル」列のカンマの種類：
-    <form name="form_nombreConnector">
-        <input type="radio" name="connect1" value="，" checked> 全角モノ
-        <input type="radio" name="connect1" value="," > 半角モノ
+    <form class="nombreConnector">
+        <input type="radio" name="radio1" value="，" checked> 全角モノ
+        <input type="radio" name="radio1" value=","         > 半角モノ
     </form>
 
     <div class="horizontal">
-        <form name="form_toRelease">
-            <textarea name="textarea1" cols="40" rows="10" value="1" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
+        <form class="release">
+            <textarea cols="40" rows="10" class="input" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
             <input type="button" value="名開き" onclick="clickBtn_release()" class="button">
             <input type="button" value="表をコピー" onclick="clickBtn_release_copy()" class="button">
         </form>
     </div>
 
-    <table id="releaseTable" border="double">
+    <table class="outputTable" border="double">
         <tr>
             <td>項目</td>
             <td>ノンブル</td>
