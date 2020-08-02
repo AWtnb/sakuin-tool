@@ -14,6 +14,8 @@ function copyTable(elementId) {
     alert("コピーしました！");
 }
 
+function resetTable() {}
+
 ////////////////////////////////////////////////
 // 読み取得
 ////////////////////////////////////////////////
@@ -58,9 +60,21 @@ function setYomi(outputArea, inputLines){
     });
 }
 
+function clickBtn_yomi() {
+    const lines = document.form_toYomi.textarea1.value;
+    const outputArea = document.form_toYomi.textarea2;
+    setYomi(outputArea, lines);
+}
+function clickBtn_yomi_copy() {
+    document.form_toYomi.textarea2.select()
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+
 ////////////////////////////////////////////////
 // カタカナひらがな相互変換
 ////////////////////////////////////////////////
+
 function hira2kata(str){
     return str.replace(/[\u3041-\u3096]/g, function(match) {
         var chr = match.charCodeAt(0) + 0x60;
@@ -75,9 +89,25 @@ function kata2hira(str){
     });
 }
 
+function clickBtn_katahira() {
+    const lines_toConvert = document.form_toConvert.textarea1.value;
+    let mode = document.querySelector("#inputarea_forKatahira > .form_katahiraFlag").radio1.value;
+    let msg = kata2hira(lines_toConvert);
+    if (mode == "toKata") {
+        msg = hira2kata(lines_toConvert);
+    }
+    document.querySelector("#inputarea_forKatahira .output").value = msg;
+}
+function clickBtn_katahira_copy() {
+    document.querySelector("#inputarea_forKatahira .output").select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+
 ////////////////////////////////////////////////
 // 配列読み
 ////////////////////////////////////////////////
+
 function toHairetsu (str, removeNoise) {
     let table = [];
     table["ァ"]="ア";table["ィ"]="イ";table["ゥ"]="ウ";table["ェ"]="エ";table["ォ"]="オ";table["ヴ"]="ウ";
@@ -105,6 +135,25 @@ function toHairetsu (str, removeNoise) {
         ret.push(ktkn);
     });
     return ret;
+}
+
+function clickBtn_hairetsu() {
+    const lines_toHairetsu = document.form_toHairetsu.textarea1.value;
+    const removeFlag = document.form_removeFlag.removeFlag;
+    let converted = [];
+    if (removeFlag.checked) {
+        converted = toHairetsu(lines_toHairetsu, true);
+    }
+    else {
+        converted = toHairetsu(lines_toHairetsu, false);
+    }
+    const msg = converted.join("\n");
+    document.form_toHairetsu.textarea2.value = msg;
+}
+function clickBtn_hairetsu_copy() {
+    document.form_toHairetsu.textarea2.select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
 }
 
 ////////////////////////////////////////////////
@@ -139,6 +188,18 @@ function nayose (lines) {
         }
     }
     return ret;
+}
+
+function clickBtn_nayose() {
+    const lines_toNayose = document.form_toNayose.textarea1.value;
+    const nys = nayose(lines_toNayose);
+    const msg = nys.join("\n");
+    document.form_toNayose.textarea2.value = msg;
+}
+function clickBtn_nayose_copy() {
+    document.form_toNayose.textarea2.select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
 }
 
 ////////////////////////////////////////////////
@@ -177,6 +238,46 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
     return releasedObj
 }
 
+function clickBtn_release() {
+    let delimiter = "\t"
+    const delimRadioBtn = document.form_delimiter.delim1;
+    for (let i = 0; i < delimRadioBtn.length; i++){
+        if(delimRadioBtn[i].checked){
+            delimiter = delimRadioBtn[i].value;
+            break;
+        }
+    }
+
+    let nombreConnector = "，"
+    const commaRadioBtn = document.form_nombreConnector.connect1;
+    for (let j = 0; j < commaRadioBtn.length; j++){
+        if(commaRadioBtn[j].checked){
+            nombreConnector = commaRadioBtn[j].value;
+            break;
+        }
+    }
+    const linesToRelease = document.form_toRelease.textarea1.value;
+    const releasedObj = releaseNayoseLines(linesToRelease, nombreConnector, delimiter);
+
+    const resultTable = document.getElementById("releaseTable");
+    const maxRow = resultTable.rows.length;
+    if (maxRow > 1) {
+        for (let r = maxRow - 1; r >= 1; r--) {
+            resultTable.deleteRow(r);
+        }
+    }
+    for (let item in releasedObj) {
+        let row = resultTable.insertRow(-1);
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        cell1.innerHTML = releasedObj[item].name;
+        cell2.innerHTML = releasedObj[item].nombre;
+    }
+}
+function clickBtn_release_copy() {
+    copyTable("releaseTable");
+}
+
 
 ////////////////////////////////////////////////
 // 子項目復活
@@ -203,6 +304,18 @@ function completeChildItem (multiLines, delimiter) {
     return completedArray
 }
 
+function clickBtn_complete() {
+    let delimiter = document.querySelector("#form_delim_toComplete").radio1.value;
+    const lines_toComplete = document.form_toComplete.textarea1.value;
+    const completedArray = completeChildItem(lines_toComplete, delimiter);
+    document.form_toComplete.textarea2.value = completedArray.join("\n");
+}
+function clickBtn_complete_copy() {
+    document.form_toComplete.textarea2.select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+
 ////////////////////////////////////////////////
 // 索引テンプレート生成
 ////////////////////////////////////////////////
@@ -227,4 +340,27 @@ function generateTemplare(multiLines) {
         }
     });
     return templateArray
+}
+
+function clickBtn_generate() {
+    const linestoGenerate = document.querySelector("#inputarea_toGenerate .input").value;
+    const templateArray = generateTemplare(linestoGenerate);
+
+    const resultTable = document.getElementById("templateTable");
+    const maxRow = resultTable.rows.length;
+    if (maxRow > 1) {
+        for (let r = maxRow - 1; r >= 1; r--) {
+            resultTable.deleteRow(r);
+        }
+    }
+    templateArray.forEach(line => {
+        let row = resultTable.insertRow(-1);
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        cell1.innerHTML = line;
+        cell2.innerHTML = "";
+    });
+}
+function clickBtn_generate_copy() {
+    copyTable("templateTable");
 }

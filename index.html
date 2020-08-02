@@ -55,10 +55,10 @@
     </ul>
 </div>
 
-<div class="inputarea">
+<div class="inputarea" id="inputarea_toGenerate">
     <div class="horizontal">
         <form name="form_toGenerate">
-            <textarea name="textarea1" cols="40" rows="10" value="1" placeholder="図のように Excel から貼り付けてください"></textarea>
+            <textarea cols="40" rows="10" value="1" class="input" placeholder="図のように Excel から貼り付けてください"></textarea>
             <input type="button" value="生成" onclick="clickBtn_generate()" class="button">
             <input type="button" value="表をコピー" onclick="clickBtn_generate_copy()" class="button">
         </form>
@@ -87,7 +87,7 @@
     </ul>
 </div>
 
-<div class="inputarea">
+<div class="inputarea" id="inputarea_forYomi">
     <div class="horizontal">
         <form name="form_toYomi">
             <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
@@ -110,7 +110,7 @@
     <p>テキストボックスに入力された文字列を配列読みに変換します。</p>
 </div>
 
-<div class="inputarea">
+<div class="inputarea" id="inputarea_forHairetsu">
     <form name="form_removeFlag">
         <input type="checkbox" name="removeFlag" value="remove"> ひらがな・カタカナ・数字以外を削除する
     </form>
@@ -143,7 +143,7 @@
     </div>
 </div>
 
-<div class="inputarea">
+<div class="inputarea" id="inputarea_forNayose">
     <div class="horizontal">
         <form name="form_toNayose">
             <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
@@ -165,16 +165,16 @@
     <p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
 </div>
 
-<div class="inputarea">
-    <form id="form_katahiraFlag">
+<div class="inputarea" id="inputarea_forKatahira">
+    <form class="form_katahiraFlag">
         <label><input type="radio" name="radio1" value="toKata" checked>ひらがな→カタカナ</label>
         <label><input type="radio" name="radio1" value="toHira"        >カタカナ→ひらがな</label>
     </form>
     <div class="horizontal">
         <form name="form_toConvert">
-            <textarea name="textarea1" cols="25" rows="20" value="1" placeholder="文字列を貼り付けてください"></textarea>
+            <textarea cols="25" rows="20" value="1" class="input" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="変換" onclick="clickBtn_katahira()" class="button">
-            <textarea name="textarea2" cols="25" rows="20" value="1" placeholder="結果が表示されます" readonly></textarea>
+            <textarea cols="25" rows="20" value="1" class="output" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_katahira_copy()" class="button">
         </form>
     </div>
@@ -205,11 +205,11 @@
     </ul>
 </div>
 
-<div class="inputarea">
+<div class="inputarea" id="inputarea_toComplete">
     項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：
-    <form name="form_delim">
-        <input type="radio" name="delim1" value="　　" checked> 二倍アキ
-        <input type="radio" name="delim1" value="\t" > タブ文字（Excel）
+    <form id="form_delim_toComplete">
+        <input type="radio" name="radio1" value="　　" checked> 二倍アキ
+        <input type="radio" name="radio1" value="\t" > タブ文字（Excel）
     </form>
     <div class="horizontal">
         <form name="form_toComplete">
@@ -240,7 +240,7 @@
     </ul>
 </div>
 
-<div class="inputarea">
+<div class="inputarea" id="inputarea_forRelease">
     「項目」と「ノンブル」の間の文字：
     <form name="form_delimiter">
         <input type="radio" name="delim1" value="　　" checked> 2倍アキ
@@ -269,180 +269,6 @@
 </div>
 
 <div class="back2top"><a href="#navi">目次に戻る</a></div>
-
-<script>
-    
-// --------------------
-// テンプレート生成用
-// --------------------
-
-function clickBtn_generate() {
-    const linestoGenerate = document.form_toGenerate.textarea1.value;
-    const templateArray = generateTemplare(linestoGenerate);
-
-    const resultTable = document.getElementById("templateTable");
-    const maxRow = resultTable.rows.length;
-    if (maxRow > 1) {
-        for (let r = maxRow - 1; r >= 1; r--) {
-            resultTable.deleteRow(r);
-        }
-    }
-    templateArray.forEach(line => {
-        let row = resultTable.insertRow(-1);
-        let cell1 = row.insertCell(0);
-        let cell2 = row.insertCell(1);
-        cell1.innerHTML = line;
-        cell2.innerHTML = "";
-    });
-}
-function clickBtn_generate_copy() {
-    copyTable("templateTable");
-}
-
-// --------------------
-// 読みがな取得用
-// --------------------
-
-function clickBtn_yomi() {
-    const lines = document.form_toYomi.textarea1.value;
-    const outputArea = document.form_toYomi.textarea2;
-    setYomi(outputArea, lines);
-}
-function clickBtn_yomi_copy() {
-    document.form_toYomi.textarea2.select()
-    document.execCommand("Copy");
-    alert("コピーしました！");
-}
-
-// --------------------
-// 配列よみ変換用
-// --------------------
-
-function clickBtn_hairetsu() {
-    const lines_toHairetsu = document.form_toHairetsu.textarea1.value;
-    const removeFlag = document.form_removeFlag.removeFlag;
-    let converted = [];
-    if (removeFlag.checked) {
-        converted = toHairetsu(lines_toHairetsu, true);
-    }
-    else {
-        converted = toHairetsu(lines_toHairetsu, false);
-    }
-    const msg = converted.join("\n");
-    document.form_toHairetsu.textarea2.value = msg;
-}
-function clickBtn_hairetsu_copy() {
-    document.form_toHairetsu.textarea2.select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
-}
-
-// --------------------
-// 名寄せ用
-// --------------------
-
-function clickBtn_nayose() {
-    const lines_toNayose = document.form_toNayose.textarea1.value;
-    const nys = nayose(lines_toNayose);
-    const msg = nys.join("\n");
-    document.form_toNayose.textarea2.value = msg;
-}
-function clickBtn_nayose_copy() {
-    document.form_toNayose.textarea2.select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
-}
-
-// --------------------
-// カタカナひらがな変換用
-// --------------------
-
-function clickBtn_katahira() {
-    const lines_toConvert = document.form_toConvert.textarea1.value;
-    let element = document.getElementById("form_katahiraFlag");
-    let radioList = element.radio1;
-    let mode = radioList.value;
-    if (mode == "toKata") {
-        msg = hira2kata(lines_toConvert);
-    }
-    else {
-        msg = kata2hira(lines_toConvert);
-    }
-    document.form_toConvert.textarea2.value = msg;
-}
-function clickBtn_katahira_copy() {
-    document.form_toConvert.textarea2.select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
-}
-
-// --------------------
-// 子項目復元用
-// --------------------
-
-function clickBtn_complete() {
-    let delimiter = "　　"
-    const delimRadioBtn = document.form_delim.delim1;
-    for (let i = 0; i < delimRadioBtn.length; i++){
-        if(delimRadioBtn[i].checked){
-            delimiter = delimRadioBtn[i].value;
-            break;
-        }
-    }
-    const lines_toComplete = document.form_toComplete.textarea1.value;
-    const completedArray = completeChildItem(lines_toComplete, delimiter);
-    document.form_toComplete.textarea2.value = completedArray.join("\n");
-}
-function clickBtn_complete_copy() {
-    document.form_toComplete.textarea2.select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
-}
-
-// --------------------
-// 名開き用
-// --------------------
-
-function clickBtn_release() {
-    let delimiter = "\t"
-    const delimRadioBtn = document.form_delimiter.delim1;
-    for (let i = 0; i < delimRadioBtn.length; i++){
-        if(delimRadioBtn[i].checked){
-            delimiter = delimRadioBtn[i].value;
-            break;
-        }
-    }
-
-    let nombreConnector = "，"
-    const commaRadioBtn = document.form_nombreConnector.connect1;
-    for (let j = 0; j < commaRadioBtn.length; j++){
-        if(commaRadioBtn[j].checked){
-            nombreConnector = commaRadioBtn[j].value;
-            break;
-        }
-    }
-    const linesToRelease = document.form_toRelease.textarea1.value;
-    const releasedObj = releaseNayoseLines(linesToRelease, nombreConnector, delimiter);
-
-    const resultTable = document.getElementById("releaseTable");
-    const maxRow = resultTable.rows.length;
-    if (maxRow > 1) {
-        for (let r = maxRow - 1; r >= 1; r--) {
-            resultTable.deleteRow(r);
-        }
-    }
-    for (let item in releasedObj) {
-        let row = resultTable.insertRow(-1);
-        let cell1 = row.insertCell(0);
-        let cell2 = row.insertCell(1);
-        cell1.innerHTML = releasedObj[item].name;
-        cell2.innerHTML = releasedObj[item].nombre;
-    }
-}
-function clickBtn_release_copy() {
-    copyTable("releaseTable");
-}
-</script>
 
 </div>
 </body>
