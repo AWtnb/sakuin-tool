@@ -51,6 +51,8 @@ body {
   border-radius: 6px;
   padding: 0.5em;
   margin-left: 0.5em;
+  width: 200px;
+  height: 250px;
 }
 .inputarea .horizontal form textarea:focus {
   border: 1px solid #d33682;
