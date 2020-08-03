@@ -356,7 +356,7 @@ function clickBtn_generate_copy() {
 // 子項目候補の確認
 ////////////////////////////////////////////////
 
-function highlightChildItem(multilines) {
+function highlightChildItem(multilines, mode="tail") {
     const lines = multilines.split(/[\r\n]+/g);
     const nonMiyoItems = lines.filter(line => !line.match(/→/g));
     const indexItems = nonMiyoItems
@@ -367,7 +367,18 @@ function highlightChildItem(multilines) {
     indexItems.forEach(item => {
         let itemBaseName = item.replace(/（.*?）|［.*?］/g, "");
         let escaped = itemBaseName.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
-        let reg = new RegExp(`^${escaped}|${escaped}$`, "g");
+
+        let reg
+        if (mode == "tail") {
+            reg = new RegExp(`${escaped}$`, "g");
+        }
+        else if (mode == "head") {
+            reg = new RegExp(`^${escaped}`, "g");
+        }
+        else {
+            reg = new RegExp(`^${escaped}|${escaped}$`, "g");
+        }
+
         let grep = indexItems.filter(line => line.match(reg));
         if (grep.length > 1) {
             let markup = grep
@@ -382,6 +393,7 @@ function highlightChildItem(multilines) {
 
 function clickBtn_check() {
     const lines = document.querySelector("#inputarea_forCheck form.check .input").value;
-    const markup = highlightChildItem(lines);
+    const mode = document.querySelector("#inputarea_forCheck form.searchPos").radio1.value;
+    const markup = highlightChildItem(lines, mode);
     document.querySelector("#inputarea_forCheck .output").innerHTML = markup;
 }
