@@ -123,22 +123,20 @@ function toHairetsu (str, removeNoise) {
     table["バ"]="ハ";table["ビ"]="ヒ";table["ブ"]="フ";table["ベ"]="ヘ";table["ボ"]="ホ";table["パ"]="ハ";table["ピ"]="ヒ";table["プ"]="フ";table["ペ"]="ヘ";table["ポ"]="ホ";
     table["ャ"]="ヤ";table["ュ"]="ユ";table["ョ"]="ヨ";
     table["ー"]="";
-    let lines = str.split(/[\r\n]/g); // windows
-    let ret = [];
-    lines.forEach (line => {
+    let lines = str.split(/\r?\n/g);
+    const ret = lines.map (line => {
         if (!line) {
-            ret.push("")
-            return;
+            return "";
         }
         let ktkn = hira2kata(line);
         for (let t in table) {
             let reg = new RegExp(t, "g");
             ktkn = ktkn.replace(reg, table[t]);
         }
-        if (removeNoise == true) {
+        if (removeNoise) {
             ktkn = ktkn.replace(/[^ァ-ヴa-zA-Z0-9０-９]/g, "");
         }
-        ret.push(ktkn);
+        return ktkn;
     });
     return ret;
 }
@@ -147,13 +145,7 @@ function clickBtn_hairetsu() {
     const lines_toHairetsu = document.querySelector("#inputarea_forHairetsu form.hairetsu .input").value;
     const removeFlag = document.querySelector("#inputarea_forHairetsu form.removeFlag .removeFlag");
 
-    let converted = [];
-    if (removeFlag.checked) {
-        converted = toHairetsu(lines_toHairetsu, true);
-    }
-    else {
-        converted = toHairetsu(lines_toHairetsu, false);
-    }
+    const converted = toHairetsu(lines_toHairetsu, removeFlag.checked);
     const msg = converted.join("\n");
     document.querySelector("#inputarea_forHairetsu form.hairetsu .output").value = msg;
 }
@@ -218,7 +210,7 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
     const regDelimiter = new RegExp(delimiter);
     const releasedObj = [];
     const lines = multiLines.split(/[\r\n]+/g);
-    lines.filter(line => line.match(/./g)).forEach(line => {
+    lines.filter(line => line).forEach(line => {
         if (! line.match(regDelimiter)) {
             releasedObj.push({name: line, nombre: ""});
             return
@@ -274,7 +266,7 @@ function clickBtn_release_copy() {
 ////////////////////////////////////////////////
 
 function completeChildItem (multiLines, delimiter) {
-    const lines = multiLines.split(/[\r\n]+/g).filter(line => line.match(/./g));
+    const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
     const regAfterDelim = new RegExp(`${delimiter}.+$`, "g");
     const regFiller = new RegExp("(\u2500|\u2015|\u2500)+");
     const completedArray = [];
@@ -317,7 +309,7 @@ function toHankaku(str) {
 }
 
 function generateTemplare(multiLines) {
-    const lines = multiLines.split(/[\r\n]+/g).filter(line => line.match(/./g));
+    const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
     const templateArray = [];
     lines.forEach(line => {
         let pair = line.split("\t");
@@ -360,13 +352,12 @@ function highlightChildItem(multilines, mode="tail") {
     const lines = multilines.split(/[\r\n]+/g);
     const nonMiyoItems = lines.filter(line => !line.match(/→/g));
     const indexItems = nonMiyoItems
-        .filter(line => line.match(/./g))
+        .filter(line => line)
         .filter(line => !line.match(/^　/g))
         .map(line => line.replace(/　　\d.*$/g, ""));
-    let array = [];
-    indexItems.forEach(item => {
-        let itemBaseName = item.replace(/（.*?）|［.*?］/g, "");
-        let escaped = itemBaseName.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
+    const array = indexItems.map(item => {
+        const itemBaseName = item.replace(/（.*?）|［.*?］/g, "");
+        const escaped = itemBaseName.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
 
         let reg
         if (mode == "tail") {
@@ -379,15 +370,15 @@ function highlightChildItem(multilines, mode="tail") {
             reg = new RegExp(`^${escaped}|${escaped}$`, "g");
         }
 
-        let grep = indexItems.filter(line => line.match(reg));
+        const grep = indexItems.filter(line => line.match(reg));
         if (grep.length > 1) {
-            let markup = grep
+            const markup = grep
                 .filter(line => !(line == item))
                 .map(line => line.replace(reg, "<b class=\"blue\">$&</b>"))
                 .join("<br>");
-            array.push(`<b>${item}</b> を含む項目：<br>${markup}`);
+            return `<b>${item}</b> を含む項目：<br>${markup}`;
         }
-    });
+    }).filter(x => x);
     return array.map(item => `<p>${item}</p>`).join("\n");
 }
 
