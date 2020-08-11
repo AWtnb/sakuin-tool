@@ -163,27 +163,29 @@ function nayose (lines) {
     let table = {};
     let lineArray = lines.split(/[\r\n]+/g);
     // 集約
-    lineArray.forEach(item => {
-        if (item && item.replace(/\s/g, "")) {
-            let pair = item.split("\t");
-            if (pair[0] in table) {
-                table[pair[0]] = (table[pair[0]] + ", " + pair[1]);
+    lineArray
+        .filter(line => line)
+        .filter(line => !line.match(/^\s+$/))
+        .forEach(item => {
+            const pair = item.split("\t");
+            const itemName = pair[0];
+            const nombre = pair[1];
+            if (itemName in table) {
+                table[itemName] = (table[itemName] + ", " + nombre);
             }
             else {
-                table[pair[0]] = pair[1];
+                table[itemName] = nombre;
             }
-        }
-    });
+        });
 
     // 整形
     let ret = [];
     for (let n in table) {
-        if (typeof (table[n]) === "undefined") {
+        if (table[n] == "" || typeof(table[n]) === "undefined") {
             ret.push(n);
         }
         else {
-            let line = n + "　　" + table[n]
-            ret.push(line);
+            ret.push(n + "　　" + table[n]);
         }
     }
     return ret;
