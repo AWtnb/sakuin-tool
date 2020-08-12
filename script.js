@@ -167,11 +167,15 @@ function nayose (lines) {
         .filter(line => line)
         .filter(line => !line.match(/^\s+$/))
         .forEach(item => {
-            const pair = item.split("\t");
-            const itemName = pair[0];
-            const nombre = pair[1];
+            const [itemName, nombre, rest] = item.split("\t");
             if (itemName in table) {
-                table[itemName] = (table[itemName] + ", " + nombre);
+                const currentValue = table[itemName];
+                if (currentValue == "") {
+                    table[itemName] = nombre;
+                }
+                else if (nombre != "") {
+                    table[itemName] = currentValue + ", " + nombre;
+                }
             }
             else {
                 table[itemName] = nombre;
