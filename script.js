@@ -171,7 +171,7 @@ function nayose (lines) {
         .filter(line => line)
         .filter(line => !line.match(/^\s+$/))
         .forEach(item => {
-            const [itemName, nombre, rest] = item.split("\t");
+            const [itemName, nombre, ...rest] = item.split("\t");
             if (map.has(itemName)) {
                 const currentValue = map.get(itemName);
                 if (currentValue == "") {
@@ -225,7 +225,7 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
             releasedObj.push({name: line, nombre: ""});
             return
         }
-        const [name, nombre, rest] = line.split(regDelimiter);
+        const [name, nombre, ...rest] = line.split(regDelimiter);
         if (nombre.match(regConnector)) {
             const nombreArray = nombre.replace(/\s/g, "").split(regConnector);
             nombreArray.forEach(n => {
@@ -319,7 +319,7 @@ function generateTemplare(multiLines) {
     const templateArray = [];
     const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
     lines.forEach(line => {
-        const [page, counter, rest] = line.split("\t");
+        const [page, counter, ...rest] = line.split("\t");
         const nItem = toHankaku(counter);
         if (String(nItem) != "0" && nItem.match(/^\d+$/)) {
             for (let i = 0; i < Number(nItem); i++) {
