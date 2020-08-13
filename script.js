@@ -39,9 +39,9 @@ function setYomi(outputArea, inputLines){
         });
     });
     promise.then((tokenizer) => {
-        let yomiArray = inputLines.split(/\n/).map(line => {
-            let parsed = tokenizer.tokenize(line);
-            let yomi = parsed.map(token => {
+        const yomiArray = inputLines.split(/\n/).map(line => {
+            const parsed = tokenizer.tokenize(line);
+            const yomi = parsed.map(token => {
                 console.log(token.surface_form, token.word_type, token.pos, token.reading);
                 let surface = token.surface_form;
                 if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
@@ -83,26 +83,30 @@ function clickBtn_yomi_copy() {
 
 function hira2kata(str){
     return str.replace(/[\u3041-\u3096]/g, function(match) {
-        var chr = match.charCodeAt(0) + 0x60;
+        const chr = match.charCodeAt(0) + 0x60;
         return String.fromCharCode(chr);
     });
 }
 
 function kata2hira(str){
     return str.replace(/[\u30a1-\u30f6]/g, function(match) {
-        var chr = match.charCodeAt(0) - 0x60;
+        const chr = match.charCodeAt(0) - 0x60;
         return String.fromCharCode(chr);
     });
+}
+
+function convertHiraKata(str, mode){
+    if (mode == "toKata") {
+        return hira2kata(str)
+    }
+    return kata2hira(str)
 }
 
 function clickBtn_katahira() {
     const lines_toConvert = document.querySelector("#inputarea_forKatahira form.convert .input").value;
     const mode = document.querySelector("#inputarea_forKatahira form.katahiraFlag").radio1.value;
-    let msg = kata2hira(lines_toConvert);
-    if (mode == "toKata") {
-        msg = hira2kata(lines_toConvert);
-    }
-    document.querySelector("#inputarea_forKatahira form.convert .output").value = msg;
+    const converted = convertHiraKata(lines_toConvert, mode);
+    document.querySelector("#inputarea_forKatahira form.convert .output").value = converted;
 }
 function clickBtn_katahira_copy() {
     document.querySelector("#inputarea_forKatahira form.convert .output").select();
@@ -115,7 +119,7 @@ function clickBtn_katahira_copy() {
 ////////////////////////////////////////////////
 
 function toHairetsu (str, removeNoise) {
-    let table = [];
+    const table = [];
     table["ァ"]="ア";table["ィ"]="イ";table["ゥ"]="ウ";table["ェ"]="エ";table["ォ"]="オ";table["ヴ"]="ウ";
     table["ガ"]="カ";table["ギ"]="キ";table["グ"]="ク";table["ゲ"]="ケ";table["ゴ"]="コ";
     table["ザ"]="サ";table["ジ"]="シ";table["ズ"]="ス";table["ゼ"]="セ";table["ゾ"]="ソ";
@@ -123,20 +127,20 @@ function toHairetsu (str, removeNoise) {
     table["バ"]="ハ";table["ビ"]="ヒ";table["ブ"]="フ";table["ベ"]="ヘ";table["ボ"]="ホ";table["パ"]="ハ";table["ピ"]="ヒ";table["プ"]="フ";table["ペ"]="ヘ";table["ポ"]="ホ";
     table["ャ"]="ヤ";table["ュ"]="ユ";table["ョ"]="ヨ";
     table["ー"]="";
-    let lines = str.split(/\r?\n/g);
+    const lines = str.split(/\r?\n/g);
     const ret = lines.map (line => {
         if (!line) {
             return "";
         }
-        let ktkn = hira2kata(line);
+        let katakana = hira2kata(line);
         for (let t in table) {
             let reg = new RegExp(t, "g");
-            ktkn = ktkn.replace(reg, table[t]);
+            katakana = katakana.replace(reg, table[t]);
         }
         if (removeNoise) {
-            ktkn = ktkn.replace(/[^ァ-ヴa-zA-Z0-9０-９]/g, "");
+            katakana = katakana.replace(/[^ァ-ヴa-zA-Z0-9０-９]/g, "");
         }
-        return ktkn;
+        return katakana;
     });
     return ret;
 }
@@ -185,8 +189,6 @@ function nayose (lines) {
     // 整形
     const ret = [];
     map.forEach((v, k) => {
-        console.log(typeof(v));
-        console.log(v);
         if (v == "" || typeof(v) === "undefined") {
             ret.push(k)
         }
@@ -223,12 +225,9 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
             releasedObj.push({name: line, nombre: ""});
             return
         }
-        let pair = line.split(regDelimiter);
-        let name = String(pair[0]);
-        let nombre = String(pair[1]);
+        const [name, nombre, rest] = line.split(regDelimiter);
         if (nombre.match(regConnector)) {
-            nombre = nombre.replace(/\s/g, "");
-            let nombreArray = nombre.split(regConnector);
+            const nombreArray = nombre.replace(/\s/g, "").split(regConnector);
             nombreArray.forEach(n => {
                 releasedObj.push({name: name, nombre: n});
             });
@@ -283,7 +282,7 @@ function completeChildItem (multiLines, delimiter) {
     for (let i = 1; i < lines.length; i++) {
         const currentLine = lines[i];
         if (currentLine.match(regFiller)) {
-            let completedItem = currentLine.replace(/^\s+/, "").replace(regFiller, lastParentItem);
+            const completedItem = currentLine.replace(/^\s+/, "").replace(regFiller, lastParentItem);
             completedArray.push(completedItem);
         }
         else {
@@ -317,12 +316,11 @@ function toHankaku(str) {
 }
 
 function generateTemplare(multiLines) {
-    const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
     const templateArray = [];
+    const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
     lines.forEach(line => {
-        let pair = line.split("\t");
-        let page = pair[0];
-        let nItem = toHankaku(pair[1]);
+        const [page, counter, rest] = line.split("\t");
+        const nItem = toHankaku(counter);
         if (String(nItem) != "0" && nItem.match(/^\d+$/)) {
             for (let i = 0; i < Number(nItem); i++) {
                 templateArray.push(page);
