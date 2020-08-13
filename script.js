@@ -160,38 +160,40 @@ function clickBtn_hairetsu_copy() {
 ////////////////////////////////////////////////
 
 function nayose (lines) {
-    let table = {};
-    let lineArray = lines.split(/[\r\n]+/g);
+    const map = new Map()
+    const lineArray = lines.split(/[\r\n]+/g);
     // 集約
     lineArray
         .filter(line => line)
         .filter(line => !line.match(/^\s+$/))
         .forEach(item => {
             const [itemName, nombre, rest] = item.split("\t");
-            if (itemName in table) {
-                const currentValue = table[itemName];
+            if (map.has(itemName)) {
+                const currentValue = map.get(itemName);
                 if (currentValue == "") {
-                    table[itemName] = nombre;
+                    map.set(itemName, String(nombre));
                 }
                 else if (nombre != "") {
-                    table[itemName] = currentValue + ", " + nombre;
+                    map.set(itemName, currentValue + ", " + String(nombre));
                 }
             }
             else {
-                table[itemName] = nombre;
+                map.set(itemName, String(nombre));
             }
         });
 
     // 整形
-    let ret = [];
-    for (let n in table) {
-        if (table[n] == "" || typeof(table[n]) === "undefined") {
-            ret.push(n);
+    const ret = [];
+    map.forEach((v, k) => {
+        console.log(typeof(v));
+        console.log(v);
+        if (v == "" || typeof(v) === "undefined") {
+            ret.push(k)
         }
         else {
-            ret.push(n + "　　" + table[n]);
+            ret.push(k + "　　" + v);
         }
-    }
+    })
     return ret;
 }
 
