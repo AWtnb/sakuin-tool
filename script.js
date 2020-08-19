@@ -215,19 +215,18 @@ function clickBtn_nayose_copy() {
 // 名開き
 ////////////////////////////////////////////////
 
-function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
-    const regConnector = new RegExp(nombreConnector);
-    const regDelimiter = new RegExp(delimiter);
+function releaseNayoseLines (multiLines, nombreConnector, delim) {
+    const delimiter = (delim == "tab")? "\t": "　　";
     const releasedObj = [];
     const lines = multiLines.split(/[\r\n]+/g);
     lines.filter(line => line).forEach(line => {
-        if (! line.match(regDelimiter)) {
+        if (line.indexOf(delimiter) == -1) {
             releasedObj.push({name: line, nombre: ""});
             return
         }
-        const [name, nombre, ...rest] = line.split(regDelimiter);
-        if (nombre.match(regConnector)) {
-            const nombreArray = nombre.replace(/\s/g, "").split(regConnector);
+        const [name, nombre, ...rest] = line.split(delimiter);
+        if (nombre.indexOf(nombreConnector) != -1) {
+            const nombreArray = nombre.replace(/\s+/g, "").split(nombreConnector);
             nombreArray.forEach(n => {
                 releasedObj.push({name: name, nombre: n});
             });
@@ -245,11 +244,11 @@ function releaseNayoseLines (multiLines, nombreConnector, delimiter) {
 }
 
 function clickBtn_release() {
-    const delimiter = document.querySelector("#inputarea_forRelease form.delimiter").radio1.value;
+    const delim = document.querySelector("#inputarea_forRelease form.delimiter").radio1.value;
     const nombreConnector = document.querySelector("#inputarea_forRelease form.nombreConnector").radio1.value;
 
     const linesToRelease = document.querySelector("#inputarea_forRelease form.release .input").value;
-    const releasedObj = releaseNayoseLines(linesToRelease, nombreConnector, delimiter);
+    const releasedObj = releaseNayoseLines(linesToRelease, nombreConnector, delim);
 
     const outputTable = document.querySelector("#inputarea_forRelease .outputTable");
     resetTable(outputTable);
