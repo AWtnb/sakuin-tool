@@ -424,13 +424,16 @@ function highlightInvalidNombreLine(multilines, comma="half") {
         .map(line => {
             const nombres = line.replace(/^.+?　　/, "");
             const nombreArray = nombres.replace(/\s+/, "").replace("-", nombreConnector).split(nombreConnector);
-            console.log(nombreArray);
-            if(!isSorted(nombreArray) || hasConsecutiveTriplet(nombreArray)) {
-                return `<span style="color:red">${line}</span>`
+            const ret = [line];
+            if (!isSorted(nombreArray)) {
+                ret.push("<span style=\"font-weight:bold;color:red;margin:0 4px;\">←順番</span>");
             }
-            return line
+            if (hasConsecutiveTriplet(nombreArray)) {
+                ret.push("<span style=\"font-weight:bold;color:blue;margin:0 4px;\">←連続</span>");
+            }
+            return ret.join("")
         });
-    return lines.join("<br>\n")
+    return "<p>" + lines.join("<br>\n") + "</p>"
 }
 
 function clickBtn_checkNombre() {
