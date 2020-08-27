@@ -27,6 +27,7 @@
                 <li><a href="#index_forKatahira">カタカナひらがな相互変換</a></li>
                 <li><a href="#index_forNayose">名寄せ</a></li>
                 <li><a href="#index_forCheckChild">子項目候補の確認</a></li>
+                <li><a href="#index_forCheckNombre">ノンブル並びの確認</a></li>
             </ol>
         <li><a href="#index_forReuse">旧版再利用ツール</a></li>
             <ol>
@@ -195,7 +196,7 @@
     </ul>
 </div>
 
-<div class="inputarea" id="inputarea_forCheck">
+<div class="inputarea" id="inputarea_forCheckChild">
     <form class="searchPos">
         <label><input type="radio" name="radio1" value="tail" checked>末尾一致</label>
         <label><input type="radio" name="radio1" value="head"        >先頭一致</label>
@@ -204,7 +205,7 @@
     <div class="horizontal">
         <form class="check">
             <textarea class="input" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
-            <input type="button" value="チェック" onclick="clickBtn_check()" class="button">
+            <input type="button" value="チェック" onclick="clickBtn_checkChild()" class="button">
         </form>
     </div>
 
@@ -213,6 +214,38 @@
 </div>
 
 <div class="back2top"><a href="#navi">目次に戻る</a></div>
+
+<!-- ========================================
+ノンブル並びの確認
+======================================== -->
+
+<h3 id="index_forCheckNombre">ノンブル並びの確認</h3>
+<div class="caption">
+    <ul>
+        <li>名寄せ済みの索引に対して「ノンブルが正しく並んでいないもの」「3つ連続しているもの」を探します。</li>
+        <li>機械的な検索なので必ず目でも確認してください。</li>
+    </ul>
+</div>
+
+<div class="inputarea" id="inputarea_forCheckNombre">
+    <label>カンマの種類：</label>
+    <form class="nombreConnector">
+        <label><input type="radio" name="radio1" value="half" checked>半角</label>
+        <label><input type="radio" name="radio1" value="full"        >全角</label>
+    </form>
+    <div class="horizontal">
+        <form class="check">
+            <textarea class="input" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
+            <input type="button" value="チェック" onclick="clickBtn_checkNombre()" class="button">
+        </form>
+    </div>
+
+    <div class="output">
+    </div>
+</div>
+
+<div class="back2top"><a href="#navi">目次に戻る</a></div>
+
 
 <!-- ======================================================================
 旧版の活用

@@ -387,9 +387,55 @@ function highlightChildItem(multilines, mode="tail") {
     return array.map(item => `<p>${item}</p>`).join("\n");
 }
 
-function clickBtn_check() {
-    const lines = document.querySelector("#inputarea_forCheck form.check .input").value;
-    const mode = document.querySelector("#inputarea_forCheck form.searchPos").radio1.value;
+function clickBtn_checkChild() {
+    const lines = document.querySelector("#inputarea_forCheckChild form.check .input").value;
+    const mode = document.querySelector("#inputarea_forCheckChild form.searchPos").radio1.value;
     const markup = highlightChildItem(lines, mode);
-    document.querySelector("#inputarea_forCheck .output").innerHTML = markup;
+    document.querySelector("#inputarea_forCheckChild .output").innerHTML = markup;
+}
+
+////////////////////////////////////////////////
+// ノンブル並びチェック
+////////////////////////////////////////////////
+
+function isSorted(array) {
+    for (let i = 0; i < array.length - 1; i++) {
+        if (Number(array[i]) >= Number(array[i + 1])) {
+            return false
+        }
+    }
+    return true
+}
+
+function hasConsecutiveTriplet(array) {
+    for (let i = 0; i < array.length - 2; i++) {
+        const current = Number(array[i]);
+        if (current + 1 == Number(array[i + 1]) && current + 2 == Number(array[i + 2])) {
+            return true
+        }
+    }
+    return false
+}
+
+function highlightInvalidNombreLine(multilines, comma="half") {
+    const nombreConnector = (comma == "half")? ",": "，";
+    const lines = multilines.split(/[\r\n]+/g)
+        .filter(line => line)
+        .map(line => {
+            const nombres = line.replace(/^.+?　　/, "");
+            const nombreArray = nombres.replace(/\s+/, "").replace("-", nombreConnector).split(nombreConnector);
+            console.log(nombreArray);
+            if(!isSorted(nombreArray) || hasConsecutiveTriplet(nombreArray)) {
+                return `<span style="color:red">${line}</span>`
+            }
+            return line
+        });
+    return lines.join("<br>\n")
+}
+
+function clickBtn_checkNombre() {
+    const lines = document.querySelector("#inputarea_forCheckNombre form.check .input").value;
+    const comma = document.querySelector("#inputarea_forCheckNombre form.nombreConnector").radio1.value;
+    const markup = highlightInvalidNombreLine(lines, comma);
+    document.querySelector("#inputarea_forCheckNombre .output").innerHTML = markup;
 }
