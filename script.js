@@ -432,7 +432,7 @@ function highlightInvalidNombreLine(multilines) {
             }
             return (ret.join("") == line)? null : ret.join("");
         }).filter(x => x);
-    return "<p>" + invalidLines.join("<br>\n") + "</p>"
+    return (invalidLines.length < 1)? "<p>\u{1F389}問題は見当たりません！</p>" : "<p>" + invalidLines.join("<br>\n") + "</p>";
 }
 
 function clickBtn_checkNombre() {
