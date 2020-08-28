@@ -297,21 +297,12 @@
         <li>名寄せされた状態の索引を「項目－ノンブル」の1対1対応に戻します（上図）。</li>
         <li>子項目や見よ項目はそのまま残ります。</li>
         <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
+        <li>項目とノンブル間が2倍アキで区切られた、テキスト形式の索引でも動作します。</li>
+        <li>タブ文字（Excel）もしくは2倍アキで項目とノンブルを区別しています。<br>「日　　本」などと字間に2つ以上スペースが含まれていると正常に動作しませんのでご注意ください。</li>
     </ul>
 </div>
 
 <div class="inputarea" id="inputarea_forRelease">
-    「項目」と「ノンブル」の間の文字：
-    <form class="delimiter">
-        <input type="radio" name="radio1" value="spaces" checked> 2倍アキ
-        <input type="radio" name="radio1" value="tab"> タブ文字（Excel）
-    </form>
-    「ノンブル」列のカンマの種類：
-    <form class="nombreConnector">
-        <input type="radio" name="radio1" value=","  checked> 半角モノ
-        <input type="radio" name="radio1" value="，"        > 全角モノ
-    </form>
-
     <div class="horizontal">
         <form class="release">
             <textarea class="input" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>

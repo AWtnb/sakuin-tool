@@ -173,24 +173,23 @@ function nayose (lines) {
     const map = new Map()
     const lineArray = lines.split(/[\r\n]+/g);
     // 集約
-    lineArray
-        .filter(line => line)
-        .filter(line => !line.match(/^\s+$/))
-        .forEach(item => {
-            const [itemName, nombre, ...rest] = item.split("\t");
-            if (map.has(itemName)) {
-                const currentValue = map.get(itemName);
-                if (currentValue == "") {
-                    map.set(itemName, String(nombre));
-                }
-                else if (nombre != "") {
-                    map.set(itemName, currentValue + ", " + String(nombre));
-                }
-            }
-            else {
+    lineArray.filter(line => line)
+    .filter(line => !line.match(/^\s+$/))
+    .forEach(item => {
+        const [itemName, nombre, ...rest] = item.split("\t");
+        if (map.has(itemName)) {
+            const currentValue = map.get(itemName);
+            if (currentValue == "") {
                 map.set(itemName, String(nombre));
             }
-        });
+            else if (nombre != "") {
+                map.set(itemName, currentValue + ", " + String(nombre));
+            }
+        }
+        else {
+            map.set(itemName, String(nombre));
+        }
+    });
 
     // 整形
     const ret = [];
@@ -221,40 +220,33 @@ function clickBtn_nayose_copy() {
 // 名開き
 ////////////////////////////////////////////////
 
-function releaseNayoseLines (multiLines, nombreConnector, delim) {
-    const delimiter = (delim == "tab")? "\t": "　　";
+function releaseNayoseLines (multiLines) {
     const releasedObj = [];
     const lines = multiLines.split(/[\r\n]+/g);
-    lines.filter(line => line).forEach(line => {
-        if (line.indexOf(delimiter) == -1) {
+    lines.filter(line => line)
+    .map(line => line.replace("　　", "\t"))
+    .forEach(line => {
+        if (line.indexOf("\t") == -1) {
             releasedObj.push({name: line, nombre: ""});
             return
         }
-        const [name, nombre, ...rest] = line.split(delimiter);
-        if (nombre.indexOf(nombreConnector) != -1) {
-            const nombreArray = nombre.replace(/\s+/g, "").split(nombreConnector);
-            nombreArray.forEach(n => {
-                releasedObj.push({name: name, nombre: n});
-            });
+        const [name, nombres, ...rest] = line.split("\t");
+        if (!nombres) {
+            releasedObj.push({name: name, nombre: ""});
+            return
         }
-        else {
-            if (typeof nombre === 'undefined') {
-                releasedObj.push({name: name, nombre: ""});
-            }
-            else {
-                releasedObj.push({name: name, nombre: nombre});
-            }
-        }
+        const nombreArray = nombres.replace(/\s+/g, "").replace("，", ",").split(",");
+        nombreArray.forEach(n => {
+            releasedObj.push({name: name, nombre: n});
+        });
     });
     return releasedObj
 }
 
 function clickBtn_release() {
-    const delim = document.querySelector("#inputarea_forRelease form.delimiter").radio1.value;
-    const nombreConnector = document.querySelector("#inputarea_forRelease form.nombreConnector").radio1.value;
 
     const linesToRelease = document.querySelector("#inputarea_forRelease form.release .input").value;
-    const releasedObj = releaseNayoseLines(linesToRelease, nombreConnector, delim);
+    const releasedObj = releaseNayoseLines(linesToRelease);
 
     const outputTable = document.querySelector("#inputarea_forRelease .outputTable");
     resetTable(outputTable);
@@ -384,6 +376,7 @@ function highlightChildItem(multilines, mode="tail") {
                 .join("<br>");
             return `<b>${item}</b> を含む項目：<br>${markup}`;
         }
+        return null
     }).filter(x => x);
     return array.map(item => `<p>${item}</p>`).join("\n");
 }
