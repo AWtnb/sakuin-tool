@@ -3,6 +3,12 @@
 // 汎用関数
 ////////////////////////////////////////////////
 
+function toHankaku(str) {
+    return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
+        return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+    });
+}
+
 function copyTable(tableElem) {
     const range = document.createRange();
     range.selectNodeContents(tableElem);
@@ -308,12 +314,6 @@ function clickBtn_complete_copy() {
 // 索引テンプレート生成
 ////////////////////////////////////////////////
 
-function toHankaku(str) {
-    return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
-        return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
-    });
-}
-
 function generateTemplare(multiLines) {
     const templateArray = [];
     const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
@@ -417,13 +417,12 @@ function hasConsecutiveTriplet(array) {
     return false
 }
 
-function highlightInvalidNombreLine(multilines, comma="half") {
-    const nombreConnector = (comma == "half")? ",": "，";
-    const lines = multilines.split(/[\r\n]+/g)
+function highlightInvalidNombreLine(multilines) {
+    const invalidLines = multilines.split(/[\r\n]+/g)
         .filter(line => line)
         .map(line => {
-            const nombres = line.replace(/^.+?　　/, "");
-            const nombreArray = nombres.replace(/\s+/, "").replace("-", nombreConnector).split(nombreConnector);
+            const nombres = line.replace(/^.+?　　/, "").replace(/\s+/, "").replace("，", ",");
+            const nombreArray = nombres.replace("-", ",").split(",");
             const ret = [line];
             if (!isSorted(nombreArray)) {
                 ret.push("<span style=\"font-weight:bold;color:red;margin:0 4px;\">←順番</span>");
@@ -431,14 +430,13 @@ function highlightInvalidNombreLine(multilines, comma="half") {
             if (hasConsecutiveTriplet(nombreArray)) {
                 ret.push("<span style=\"font-weight:bold;color:blue;margin:0 4px;\">←連続</span>");
             }
-            return ret.join("")
-        });
-    return "<p>" + lines.join("<br>\n") + "</p>"
+            return (ret.join("") == line)? null : ret.join("");
+        }).filter(x => x);
+    return "<p>" + invalidLines.join("<br>\n") + "</p>"
 }
 
 function clickBtn_checkNombre() {
     const lines = document.querySelector("#inputarea_forCheckNombre form.check .input").value;
-    const comma = document.querySelector("#inputarea_forCheckNombre form.nombreConnector").radio1.value;
-    const markup = highlightInvalidNombreLine(lines, comma);
+    const markup = highlightInvalidNombreLine(lines);
     document.querySelector("#inputarea_forCheckNombre .output").innerHTML = markup;
 }
