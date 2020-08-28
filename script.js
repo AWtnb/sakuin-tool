@@ -277,8 +277,9 @@ function clickBtn_release_copy() {
 // 子項目復活
 ////////////////////////////////////////////////
 
-function completeChildItem (multiLines, delimiter) {
+function completeChildItem (multiLines, delim) {
     const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
+    const delimiter = (delim == "spaces")? "　　": "\t";
     const regAfterDelim = new RegExp(`${delimiter}.+$`, "g");
     const regFiller = new RegExp("(\u2500|\u2015|\u2500)+");
     const completedArray = [];
