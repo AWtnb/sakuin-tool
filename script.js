@@ -235,7 +235,7 @@ function releaseNayoseLines (multiLines) {
             releasedObj.push({name: name, nombre: ""});
             return
         }
-        const nombreArray = nombres.replace(/\s+/g, "").replace("，", ",").split(",");
+        const nombreArray = nombres.replace(/\s+/g, "").replace(/，/g, ",").split(",");
         nombreArray.forEach(n => {
             releasedObj.push({name: name, nombre: n});
         });
@@ -415,8 +415,8 @@ function highlightInvalidNombreLine(multilines) {
     const invalidLines = multilines.split(/[\r\n]+/g)
         .filter(line => line)
         .map(line => {
-            const nombres = line.replace(/^.+?　　/, "").replace(/\s+/, "").replace("，", ",");
-            const nombreArray = nombres.replace("-", ",").split(",");
+            const nombres = line.replace(/^.+?　　/, "").replace(/\s+/, "").replace(/，/g, ",");
+            const nombreArray = nombres.replace(/-/g, ",").split(",");
             const ret = [line];
             if (!isSorted(nombreArray)) {
                 ret.push("<span style=\"font-weight:bold;color:red;margin:0 4px;\">←順番</span>");
