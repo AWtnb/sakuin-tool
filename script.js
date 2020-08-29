@@ -464,35 +464,41 @@ function findLostMiyoParenthesis(multilines) {
 function findLostMiyoItem(multilines) {
     const lines = multilines.split(/[\r\n]+/g).filter(line => line);
     const miyoReferredLines = lines.filter(line => line.match(/[（\\(].+?[）\\)]/));
-    return miyoReferredLines.map(line => {
+    const lostInfo = [];
+    miyoReferredLines.forEach(line => {
         const toItem = line.replace(/[（\\(].+$/, "");
-        const fromItem = line.replace(/^.+?[（\\(]/, "").replace(/[）\\)].*$/, "");
         const toItemESCAPED = escapeMeta(toItem);
-        const fromItemESCAPED = escapeMeta(fromItem);
-        const targetPattern = new RegExp(`${fromItemESCAPED}\\s*→\\s*${toItemESCAPED}`);
-        const grep = lines.filter(line => line.match(targetPattern));
-        if (grep.length < 1) {
-            return {found: line, shouldExist:`${fromItem}→${toItem}`}
-        }
-        return null
-    }).filter(x => x);
+        const fromItemArray = line.replace(/^.+?[（\\(]/, "").replace(/[）\\)].*$/, "").split(/[,，] */);
+        fromItemArray.forEach(fromItem => {
+            const fromItemESCAPED = escapeMeta(fromItem);
+            const targetPattern = new RegExp(`${fromItemESCAPED}\\s*→\\s*${toItemESCAPED}`);
+            const grep = lines.filter(line => line.match(targetPattern));
+            if (grep.length < 1) {
+                lostInfo.push({found: line, shouldExist:`${fromItem}→${toItem}`});
+            }
+        });
+    });
+    return lostInfo
 }
 
 function clickBtn_checkMiyo(){
+
     const lines = document.querySelector("#userinterface_forCheckMiyo form.check .userInput").value;
     const lostMiyoParenInfo = findLostMiyoParenthesis(lines);
     const foundArray = [];
     if (lostMiyoParenInfo.length > 0) {
+        foundArray.push("<label>見よ項目があるのに参照先に括弧で付記されていないもの</label>");
         lostMiyoParenInfo.forEach(item => {
-            foundArray.push(`見よ項目<span style="color:red">${item.found}</span>の参照先で<span style="font-weight:bold">${item.shouldExist}</span>のように括弧書きされていません。`);
+            foundArray.push(`<li><span style="font-weight:bold">${item.found}</span> …… <span style="color:red">${item.shouldExist}</span></li>`);
         });
     }
     const lostMiyoItemInfo = findLostMiyoItem(lines);
     if (lostMiyoItemInfo.length > 0) {
+        foundArray.push("<label>参照元として括弧書きされているのに見よ項目がないもの</label>");
         lostMiyoItemInfo.forEach(item => {
-            foundArray.push(`項目<span style="color:blue">${item.found}</span>に対する見よ項目<span style="font-weight:bold">${item.shouldExist}</span>がありません。`);
+            foundArray.push(`<li><span style="font-weight:bold">${item.found}</span> …… <span style="color:blue">${item.shouldExist}</span></li>`);
         });
     }
-    const markup = foundArray.map(item => `<li>${item}</li>`).join("\n");
+    const markup = foundArray.join("\n");
     document.querySelector("#userinterface_forCheckMiyo .displayResult").innerHTML = markup;
 }
