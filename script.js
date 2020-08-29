@@ -3,6 +3,10 @@
 // 汎用関数
 ////////////////////////////////////////////////
 
+function escapeMeta(str) {
+    return str.replace(/[-[\]{}()*+?.,\\^$|]/g, "\\$&");
+}
+
 function toHankaku(str) {
     return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
         return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
@@ -355,7 +359,7 @@ function highlightChildItem(multilines, mode="tail") {
         .map(line => line.replace(/　　\d.*$/g, ""));
     const array = indexItems.map(item => {
         const itemBaseName = item.replace(/（.*?）|［.*?］/g, "");
-        const escaped = itemBaseName.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
+        const escaped = escapeMeta(itemBaseName);
 
         let reg
         if (mode == "tail") {
@@ -433,4 +437,43 @@ function clickBtn_checkNombre() {
     const lines = document.querySelector("#inputarea_forCheckNombre form.check .input").value;
     const markup = highlightInvalidNombreLine(lines);
     document.querySelector("#inputarea_forCheckNombre .output").innerHTML = markup;
+}
+
+////////////////////////////////////////////////
+// 見よ項目チェック
+////////////////////////////////////////////////
+
+// 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
+function findLostMiyoParenthesis(multiLines) {
+    const lines = multilines.split(/[\r\n]+/g).filter(line => line);
+    const miyoLines = lines.filter(line => (line.indexOf("→") != -1));
+    return miyoLines.map(line => {
+        const [fromItem, toItem, ...rest] = line.split(/\s*→\s*/);
+        const toItemESCAPED = escapeMeta(toItem);
+        const fromItemESCAPED = escapeMeta(fromItem);
+        const targetPattern = new RegExp(`^${toItemESCAPED}（.*${fromItemESCAPED}.*）`);
+        const grep = lines.filter(line => line.match(targetPattern));
+        if (grep.length < 1) {
+            return {found: line, shouldExist:`${toItem}（… ${fromItem} …）`}
+        }
+        return null
+    }).filter(x => x);
+}
+
+// 括弧書きで付記されているのに見よ項目がないものを探す関数
+function findLostMiyoItem(multiLines) {
+    const lines = multilines.split(/[\r\n]+/g).filter(line => line);
+    const miyoReferredLines = lines.filter(line => line.match(/[（\\(].+?[）\\)]/));
+    return miyoReferredLines.map(line => {
+        const miyoReferredTo = line.replace(/[（\\(].+$/, "");
+        const miyoReferFrom = line.replace(/^.+?[（\\(]/, "").replace(/[）\\)].+$/, "");
+        const miyoReferredToESCAPED = escapeMeta(miyoReferredTo);
+        const miyoReferFromESCAPED = escapeMeta(miyoReferFrom);
+        const targetPattern = new RegExp(`${miyoReferFromESCAPED}\\s*→\\s*${miyoReferredToESCAPED}`);
+        const grep = lines.filter(line => line.match(targetPattern));
+        if (grep.length < 1) {
+            return {found: line, shouldExist:`${miyoReferFrom}→${miyoReferredTo}`}
+        }
+        return null
+    }).filter(x => x);
 }
