@@ -61,13 +61,13 @@
 <div class="userinterface" id="userinterface_toGenerate">
     <div class="horizontal">
         <form class="generate">
-            <textarea class="input" placeholder="図のように Excel から貼り付けてください"></textarea>
+            <textarea class="userInput" placeholder="図のように Excel から貼り付けてください"></textarea>
             <input type="button" value="生成" onclick="clickBtn_generate()" class="button">
             <input type="button" value="表をコピー" onclick="clickBtn_generate_copy()" class="button">
         </form>
     </div>
 
-    <table border="double" class="outputTable">
+    <table border="double" class="resultTable">
         <tr>
             <td>ページ</td>
             <td>項目</td>
@@ -93,9 +93,9 @@
 <div class="userinterface" id="userinterface_forYomi">
     <div class="horizontal">
         <form class="yomi">
-            <textarea class="input" placeholder="文字列を貼り付けてください"></textarea>
+            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="取得" onclick="clickBtn_yomi()" class="button">
-            <textarea class="output" placeholder="ここに結果が表示されます" readonly></textarea>
+            <textarea class="displayResult" placeholder="ここに結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_yomi_copy()" class="button">
         </form>
     </div>
@@ -119,9 +119,9 @@
     </form>
     <div class="horizontal">
         <form class="hairetsu">
-            <textarea class="input" placeholder="文字列を貼り付けてください"></textarea>
+            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="変換" onclick="clickBtn_hairetsu()" class="button">
-            <textarea class="output" readonly placeholder="ここに結果が表示されます"></textarea>
+            <textarea class="displayResult" readonly placeholder="ここに結果が表示されます"></textarea>
             <input type="button" value="コピー" onclick="clickBtn_hairetsu_copy()" class="button">
         </form>
     </div>
@@ -145,9 +145,9 @@
     </form>
     <div class="horizontal">
         <form class="convert">
-            <textarea class="input" placeholder="文字列を貼り付けてください"></textarea>
+            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="変換" onclick="clickBtn_katahira()" class="button">
-            <textarea class="output" placeholder="結果が表示されます" readonly></textarea>
+            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_katahira_copy()" class="button">
         </form>
     </div>
@@ -175,9 +175,9 @@
 <div class="userinterface" id="userinterface_forNayose">
     <div class="horizontal">
         <form class="nayose">
-            <textarea class="input" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
+            <textarea class="userInput" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
             <input type="button" value="名寄せ" onclick="clickBtn_nayose()" class="button">
-            <textarea class="output" placeholder="結果が表示されます" readonly></textarea>
+            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_nayose_copy()" class="button">
         </form>
     </div>
@@ -205,12 +205,12 @@
     </form>
     <div class="horizontal">
         <form class="check">
-            <textarea class="input" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
+            <textarea class="userInput" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
             <input type="button" value="チェック" onclick="clickBtn_checkChild()" class="button">
         </form>
     </div>
 
-    <div class="output">
+    <div class="displayResult">
     </div>
 </div>
 
@@ -236,12 +236,12 @@
 <div class="userinterface" id="userinterface_forCheckNombre">
     <div class="horizontal">
         <form class="check">
-            <textarea class="input" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
+            <textarea class="userInput" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
             <input type="button" value="チェック" onclick="clickBtn_checkNombre()" class="button">
         </form>
     </div>
 
-    <div class="output">
+    <div class="displayResult">
     </div>
 </div>
 
@@ -266,12 +266,12 @@
 <div class="userinterface" id="userinterface_forCheckMiyo">
     <div class="horizontal">
         <form class="check">
-            <textarea class="input" placeholder="索引をコピー＆ペーストしてください"></textarea>
+            <textarea class="userInput" placeholder="索引をコピー＆ペーストしてください"></textarea>
             <input type="button" value="チェック" onclick="clickBtn_checkMiyo()" class="button">
         </form>
     </div>
 
-    <div class="output">
+    <div class="displayResult">
     </div>
 </div>
 
@@ -308,9 +308,9 @@
     </form>
     <div class="horizontal">
         <form class="complete">
-            <textarea class="input" placeholder="索引を貼り付けてください"></textarea>
+            <textarea class="userInput" placeholder="索引を貼り付けてください"></textarea>
             <input type="button" value="復元" onclick="clickBtn_complete()" class="button">
-            <textarea class="output" placeholder="結果が表示されます" readonly></textarea>
+            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="clickBtn_complete_copy()" class="button">
         </form>
     </div>
@@ -340,13 +340,13 @@
 <div class="userinterface" id="userinterface_forRelease">
     <div class="horizontal">
         <form class="release">
-            <textarea class="input" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
+            <textarea class="userInput" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
             <input type="button" value="名開き" onclick="clickBtn_release()" class="button">
             <input type="button" value="表をコピー" onclick="clickBtn_release_copy()" class="button">
         </form>
     </div>
 
-    <table class="outputTable" border="double">
+    <table class="resultTable" border="double">
         <tr>
             <td>項目</td>
             <td>ノンブル</td>

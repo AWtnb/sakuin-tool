@@ -77,12 +77,12 @@ function setYomi(outputArea, inputLines){
 }
 
 function clickBtn_yomi() {
-    const lines = document.querySelector("#userinterface_forYomi form.yomi .input").value;
-    const outputArea = document.querySelector("#userinterface_forYomi form.yomi .output");
+    const lines = document.querySelector("#userinterface_forYomi form.yomi .userInput").value;
+    const outputArea = document.querySelector("#userinterface_forYomi form.yomi .displayResult");
     setYomi(outputArea, lines);
 }
 function clickBtn_yomi_copy() {
-    document.querySelector("#userinterface_forYomi form.yomi .output").select();
+    document.querySelector("#userinterface_forYomi form.yomi .displayResult").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -113,13 +113,13 @@ function convertHiraKata(str, mode){
 }
 
 function clickBtn_katahira() {
-    const lines_toConvert = document.querySelector("#userinterface_forKatahira form.convert .input").value;
+    const lines_toConvert = document.querySelector("#userinterface_forKatahira form.convert .userInput").value;
     const mode = document.querySelector("#userinterface_forKatahira form.katahiraFlag").radio1.value;
     const converted = convertHiraKata(lines_toConvert, mode);
-    document.querySelector("#userinterface_forKatahira form.convert .output").value = converted;
+    document.querySelector("#userinterface_forKatahira form.convert .displayResult").value = converted;
 }
 function clickBtn_katahira_copy() {
-    document.querySelector("#userinterface_forKatahira form.convert .output").select();
+    document.querySelector("#userinterface_forKatahira form.convert .displayResult").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -156,15 +156,15 @@ function toHairetsu (str, removeNoise) {
 }
 
 function clickBtn_hairetsu() {
-    const lines_toHairetsu = document.querySelector("#userinterface_forHairetsu form.hairetsu .input").value;
+    const lines_toHairetsu = document.querySelector("#userinterface_forHairetsu form.hairetsu .userInput").value;
     const removeFlag = document.querySelector("#userinterface_forHairetsu form.removeFlag .removeFlag");
 
     const converted = toHairetsu(lines_toHairetsu, removeFlag.checked);
     const msg = converted.join("\n");
-    document.querySelector("#userinterface_forHairetsu form.hairetsu .output").value = msg;
+    document.querySelector("#userinterface_forHairetsu form.hairetsu .displayResult").value = msg;
 }
 function clickBtn_hairetsu_copy() {
-    document.querySelector("#userinterface_forHairetsu form.hairetsu .output").select();
+    document.querySelector("#userinterface_forHairetsu form.hairetsu .displayResult").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -209,13 +209,13 @@ function nayose (lines) {
 }
 
 function clickBtn_nayose() {
-    const lines_toNayose = document.querySelector("#userinterface_forNayose form.nayose .input").value;
+    const lines_toNayose = document.querySelector("#userinterface_forNayose form.nayose .userInput").value;
     const nys = nayose(lines_toNayose);
     const msg = nys.join("\n");
-    document.querySelector("#userinterface_forNayose form.nayose .output").value = msg;
+    document.querySelector("#userinterface_forNayose form.nayose .displayResult").value = msg;
 }
 function clickBtn_nayose_copy() {
-    document.querySelector("#userinterface_forNayose form.nayose .output").select();
+    document.querySelector("#userinterface_forNayose form.nayose .displayResult").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -249,10 +249,10 @@ function releaseNayoseLines (multiLines) {
 
 function clickBtn_release() {
 
-    const linesToRelease = document.querySelector("#userinterface_forRelease form.release .input").value;
+    const linesToRelease = document.querySelector("#userinterface_forRelease form.release .userInput").value;
     const releasedObj = releaseNayoseLines(linesToRelease);
 
-    const outputTable = document.querySelector("#userinterface_forRelease .outputTable");
+    const outputTable = document.querySelector("#userinterface_forRelease .resultTable");
     resetTable(outputTable);
 
     for (let item in releasedObj) {
@@ -264,7 +264,7 @@ function clickBtn_release() {
     }
 }
 function clickBtn_release_copy() {
-    const outputTable = document.querySelector("#userinterface_forRelease .outputTable");
+    const outputTable = document.querySelector("#userinterface_forRelease .resultTable");
     copyTable(outputTable);
 }
 
@@ -297,12 +297,12 @@ function completeChildItem (multiLines, delim) {
 
 function clickBtn_complete() {
     const delimiter = document.querySelector("#userinterface_toComplete form.delimiter").radio1.value;
-    const lines_toComplete = document.querySelector("#userinterface_toComplete form.complete .input").value;
+    const lines_toComplete = document.querySelector("#userinterface_toComplete form.complete .userInput").value;
     const completedArray = completeChildItem(lines_toComplete, delimiter);
-    document.querySelector("#userinterface_toComplete form.complete .output").value = completedArray.join("\n");
+    document.querySelector("#userinterface_toComplete form.complete .displayResult").value = completedArray.join("\n");
 }
 function clickBtn_complete_copy() {
-    document.querySelector("#userinterface_toComplete form.complete .input").select();
+    document.querySelector("#userinterface_toComplete form.complete .userInput").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
@@ -327,10 +327,10 @@ function generateTemplare(multiLines) {
 }
 
 function clickBtn_generate() {
-    const linesToGenerate = document.querySelector("#userinterface_toGenerate form.generate .input").value;
+    const linesToGenerate = document.querySelector("#userinterface_toGenerate form.generate .userInput").value;
     const templateArray = generateTemplare(linesToGenerate);
 
-    const outputTable = document.querySelector("#userinterface_toGenerate .outputTable");
+    const outputTable = document.querySelector("#userinterface_toGenerate .resultTable");
     resetTable(outputTable)
 
     templateArray.forEach(line => {
@@ -342,7 +342,7 @@ function clickBtn_generate() {
     });
 }
 function clickBtn_generate_copy() {
-    const templateTable = document.querySelector("#userinterface_toGenerate .outputTable");
+    const templateTable = document.querySelector("#userinterface_toGenerate .resultTable");
     copyTable(templateTable);
 }
 
@@ -386,10 +386,10 @@ function highlightChildItem(multilines, mode="tail") {
 }
 
 function clickBtn_checkChild() {
-    const lines = document.querySelector("#userinterface_forCheckChild form.check .input").value;
+    const lines = document.querySelector("#userinterface_forCheckChild form.check .userInput").value;
     const mode = document.querySelector("#userinterface_forCheckChild form.searchPos").radio1.value;
     const markup = highlightChildItem(lines, mode);
-    document.querySelector("#userinterface_forCheckChild .output").innerHTML = markup;
+    document.querySelector("#userinterface_forCheckChild .displayResult").innerHTML = markup;
 }
 
 ////////////////////////////////////////////////
@@ -434,9 +434,9 @@ function highlightInvalidNombreLine(multilines) {
 }
 
 function clickBtn_checkNombre() {
-    const lines = document.querySelector("#userinterface_forCheckNombre form.check .input").value;
+    const lines = document.querySelector("#userinterface_forCheckNombre form.check .userInput").value;
     const markup = highlightInvalidNombreLine(lines);
-    document.querySelector("#userinterface_forCheckNombre .output").innerHTML = markup;
+    document.querySelector("#userinterface_forCheckNombre .displayResult").innerHTML = markup;
 }
 
 ////////////////////////////////////////////////
