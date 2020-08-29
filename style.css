@@ -167,13 +167,15 @@ hr {
   margin: 0.25em 4em;
   border-radius: 8px;
 }
-.navigation ol {
+.navigation ol,
+.navigation ul {
   margin: 0;
   padding: 0.25em 2em;
 }
 .navigation::before {
   content: "INDEX";
   font-weight: bold;
+  padding: 0.5em;
 }
 .back2top {
   margin: 1em -1em 0.1em 0;
