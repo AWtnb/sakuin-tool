@@ -444,7 +444,7 @@ function clickBtn_checkNombre() {
 ////////////////////////////////////////////////
 
 // 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
-function findLostMiyoParenthesis(multiLines) {
+function findLostMiyoParenthesis(multilines) {
     const lines = multilines.split(/[\r\n]+/g).filter(line => line);
     const miyoLines = lines.filter(line => (line.indexOf("→") != -1));
     return miyoLines.map(line => {
@@ -454,19 +454,19 @@ function findLostMiyoParenthesis(multiLines) {
         const targetPattern = new RegExp(`^${toItemESCAPED}（.*${fromItemESCAPED}.*）`);
         const grep = lines.filter(line => line.match(targetPattern));
         if (grep.length < 1) {
-            return {found: line, shouldExist:`${toItem}（… ${fromItem} …）`}
+            return {found: line, shouldExist:`${toItem}（${fromItem}）`}
         }
         return null
     }).filter(x => x);
 }
 
 // 括弧書きで付記されているのに見よ項目がないものを探す関数
-function findLostMiyoItem(multiLines) {
+function findLostMiyoItem(multilines) {
     const lines = multilines.split(/[\r\n]+/g).filter(line => line);
     const miyoReferredLines = lines.filter(line => line.match(/[（\\(].+?[）\\)]/));
     return miyoReferredLines.map(line => {
         const toItem = line.replace(/[（\\(].+$/, "");
-        const fromItem = line.replace(/^.+?[（\\(]/, "").replace(/[）\\)].+$/, "");
+        const fromItem = line.replace(/^.+?[（\\(]/, "").replace(/[）\\)].*$/, "");
         const toItemESCAPED = escapeMeta(toItem);
         const fromItemESCAPED = escapeMeta(fromItem);
         const targetPattern = new RegExp(`${fromItemESCAPED}\\s*→\\s*${toItemESCAPED}`);
@@ -479,5 +479,20 @@ function findLostMiyoItem(multiLines) {
 }
 
 function clickBtn_checkMiyo(){
-
+    const lines = document.querySelector("#userinterface_forCheckMiyo form.check .userInput").value;
+    const lostMiyoParenInfo = findLostMiyoParenthesis(lines);
+    const foundArray = [];
+    if (lostMiyoParenInfo.length > 0) {
+        lostMiyoParenInfo.forEach(item => {
+            foundArray.push(`見よ項目<span style="color:red">${item.found}</span>の参照先で<span style="font-weight:bold">${item.shouldExist}</span>のように括弧書きされていません。`);
+        });
+    }
+    const lostMiyoItemInfo = findLostMiyoItem(lines);
+    if (lostMiyoItemInfo.length > 0) {
+        lostMiyoItemInfo.forEach(item => {
+            foundArray.push(`項目<span style="color:blue">${item.found}</span>に対する見よ項目<span style="font-weight:bold">${item.shouldExist}</span>がありません。`);
+        });
+    }
+    const markup = foundArray.map(item => `<li>${item}</li>`).join("\n");
+    document.querySelector("#userinterface_forCheckMiyo .displayResult").innerHTML = markup;
 }
