@@ -489,14 +489,14 @@ function clickBtn_checkMiyo(){
     if (lostMiyoParenInfo.length > 0) {
         foundArray.push("<label>見よ項目があるのに参照先に括弧で付記されていないもの</label>");
         lostMiyoParenInfo.forEach(item => {
-            foundArray.push(`<li><span style="font-weight:bold">${item.found}</span> …… <span style="color:red">${item.shouldExist}</span></li>`);
+            foundArray.push(`<li style="margin-left:1em"><span style="font-weight:bold">${item.found}</span> …… <span style="color:red">${item.shouldExist}</span></li>`);
         });
     }
     const lostMiyoItemInfo = findLostMiyoItem(lines);
     if (lostMiyoItemInfo.length > 0) {
         foundArray.push("<label>参照元として括弧書きされているのに見よ項目がないもの</label>");
         lostMiyoItemInfo.forEach(item => {
-            foundArray.push(`<li><span style="font-weight:bold">${item.found}</span> …… <span style="color:blue">${item.shouldExist}</span></li>`);
+            foundArray.push(`<li style="margin-left:1em"><span style="font-weight:bold">${item.found}</span> …… <span style="color:blue">${item.shouldExist}</span></li>`);
         });
     }
     const markup = foundArray.join("\n");
