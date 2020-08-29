@@ -477,3 +477,7 @@ function findLostMiyoItem(multiLines) {
         return null
     }).filter(x => x);
 }
+
+function clickBtn_checkMiyo(){
+
+}
