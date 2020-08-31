@@ -314,12 +314,12 @@ function clickBtn_complete_copy() {
 function generateTemplare(multiLines) {
     const templateArray = [];
     const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
-    lines.forEach(line => {
+    lines.forEach((line, index) => {
         const [page, counter, ...rest] = line.split("\t");
         const nItem = toHankaku(counter);
         if (String(nItem) != "0" && nItem.match(/^\d+$/)) {
             for (let i = 0; i < Number(nItem); i++) {
-                templateArray.push(page);
+                templateArray.push({index:index, page:page});
             }
         }
     });
@@ -337,8 +337,10 @@ function clickBtn_generate() {
         let row = outputTable.insertRow(-1);
         let cell1 = row.insertCell(0);
         let cell2 = row.insertCell(1);
-        cell1.innerHTML = line;
-        cell2.innerHTML = "";
+        let cell3 = row.insertCell(2);
+        cell1.innerHTML = line.index;
+        cell2.innerHTML = line.page;
+        cell3.innerHTML = "";
     });
 }
 function clickBtn_generate_copy() {
