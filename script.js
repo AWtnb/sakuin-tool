@@ -314,12 +314,14 @@ function clickBtn_complete_copy() {
 function generateTemplare(multiLines) {
     const templateArray = [];
     const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
-    lines.forEach((line, index) => {
+    lines
+    .filter(line => !(line.match(/(\t)0/)))
+    .forEach((line, index) => {
         const [page, counter, ...rest] = line.split("\t");
         const nItem = toHankaku(counter);
-        if (String(nItem) != "0" && nItem.match(/^\d+$/)) {
+        if (nItem.match(/^\d+$/)) {
             for (let i = 0; i < Number(nItem); i++) {
-                templateArray.push({index:index, page:page});
+                templateArray.push({index:(index + 1), page:page});
             }
         }
     });
@@ -333,14 +335,16 @@ function clickBtn_generate() {
     const outputTable = document.querySelector("#userinterface_toGenerate .resultTable");
     resetTable(outputTable)
 
-    templateArray.forEach(line => {
-        let row = outputTable.insertRow(-1);
-        let cell1 = row.insertCell(0);
-        let cell2 = row.insertCell(1);
-        let cell3 = row.insertCell(2);
-        cell1.innerHTML = line.index;
-        cell2.innerHTML = line.page;
-        cell3.innerHTML = "";
+    templateArray.forEach((line, idx) => {
+        const row = outputTable.insertRow(-1);
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+        const cell4 = row.insertCell(3);
+        cell1.innerHTML = (idx + 1);
+        cell2.innerHTML = line.index;
+        cell3.innerHTML = line.page;
+        cell4.innerHTML = "";
     });
 }
 function clickBtn_generate_copy() {
