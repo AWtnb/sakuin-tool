@@ -173,14 +173,14 @@ function clickBtn_hairetsu_copy() {
 // 名寄せ
 ////////////////////////////////////////////////
 
-function nayose (lines) {
+function nayose (lines, nombreOnLeft = false) {
     const map = new Map()
     const lineArray = lines.split(/[\r\n]+/g);
     // 集約
     lineArray.filter(line => line)
     .filter(line => !line.match(/^\s+$/))
     .forEach(item => {
-        const [itemName, nombre, ...rest] = item.split("\t");
+        const [itemName, nombre, ...rest] = (nombreOnLeft)? item.split("\t").reverse() : item.split("\t");
         if (map.has(itemName)) {
             const currentValue = map.get(itemName);
             if (currentValue == "") {
@@ -210,7 +210,7 @@ function nayose (lines) {
 
 function clickBtn_nayose() {
     const lines_toNayose = document.querySelector("#userinterface_forNayose form.nayose .userInput").value;
-    const nys = nayose(lines_toNayose);
+    const nys = nayose(lines_toNayose, document.querySelector("#userinterface_forNayose .isLeft").checked);
     const msg = nys.join("\n");
     document.querySelector("#userinterface_forNayose form.nayose .displayResult").value = msg;
 }
