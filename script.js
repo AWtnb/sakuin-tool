@@ -302,7 +302,7 @@ function clickBtn_complete() {
     document.querySelector("#userinterface_toComplete form.complete .displayResult").value = completedArray.join("\n");
 }
 function clickBtn_complete_copy() {
-    document.querySelector("#userinterface_toComplete form.complete .userInput").select();
+    document.querySelector("#userinterface_toComplete form.complete .displayResult").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
