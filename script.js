@@ -182,27 +182,23 @@ function nayose (lines, nombreOnLeft = false) {
     .forEach(item => {
         const [itemName, nombre, ...rest] = (nombreOnLeft)? item.split("\t").reverse() : item.split("\t");
         if (map.has(itemName)) {
-            const currentValue = map.get(itemName);
-            if (currentValue == "") {
-                map.set(itemName, String(nombre));
-            }
-            else if (nombre != "") {
-                map.set(itemName, currentValue + ", " + String(nombre));
-            }
+            map.get(itemName).push(nombre);
         }
         else {
-            map.set(itemName, String(nombre));
+            map.set(itemName, [nombre]);
         }
     });
 
     // 整形
     const ret = [];
     map.forEach((v, k) => {
-        if (v == "" || typeof(v) === "undefined") {
+        const sorted = v.filter(x => x).sort((a, b) => a - b);
+        const uniq = Array.from(new Set(sorted));
+        if (uniq.length < 1) {
             ret.push(k)
         }
         else {
-            ret.push(k + "　　" + v);
+            ret.push(k + "　　" + uniq.join(", "));
         }
     })
     return ret;
