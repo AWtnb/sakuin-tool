@@ -173,6 +173,31 @@ function clickBtn_hairetsu_copy() {
 // 名寄せ
 ////////////////////////////////////////////////
 
+function hyphenateConsecutiveTriplet (inputArray) {
+    if (inputArray.length < 3) {
+        return inputArray
+    }
+    const array = [];
+    array.push(
+        {Item: inputArray[0], Hyphenate: false}
+    );
+    for (let i = 0; i <= inputArray.length - 3; i++) {
+        const current = Number(inputArray[i]);
+        const next1 = Number(inputArray[i + 1]);
+        const next2 = Number(inputArray[i + 2]);
+        const hyphenateFlag = (current + 1 == next1 && current + 2 == next2)? true : false;
+        array.push(
+            {Item: next1, Hyphenate: hyphenateFlag}
+        );
+    }
+    array.push(
+        {Item: inputArray[inputArray.length - 1], Hyphenate: false}
+    );
+    return array.map(x => {
+        return (x.Hyphenate)? "-" : x.Item
+    })
+}
+
 function nayose (lines, nombreOnLeft = false) {
     const map = new Map()
     const lineArray = lines.split(/[\r\n]+/g);
@@ -195,10 +220,11 @@ function nayose (lines, nombreOnLeft = false) {
         const sorted = v.filter(x => x).sort((a, b) => a - b);
         const uniq = Array.from(new Set(sorted));
         if (uniq.length < 1) {
-            ret.push(k)
+            ret.push(k);
         }
         else {
-            ret.push(k + "　　" + uniq.join(", "));
+            const hyphenated = hyphenateConsecutiveTriplet(uniq);
+            ret.push(k + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/, "-"));
         }
     })
     return ret;
