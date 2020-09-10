@@ -177,6 +177,9 @@ function hyphenateConsecutiveTriplet (inputArray) {
     if (inputArray.length < 3) {
         return inputArray
     }
+    if (!inputArray.join("").match(/^\d+$/)) {
+        return inputArray
+    }
     const array = [];
     array.push(
         {Item: inputArray[0], Hyphenate: false}
