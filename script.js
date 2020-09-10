@@ -224,7 +224,7 @@ function nayose (lines, nombreOnLeft = false) {
         }
         else {
             const hyphenated = hyphenateConsecutiveTriplet(uniq);
-            ret.push(k + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/, "-"));
+            ret.push(k + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/g, "-"));
         }
     })
     return ret;
