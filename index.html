@@ -29,6 +29,7 @@
                 <li><a href="#section_forCheckChild">子項目候補の確認</a></li>
                 <li><a href="#section_forCheckNombre">ノンブル並びの確認</a></li>
                 <li><a href="#section_forCheckMiyo">見よ項目の確認</a></li>
+                <li><a href="#section_forAdjustNombre">ノンブル加算減算</a></li>
             </ol>
         <li>旧版再利用ツール</li>
             <ol>
@@ -287,6 +288,38 @@
 
 <div class="back2top"><a href="#navi">目次に戻る</a></div>
 
+
+<!-- ========================================
+ノンブル加算減算
+======================================== -->
+<h3 id="section_forAdjustNombre">ノンブル加算減算</h3>
+<div class="caption">
+    <ul>
+        <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
+        <li>ノンブルに数字以外が含まれていた場合は計算の対象外です。</li>
+        <li>ノンブルは必ず半角カンマ区切りで出力します。</li>
+    </ul>
+</div>
+
+<div class="userinterface" id="userinterface_forAdjustNombre">
+    <div class="horizontal">
+        <label>開始ノンブル<input type="number" value="1" min="1" class="startNombre"></label>
+        <label>終了ノンブル<input type="number" value="999" min="1" class="endNombre"></label>
+    </div>
+    <p><label>増分<input type="number" value="1" class="nombreDelta"></label></p>
+    <div class="horizontal">
+        <form class="adjustNombre">
+            <textarea class="userInput" placeholder="名寄せされた索引を貼り付けてください"></textarea>
+            <input type="button" value="計算" onclick="clickBtn_adjustNombre()" class="button">
+            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_adjustNombre_copy()" class="button">
+        </form>
+    </div>
+    <div class="displayResult">
+    </div>
+</div>
+
+<div class="back2top"><a href="#navi">目次に戻る</a></div>
 
 <!-- ======================================================================
 旧版の活用

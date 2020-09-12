@@ -23,6 +23,13 @@ body {
   letter-spacing: 1px;
   border-radius: 4px;
 }
+input[type="number"] {
+  margin-left: 4px;
+  margin-right: 20px;
+  width: 3em;
+  border: 1px solid #d33682;
+  border-radius: 2px;
+}
 .userinterface {
   font-size: 10pt;
   display: inline-block;

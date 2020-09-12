@@ -533,3 +533,55 @@ function clickBtn_checkMiyo(){
     const markup = foundArray.join("\n");
     document.querySelector("#userinterface_forCheckMiyo .displayResult").innerHTML = markup;
 }
+
+////////////////////////////////////////////////
+// ノンブル加算減算
+////////////////////////////////////////////////
+
+function adjustNombre(multiline, startNombre, endNombre, nombreDelta) {
+    const lineArray = multiline.split(/[\r\n]+/g);
+    return lineArray
+    .filter(x => x)
+    .map(line => {
+        const [item, nombres, ...rest] = line.split("　　");
+        const nombresArray = nombres
+        .replace(/\s/g, "").replace(/，/g, ",").split(",")
+        .map(nbr => {
+            if (Number(startNombre) <= Number(nbr) && Number(nbr) <= Number(endNombre)) {
+                return Number(nbr) + Number(nombreDelta);
+            }
+            return nbr
+        });
+        const adjustedLine = item + "　　" + nombresArray.join(", ");
+        return {
+            original: line,
+            adjusted: adjustedLine,
+            isModified: (line != adjustedLine)
+        }
+    });
+}
+
+
+function clickBtn_adjustNombre(){
+    const adjustedArray = adjustNombre(
+        document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .userInput").value,
+        document.querySelector("#userinterface_forAdjustNombre input.startNombre").value,
+        document.querySelector("#userinterface_forAdjustNombre input.endNombre").value,
+        document.querySelector("#userinterface_forAdjustNombre input.nombreDelta").value
+    );
+    const adjustedLines = adjustedArray.map(item => item.adjusted).join("\n");
+    document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .displayResult").value = adjustedLines;
+    const modified = adjustedArray.filter(item => item.isModified);
+    const markup= (modified.length)?
+    "<p>変更箇所↓</p>" + modified.map(item => {
+        return `<p><span style="color:gray">${item.original}</span><br><span style="color:red">${item.adjusted}</span></p>`;
+    }).join("\n") :
+    "<p>（変更箇所はありません）</p>";
+    document.querySelector("#userinterface_forAdjustNombre > .displayResult").innerHTML = markup;
+}
+
+function clickBtn_adjustNombre_copy(){
+    document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .displayResult").select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
