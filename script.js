@@ -571,7 +571,7 @@ function clickBtn_adjustNombre(){
     document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .displayResult").value = adjustedLines;
     const modified = adjustedArray.filter(item => item.isModified);
     const markup= (modified.length)?
-    `<p>■${modified.length}箇所の変更：</p>` + modified.map(item => {
+    `<p>■${modified.length}行の変更：</p>` + modified.map(item => {
         return `<p><span style="color:gray">${item.original}</span><br><span style="color:red">${item.adjusted}</span></p>`;
     }).join("\n") :
     "<p>（変更箇所はありません）</p>";
