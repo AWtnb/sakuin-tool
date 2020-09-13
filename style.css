@@ -38,6 +38,7 @@
   z-index: 1;
   top: 6px;
   margin-top: 10px;
+  overflow: hidden;
 }
 .sidebar .sidebar_fixeditem ul {
   list-style-type: none;
