@@ -48,12 +48,12 @@ function setYomi(outputArea, inputLines){
             }
         });
     });
-    promise.then((tokenizer) => {
+    promise.then(tokenizer => {
         const yomiArray = inputLines.split(/\n/).map(line => {
             const parsed = tokenizer.tokenize(line);
-            const yomi = parsed.map(token => {
+            return parsed.map(token => {
                 console.log(token.surface_form, token.word_type, token.pos, token.reading);
-                let surface = token.surface_form;
+                const surface = token.surface_form;
                 if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
                     return surface;
                 }
@@ -64,9 +64,7 @@ function setYomi(outputArea, inputLines){
                     return token.surface_form;
                 }
                 return token.reading;
-            });
-            console.log("----------");
-            return yomi.join("");
+            }).join("");
         });
         outputArea.value = yomiArray.join("\n")
     })
