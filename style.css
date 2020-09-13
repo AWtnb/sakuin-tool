@@ -52,14 +52,10 @@
 }
 .button {
   font-size: 10pt;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  padding-top: 0.25em;
-  padding-bottom: 0.25em;
-  text-decoration: none;
+  padding: 0.25rem 0.5rem;
   background: #eee8d5;
   color: #002b36;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   border-radius: 4px;
 }
 input[type="number"] {
@@ -70,113 +66,85 @@ input[type="number"] {
   border-radius: 2px;
 }
 .userinterface {
-  font-size: 10pt;
   display: inline-block;
-  margin-left: 2em;
-  padding-left: 1em;
-  padding-right: 1em;
-  padding-top: 0.5em;
+  margin-left: 2rem;
+  padding: 1rem;
   border: solid 1px #859900;
   border-radius: 8px;
 }
 .userinterface .horizontal {
   display: inline-flex;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
 }
 .userinterface .horizontal form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 0;
-  margin-bottom: 0.5em;
+  margin: 0.5rem;
 }
-.userinterface .horizontal form textarea {
-  transition: 0.3s;
+.userinterface input {
+  margin: 0.5rem;
+}
+.userinterface textarea {
   border: 1px dotted #d33682;
   border-radius: 6px;
   padding: 0.5em;
-  margin-left: 0.5em;
   width: 200px;
   height: 250px;
 }
-.userinterface .horizontal form textarea:focus {
+.userinterface textarea:focus {
   border: 1px solid #d33682;
   outline: none;
-  box-shadow: 0 0 5px 1px rgba(211, 54, 130, 0.48);
-}
-.userinterface .horizontal form input {
-  margin-left: 0.5em;
+  box-shadow: 0 0 5px 1px rgba(211, 54, 130, 0.6);
 }
 .userinterface table {
   border-collapse: collapse;
   border-spacing: 0;
-  margin-bottom: 0.5em;
-  margin-left: 0.5em;
-  border: #586e75;
-  font-size: 10pt;
-  max-height: 120px;
-  overflow: auto;
-  overflow-x: hidden;
+  margin: 0.5em;
+  font-size: 0.9rem;
 }
 .userinterface table td {
   min-width: 150px;
-  max-width: 250px;
-  padding-left: 0.75em;
+  padding: 2px;
+  border: 1px solid #586e75;
 }
-.userinterface thead,
-.userinterface tbody {
+.userinterface table tbody {
   display: block;
-}
-.userinterface tbody {
-  max-height: 100px;
+  max-height: 400px;
   overflow-y: scroll;
 }
 .caption {
-  margin-left: 1em;
-}
-.caption ul {
-  padding-left: 1em;
-  padding-bottom: 0.25em;
-  margin-left: 1em;
+  margin: 1rem;
 }
 .caption .imagebox {
   display: inline-flex;
   position: relative;
-  margin-top: 0.75em;
-  margin-bottom: 0.75em;
-  margin-left: 0.75em;
-  padding: 0.75em;
+  margin: 1rem;
+  padding: 0.75rem;
   border: 1px solid #839496;
   border-radius: 8px;
 }
 .caption .imagebox .boxtitle {
   color: #839496;
-  font-size: 10pt;
+  font-size: 0.9rem;
   position: absolute;
   top: 0;
   left: 0;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  margin: 0;
+  padding: 0 4px;
   background-color: #f2fffc;
   transform: translateY(-50%) translateX(1em);
 }
 h1 {
-  margin: 0;
-  padding: 0;
   font-size: 3rem;
   color: #073642;
 }
 h2 {
-  margin-top: 3em;
-  margin-bottom: 1em;
+  margin: 5rem 0 1rem 0;
   border-bottom: solid 1px #268bd2;
-  font-size: 20pt;
+  font-size: 2rem;
 }
 h3 {
-  font-size: 14pt;
-  margin-top: 3em;
+  font-size: 1.2rem;
+  margin-top: 4rem;
 }
 h3::before {
   content: "\25cf";

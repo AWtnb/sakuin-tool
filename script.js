@@ -233,7 +233,7 @@ function nayose (lines, nombreOnLeft = false) {
 
 function clickBtn_nayose() {
     const lines_toNayose = document.querySelector("#userinterface_forNayose form.nayose .userInput").value;
-    const nys = nayose(lines_toNayose, document.querySelector("#userinterface_forNayose .isLeft").checked);
+    const nys = nayose(lines_toNayose, document.querySelector("#userinterface_forNayose form.nombreLeftFlag .isLeft").checked);
     const msg = nys.join("\n");
     document.querySelector("#userinterface_forNayose form.nayose .displayResult").value = msg;
 }

@@ -78,7 +78,7 @@
         </form>
     </div>
 
-    <table border="double" class="resultTable">
+    <table  class="resultTable">
         <tr>
             <td>ID</td>
             <td>index</td>
@@ -179,7 +179,9 @@
 </div>
 
 <div class="userinterface" id="userinterface_forNayose">
-    <label><input type="checkbox" name="check1" class="isLeft" value="nombreOnLeft">←ノンブルが左列（上図と逆）の場合はチェック</label>
+    <form class="nombreLeftFlag">
+        <input type="checkbox" class="isLeft"> ←ノンブルが左列（上図と逆）の場合はチェック
+    </form>
     <div class="horizontal">
         <form class="nayose">
             <textarea class="userInput" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
@@ -334,7 +336,7 @@
 </div>
 
 <div class="userinterface" id="userinterface_toComplete">
-    項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：
+    <label>項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：</label>
     <form class="delimiter">
         <input type="radio" name="radio1" value="spaces" checked> 二倍アキ
         <input type="radio" name="radio1" value="tab"          > タブ文字（Excel）
@@ -377,7 +379,7 @@
         </form>
     </div>
 
-    <table class="resultTable" border="double">
+    <table class="resultTable">
         <tr>
             <td>項目</td>
             <td>ノンブル</td>
