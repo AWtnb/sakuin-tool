@@ -542,6 +542,13 @@ function adjustNombre(multiline, startNombre, endNombre, nombreDelta) {
     .filter(x => x)
     .map(line => {
         const [item, nombres, ...rest] = line.split("　　");
+        if (!nombres) {
+            return {
+                original: line,
+                adjusted: line,
+                isModified: false
+            }
+        }
         const nombresArray = nombres
         .replace(/\s/g, "").replace(/，/g, ",").split(",")
         .map(nbr => {
