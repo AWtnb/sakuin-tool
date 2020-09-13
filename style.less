@@ -19,18 +19,61 @@
 @mainBg: #f2fffc;
 @containerWidth: 600px;
 
-body {
+:root {
     background-color: @mainBg;
     color: @black;
     font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
+    font-size: 12pt;
+
+    a {
+        color: @cyan;
+        text-decoration: none;
+    }
+    b.blue {
+        color: @blue;
+    }
+    b.red {
+        color: @red;
+    }
+    ul {
+        width: 600px;
+    }
 }
 
 #container{
-    width: @containerWidth;
-    margin-left: auto;
-    margin-right: auto;
-    padding-bottom: 2em;
-    border-bottom: 4px double @brblack;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.main {
+    margin: 20px;
+    padding: 12px;
+    width: 800px;
+    display: block;
+}
+
+.sidebar {
+    width: 220px;
+    border-right: @brwhite 1px solid;
+    .sidebar_fixeditem {
+        font-size: .9rem;
+        position: sticky;
+        z-index: 1;
+        top: 6px;
+        margin-top: 10px;
+
+        ul {
+            list-style-type: none;
+            padding-left: .9rem;
+            li {
+                margin-left: -.9rem;
+            }
+        }
+
+        .sidebar_promotion {
+            border-top: 4px double @brwhite;
+        }
+    }
 }
 
 .button {
@@ -148,39 +191,16 @@ input[type="number"] {
     }
 }
 
-a {
-    color: @cyan;
-}
-
-b.blue {
-    color: @blue;
-}
-b.red {
-    color: @red;
-}
-
-footer {
-    padding-top: .25em;
-    padding-bottom: 1em;
-    width: @containerWidth;
-    text-align: center;
-    margin-right: auto;
-    margin-left: auto;
-}
-
 h1 {
-    margin: 1em 0;
-    font-size: 30pt;
+    margin: 0;
+    padding: 0;
+    font-size: 3rem;
     color: @black;
 }
 h2 {
-    padding: 0.25em 0.25em;
-    line-height: 1.5;
     margin-top: 3em;
     margin-bottom: 1em;
-    background: transparent;
-    border-left: solid 6px @blue;
-    border-bottom: solid 1px @brblue;
+    border-bottom: solid 1px @blue;
     font-size: 20pt;
 }
 h3 {
@@ -189,42 +209,5 @@ h3 {
     &::before {
         content: "\25cf";
         color: @blue;
-    }
-}
-
-hr {
-    border-top: 1px dashed @brblue;
-    margin: 1em 0 3em 0;
-}
-
-.navigation {
-    border: 1px solid @brblue;
-    font-size: 10pt;
-    padding: .25em;
-    margin: .25em 4em;
-    border-radius: 8px;
-    ol, ul {
-        margin: 0;
-        padding: .25em 2em;
-    }
-    &::before {
-        content: "INDEX";
-        font-weight: bold;
-        padding: .5em;
-    }
-}
-
-.back2top {
-    margin: 1em -1em .1em 0;
-    text-align: end;
-    a {
-        &::after {
-            content: "\2191";
-        }
-        background-color: @brblue;
-        color: white;
-        padding: .25em;
-        font-size: 10pt;
-        text-decoration: none;
     }
 }

@@ -1,15 +1,53 @@
 @charset "UTF-8";
-body {
+:root {
   background-color: #f2fffc;
   color: #073642;
   font-family: 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
+  font-size: 12pt;
+}
+:root a {
+  color: #2aa198;
+  text-decoration: none;
+}
+:root b.blue {
+  color: #268bd2;
+}
+:root b.red {
+  color: #dc322f;
+}
+:root ul {
+  width: 600px;
 }
 #container {
-  width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 2em;
-  border-bottom: 4px double #002b36;
+  display: -webkit-flex;
+  display: flex;
+}
+.main {
+  margin: 20px;
+  padding: 12px;
+  width: 800px;
+  display: block;
+}
+.sidebar {
+  width: 220px;
+  border-right: #eee8d5 1px solid;
+}
+.sidebar .sidebar_fixeditem {
+  font-size: 0.9rem;
+  position: sticky;
+  z-index: 1;
+  top: 6px;
+  margin-top: 10px;
+}
+.sidebar .sidebar_fixeditem ul {
+  list-style-type: none;
+  padding-left: 0.9rem;
+}
+.sidebar .sidebar_fixeditem ul li {
+  margin-left: -0.9rem;
+}
+.sidebar .sidebar_fixeditem .sidebar_promotion {
+  border-top: 4px double #eee8d5;
 }
 .button {
   font-size: 10pt;
@@ -123,36 +161,16 @@ input[type="number"] {
   background-color: #f2fffc;
   transform: translateY(-50%) translateX(1em);
 }
-a {
-  color: #2aa198;
-}
-b.blue {
-  color: #268bd2;
-}
-b.red {
-  color: #dc322f;
-}
-footer {
-  padding-top: 0.25em;
-  padding-bottom: 1em;
-  width: 600px;
-  text-align: center;
-  margin-right: auto;
-  margin-left: auto;
-}
 h1 {
-  margin: 1em 0;
-  font-size: 30pt;
+  margin: 0;
+  padding: 0;
+  font-size: 3rem;
   color: #073642;
 }
 h2 {
-  padding: 0.25em 0.25em;
-  line-height: 1.5;
   margin-top: 3em;
   margin-bottom: 1em;
-  background: transparent;
-  border-left: solid 6px #268bd2;
-  border-bottom: solid 1px #839496;
+  border-bottom: solid 1px #268bd2;
   font-size: 20pt;
 }
 h3 {
@@ -162,39 +180,4 @@ h3 {
 h3::before {
   content: "\25cf";
   color: #268bd2;
-}
-hr {
-  border-top: 1px dashed #839496;
-  margin: 1em 0 3em 0;
-}
-.navigation {
-  border: 1px solid #839496;
-  font-size: 10pt;
-  padding: 0.25em;
-  margin: 0.25em 4em;
-  border-radius: 8px;
-}
-.navigation ol,
-.navigation ul {
-  margin: 0;
-  padding: 0.25em 2em;
-}
-.navigation::before {
-  content: "INDEX";
-  font-weight: bold;
-  padding: 0.5em;
-}
-.back2top {
-  margin: 1em -1em 0.1em 0;
-  text-align: end;
-}
-.back2top a {
-  background-color: #839496;
-  color: white;
-  padding: 0.25em;
-  font-size: 10pt;
-  text-decoration: none;
-}
-.back2top a::after {
-  content: "\2191";
 }
