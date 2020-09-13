@@ -290,7 +290,6 @@
     <ul>
         <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
         <li>ノンブルに数字以外が含まれていた場合は計算の対象外です。</li>
-        <li>ノンブルは必ず半角カンマ区切りで出力します。</li>
     </ul>
 </div>
 
@@ -298,8 +297,9 @@
     <div class="horizontal">
         <label>開始ノンブル<input type="number" value="1" min="1" class="startNombre"></label>
         <label>終了ノンブル<input type="number" value="999" min="1" class="endNombre"></label>
+        <label>増分<input type="number" value="1" class="nombreDelta"></label>
     </div>
-    <p><label>増分<input type="number" value="1" class="nombreDelta"></label></p>
+    <p><label><input type="checkbox" class="fullWidthCommaFlag">ノンブル間は全角カンマ</label></p>
     <div class="horizontal">
         <form class="adjustNombre">
             <textarea class="userInput" placeholder="名寄せされた索引を貼り付けてください"></textarea>

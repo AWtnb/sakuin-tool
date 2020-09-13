@@ -536,7 +536,8 @@ function clickBtn_checkMiyo(){
 // ノンブル加算減算
 ////////////////////////////////////////////////
 
-function adjustNombre(multiline, startNombre, endNombre, nombreDelta) {
+function adjustNombre(multiline, startNombre, endNombre, nombreDelta, useFullWidthComma = false) {
+    const commaType = (useFullWidthComma)? "，" : ",";
     const lineArray = multiline.split(/[\r\n]+/g);
     return lineArray
     .filter(x => x)
@@ -550,14 +551,14 @@ function adjustNombre(multiline, startNombre, endNombre, nombreDelta) {
             }
         }
         const nombresArray = nombres
-        .replace(/\s/g, "").replace(/，/g, ",").split(",")
+        .replace(/\s/g, "").split(commaType)
         .map(nbr => {
             if (Number(startNombre) <= Number(nbr) && Number(nbr) <= Number(endNombre)) {
                 return Number(nbr) + Number(nombreDelta);
             }
             return nbr
         });
-        const adjustedLine = item + "　　" + nombresArray.join(", ");
+        const adjustedLine = item + "　　" + nombresArray.join(commaType);
         return {
             original: line,
             adjusted: adjustedLine,
@@ -572,7 +573,8 @@ function clickBtn_adjustNombre(){
         document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .userInput").value,
         document.querySelector("#userinterface_forAdjustNombre input.startNombre").value,
         document.querySelector("#userinterface_forAdjustNombre input.endNombre").value,
-        document.querySelector("#userinterface_forAdjustNombre input.nombreDelta").value
+        document.querySelector("#userinterface_forAdjustNombre input.nombreDelta").value,
+        document.querySelector("#userinterface_forAdjustNombre input.fullWidthCommaFlag").checked
     );
     const adjustedLines = adjustedArray.map(item => item.adjusted).join("\n");
     document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .displayResult").value = adjustedLines;
