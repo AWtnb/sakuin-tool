@@ -537,7 +537,7 @@ function clickBtn_checkMiyo(){
 ////////////////////////////////////////////////
 
 function adjustNombre(multiline, startNombre, endNombre, nombreDelta, useFullWidthComma = false) {
-    const commaType = (useFullWidthComma)? "，" : ",";
+    const commaType = (useFullWidthComma)? "，" : ", ";
     const lineArray = multiline.split(/[\r\n]+/g);
     return lineArray
     .filter(x => x)
@@ -551,7 +551,7 @@ function adjustNombre(multiline, startNombre, endNombre, nombreDelta, useFullWid
             }
         }
         const nombresArray = nombres
-        .replace(/\s/g, "").split(commaType)
+        .split(commaType)
         .map(nbr => {
             if (Number(startNombre) <= Number(nbr) && Number(nbr) <= Number(endNombre)) {
                 return Number(nbr) + Number(nombreDelta);
