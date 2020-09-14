@@ -379,14 +379,15 @@ function clickBtn_generate_copy() {
 // 子項目候補の確認
 ////////////////////////////////////////////////
 
-function highlightChildItem(multilines, mode="tail") {
+function highlightChildItem(multilines, mode = "tail") {
     const lines = multilines.split(/[\r\n]+/g);
     const nonMiyoItems = lines.filter(line => !line.match(/→/g));
     const indexItems = nonMiyoItems
-        .filter(line => line)
-        .filter(line => !line.match(/^　/g))
-        .map(line => line.replace(/　　\d.*$/g, ""));
-    const array = indexItems.map(item => {
+    .filter(line => line)
+    .filter(line => !line.match(/^　/g))
+    .map(line => line.replace(/　　\d.*$/g, ""))
+    .sort((a, b) => b.length - a.length);
+    const possibleChildItemArray = indexItems.map(item => {
         const itemBaseName = item.replace(/（.*?）|［.*?］/g, "");
         const escaped = escapeMeta(itemBaseName);
 
@@ -404,14 +405,14 @@ function highlightChildItem(multilines, mode="tail") {
         const grep = indexItems.filter(line => line.match(reg));
         if (grep.length > 1) {
             const markup = grep
-                .filter(line => !(line == item))
-                .map(line => line.replace(reg, "<b class=\"blue\">$&</b>"))
-                .join("<br>");
+            .filter(line => (line != item))
+            .map(line => line.replace(reg, "<b class=\"blue\">$&</b>"))
+            .join("<br>");
             return `<b>${item}</b> を含む項目：<br>${markup}`;
         }
         return null
     }).filter(x => x);
-    return array.map(item => `<p>${item}</p>`).join("\n");
+    return possibleChildItemArray.map(item => `<p>${item}</p>`).join("\n");
 }
 
 function clickBtn_checkChild() {
