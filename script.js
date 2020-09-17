@@ -58,7 +58,7 @@ function setYomi(outputArea, inputLines){
                     return surface;
                 }
                 if (token.pos == "記号") {
-                    return "";
+                    return surface;
                 }
                 if (token.word_type != "KNOWN") {
                     return token.surface_form;
