@@ -475,13 +475,13 @@ function clickBtn_checkNombre() {
 
 // 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
 function findLostMiyoParenthesis(multilines) {
-    const lines = multilines.split(/[\r\n]+/g).filter(line => line);
+    const lines = multilines.split(/[\r\n]+/g).map(line => line.replace(/　　.+$/, "")).filter(line => line);
     const miyoLines = lines.filter(line => (line.indexOf("→") != -1));
     return miyoLines.map(line => {
         const [fromItem, toItem, ...rest] = line.split(/\s*→\s*/);
         const fromItemESCAPED = escapeMeta(fromItem);
         const toItemESCAPED = escapeMeta(toItem);
-        const targetPattern = new RegExp(`^${toItemESCAPED}（.*${fromItemESCAPED}.*）`);
+        const targetPattern = new RegExp(`^${toItemESCAPED}[（［].*${fromItemESCAPED}.*[）］]`);
         const grep = lines.filter(line => line.match(targetPattern));
         if (grep.length < 1) {
             return {found: line, shouldExist:`${toItem}（${fromItem}）`}
@@ -493,12 +493,12 @@ function findLostMiyoParenthesis(multilines) {
 // 括弧書きで付記されているのに見よ項目がないものを探す関数
 function findLostMiyoItem(multilines) {
     const lines = multilines.split(/[\r\n]+/g).filter(line => line);
-    const miyoReferredLines = lines.filter(line => line.match(/[（\\(].+?[）\\)]/));
+    const miyoReferredLines = lines.filter(line => line.match(/[［（\(].+?[］）\)]/));
     const lostInfo = [];
     miyoReferredLines.forEach(line => {
-        const toItem = line.replace(/[（\\(].+$/, "");
+        const toItem = line.replace(/[［（\(].+$/, "");
         const toItemESCAPED = escapeMeta(toItem);
-        const fromItemArray = line.replace(/^.+?[（\\(]/, "").replace(/[）\\)].*$/, "").split(/[,，] */);
+        const fromItemArray = line.replace(/^.+?[［（\(]/, "").replace(/[］）\)].*$/, "").split(/[,，] */);
         fromItemArray.forEach(fromItem => {
             const fromItemESCAPED = escapeMeta(fromItem);
             const targetPattern = new RegExp(`${fromItemESCAPED}\\s*→\\s*${toItemESCAPED}`);
