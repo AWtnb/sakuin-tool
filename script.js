@@ -231,6 +231,39 @@ function nayose (lines, nombreOnLeft = false) {
     return ret;
 }
 
+function nayoseByOrder(lines, nombreOnLeft = false) {
+    const lineArray = lines.split(/[\r?\n]+/g);
+    lineArray.filter(line => line).filter(line => !line.match(/^\s+$/));
+    const stack = [];
+    for (let i = 0; i < lineArray.length; i++) {
+        const item = lineArray[i];
+        const [itemName, nombre, ...rest] = (nombreOnLeft)? item.split("\t").reverse() : item.split("\t");
+        if (i == 0) {
+            stack.push([itemName, [nombre]]);
+            continue;
+        }
+        if (itemName == stack[stack.length - 1][0]) {
+            stack[stack.length - 1][1].push(nombre);
+            continue;
+        }
+        stack.push([itemName, [nombre]]);
+    }
+    const ret = [];
+    stack.forEach(pair => {
+        const [itemName, nombreArray] = pair;
+        const sorted = nombreArray.filter(x => x).sort((a, b) => a - b);
+        const uniq = Array.from(new Set(sorted));
+        if (uniq.length < 1) {
+            ret.push(itemName);
+        }
+        else {
+            const hyphenated = hyphenateConsecutiveTriplet(uniq);
+            ret.push(itemName + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/g, "-"));
+        }
+    });
+    return ret;
+}
+
 function clickBtn_nayose() {
     const lines_toNayose = document.querySelector("#userinterface_forNayose form.nayose .userInput").value;
     const nys = nayose(lines_toNayose, document.querySelector("#userinterface_forNayose form.nombreLeftFlag .isLeft").checked);
