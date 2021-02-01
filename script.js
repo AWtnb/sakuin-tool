@@ -206,7 +206,7 @@ function nayose (lines, nombreOnLeft = false) {
     lineArray.filter(line => line)
     .filter(line => !line.match(/^\s+$/))
     .forEach(item => {
-        const [itemName, nombre, ...rest] = (nombreOnLeft)? item.split("\t").reverse() : item.split("\t");
+        const [itemName, nombre, ...rest] = (nombreOnLeft)? item.split("\t").slice(0, 2).reverse() : item.split("\t");
         if (map.has(itemName)) {
             map.get(itemName).push(nombre);
         }
@@ -237,31 +237,30 @@ function nayoseByOrder(lines, nombreOnLeft = false) {
     const stack = [];
     for (let i = 0; i < lineArray.length; i++) {
         const item = lineArray[i];
-        const [itemName, nombre, ...rest] = (nombreOnLeft)? item.split("\t").reverse() : item.split("\t");
+        const [itemName, nombre, ...rest] = (nombreOnLeft)? item.split("\t").slice(0, 2).reverse() : item.split("\t");
         if (i == 0) {
             stack.push([itemName, [nombre]]);
             continue;
         }
-        if (itemName == stack[stack.length - 1][0]) {
-            stack[stack.length - 1][1].push(nombre);
+        const lastIdx = stack.length - 1;
+        if (itemName == stack[lastIdx][0]) {
+            stack[lastIdx][1].push(nombre);
             continue;
         }
         stack.push([itemName, [nombre]]);
     }
-    const ret = [];
-    stack.forEach(pair => {
+
+    return stack.map(pair => {
         const [itemName, nombreArray] = pair;
         const sorted = nombreArray.filter(x => x).sort((a, b) => a - b);
         const uniq = Array.from(new Set(sorted));
         if (uniq.length < 1) {
-            ret.push(itemName);
+            return itemName;
         }
-        else {
-            const hyphenated = hyphenateConsecutiveTriplet(uniq);
-            ret.push(itemName + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/g, "-"));
-        }
+        const hyphenated = hyphenateConsecutiveTriplet(uniq);
+        return (itemName + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/g, "-"));
     });
-    return ret;
+
 }
 
 function clickBtn_nayose() {
