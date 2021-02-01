@@ -75,8 +75,9 @@ function setYomi(outputArea, inputLines){
 }
 
 function clickBtn_yomi() {
-    const lines = document.querySelector("#userinterface_forYomi form.yomi .userInput").value;
-    const outputArea = document.querySelector("#userinterface_forYomi form.yomi .displayResult");
+    const yomiElem = document.querySelector("#userinterface_forYomi");
+    const lines = yomiElem.querySelector("form.yomi .userInput").value;
+    const outputArea = yomiElem.querySelector("form.yomi .displayResult");
     setYomi(outputArea, lines);
 }
 function clickBtn_yomi_copy() {
@@ -111,10 +112,11 @@ function convertHiraKata(str, mode){
 }
 
 function clickBtn_katahira() {
-    const lines_toConvert = document.querySelector("#userinterface_forKatahira form.convert .userInput").value;
-    const mode = document.querySelector("#userinterface_forKatahira form.katahiraFlag").radio1.value;
+    const katahiraElem = document.querySelector("#userinterface_forKatahira");
+    const lines_toConvert = katahiraElem.querySelector("form.convert .userInput").value;
+    const mode = katahiraElem.querySelector("form.katahiraFlag").radio1.value;
     const converted = convertHiraKata(lines_toConvert, mode);
-    document.querySelector("#userinterface_forKatahira form.convert .displayResult").value = converted;
+    katahiraElem.querySelector("form.convert .displayResult").value = converted;
 }
 function clickBtn_katahira_copy() {
     document.querySelector("#userinterface_forKatahira form.convert .displayResult").select();
@@ -154,12 +156,13 @@ function toHairetsu (str, removeNoise) {
 }
 
 function clickBtn_hairetsu() {
-    const lines_toHairetsu = document.querySelector("#userinterface_forHairetsu form.hairetsu .userInput").value;
-    const removeFlag = document.querySelector("#userinterface_forHairetsu form.removeFlag .removeFlag");
+    const hairetsuElem = document.querySelector("#userinterface_forHairetsu");
+    const lines_toHairetsu = hairetsuElem.querySelector("form.hairetsu .userInput").value;
+    const removeFlag = hairetsuElem.querySelector("form.removeFlag .removeFlag");
 
     const converted = toHairetsu(lines_toHairetsu, removeFlag.checked);
     const msg = converted.join("\n");
-    document.querySelector("#userinterface_forHairetsu form.hairetsu .displayResult").value = msg;
+    hairetsuElem.querySelector("form.hairetsu .displayResult").value = msg;
 }
 function clickBtn_hairetsu_copy() {
     document.querySelector("#userinterface_forHairetsu form.hairetsu .displayResult").select();
@@ -264,12 +267,13 @@ function nayoseByOrder(lines, nombreOnLeft = false) {
 }
 
 function clickBtn_nayose() {
-    const lines_toNayose = document.querySelector("#userinterface_forNayose form.nayose .userInput").value;
-    const nys = (document.querySelector("#userinterface_forNayose form.orderedFlag .isOrdered").checked)?
-        nayoseByOrder(lines_toNayose, document.querySelector("#userinterface_forNayose form.nombreLeftFlag .isLeft").checked) :
-        nayose(lines_toNayose, document.querySelector("#userinterface_forNayose form.nombreLeftFlag .isLeft").checked);
+    const nayoseElem = document.querySelector("#userinterface_forNayose");
+    const lines_toNayose = nayoseElem.querySelector("form.nayose .userInput").value;
+    const nys = (nayoseElem.querySelector("form.orderedFlag .isOrdered").checked)?
+        nayoseByOrder(lines_toNayose, nayoseElem.querySelector("form.nombreLeftFlag .isLeft").checked) :
+        nayose(lines_toNayose, nayoseElem.querySelector("form.nombreLeftFlag .isLeft").checked);
     const msg = nys.join("\n");
-    document.querySelector("#userinterface_forNayose form.nayose .displayResult").value = msg;
+    nayoseElem.querySelector("form.nayose .displayResult").value = msg;
 }
 function clickBtn_nayose_copy() {
     document.querySelector("#userinterface_forNayose form.nayose .displayResult").select();
@@ -305,11 +309,12 @@ function releaseNayoseLines (multiLines) {
 }
 
 function clickBtn_release() {
+    const releaseElem = document.querySelector("#userinterface_forRelease");
 
-    const linesToRelease = document.querySelector("#userinterface_forRelease form.release .userInput").value;
+    const linesToRelease = releaseElem.querySelector("form.release .userInput").value;
     const releasedObj = releaseNayoseLines(linesToRelease);
 
-    const outputTable = document.querySelector("#userinterface_forRelease .resultTable");
+    const outputTable = releaseElem.querySelector(".resultTable");
     resetTable(outputTable);
 
     for (let item in releasedObj) {
@@ -353,10 +358,12 @@ function completeChildItem (multiLines, delim) {
 }
 
 function clickBtn_complete() {
-    const delimiter = document.querySelector("#userinterface_toComplete form.delimiter").radio1.value;
-    const lines_toComplete = document.querySelector("#userinterface_toComplete form.complete .userInput").value;
+    const completeElem = document.querySelector("#userinterface_toComplete");
+
+    const delimiter = completeElem.querySelector("form.delimiter").radio1.value;
+    const lines_toComplete = completeElem.querySelector("form.complete .userInput").value;
     const completedArray = completeChildItem(lines_toComplete, delimiter);
-    document.querySelector("#userinterface_toComplete form.complete .displayResult").value = completedArray.join("\n");
+    completeElem.querySelector("form.complete .displayResult").value = completedArray.join("\n");
 }
 function clickBtn_complete_copy() {
     document.querySelector("#userinterface_toComplete form.complete .displayResult").select();
@@ -386,10 +393,12 @@ function generateTemplare(multiLines) {
 }
 
 function clickBtn_generate() {
-    const linesToGenerate = document.querySelector("#userinterface_toGenerate form.generate .userInput").value;
+    const generateElem = document.querySelector("#userinterface_toGenerate");
+
+    const linesToGenerate = generateElem.querySelector("form.generate .userInput").value;
     const templateArray = generateTemplare(linesToGenerate);
 
-    const outputTable = document.querySelector("#userinterface_toGenerate .resultTable");
+    const outputTable = generateElem.querySelector(".resultTable");
     resetTable(outputTable)
 
     templateArray.forEach((line, idx) => {
@@ -450,10 +459,12 @@ function highlightChildItem(multilines, mode = "tail") {
 }
 
 function clickBtn_checkChild() {
-    const lines = document.querySelector("#userinterface_forCheckChild form.check .userInput").value;
-    const mode = document.querySelector("#userinterface_forCheckChild form.searchPos").radio1.value;
+    const checkChildElem = document.querySelector("#userinterface_forCheckChild");
+
+    const lines = checkChildElem.querySelector("form.check .userInput").value;
+    const mode = checkChildElem.querySelector("form.searchPos").radio1.value;
     const markup = highlightChildItem(lines, mode);
-    document.querySelector("#userinterface_forCheckChild .displayResult").innerHTML = markup;
+    checkChildElem.querySelector(".displayResult").innerHTML = markup;
 }
 
 ////////////////////////////////////////////////
@@ -498,9 +509,10 @@ function highlightInvalidNombreLine(multilines) {
 }
 
 function clickBtn_checkNombre() {
-    const lines = document.querySelector("#userinterface_forCheckNombre form.check .userInput").value;
+    const checkNombreElem = document.querySelector("#userinterface_forCheckNombre");
+    const lines = checkNombreElem.querySelector("form.check .userInput").value;
     const markup = highlightInvalidNombreLine(lines);
-    document.querySelector("#userinterface_forCheckNombre .displayResult").innerHTML = markup;
+    checkNombreElem.querySelector(".displayResult").innerHTML = markup;
 }
 
 ////////////////////////////////////////////////
@@ -546,8 +558,9 @@ function findLostMiyoItem(multilines) {
 }
 
 function clickBtn_checkMiyo(){
+    const checkMiyoElem = document.querySelector("#userinterface_forCheckMiyo");
 
-    const lines = document.querySelector("#userinterface_forCheckMiyo form.check .userInput").value;
+    const lines = checkMiyoElem.querySelector("form.check .userInput").value;
     const lostMiyoParenInfo = findLostMiyoParenthesis(lines);
     const foundArray = [];
     if (lostMiyoParenInfo.length > 0) {
@@ -564,7 +577,7 @@ function clickBtn_checkMiyo(){
         });
     }
     const markup = foundArray.join("\n");
-    document.querySelector("#userinterface_forCheckMiyo .displayResult").innerHTML = markup;
+    checkMiyoElem.querySelector(".displayResult").innerHTML = markup;
 }
 
 ////////////////////////////////////////////////
@@ -604,22 +617,24 @@ function adjustNombre(multiline, startNombre, endNombre, nombreDelta, useFullWid
 
 
 function clickBtn_adjustNombre(){
+    const adjustNombreElem = document.querySelector("#userinterface_forAdjustNombre");
+
     const adjustedArray = adjustNombre(
-        document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .userInput").value,
-        document.querySelector("#userinterface_forAdjustNombre input.startNombre").value,
-        document.querySelector("#userinterface_forAdjustNombre input.endNombre").value,
-        document.querySelector("#userinterface_forAdjustNombre input.nombreDelta").value,
-        document.querySelector("#userinterface_forAdjustNombre input.fullWidthCommaFlag").checked
+        adjustNombreElem.querySelector("form.adjustNombre .userInput").value,
+        adjustNombreElem.querySelector("input.startNombre").value,
+        adjustNombreElem.querySelector("input.endNombre").value,
+        adjustNombreElem.querySelector("input.nombreDelta").value,
+        adjustNombreElem.querySelector("input.fullWidthCommaFlag").checked
     );
     const adjustedLines = adjustedArray.map(item => item.adjusted).join("\n");
-    document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .displayResult").value = adjustedLines;
+    adjustNombreElem.querySelector("form.adjustNombre textarea.displayResult").value = adjustedLines;
     const modified = adjustedArray.filter(item => item.isModified);
-    const markup= (modified.length)?
+    const markup = (modified.length)?
     `<p>■${modified.length}行の変更：</p>` + modified.map(item => {
-        return `<p><span style="color:gray">${item.original}</span><br><span style="color:red">${item.adjusted}</span></p>`;
+        return `<p style="margin:2px 0;"><span style="color:gray">${item.original}</span><br><span style="color:red">${item.adjusted}</span></p>`;
     }).join("\n") :
     "<p>（変更箇所はありません）</p>";
-    document.querySelector("#userinterface_forAdjustNombre > .displayResult").innerHTML = markup;
+    adjustNombreElem.querySelector("div.displayResult").innerHTML = markup;
 }
 
 function clickBtn_adjustNombre_copy(){
