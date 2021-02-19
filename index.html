@@ -22,6 +22,7 @@
                     <li><a href="#section_forYomi">読みがなの取得</a></li>
                     <li><a href="#section_forHairetsu">配列読みに変換</a></li>
                     <li><a href="#section_forKatahira">カタカナひらがな相互変換</a></li>
+                    <li><a href="#section_forRoman">ローマ字に変換</a></li>
                     <li><a href="#section_forNayose">名寄せ</a></li>
                     <li><a href="#section_forCheckChild">子項目候補の確認</a></li>
                     <li><a href="#section_forCheckNombre">ノンブル並びの確認</a></li>
@@ -167,6 +168,35 @@
     </div>
 </div>
 
+<!-- ========================================
+ローマ字に変換
+======================================== -->
+<h3 id="section_forRoman">ローマ字に変換</h3>
+<div class="caption">
+    <p>テキストボックスに入力された文字列（カタカナ／ひらがな）をローマ字に変換します。</p>
+    <ul>
+        <li>ヘボン式ローマ字に従っています。</li>
+        <ul>
+            <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
+        </ul>
+        <li>変換できなかった文字はそのまま表示します。</li>
+        <ul>
+            <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
+            <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
+        </ul>
+    </ul>
+</div>
+
+<div class="userinterface" id="userinterface_forRoman">
+    <div class="horizontal">
+        <form class="convert">
+            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="変換" onclick="clickBtn_roman()" class="button">
+            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_roman_copy()" class="button">
+        </form>
+    </div>
+</div>
 
 <!-- ========================================
 名寄せ

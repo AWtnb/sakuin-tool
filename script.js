@@ -642,3 +642,49 @@ function clickBtn_adjustNombre_copy(){
     document.execCommand("Copy");
     alert("コピーしました！");
 }
+
+////////////////////////////////////////////////
+// ローマ字に変換
+////////////////////////////////////////////////
+
+const romajiHash = {
+    "ア":"A", "イ":"I", "ウ":"U", "エ":"E", "オ":"O",
+    "カ":"Ka", "キ":"Ki", "ク":"Ku", "ケ":"Ke", "コ":"Ko", "サ":"Sa", "シ":"Shi", "ス":"Su", "セ":"Se", "ソ":"So",
+    "タ":"Ta", "チ":"Chi", "ツ":"Tsu", "テ":"Te", "ト":"To",
+    "ナ":"Na", "ニ":"Ni", "ヌ":"Nu", "ネ":"Ne", "ノ":"No",
+    "ハ":"Ha", "ヒ":"Hi", "フ":"Fu", "ヘ":"He", "ホ":"Ho",
+    "マ":"Ma", "ミ":"Mi", "ム":"Mu", "メ":"Me", "モ":"Mo",
+    "ヤ":"Ya", "ユ":"Yu", "ヨ":"Yo",
+    "ラ":"Ra", "リ":"Ri", "ル":"Ru", "レ":"Re", "ロ":"Ro",
+    "ワ":"Wa", "ヲ":"Wo", "ン":"N",
+    "ガ":"Ga", "ギ":"Gi", "グ":"Gu", "ゲ":"Ge", "ゴ":"Go",
+    "ザ":"Za", "ジ":"Ji", "ズ":"Zu", "ゼ":"Ze", "ゾ":"Zo",
+    "ダ":"Da", "ヂ":"Di", "ヅ":"Zu", "デ":"De", "ド":"Do",
+    "バ":"Ba", "ビ":"Bi", "ブ":"Bu", "ベ":"Be", "ボ":"Bo",
+    "パ":"Pa", "ピ":"Pi", "プ":"Pu", "ペ":"Pe", "ポ":"Po",
+    "ャ":"Lya", "ュ":"Lyu", "ョ":"Lyo", "ッ":"Ltu",
+};
+
+function toRoman(s) {
+    let converted = hira2kata(s);
+    Object.keys(romajiHash).forEach(key => {
+        const reg = new RegExp(key, "g");
+        converted = converted.replace(reg, romajiHash[key]);
+    });
+    // サ行タ行の拗音処理 → 拗音処理 → 促音処理
+    converted = converted.replace(/([CS]h|J)iLy(.)/g, '$1$2').replace(/([A-Z])iL(y.)/g, '$1$2').replace(/Ltu(.)/g, '$1$1')
+    return converted.toLowerCase();
+}
+
+function clickBtn_roman() {
+    const romanElem = document.querySelector("#userinterface_forRoman");
+    const lines_toConvert = romanElem.querySelector("form.convert .userInput").value;
+    const converted = toRoman(lines_toConvert);
+    romanElem.querySelector("form.convert .displayResult").value = converted;
+}
+
+function clickBtn_roman_copy() {
+    document.querySelector("#userinterface_forRoman form.convert .displayResult").select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
