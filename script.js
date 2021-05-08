@@ -129,31 +129,27 @@ function clickBtn_katahira_copy() {
 // 配列読み
 ////////////////////////////////////////////////
 
-function toHairetsu (str, removeNoise) {
-    const table = [];
-    table["ァ"]="ア";table["ィ"]="イ";table["ゥ"]="ウ";table["ェ"]="エ";table["ォ"]="オ";table["ヴ"]="ウ";
-    table["ガ"]="カ";table["ギ"]="キ";table["グ"]="ク";table["ゲ"]="ケ";table["ゴ"]="コ";
-    table["ザ"]="サ";table["ジ"]="シ";table["ズ"]="ス";table["ゼ"]="セ";table["ゾ"]="ソ";
-    table["ダ"]="タ";table["ヂ"]="チ";table["ヅ"]="ツ";table["ッ"]="ツ";table["デ"]="テ";table["ド"]="ト";
-    table["バ"]="ハ";table["ビ"]="ヒ";table["ブ"]="フ";table["ベ"]="ヘ";table["ボ"]="ホ";table["パ"]="ハ";table["ピ"]="ヒ";table["プ"]="フ";table["ペ"]="ヘ";table["ポ"]="ホ";
-    table["ャ"]="ヤ";table["ュ"]="ユ";table["ョ"]="ヨ";
-    table["ー"]="";
-    const lines = str.split(/\r?\n/g);
-    const ret = lines.map (line => {
+function toHairetsu (lines, removeNoise) {
+    const map = new Map();
+    map.set("ァ", "ア"); map.set("ィ", "イ"); map.set("ゥ", "ウ"); map.set("ェ", "エ");map.set("ォ", "オ"); map.set("ヴ", "ウ");
+    map.set("ガ", "カ"); map.set("ギ", "キ"); map.set("グ", "ク"); map.set("ゲ", "ケ");map.set("ゴ", "コ");
+    map.set("ザ", "サ"); map.set("ジ", "シ"); map.set("ズ", "ス"); map.set("ゼ", "セ");map.set("ゾ", "ソ");
+    map.set("ダ", "タ"); map.set("ヂ", "チ"); map.set("ヅ", "ツ"); map.set("ッ", "ツ");map.set("デ", "テ"); map.set("ド", "ト");
+    map.set("バ", "ハ"); map.set("ビ", "ヒ"); map.set("ブ", "フ"); map.set("ベ", "ヘ");map.set("ボ", "ホ");
+    map.set("パ", "ハ"); map.set("ピ", "ヒ"); map.set("プ", "フ"); map.set("ペ", "ヘ");map.set("ポ", "ホ");
+    map.set("ャ", "ヤ"); map.set("ュ", "ユ"); map.set("ョ", "ヨ");
+    map.set("ー", "");
+
+    return lines.split(/\r?\n/g).map(line => {
         if (!line) {
             return "";
         }
         let katakana = hira2kata(line);
-        for (let t in table) {
-            let reg = new RegExp(t, "g");
-            katakana = katakana.replace(reg, table[t]);
+        for (let k of map.keys()) {
+            katakana = katakana.replace(k, map.get(k));
         }
-        if (removeNoise) {
-            katakana = katakana.replace(/[^ァ-ヴa-zA-Z0-9０-９]/g, "");
-        }
-        return katakana;
+        return (removeNoise)? katakana.replace(/[^ァ-ヴa-zA-Z0-9０-９]/g, "") : katakana;
     });
-    return ret;
 }
 
 function clickBtn_hairetsu() {
@@ -207,13 +203,13 @@ function nayose (lines, nombreOnLeft = false) {
     // 集約
     lineArray.filter(line => line)
     .filter(line => !line.match(/^\s+$/))
-    .forEach(item => {
-        const [itemName, nombre, ...rest] = (nombreOnLeft)? item.split("\t").slice(0, 2).reverse() : item.split("\t");
-        if (map.has(itemName)) {
-            map.get(itemName).push(nombre);
+    .forEach(line => {
+        const [item, nombre, ...rest] = (nombreOnLeft)? line.split("\t").slice(0, 2).reverse() : line.split("\t");
+        if (map.has(item)) {
+            map.get(item).push(nombre);
         }
         else {
-            map.set(itemName, [nombre]);
+            map.set(item, [nombre]);
         }
     });
 
@@ -233,33 +229,33 @@ function nayose (lines, nombreOnLeft = false) {
     return ret;
 }
 
-function nayoseByOrder(lines, nombreOnLeft = false) {
+function nayoseFromTop(lines, nombreOnLeft = false) {
     const lineArray = lines.split(/[\r?\n]+/g).filter(line => line).filter(line => !line.match(/^\s+$/));
     const stack = [];
     for (let i = 0; i < lineArray.length; i++) {
-        const item = lineArray[i];
-        const [itemName, nombre, ...rest] = (nombreOnLeft)? item.split("\t").slice(0, 2).reverse() : item.split("\t");
+        const line = lineArray[i];
+        const [item, nombre, ...rest] = (nombreOnLeft)? line.split("\t").slice(0, 2).reverse() : line.split("\t");
         if (i == 0) {
-            stack.push([itemName, [nombre]]);
+            stack.push([item, [nombre]]);
             continue;
         }
         const lastIdx = stack.length - 1;
-        if (itemName == stack[lastIdx][0]) {
+        if (item == stack[lastIdx][0]) {
             stack[lastIdx][1].push(nombre);
             continue;
         }
-        stack.push([itemName, [nombre]]);
+        stack.push([item, [nombre]]);
     }
 
     return stack.map(pair => {
-        const [itemName, nombreArray] = pair;
+        const [item, nombreArray] = pair;
         const sorted = nombreArray.filter(x => x).sort((a, b) => a - b);
         const uniq = Array.from(new Set(sorted));
         if (uniq.length < 1) {
-            return itemName;
+            return item;
         }
         const hyphenated = hyphenateConsecutiveTriplet(uniq);
-        return (itemName + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/g, "-"));
+        return (item + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/g, "-"));
     });
 
 }
@@ -268,7 +264,7 @@ function clickBtn_nayose() {
     const nayoseElem = document.querySelector("#userinterface_forNayose");
     const lines_toNayose = nayoseElem.querySelector("form.nayose .userInput").value;
     const nys = (nayoseElem.querySelector("form.orderedFlag .isOrdered").checked)?
-        nayoseByOrder(lines_toNayose, nayoseElem.querySelector("form.nombreLeftFlag .isLeft").checked) :
+        nayoseFromTop(lines_toNayose, nayoseElem.querySelector("form.nombreLeftFlag .isLeft").checked) :
         nayose(lines_toNayose, nayoseElem.querySelector("form.nombreLeftFlag .isLeft").checked);
     const msg = nys.join("\n");
     nayoseElem.querySelector("form.nayose .displayResult").value = msg;
