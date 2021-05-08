@@ -183,21 +183,19 @@ function hyphenateConsecutiveTriplet (inputArray) {
         return inputArray
     }
     const array = [];
-    array.push(
-        {Item: inputArray[0], Hyphenate: false}
-    );
+    array.push({
+        Item: inputArray[0], Hyphenate: false
+    });
     for (let i = 0; i <= inputArray.length - 3; i++) {
-        const current = Number(inputArray[i]);
-        const next1 = Number(inputArray[i + 1]);
-        const next2 = Number(inputArray[i + 2]);
-        const hyphenateFlag = (current + 1 == next1 && current + 2 == next2)? true : false;
-        array.push(
-            {Item: next1, Hyphenate: hyphenateFlag}
-        );
+        const [current, next1, next2] = inputArray.slice(i, i+3);
+        array.push({
+            Item: next1,
+            Hyphenate: (Number(current)+1 == next1 && Number(current)+2 == next2)
+        });
     }
-    array.push(
-        {Item: inputArray[inputArray.length - 1], Hyphenate: false}
-    );
+    array.push({
+        Item: inputArray[inputArray.length - 1], Hyphenate: false
+    });
     return array.map(x => {
         return (x.Hyphenate)? "-" : x.Item
     })
