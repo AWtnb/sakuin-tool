@@ -131,14 +131,16 @@ function clickBtn_katahira_copy() {
 
 function toHairetsu (lines, removeNoise) {
     const map = new Map();
-    map.set("ァ", "ア"); map.set("ィ", "イ"); map.set("ゥ", "ウ"); map.set("ェ", "エ");map.set("ォ", "オ"); map.set("ヴ", "ウ");
-    map.set("ガ", "カ"); map.set("ギ", "キ"); map.set("グ", "ク"); map.set("ゲ", "ケ");map.set("ゴ", "コ");
-    map.set("ザ", "サ"); map.set("ジ", "シ"); map.set("ズ", "ス"); map.set("ゼ", "セ");map.set("ゾ", "ソ");
-    map.set("ダ", "タ"); map.set("ヂ", "チ"); map.set("ヅ", "ツ"); map.set("ッ", "ツ");map.set("デ", "テ"); map.set("ド", "ト");
-    map.set("バ", "ハ"); map.set("ビ", "ヒ"); map.set("ブ", "フ"); map.set("ベ", "ヘ");map.set("ボ", "ホ");
-    map.set("パ", "ハ"); map.set("ピ", "ヒ"); map.set("プ", "フ"); map.set("ペ", "ヘ");map.set("ポ", "ホ");
-    map.set("ャ", "ヤ"); map.set("ュ", "ユ"); map.set("ョ", "ヨ");
-    map.set("ー", "");
+    [
+        ["ァ", "ア"], ["ィ", "イ"], ["ゥ", "ウ"], ["ェ", "エ"],["ォ", "オ"], ["ヴ", "ウ"],
+        ["ガ", "カ"], ["ギ", "キ"], ["グ", "ク"], ["ゲ", "ケ"],["ゴ", "コ"],
+        ["ザ", "サ"], ["ジ", "シ"], ["ズ", "ス"], ["ゼ", "セ"],["ゾ", "ソ"],
+        ["ダ", "タ"], ["ヂ", "チ"], ["ヅ", "ツ"], ["ッ", "ツ"],["デ", "テ"], ["ド", "ト"],
+        ["バ", "ハ"], ["ビ", "ヒ"], ["ブ", "フ"], ["ベ", "ヘ"],["ボ", "ホ"],
+        ["パ", "ハ"], ["ピ", "ヒ"], ["プ", "フ"], ["ペ", "ヘ"],["ポ", "ホ"],
+        ["ャ", "ヤ"], ["ュ", "ユ"], ["ョ", "ヨ"],
+        ["ー", ""]
+    ].forEach(x => map.set(...x));
 
     let katakana = hira2kata(lines);
     for (let k of map.keys()) {
@@ -666,22 +668,24 @@ function clickBtn_adjustNombre_copy(){
 
 function toRoman(s) {
     const map = new Map();
-    map.set("ア", "A"); map.set("イ", "I"); map.set("ウ", "U"); map.set("エ", "E"); map.set("オ", "O");
-    map.set("カ", "Ka"); map.set("キ", "Ki"); map.set("ク", "Ku"); map.set("ケ", "Ke"); map.set("コ", "Ko");
-    map.set("サ", "Sa"); map.set("シ", "Shi"); map.set("ス", "Su"); map.set("セ", "Se"); map.set("ソ", "So");
-    map.set("タ", "Ta"); map.set("チ", "Chi"); map.set("ツ", "Tsu"); map.set("テ", "Te"); map.set("ト", "To");
-    map.set("ナ", "Na"); map.set("ニ", "Ni"); map.set("ヌ", "Nu"); map.set("ネ", "Ne"); map.set("ノ", "No");
-    map.set("ハ", "Ha"); map.set("ヒ", "Hi"); map.set("フ", "Fu"); map.set("ヘ", "He"); map.set("ホ", "Ho");
-    map.set("マ", "Ma"); map.set("ミ", "Mi"); map.set("ム", "Mu"); map.set("メ", "Me"); map.set("モ", "Mo");
-    map.set("ヤ", "Ya"); map.set("ユ", "Yu"); map.set("ヨ", "Yo");
-    map.set("ラ", "Ra"); map.set("リ", "Ri"); map.set("ル", "Ru"); map.set("レ", "Re"); map.set("ロ", "Ro");
-    map.set("ワ", "Wa"); map.set("ヲ", "Wo"); map.set("ン", "N");
-    map.set("ガ", "Ga"); map.set("ギ", "Gi"); map.set("グ", "Gu"); map.set("ゲ", "Ge"); map.set("ゴ", "Go");
-    map.set("ザ", "Za"); map.set("ジ", "Ji"); map.set("ズ", "Zu"); map.set("ゼ", "Ze"); map.set("ゾ", "Zo");
-    map.set("ダ", "Da"); map.set("ヂ", "Di"); map.set("ヅ", "Zu"); map.set("デ", "De"); map.set("ド", "Do");
-    map.set("バ", "Ba"); map.set("ビ", "Bi"); map.set("ブ", "Bu"); map.set("ベ", "Be"); map.set("ボ", "Bo");
-    map.set("パ", "Pa");map.set("ピ", "Pi");map.set("プ", "Pu");map.set("ペ", "Pe");map.set("ポ", "Po");
-    map.set("ャ", "Lya"); map.set("ュ", "Lyu"); map.set("ョ", "Lyo"); map.set("ッ", "Ltu");
+    [
+        ["ア", "A"], ["イ", "I"], ["ウ", "U"], ["エ", "E"], ["オ", "O"],
+        ["カ", "Ka"], ["キ", "Ki"], ["ク", "Ku"], ["ケ", "Ke"], ["コ", "Ko"],
+        ["サ", "Sa"], ["シ", "Shi"], ["ス", "Su"], ["セ", "Se"], ["ソ", "So"],
+        ["タ", "Ta"], ["チ", "Chi"], ["ツ", "Tsu"], ["テ", "Te"], ["ト", "To"],
+        ["ナ", "Na"], ["ニ", "Ni"], ["ヌ", "Nu"], ["ネ", "Ne"], ["ノ", "No"],
+        ["ハ", "Ha"], ["ヒ", "Hi"], ["フ", "Fu"], ["ヘ", "He"], ["ホ", "Ho"],
+        ["マ", "Ma"], ["ミ", "Mi"], ["ム", "Mu"], ["メ", "Me"], ["モ", "Mo"],
+        ["ヤ", "Ya"], ["ユ", "Yu"], ["ヨ", "Yo"],
+        ["ラ", "Ra"], ["リ", "Ri"], ["ル", "Ru"], ["レ", "Re"], ["ロ", "Ro"],
+        ["ワ", "Wa"], ["ヲ", "Wo"], ["ン", "N"],
+        ["ガ", "Ga"], ["ギ", "Gi"], ["グ", "Gu"], ["ゲ", "Ge"], ["ゴ", "Go"],
+        ["ザ", "Za"], ["ジ", "Ji"], ["ズ", "Zu"], ["ゼ", "Ze"], ["ゾ", "Zo"],
+        ["ダ", "Da"], ["ヂ", "Di"], ["ヅ", "Zu"], ["デ", "De"], ["ド", "Do"],
+        ["バ", "Ba"], ["ビ", "Bi"], ["ブ", "Bu"], ["ベ", "Be"], ["ボ", "Bo"],
+        ["パ", "Pa"],["ピ", "Pi"],["プ", "Pu"],["ペ", "Pe"],["ポ", "Po"],
+        ["ャ", "Lya"], ["ュ", "Lyu"], ["ョ", "Lyo"], ["ッ", "Ltu"]
+    ].forEach(x => map.set(...x))
 
     let converted = hira2kata(s);
     for (let k of map.keys()) {
