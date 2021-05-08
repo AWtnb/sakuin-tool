@@ -36,6 +36,21 @@ function resetTable(tableElem) {
 // 読み取得
 ////////////////////////////////////////////////
 
+function getYomi(token) {
+    console.log(token.surface_form, token.word_type, token.pos, token.reading);
+    const surface = token.surface_form;
+    if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
+        return surface;
+    }
+    if (token.pos == "記号") {
+        return surface;
+    }
+    if (token.word_type != "KNOWN") {
+        return token.surface_form;
+    }
+    return token.reading;
+}
+
 function setYomi(outputArea, inputLines){
     outputArea.value = "（\u{1f914}よみがな計算中…）";
     const promise = new Promise((resolve, reject) => {
@@ -49,24 +64,10 @@ function setYomi(outputArea, inputLines){
         });
     });
     promise.then(tokenizer => {
-        const yomiArray = inputLines.split(/\n/).map(line => {
-            const parsed = tokenizer.tokenize(line);
-            return parsed.map(token => {
-                console.log(token.surface_form, token.word_type, token.pos, token.reading);
-                const surface = token.surface_form;
-                if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
-                    return surface;
-                }
-                if (token.pos == "記号") {
-                    return surface;
-                }
-                if (token.word_type != "KNOWN") {
-                    return token.surface_form;
-                }
-                return token.reading;
-            }).join("");
+        const result = inputLines.split(/\r?\n/g).map(line => {
+            return tokenizer.tokenize(line).map(getYomi).join("");
         });
-        outputArea.value = yomiArray.join("\n")
+        outputArea.value = result.join("\n")
     })
     .catch((e) => {
         outputArea.value = "解析失敗…\nやり直してみてください！";
