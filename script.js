@@ -171,39 +171,47 @@ function clickBtn_hairetsu_copy() {
 // 名寄せ
 ////////////////////////////////////////////////
 
-function hyphenateConsecutiveTriplet (inputArray) {
+function hasNaN(array) {
+    const reg = new RegExp(/[^\d]/)
+    return reg.test(array.join(""))
+}
+
+function hyphenateConsecutive (inputArray) {
     if (inputArray.length < 3) {
         return inputArray
     }
-    if (!inputArray.join("").match(/^\d+$/)) {
-        return inputArray
-    }
-    const array = [];
-    array.push({
-        Item: inputArray[0], Hyphenate: false
+    const stack = [];
+    stack.push({
+        Item: inputArray[0],
+        Hyphenate: false
     });
     for (let i = 0; i <= inputArray.length - 3; i++) {
         const [current, next1, next2] = inputArray.slice(i, i+3);
-        array.push({
+        const isConsecutive = (hasNaN(inputArray.slice(i, i+3)))?
+            false :
+            (Number(current)+1 == next1 && Number(current)+2 == next2)
+        stack.push({
             Item: next1,
-            Hyphenate: (Number(current)+1 == next1 && Number(current)+2 == next2)
+            Hyphenate: isConsecutive
         });
     }
-    array.push({
-        Item: inputArray[inputArray.length - 1], Hyphenate: false
+    stack.push({
+        Item: inputArray[inputArray.length - 1],
+        Hyphenate: false
     });
-    return array.map(x => {
-        return (x.Hyphenate)? "-" : x.Item
-    })
+    const nombres = stack.map(x => ((x.Hyphenate)? "-" : x.Item));
+    return Array.from(new Set(nombres))
+}
+
+function asNumber(s) {
+    return Number(toHankaku(s.replace(/[^[0-9０-９]/g, "")))
 }
 
 function nayose (lines, nombreOnLeft = false) {
     const map = new Map()
     const lineArray = lines.split(/[\r\n]+/g);
     // 集約
-    lineArray.filter(line => line)
-    .filter(line => !line.match(/^\s+$/))
-    .forEach(line => {
+    lineArray.filter(line => line).filter(line => !line.match(/^\s+$/)).forEach(line => {
         const [item, nombre, ...rest] = (nombreOnLeft)? line.split("\t").slice(0, 2).reverse() : line.split("\t");
         if (map.has(item)) {
             map.get(item).push(nombre);
@@ -216,14 +224,14 @@ function nayose (lines, nombreOnLeft = false) {
     // 整形
     const ret = [];
     map.forEach((v, k) => {
-        const sorted = v.filter(x => x).sort((a, b) => a - b);
+        const sorted = v.filter(x => x).sort((a, b) => asNumber(a) - asNumber(b));
         const uniq = Array.from(new Set(sorted));
         if (uniq.length < 1) {
             ret.push(k);
         }
         else {
-            const hyphenated = hyphenateConsecutiveTriplet(uniq);
-            ret.push(k + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/g, "-"));
+            const hyphenated = hyphenateConsecutive(uniq);
+            ret.push(k + "　　" + hyphenated.join(", ").replace(", -, ", "-"));
         }
     })
     return ret;
@@ -249,13 +257,13 @@ function nayoseFromTop(lines, nombreOnLeft = false) {
 
     return stack.map(pair => {
         const [item, nombreArray] = pair;
-        const sorted = nombreArray.filter(x => x).sort((a, b) => a - b);
+        const sorted = nombreArray.filter(x => x).sort((a, b) => asNumber(a) - asNumber(b));
         const uniq = Array.from(new Set(sorted));
         if (uniq.length < 1) {
             return item;
         }
-        const hyphenated = hyphenateConsecutiveTriplet(uniq);
-        return (item + "　　" + hyphenated.join(", ").replace(/(, -)+(, )/g, "-"));
+        const hyphenated = hyphenateConsecutive(uniq);
+        return (item + "　　" + hyphenated.join(", ").replace(", -, ", "-"));
     });
 
 }
