@@ -234,8 +234,7 @@ function nayose (lines, nombreOnLeft = false) {
 }
 
 function nayoseByOrder(lines, nombreOnLeft = false) {
-    const lineArray = lines.split(/[\r?\n]+/g);
-    lineArray.filter(line => line).filter(line => !line.match(/^\s+$/));
+    const lineArray = lines.split(/[\r?\n]+/g).filter(line => line).filter(line => !line.match(/^\s+$/));
     const stack = [];
     for (let i = 0; i < lineArray.length; i++) {
         const item = lineArray[i];
