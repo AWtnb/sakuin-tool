@@ -140,16 +140,12 @@ function toHairetsu (lines, removeNoise) {
     map.set("ャ", "ヤ"); map.set("ュ", "ユ"); map.set("ョ", "ヨ");
     map.set("ー", "");
 
-    return lines.split(/\r?\n/g).map(line => {
-        if (!line) {
-            return "";
-        }
-        let katakana = hira2kata(line);
-        for (let k of map.keys()) {
-            katakana = katakana.replace(k, map.get(k));
-        }
-        return (removeNoise)? katakana.replace(/[^ァ-ヴa-zA-Z0-9０-９]/g, "") : katakana;
-    });
+    let katakana = hira2kata(lines);
+    for (let k of map.keys()) {
+        const reg = new RegExp(k, "g");
+        katakana = katakana.replace(reg, map.get(k));
+    }
+    return (removeNoise)? katakana.replace(/[^ァ-ヴa-zA-Z0-9０-９\r\n]/g, "") : katakana;
 }
 
 function clickBtn_hairetsu() {
@@ -158,7 +154,8 @@ function clickBtn_hairetsu() {
     const removeFlag = hairetsuElem.querySelector("form.removeFlag .removeFlag");
 
     const converted = toHairetsu(lines_toHairetsu, removeFlag.checked);
-    const msg = converted.join("\n");
+    const msg = converted;
+    // const msg = converted.join("\n");
     hairetsuElem.querySelector("form.hairetsu .displayResult").value = msg;
 }
 function clickBtn_hairetsu_copy() {
@@ -649,30 +646,48 @@ function clickBtn_adjustNombre_copy(){
 // ローマ字に変換
 ////////////////////////////////////////////////
 
-const romajiHash = {
-    "ア":"A", "イ":"I", "ウ":"U", "エ":"E", "オ":"O",
-    "カ":"Ka", "キ":"Ki", "ク":"Ku", "ケ":"Ke", "コ":"Ko", "サ":"Sa", "シ":"Shi", "ス":"Su", "セ":"Se", "ソ":"So",
-    "タ":"Ta", "チ":"Chi", "ツ":"Tsu", "テ":"Te", "ト":"To",
-    "ナ":"Na", "ニ":"Ni", "ヌ":"Nu", "ネ":"Ne", "ノ":"No",
-    "ハ":"Ha", "ヒ":"Hi", "フ":"Fu", "ヘ":"He", "ホ":"Ho",
-    "マ":"Ma", "ミ":"Mi", "ム":"Mu", "メ":"Me", "モ":"Mo",
-    "ヤ":"Ya", "ユ":"Yu", "ヨ":"Yo",
-    "ラ":"Ra", "リ":"Ri", "ル":"Ru", "レ":"Re", "ロ":"Ro",
-    "ワ":"Wa", "ヲ":"Wo", "ン":"N",
-    "ガ":"Ga", "ギ":"Gi", "グ":"Gu", "ゲ":"Ge", "ゴ":"Go",
-    "ザ":"Za", "ジ":"Ji", "ズ":"Zu", "ゼ":"Ze", "ゾ":"Zo",
-    "ダ":"Da", "ヂ":"Di", "ヅ":"Zu", "デ":"De", "ド":"Do",
-    "バ":"Ba", "ビ":"Bi", "ブ":"Bu", "ベ":"Be", "ボ":"Bo",
-    "パ":"Pa", "ピ":"Pi", "プ":"Pu", "ペ":"Pe", "ポ":"Po",
-    "ャ":"Lya", "ュ":"Lyu", "ョ":"Lyo", "ッ":"Ltu",
-};
+// const romajiHash = {
+//     "ア":"A", "イ":"I", "ウ":"U", "エ":"E", "オ":"O",
+//     "カ":"Ka", "キ":"Ki", "ク":"Ku", "ケ":"Ke", "コ":"Ko", "サ":"Sa", "シ":"Shi", "ス":"Su", "セ":"Se", "ソ":"So",
+//     "タ":"Ta", "チ":"Chi", "ツ":"Tsu", "テ":"Te", "ト":"To",
+//     "ナ":"Na", "ニ":"Ni", "ヌ":"Nu", "ネ":"Ne", "ノ":"No",
+//     "ハ":"Ha", "ヒ":"Hi", "フ":"Fu", "ヘ":"He", "ホ":"Ho",
+//     "マ":"Ma", "ミ":"Mi", "ム":"Mu", "メ":"Me", "モ":"Mo",
+//     "ヤ":"Ya", "ユ":"Yu", "ヨ":"Yo",
+//     "ラ":"Ra", "リ":"Ri", "ル":"Ru", "レ":"Re", "ロ":"Ro",
+//     "ワ":"Wa", "ヲ":"Wo", "ン":"N",
+//     "ガ":"Ga", "ギ":"Gi", "グ":"Gu", "ゲ":"Ge", "ゴ":"Go",
+//     "ザ":"Za", "ジ":"Ji", "ズ":"Zu", "ゼ":"Ze", "ゾ":"Zo",
+//     "ダ":"Da", "ヂ":"Di", "ヅ":"Zu", "デ":"De", "ド":"Do",
+//     "バ":"Ba", "ビ":"Bi", "ブ":"Bu", "ベ":"Be", "ボ":"Bo",
+//     "パ":"Pa", "ピ":"Pi", "プ":"Pu", "ペ":"Pe", "ポ":"Po",
+//     "ャ":"Lya", "ュ":"Lyu", "ョ":"Lyo", "ッ":"Ltu",
+// };
 
 function toRoman(s) {
+    const map = new Map();
+    map.set("ア", "A"); map.set("イ", "I"); map.set("ウ", "U"); map.set("エ", "E"); map.set("オ", "O");
+    map.set("カ", "Ka"); map.set("キ", "Ki"); map.set("ク", "Ku"); map.set("ケ", "Ke"); map.set("コ", "Ko");
+    map.set("サ", "Sa"); map.set("シ", "Shi"); map.set("ス", "Su"); map.set("セ", "Se"); map.set("ソ", "So");
+    map.set("タ", "Ta"); map.set("チ", "Chi"); map.set("ツ", "Tsu"); map.set("テ", "Te"); map.set("ト", "To");
+    map.set("ナ", "Na"); map.set("ニ", "Ni"); map.set("ヌ", "Nu"); map.set("ネ", "Ne"); map.set("ノ", "No");
+    map.set("ハ", "Ha"); map.set("ヒ", "Hi"); map.set("フ", "Fu"); map.set("ヘ", "He"); map.set("ホ", "Ho");
+    map.set("マ", "Ma"); map.set("ミ", "Mi"); map.set("ム", "Mu"); map.set("メ", "Me"); map.set("モ", "Mo");
+    map.set("ヤ", "Ya"); map.set("ユ", "Yu"); map.set("ヨ", "Yo");
+    map.set("ラ", "Ra"); map.set("リ", "Ri"); map.set("ル", "Ru"); map.set("レ", "Re"); map.set("ロ", "Ro");
+    map.set("ワ", "Wa"); map.set("ヲ", "Wo"); map.set("ン", "N");
+    map.set("ガ", "Ga"); map.set("ギ", "Gi"); map.set("グ", "Gu"); map.set("ゲ", "Ge"); map.set("ゴ", "Go");
+    map.set("ザ", "Za"); map.set("ジ", "Ji"); map.set("ズ", "Zu"); map.set("ゼ", "Ze"); map.set("ゾ", "Zo");
+    map.set("ダ", "Da"); map.set("ヂ", "Di"); map.set("ヅ", "Zu"); map.set("デ", "De"); map.set("ド", "Do");
+    map.set("バ", "Ba"); map.set("ビ", "Bi"); map.set("ブ", "Bu"); map.set("ベ", "Be"); map.set("ボ", "Bo");
+    map.set("パ", "Pa");map.set("ピ", "Pi");map.set("プ", "Pu");map.set("ペ", "Pe");map.set("ポ", "Po");
+    map.set("ャ", "Lya"); map.set("ュ", "Lyu"); map.set("ョ", "Lyo"); map.set("ッ", "Ltu");
+
     let converted = hira2kata(s);
-    Object.keys(romajiHash).forEach(key => {
-        const reg = new RegExp(key, "g");
-        converted = converted.replace(reg, romajiHash[key]);
-    });
+    for (let k of map.keys()) {
+        const reg = new RegExp(k, "g");
+        converted = converted.replace(reg, map.get(k));
+    }
     // サ行タ行の拗音処理 → 拗音処理 → 促音処理
     converted = converted.replace(/([CS]h|J)iLy(.)/g, '$1$2').replace(/([A-Z])iL(y.)/g, '$1$2').replace(/Ltu(.)/g, '$1$1')
     return converted.toLowerCase();
