@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>見よ項目の確認</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+
+
+<h2>見よ項目の確認</h2>
+<div class="caption">
+    <ul>
+        <li>チェック内容：</li>
+        <ul>
+            <li>見よ項目があるのに参照先に括弧で付記されていないもの</li>
+            <li>参照元として括弧書きされているのに見よ項目がないもの</li>
+        </ul>
+        <li>機械的な検索なので必ず目でも確認してください。</li>
+    </ul>
+</div>
+
+<div class="userinterface" id="userinterface_forCheckMiyo">
+    <div class="horizontal">
+        <form class="check">
+            <textarea class="userInput" placeholder="索引をコピー＆ペーストしてください"></textarea>
+            <input type="button" value="チェック" onclick="clickBtn_checkMiyo()" class="button">
+        </form>
+    </div>
+
+    <div class="displayResult">
+    </div>
+</div>
+
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+
+// 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
+function findLostMiyoParenthesis(multilines) {
+    const lines = multilines.split(/[\r\n]+/g).map(line => line.replace(/　　.+$/, "")).filter(line => line);
+    const miyoLines = lines.filter(line => (line.indexOf("→") != -1));
+    return miyoLines.map(line => {
+        const [fromItem, toItem, ...rest] = line.split(/\s*→\s*/);
+        const fromItemESCAPED = escapeMeta(fromItem);
+        const toItemESCAPED = escapeMeta(toItem);
+        const targetPattern = new RegExp(`^${toItemESCAPED}[（［].*${fromItemESCAPED}.*[）］]`);
+        const grep = lines.filter(line => line.match(targetPattern));
+        if (grep.length < 1) {
+            return {found: line, shouldExist:`${toItem}（${fromItem}）`}
+        }
+        return null
+    }).filter(x => x);
+}
+
+// 括弧書きで付記されているのに見よ項目がないものを探す関数
+function findLostMiyoItem(multilines) {
+    const lines = multilines.split(/[\r\n]+/g).filter(line => line);
+    const miyoReferredLines = lines.filter(line => line.match(/[［（\(].+?[］）\)]/));
+    const lostInfo = [];
+    miyoReferredLines.forEach(line => {
+        const toItem = line.replace(/[［（\(].+$/, "");
+        const toItemESCAPED = escapeMeta(toItem);
+        const fromItemArray = line.replace(/^.+?[［（\(]/, "").replace(/[］）\)].*$/, "").split(/[,，] */);
+        fromItemArray.forEach(fromItem => {
+            const fromItemESCAPED = escapeMeta(fromItem);
+            const targetPattern = new RegExp(`${fromItemESCAPED}\\s*→\\s*${toItemESCAPED}`);
+            const grep = lines.filter(line => line.match(targetPattern));
+            if (grep.length < 1) {
+                lostInfo.push({found: line, shouldExist:`${fromItem}→${toItem}`});
+            }
+        });
+    });
+    return lostInfo
+}
+
+function clickBtn_checkMiyo(){
+    const checkMiyoElem = document.querySelector("#userinterface_forCheckMiyo");
+
+    const lines = checkMiyoElem.querySelector("form.check .userInput").value;
+    const lostMiyoParenInfo = findLostMiyoParenthesis(lines);
+    const foundArray = [];
+    if (lostMiyoParenInfo.length > 0) {
+        foundArray.push("<label>見よ項目があるのに参照先に括弧で付記されていないもの</label>");
+        lostMiyoParenInfo.forEach(item => {
+            foundArray.push(`<li style="margin-left:1em"><span style="font-weight:bold">${item.found}</span> …… <span style="color:red">${item.shouldExist}</span></li>`);
+        });
+    }
+    const lostMiyoItemInfo = findLostMiyoItem(lines);
+    if (lostMiyoItemInfo.length > 0) {
+        foundArray.push("<label>参照元として括弧書きされているのに見よ項目がないもの</label>");
+        lostMiyoItemInfo.forEach(item => {
+            foundArray.push(`<li style="margin-left:1em"><span style="font-weight:bold">${item.found}</span> …… <span style="color:blue">${item.shouldExist}</span></li>`);
+        });
+    }
+    const markup = foundArray.join("\n");
+    checkMiyoElem.querySelector(".displayResult").innerHTML = markup;
+}
+
+</script>
+</body>
+
+</html>
