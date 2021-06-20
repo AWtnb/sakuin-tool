@@ -6,6 +6,14 @@
     <title>入力テンプレートの作成</title>
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/style.css">
+    <style>
+        table tr td:nth-child(1) {
+            color: #888;
+        }
+        table tr td:nth-child(2) {
+            color: #888;
+        }
+    </style>
 </head>
 
 <body>
@@ -30,16 +38,14 @@
     </ul>
 </div>
 
-<div class="userinterface" id="userinterface_toGenerate">
+<div class="ui">
     <div class="horizontal">
-        <form class="generate">
-            <textarea class="userInput" placeholder="図のように Excel から貼り付けてください"></textarea>
-            <input type="button" value="生成" onclick="clickBtn_generate()">
-            <input type="button" value="表をコピー" onclick="clickBtn_generate_copy()">
-        </form>
+        <textarea class="inputLines" placeholder="図のように Excel から貼り付けてください"></textarea>
+        <input type="button" value="生成" onclick="click_generate()">
+        <input type="button" value="表をコピー" onclick="click_copy()">
     </div>
 
-    <table  class="resultTable">
+    <table class="result">
         <tr>
             <td>ID</td>
             <td>index</td>
@@ -54,6 +60,7 @@
 <script type="text/javascript" src="../util.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
+
 function generateTemplare(multiLines) {
     const templateArray = [];
     const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
@@ -71,16 +78,14 @@ function generateTemplare(multiLines) {
     return templateArray
 }
 
-function clickBtn_generate() {
-    const generateElem = document.querySelector("#userinterface_toGenerate");
+function click_generate() {
+    const elem = document.querySelector(".ui");
+    const lines = elem.querySelector(".inputLines").value;
 
-    const linesToGenerate = generateElem.querySelector("form.generate .userInput").value;
-    const templateArray = generateTemplare(linesToGenerate);
-
-    const outputTable = generateElem.querySelector(".resultTable");
+    const outputTable = elem.querySelector("table.result");
     resetTable(outputTable)
 
-    templateArray.forEach((line, idx) => {
+    generateTemplare(lines).forEach((line, idx) => {
         const row = outputTable.insertRow(-1);
         const cell1 = row.insertCell(0);
         const cell2 = row.insertCell(1);
@@ -92,9 +97,9 @@ function clickBtn_generate() {
         cell4.innerHTML = "";
     });
 }
-function clickBtn_generate_copy() {
-    const templateTable = document.querySelector("#userinterface_toGenerate .resultTable");
-    copyTable(templateTable);
+function click_copy() {
+    const table = document.querySelector("table.result");
+    copyTable(table);
 }
 
 </script>
