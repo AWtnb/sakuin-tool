@@ -119,6 +119,7 @@ body {
 .container .ui input[type="button"] {
   margin: auto 4px;
   height: 30px;
+  min-width: 50px;
   background: #eee8d5;
   color: #002b36;
   border-radius: 4px;
