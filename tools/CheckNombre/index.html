@@ -26,15 +26,13 @@
     </ul>
 </div>
 
-<div class="userinterface" id="userinterface_forCheckNombre">
+<div class="ui">
     <div class="horizontal">
-        <form class="check">
-            <textarea class="userInput" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
-            <input type="button" value="チェック" onclick="clickBtn_checkNombre()">
-        </form>
+        <textarea class="inputLines" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
+        <input type="button" value="チェック" onclick="click_check()">
     </div>
 
-    <div class="displayResult">
+    <div class="result">
     </div>
 </div>
 
@@ -81,11 +79,10 @@ function highlightInvalidNombreLine(multilines) {
     return (invalidLines.length < 1)? "<p>\u{1F389}問題は見当たりません！</p>" : "<p>" + invalidLines.join("<br>\n") + "</p>";
 }
 
-function clickBtn_checkNombre() {
-    const checkNombreElem = document.querySelector("#userinterface_forCheckNombre");
-    const lines = checkNombreElem.querySelector("form.check .userInput").value;
-    const markup = highlightInvalidNombreLine(lines);
-    checkNombreElem.querySelector(".displayResult").innerHTML = markup;
+function click_check() {
+    const elem = document.querySelector(".ui");
+    const lines = elem.querySelector(".inputLines").value;
+    elem.querySelector(".result").innerHTML = highlightInvalidNombreLine(lines);
 }
 
 </script>
