@@ -16,16 +16,48 @@
 @white: #fdf6e3;
 @yellow: #b58900;
 
-@mainBg: #f2fffc;
+@mainBg: #e1e7e6;
 @containerWidth: 600px;
 
-:root {
-    background-color: @mainBg;
-    color: @black;
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap');
+
+body {
     font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
-    font-size: 12pt;
+    font-size: 18px;
+    background-color: @black;
+    color: @black;
+    margin: 0;
+}
+
+.container {
+    background:@mainBg;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+
+    h1 {
+        font-family: 'Dela Gothic One', cursive;
+        font-size: 60px;
+        color: @red;
+        max-width: 100%;
+        text-align: center;
+    }
+    h2 {
+        margin: 5rem 0 1rem 0;
+        border-bottom: solid 1px @blue;
+        font-size: 1.25rem;
+    }
+    h3 {
+        font-size: 20px;
+        margin-top: 4rem;
+        &::before {
+            content: "\25cf";
+            color: @red;
+        }
+    }
+
     a {
-        color: @cyan;
+        color: @blue;
         text-decoration: none;
     }
     .blue {
@@ -34,123 +66,105 @@
     .red {
         color: @red;
     }
-    ul {
-        width: 600px;
-    }
-}
 
-.main-container {
-
-    width: 80%;
-    margin: auto;
-
-    h1 {
-        font-size: 4rem;
-        color: @black;
-    }
-    h2 {
-        margin: 5rem 0 1rem 0;
-        border-bottom: solid 1px @blue;
-        font-size: 1.25rem;
-    }
-    h3 {
-        font-size: 1.1rem;
-        margin-top: 4rem;
-        &::before {
-            content: "\25cf";
-            color: @blue;
-        }
+    ul li::marker {
+        color: @brblue;
     }
 
     .promotion {
+        margin-top: 50px;
         p {
             text-align: center;
         }
     }
 
-}
-
-input[type="button"], .button {
-    font-size: 10pt;
-    padding: .25rem .5rem;
-    margin: .5rem;
-    background: @brwhite;
-    color: @brblack;
-    letter-spacing: 2px;
-    border-radius: 4px;
-}
-
-input[type="number"] {
-    margin-left: 4px;
-    margin-right: 30px;
-    width: 3em;
-    border: 1px solid @magenta;
-    border-radius: 2px;
-}
-
-.userinterface {
-    display: inline-block;
-    margin-left: 2rem;
-    padding: 1rem;
-    border: solid 1px @green;
-    border-radius: 8px;
-    .horizontal {
-        display: inline-flex;
-        form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: .5rem;
-        }
+    .outline {
+        max-width: 400px;
+        margin: 0 auto;
     }
-    textarea {
-        border: 1px dotted @magenta;
-        border-radius: 6px;
-        padding: .5em;
-        width: 200px;
-        height: 250px;
-        &:focus {
-            border: 1px solid @magenta;
-            outline: none;
-            box-shadow: 0 0 5px 1px fadeout(@magenta, 40%);
-        }
-    }
-    table {
-        border-collapse: collapse;
-        border-spacing: 0;
-        margin: .5em;
-        font-size: .9rem;
-        td {
-            min-width: 150px;
-            padding: 2px;
-            border: 1px solid @gray;
-        }
-        tbody {
-            display: block;
-            max-height: 400px;
-            overflow-y: scroll;
-        }
-    }
-}
 
-.caption {
-    margin: 1rem;
-    .imagebox {
-        display: inline-flex;
-        position: relative;
+    
+    .caption {
         margin: 1rem;
-        padding: .75rem;
-        border: 1px solid @brblue;
-        border-radius: 8px;
-        .boxtitle {
-            color: @brblue;
-            font-size: .9rem;
-            position: absolute;
-            top: 0;
+        .imagebox {
+            display: inline-flex;
+            position: relative;
+            margin: 1rem;
+            padding: .75rem;
+            border: 1px solid @brblue;
+            border-radius: 8px;
+            .boxtitle {
+                color: @brblue;
+                font-size: .9rem;
+                position: absolute;
+                top: 0;
             left: 0;
             padding: 0 4px;
             background-color: @mainBg;
             transform: translateY(-50%) translateX(1em);
         }
     }
+}
+
+    .userinterface {
+        // display: inline-block;
+        margin-left: 2rem;
+        padding: 1rem;
+        border: solid 1px @green;
+        border-radius: 8px;
+        .horizontal {
+            display: inline-flex;
+            max-width: 100%;
+            > span, > div {
+                margin: 0 4px;
+            }
+            form {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+        textarea {
+            border: 1px dotted @red;
+            border-radius: 6px;
+            padding: .5em;
+            height: 250px;
+            &:focus {
+                border: 1px solid @red;
+                outline: none;
+                box-shadow: 0 0 5px 1px fadeout(@red, 40%);
+            }
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin: .5em;
+            font-size: .9rem;
+            max-width: 100%;
+            td {
+                min-width: 80px;
+                padding: 2px;
+                border: 1px solid @gray;
+            }
+            tbody {
+                display: block;
+                max-height: 400px;
+                overflow-y: scroll;
+            }
+        }
+        input[type="button"], .button {
+            padding: .25rem .5rem;
+            margin: 4px;
+            background: @brwhite;
+            color: @brblack;
+            border-radius: 4px;
+        }
+        input[type="number"] {
+            margin: 0 4px;
+            width: 3em;
+            border: 1px solid @magenta;
+            border-radius: 2px;
+        }
+    }
+
 }

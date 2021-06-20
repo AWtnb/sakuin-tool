@@ -1,112 +1,71 @@
 @charset "UTF-8";
-:root {
-  background-color: #f2fffc;
-  color: #073642;
+@font-face {
+  font-family: 'Dela Gothic One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/delagothicone/v4/hESp6XxvMDRA-2eD0lXpDa6QkBAGRQ.ttf) format('truetype');
+}
+body {
   font-family: 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
-  font-size: 12pt;
-}
-:root a {
-  color: #2aa198;
-  text-decoration: none;
-}
-:root .blue {
-  color: #268bd2;
-}
-:root .red {
-  color: #dc322f;
-}
-:root ul {
-  width: 600px;
-}
-.main-container {
-  width: 80%;
-  margin: auto;
-}
-.main-container h1 {
-  font-size: 4rem;
+  font-size: 18px;
+  background-color: #073642;
   color: #073642;
+  margin: 0;
 }
-.main-container h2 {
+.container {
+  background: #e1e7e6;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+.container h1 {
+  font-family: 'Dela Gothic One', cursive;
+  font-size: 60px;
+  color: #dc322f;
+  max-width: 100%;
+  text-align: center;
+}
+.container h2 {
   margin: 5rem 0 1rem 0;
   border-bottom: solid 1px #268bd2;
   font-size: 1.25rem;
 }
-.main-container h3 {
-  font-size: 1.1rem;
+.container h3 {
+  font-size: 20px;
   margin-top: 4rem;
 }
-.main-container h3::before {
+.container h3::before {
   content: "\25cf";
+  color: #dc322f;
+}
+.container a {
+  color: #268bd2;
+  text-decoration: none;
+}
+.container .blue {
   color: #268bd2;
 }
-.main-container .promotion p {
+.container .red {
+  color: #dc322f;
+}
+.container ul li::marker {
+  color: #839496;
+}
+.container .promotion {
+  margin-top: 50px;
+}
+.container .promotion p {
   text-align: center;
 }
-input[type="button"],
-.button {
-  font-size: 10pt;
-  padding: 0.25rem 0.5rem;
-  margin: 0.5rem;
-  background: #eee8d5;
-  color: #002b36;
-  letter-spacing: 2px;
-  border-radius: 4px;
+.container .outline {
+  max-width: 400px;
+  margin: 0 auto;
 }
-input[type="number"] {
-  margin-left: 4px;
-  margin-right: 30px;
-  width: 3em;
-  border: 1px solid #d33682;
-  border-radius: 2px;
-}
-.userinterface {
-  display: inline-block;
-  margin-left: 2rem;
-  padding: 1rem;
-  border: solid 1px #859900;
-  border-radius: 8px;
-}
-.userinterface .horizontal {
-  display: inline-flex;
-}
-.userinterface .horizontal form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0.5rem;
-}
-.userinterface textarea {
-  border: 1px dotted #d33682;
-  border-radius: 6px;
-  padding: 0.5em;
-  width: 200px;
-  height: 250px;
-}
-.userinterface textarea:focus {
-  border: 1px solid #d33682;
-  outline: none;
-  box-shadow: 0 0 5px 1px rgba(211, 54, 130, 0.6);
-}
-.userinterface table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  margin: 0.5em;
-  font-size: 0.9rem;
-}
-.userinterface table td {
-  min-width: 150px;
-  padding: 2px;
-  border: 1px solid #586e75;
-}
-.userinterface table tbody {
-  display: block;
-  max-height: 400px;
-  overflow-y: scroll;
-}
-.caption {
+.container .caption {
   margin: 1rem;
 }
-.caption .imagebox {
+.container .caption .imagebox {
   display: inline-flex;
   position: relative;
   margin: 1rem;
@@ -114,13 +73,74 @@ input[type="number"] {
   border: 1px solid #839496;
   border-radius: 8px;
 }
-.caption .imagebox .boxtitle {
+.container .caption .imagebox .boxtitle {
   color: #839496;
   font-size: 0.9rem;
   position: absolute;
   top: 0;
   left: 0;
   padding: 0 4px;
-  background-color: #f2fffc;
+  background-color: #e1e7e6;
   transform: translateY(-50%) translateX(1em);
+}
+.container .userinterface {
+  margin-left: 2rem;
+  padding: 1rem;
+  border: solid 1px #859900;
+  border-radius: 8px;
+}
+.container .userinterface .horizontal {
+  display: inline-flex;
+  max-width: 100%;
+}
+.container .userinterface .horizontal > span,
+.container .userinterface .horizontal > div {
+  margin: 0 4px;
+}
+.container .userinterface .horizontal form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container .userinterface textarea {
+  border: 1px dotted #dc322f;
+  border-radius: 6px;
+  padding: 0.5em;
+  height: 250px;
+}
+.container .userinterface textarea:focus {
+  border: 1px solid #dc322f;
+  outline: none;
+  box-shadow: 0 0 5px 1px rgba(220, 50, 47, 0.6);
+}
+.container .userinterface table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0.5em;
+  font-size: 0.9rem;
+  max-width: 100%;
+}
+.container .userinterface table td {
+  min-width: 80px;
+  padding: 2px;
+  border: 1px solid #586e75;
+}
+.container .userinterface table tbody {
+  display: block;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+.container .userinterface input[type="button"],
+.container .userinterface .button {
+  padding: 0.25rem 0.5rem;
+  margin: 4px;
+  background: #eee8d5;
+  color: #002b36;
+  border-radius: 4px;
+}
+.container .userinterface input[type="number"] {
+  margin: 0 4px;
+  width: 3em;
+  border: 1px solid #d33682;
+  border-radius: 2px;
 }
