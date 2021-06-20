@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>読みがなの取得</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+<h2 >読みがなの取得</h2>
+
+<div class="caption">
+    <ul>
+        <li>最初の計算時は解析辞書読み込みのために少し時間がかかります。</li>
+        <li>正しく読み情報が取得できているか必ず事後確認をしてください。</li>
+        <li>Microsoft Excel は安定ソート（<a href="https://ja.wikipedia.org/wiki/%E5%AE%89%E5%AE%9A%E3%82%BD%E3%83%BC%E3%83%88" target="_blank">Wikipedia</a>）です。<br>最初から配列読みでソートすると濁音・半濁音が混じってしまうため、Excel シート上では下記の順番でソートすることをおすすめします。</li>
+        <ol>
+            <li>元の項目名</li>
+            <li>本機能で取得した読み</li>
+            <li>配列読み（<a href="#section_forHairetsu">下記</a>で取得）</li>
+        </ol>
+    </ul>
+</div>
+
+<div class="userinterface" id="userinterface_forYomi">
+    <div class="horizontal">
+        <form class="yomi">
+            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="取得" onclick="clickBtn_yomi()" class="button">
+            <textarea class="displayResult" placeholder="ここに結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_yomi_copy()" class="button">
+        </form>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="./kuromoji.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+
+function getYomi(token) {
+    console.log(token.surface_form, token.word_type, token.pos, token.reading);
+    const surface = token.surface_form;
+    if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
+        return surface;
+    }
+    if (token.pos == "記号") {
+        return surface;
+    }
+    if (token.word_type != "KNOWN") {
+        return token.surface_form;
+    }
+    return token.reading;
+}
+
+function setYomi(outputArea, inputLines){
+    outputArea.value = "（\u{1f914}よみがな計算中…）";
+    const promise = new Promise((resolve, reject) => {
+        kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
+            if (err) {
+                reject("failed to build tokenizer...");
+            }
+            else {
+                resolve(_tokenizer);
+            }
+        });
+    });
+    promise.then(tokenizer => {
+        const result = inputLines.split(/\r?\n/g).map(line => {
+            return tokenizer.tokenize(line).map(getYomi).join("");
+        });
+        outputArea.value = result.join("\n")
+    })
+    .catch((e) => {
+        outputArea.value = "解析失敗…\nやり直してみてください！";
+        console.log(e);
+    });
+}
+
+function clickBtn_yomi() {
+    const yomiElem = document.querySelector("#userinterface_forYomi");
+    const lines = yomiElem.querySelector("form.yomi .userInput").value;
+    const outputArea = yomiElem.querySelector("form.yomi .displayResult");
+    setYomi(outputArea, lines);
+}
+function clickBtn_yomi_copy() {
+    document.querySelector("#userinterface_forYomi form.yomi .displayResult").select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+
+
+</script>
+</body>
+
+</html>
