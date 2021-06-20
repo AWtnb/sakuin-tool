@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>ノンブル加算減算</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+
+<h2>ノンブル加算減算</h2>
+<div class="caption">
+    <ul>
+        <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
+        <li>ノンブルに数字以外が含まれていた場合は計算の対象外です。</li>
+        <ul>
+            <li>範囲を示すハイフンなどが含まれる場合もスキップします。<br><strong>必ず目でも再確認してください。</strong></li>
+        </ul>
+    </ul>
+</div>
+
+<div class="userinterface" id="userinterface_forAdjustNombre">
+    <div class="horizontal">
+        <label>開始ノンブル<input type="number" value="1" min="1" class="startNombre"></label>
+        <label>終了ノンブル<input type="number" value="99" min="1" class="endNombre"></label>
+        <label>増分<input type="number" value="1" class="nombreDelta"></label>
+    </div>
+    <p><label><input type="checkbox" class="fullWidthCommaFlag">ノンブル間は全角カンマ</label></p>
+    <div class="horizontal">
+        <form class="adjustNombre">
+            <textarea class="userInput" placeholder="名寄せされた索引を貼り付けてください"></textarea>
+            <input type="button" value="計算" onclick="clickBtn_adjustNombre()" class="button">
+            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_adjustNombre_copy()" class="button">
+        </form>
+    </div>
+    <div class="displayResult">
+    </div>
+</div>
+
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+
+
+function adjustNombre(multiline, startNombre, endNombre, nombreDelta, useFullWidthComma = false) {
+    const commaType = (useFullWidthComma)? "，" : ", ";
+    const lineArray = multiline.split(/[\r\n]+/g);
+    return lineArray
+    .filter(x => x)
+    .map(line => {
+        const [item, nombres, ...rest] = line.split("　　");
+        if (!nombres) {
+            return {
+                original: line,
+                adjusted: line,
+                isModified: false
+            }
+        }
+        const nombresArray = nombres
+        .split(commaType)
+        .map(nbr => {
+            if (Number(startNombre) <= Number(nbr) && Number(nbr) <= Number(endNombre)) {
+                return Number(nbr) + Number(nombreDelta);
+            }
+            return nbr
+        });
+        const adjustedLine = item + "　　" + nombresArray.join(commaType);
+        return {
+            original: line,
+            adjusted: adjustedLine,
+            isModified: (line != adjustedLine)
+        }
+    });
+}
+
+
+function clickBtn_adjustNombre(){
+    const adjustNombreElem = document.querySelector("#userinterface_forAdjustNombre");
+
+    const adjustedArray = adjustNombre(
+        adjustNombreElem.querySelector("form.adjustNombre .userInput").value,
+        adjustNombreElem.querySelector("input.startNombre").value,
+        adjustNombreElem.querySelector("input.endNombre").value,
+        adjustNombreElem.querySelector("input.nombreDelta").value,
+        adjustNombreElem.querySelector("input.fullWidthCommaFlag").checked
+    );
+    const adjustedLines = adjustedArray.map(item => item.adjusted).join("\n");
+    adjustNombreElem.querySelector("form.adjustNombre textarea.displayResult").value = adjustedLines;
+    const modified = adjustedArray.filter(item => item.isModified);
+    const markup = (modified.length)?
+    `<p>■${modified.length}行の変更：</p>` + modified.map(item => {
+        return `<p style="margin:2px 0;"><span style="color:gray">${item.original}</span><br><span style="color:red">${item.adjusted}</span></p>`;
+    }).join("\n") :
+    "<p>（変更箇所はありません）</p>";
+    adjustNombreElem.querySelector("div.displayResult").innerHTML = markup;
+}
+
+function clickBtn_adjustNombre_copy(){
+    document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .displayResult").select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+
+
+</script>
+</body>
+
+</html>
