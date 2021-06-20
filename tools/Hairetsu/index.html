@@ -18,18 +18,17 @@
     <p>テキストボックスに入力された文字列を配列読みに変換します。</p>
 </div>
 
-<div class="userinterface" id="userinterface_forHairetsu">
-    <form class="removeFlag">
-        <input type="checkbox" class="removeFlag"> ひらがな・カタカナ・数字以外を削除する
-    </form>
+<div class="ui">
+
+    <input type="checkbox" class="removeFlag"> ひらがな・カタカナ・数字以外を削除する
+
     <div class="horizontal">
-        <form class="hairetsu">
-            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="変換" onclick="clickBtn_hairetsu()">
-            <textarea class="displayResult" readonly placeholder="ここに結果が表示されます"></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_hairetsu_copy()">
-        </form>
+        <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
+        <input type="button" value="変換" onclick="click_hairetsu()">
+        <textarea class="result" readonly placeholder="ここに結果が表示されます"></textarea>
+        <input type="button" value="コピー" onclick="click_copy()">
     </div>
+
 </div>
 
 </div>
@@ -37,6 +36,7 @@
 <script type="text/javascript" src="../util.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
+
 function toHairetsu (lines, removeNoise) {
     const map = new Map();
     [
@@ -58,21 +58,18 @@ function toHairetsu (lines, removeNoise) {
     return (removeNoise)? katakana.replace(/[^ァ-ヴa-zA-Z0-9０-９\r\n]/g, "") : katakana;
 }
 
-function clickBtn_hairetsu() {
-    const hairetsuElem = document.querySelector("#userinterface_forHairetsu");
-    const lines_toHairetsu = hairetsuElem.querySelector("form.hairetsu .userInput").value;
-    const removeFlag = hairetsuElem.querySelector("form.removeFlag .removeFlag");
+function click_hairetsu() {
+    const elem = document.querySelector(".ui");
+    const lines = elem.querySelector(".inputLines").value;
 
-    const converted = toHairetsu(lines_toHairetsu, removeFlag.checked);
-    const msg = converted;
-    // const msg = converted.join("\n");
-    hairetsuElem.querySelector("form.hairetsu .displayResult").value = msg;
+    const converted = toHairetsu(lines, elem.querySelector(".removeFlag").checked);
+    elem.querySelector(".result").value = converted;
 }
-function clickBtn_hairetsu_copy() {
-    document.querySelector("#userinterface_forHairetsu form.hairetsu .displayResult").select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
+
+function click_copy() {
+    copyElem(document.querySelector(".ui .result"));
 }
+
 </script>
 </body>
 
