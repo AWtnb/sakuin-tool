@@ -89,6 +89,12 @@ body {
         margin: 0 auto;
         li {
             font-weight: bold;
+            a:focus {
+                border: 1px solid @green;
+                border-radius: 4px;
+                padding: 2px;
+                box-shadow: 0 0 5px 1px fadeout(@green, 40%);
+            }
         }
     }
 

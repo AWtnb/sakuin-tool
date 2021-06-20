@@ -70,6 +70,12 @@ body {
 .container .outline li {
   font-weight: bold;
 }
+.container .outline li a:focus {
+  border: 1px solid #859900;
+  border-radius: 4px;
+  padding: 2px;
+  box-shadow: 0 0 5px 1px rgba(133, 153, 0, 0.6);
+}
 .container .caption {
   margin: 1rem;
 }
