@@ -91,64 +91,58 @@ body {
   background-color: #e1e7e6;
   transform: translateY(-50%) translateX(1em);
 }
-.container .userinterface {
-  margin-left: 2rem;
+.container .ui {
+  margin: 1rem;
   padding: 1rem;
   border: solid 1px #859900;
   border-radius: 8px;
 }
-.container .userinterface .horizontal {
+.container .ui .horizontal {
   display: inline-flex;
   max-width: 100%;
 }
-.container .userinterface .horizontal > span,
-.container .userinterface .horizontal > div {
+.container .ui .horizontal > span,
+.container .ui .horizontal > div {
   margin: 0 4px;
 }
-.container .userinterface .horizontal form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.container .userinterface textarea {
+.container .ui textarea {
   border: 1px dotted #dc322f;
   border-radius: 6px;
   padding: 0.5em;
   height: 250px;
 }
-.container .userinterface textarea:focus {
+.container .ui textarea:focus {
   border: 1px solid #dc322f;
   outline: none;
   box-shadow: 0 0 5px 1px rgba(220, 50, 47, 0.6);
 }
-.container .userinterface table {
+.container .ui input[type="button"] {
+  margin: auto 4px;
+  height: 30px;
+  background: #eee8d5;
+  color: #002b36;
+  border-radius: 4px;
+}
+.container .ui input[type="number"] {
+  margin: 0 4px;
+  width: 3em;
+  border: 1px solid #d33682;
+  border-radius: 2px;
+}
+.container .ui table {
   border-collapse: collapse;
   border-spacing: 0;
   margin: 0.5em;
   font-size: 0.9rem;
   max-width: 100%;
 }
-.container .userinterface table td {
+.container .ui table td {
   min-width: 80px;
   padding: 2px;
   border: 1px solid #586e75;
 }
-.container .userinterface table tbody {
+.container .ui table tbody {
   display: block;
   max-height: 400px;
   overflow-y: scroll;
-}
-.container .userinterface input[type="button"],
-.container .userinterface .button {
-  padding: 0.25rem 0.5rem;
-  margin: 4px;
-  background: #eee8d5;
-  color: #002b36;
-  border-radius: 4px;
-}
-.container .userinterface input[type="number"] {
-  margin: 0 4px;
-  width: 3em;
-  border: 1px solid #d33682;
-  border-radius: 2px;
 }

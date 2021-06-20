@@ -114,9 +114,8 @@ body {
     }
 }
 
-    .userinterface {
-        // display: inline-block;
-        margin-left: 2rem;
+    .ui {
+        margin: 1rem;
         padding: 1rem;
         border: solid 1px @green;
         border-radius: 8px;
@@ -126,11 +125,11 @@ body {
             > span, > div {
                 margin: 0 4px;
             }
-            form {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+            // form {
+            //     display: flex;
+            //     justify-content: center;
+            //     align-items: center;
+            // }
         }
         textarea {
             border: 1px dotted @red;
@@ -142,6 +141,19 @@ body {
                 outline: none;
                 box-shadow: 0 0 5px 1px fadeout(@red, 40%);
             }
+        }
+        input[type="button"] {
+            margin: auto 4px;
+            height: 30px;
+            background: @brwhite;
+            color: @brblack;
+            border-radius: 4px;
+        }
+        input[type="number"] {
+            margin: 0 4px;
+            width: 3em;
+            border: 1px solid @magenta;
+            border-radius: 2px;
         }
         table {
             border-collapse: collapse;
@@ -159,19 +171,6 @@ body {
                 max-height: 400px;
                 overflow-y: scroll;
             }
-        }
-        input[type="button"], .button {
-            padding: .25rem .5rem;
-            margin: 4px;
-            background: @brwhite;
-            color: @brblack;
-            border-radius: 4px;
-        }
-        input[type="number"] {
-            margin: 0 4px;
-            width: 3em;
-            border: 1px solid @magenta;
-            border-radius: 2px;
         }
     }
 
