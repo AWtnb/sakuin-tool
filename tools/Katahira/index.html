@@ -17,18 +17,15 @@
     <p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
 </div>
 
-<div class="userinterface" id="userinterface_forKatahira">
-    <form class="katahiraFlag">
-        <label><input type="radio" name="radio1" value="toKata" checked>ひらがな→カタカナ</label>
-        <label><input type="radio" name="radio1" value="toHira"        >カタカナ→ひらがな</label>
-    </form>
+<div class="ui">
+
+    <input type="checkbox" class="toHiraFlag"> ひらがなに変換（チェックしないとカタカナに変換します）
+
     <div class="horizontal">
-        <form class="convert">
-            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="変換" onclick="clickBtn_katahira()">
-            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_katahira_copy()">
-        </form>
+        <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
+        <input type="button" value="変換" onclick="click_katahira()">
+        <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+        <input type="button" value="コピー" onclick="click_copy()">
     </div>
 </div>
 
@@ -37,17 +34,22 @@
 <script type="text/javascript" src="../util.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
-function clickBtn_katahira() {
-    const katahiraElem = document.querySelector("#userinterface_forKatahira");
-    const lines_toConvert = katahiraElem.querySelector("form.convert .userInput").value;
-    const mode = katahiraElem.querySelector("form.katahiraFlag").radio1.value;
-    const converted = convertHiraKata(lines_toConvert, mode);
-    katahiraElem.querySelector("form.convert .displayResult").value = converted;
+
+function convertHiraKata(str, toHira=false){
+    if (toHira) {
+        return kata2hira(str)
+    }
+    return hira2kata(str)
 }
-function clickBtn_katahira_copy() {
-    document.querySelector("#userinterface_forKatahira form.convert .displayResult").select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
+
+function click_katahira() {
+    const elem = document.querySelector(".ui");
+    const lines = elem.querySelector(".inputLines").value;
+    elem.querySelector(".result").value = convertHiraKata(lines, elem.querySelector(".toHiraFlag").checked);
+}
+
+function click_copy() {
+    copyElem(document.querySelector(".ui .result"));
 }
 
 </script>

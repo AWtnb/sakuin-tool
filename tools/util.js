@@ -47,9 +47,3 @@ function kata2hira(str){
     });
 }
 
-function convertHiraKata(str, mode){
-    if (mode == "toKata") {
-        return hira2kata(str)
-    }
-    return kata2hira(str)
-}
