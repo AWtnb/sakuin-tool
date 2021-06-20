@@ -23,7 +23,7 @@
     </ul>
 </div>
 
-<div class="userinterface" id="userinterface_forAdjustNombre">
+<div class="ui">
     <div class="horizontal">
         <span><label>開始ノンブル<input type="number" value="1" min="1" class="startNombre"></label></span>
         <span><label>終了ノンブル<input type="number" value="99" min="1" class="endNombre"></label></span>
@@ -33,14 +33,12 @@
     <p><label><input type="checkbox" class="fullWidthCommaFlag">ノンブル間は全角カンマ</label></p>
 
     <div class="horizontal">
-        <form class="adjustNombre">
-            <textarea class="userInput" placeholder="名寄せされた索引を貼り付けてください"></textarea>
-            <input type="button" value="計算" onclick="clickBtn_adjustNombre()">
-            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_adjustNombre_copy()">
-        </form>
+        <textarea class="inputLines" placeholder="名寄せされた索引を貼り付けてください"></textarea>
+        <input type="button" value="計算" onclick="clickBtn_adjustNombre()">
+        <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+        <input type="button" value="コピー" onclick="click_copy()">
     </div>
-    <div class="displayResult">
+    <div class="result">
     </div>
 </div>
 
@@ -49,7 +47,6 @@
 <script type="text/javascript" src="../util.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
-
 
 function adjustNombre(multiline, startNombre, endNombre, nombreDelta, useFullWidthComma = false) {
     const commaType = (useFullWidthComma)? "，" : ", ";
@@ -84,30 +81,28 @@ function adjustNombre(multiline, startNombre, endNombre, nombreDelta, useFullWid
 
 
 function clickBtn_adjustNombre(){
-    const adjustNombreElem = document.querySelector("#userinterface_forAdjustNombre");
+    const elem = document.querySelector(".ui");
 
     const adjustedArray = adjustNombre(
-        adjustNombreElem.querySelector("form.adjustNombre .userInput").value,
-        adjustNombreElem.querySelector("input.startNombre").value,
-        adjustNombreElem.querySelector("input.endNombre").value,
-        adjustNombreElem.querySelector("input.nombreDelta").value,
-        adjustNombreElem.querySelector("input.fullWidthCommaFlag").checked
+        elem.querySelector(".inputLines").value,
+        elem.querySelector(".startNombre").value,
+        elem.querySelector(".endNombre").value,
+        elem.querySelector(".nombreDelta").value,
+        elem.querySelector(".fullWidthCommaFlag").checked
     );
     const adjustedLines = adjustedArray.map(item => item.adjusted).join("\n");
-    adjustNombreElem.querySelector("form.adjustNombre textarea.displayResult").value = adjustedLines;
+    elem.querySelector("textarea.result").value = adjustedLines;
     const modified = adjustedArray.filter(item => item.isModified);
     const markup = (modified.length)?
-    `<p>■${modified.length}行の変更：</p>` + modified.map(item => {
-        return `<p style="margin:2px 0;"><span style="color:gray">${item.original}</span><br><span style="color:red">${item.adjusted}</span></p>`;
-    }).join("\n") :
-    "<p>（変更箇所はありません）</p>";
-    adjustNombreElem.querySelector("div.displayResult").innerHTML = markup;
+        `<p>■${modified.length}行の変更：</p>` + modified.map(item => {
+            return `<p style="margin:2px 0;"><span style="color:gray">${item.original}</span><br><span style="color:red">${item.adjusted}</span></p>`;
+        }).join("\n") :
+        "<p>（変更箇所はありません）</p>";
+    elem.querySelector("div.result").innerHTML = markup;
 }
 
-function clickBtn_adjustNombre_copy(){
-    document.querySelector("#userinterface_forAdjustNombre form.adjustNombre .displayResult").select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
+function click_copy(){
+    copyElem(document.querySelector(".ui div.result"));
 }
 
 
