@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>子項目の復元</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+
+<h2>子項目の復元</h2>
+
+<div class="caption">
+    <div class="imagebox">
+        <div class="boxtitle">SAMPLE</div>
+        <img src="./image/img_complete.png">
+    </div>
+    <ul>
+        <li>索引項目中の子項目を復元します（上図）。</li>
+        <li>ノンブルが入っていても動作します。</li>
+        <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
+    </ul>
+</div>
+
+<div class="userinterface" id="userinterface_toComplete">
+    <label>項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：</label>
+    <form class="delimiter">
+        <input type="radio" name="radio1" value="spaces" checked> 二倍アキ
+        <input type="radio" name="radio1" value="tab"          > タブ文字（Excel）
+    </form>
+    <div class="horizontal">
+        <form class="complete">
+            <textarea class="userInput" placeholder="索引を貼り付けてください"></textarea>
+            <input type="button" value="復元" onclick="clickBtn_complete()" class="button">
+            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_complete_copy()" class="button">
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+
+function completeChildItem (multiLines, delim) {
+    const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
+    const delimiter = (delim == "spaces")? "　　": "\t";
+    const regAfterDelim = new RegExp(`${delimiter}.+$`, "g");
+    const regFiller = new RegExp("(\u2500|\u2015|\u2500)+");
+    const completedArray = [];
+    completedArray.push(lines[0]);
+    let lastParentItem = lines[0].replace(regAfterDelim, "");
+    for (let i = 1; i < lines.length; i++) {
+        const currentLine = lines[i];
+        if (currentLine.match(regFiller)) {
+            const completedItem = currentLine.replace(/^\s+/, "").replace(regFiller, lastParentItem);
+            completedArray.push(completedItem);
+        }
+        else {
+            completedArray.push(currentLine);
+            lastParentItem = currentLine.replace(regAfterDelim, "");
+        }
+    }
+    return completedArray
+}
+
+function clickBtn_complete() {
+    const completeElem = document.querySelector("#userinterface_toComplete");
+
+    const delimiter = completeElem.querySelector("form.delimiter").radio1.value;
+    const lines_toComplete = completeElem.querySelector("form.complete .userInput").value;
+    const completedArray = completeChildItem(lines_toComplete, delimiter);
+    completeElem.querySelector("form.complete .displayResult").value = completedArray.join("\n");
+}
+function clickBtn_complete_copy() {
+    document.querySelector("#userinterface_toComplete form.complete .displayResult").select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+
+</script>
+</body>
+
+</html>
