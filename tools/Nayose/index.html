@@ -26,20 +26,20 @@
     </div>
 </div>
 
-<div class="userinterface" id="userinterface_forNayose">
-    <form class="nombreLeftFlag">
+<div class="ui">
+
+    <div>
         <input type="checkbox" class="isLeft"> ←ノンブルが左列（上図と逆）の場合はチェック
-    </form>
-    <form class="orderedFlag">
+    </div>
+    <div>
         <input type="checkbox" class="isOrdered"> ←整列済みの場合はチェック（連続している項目のみ名寄せします）
-    </form>
+    </div>
+
     <div class="horizontal">
-        <form class="nayose">
-            <textarea class="userInput" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
-            <input type="button" value="名寄せ" onclick="clickBtn_nayose()">
-            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_nayose_copy()">
-        </form>
+        <textarea class="inputLines" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
+        <input type="button" value="名寄せ" onclick="click_nayose()">
+        <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+        <input type="button" value="コピー" onclick="click_copy()">
     </div>
 </div>
 
@@ -146,19 +146,17 @@ function nayoseFromTop(lines, nombreOnLeft = false) {
 
 }
 
-function clickBtn_nayose() {
-    const nayoseElem = document.querySelector("#userinterface_forNayose");
-    const lines_toNayose = nayoseElem.querySelector("form.nayose .userInput").value;
-    const nys = (nayoseElem.querySelector("form.orderedFlag .isOrdered").checked)?
-        nayoseFromTop(lines_toNayose, nayoseElem.querySelector("form.nombreLeftFlag .isLeft").checked) :
-        nayose(lines_toNayose, nayoseElem.querySelector("form.nombreLeftFlag .isLeft").checked);
-    const msg = nys.join("\n");
-    nayoseElem.querySelector("form.nayose .displayResult").value = msg;
+function click_nayose() {
+    const elem = document.querySelector(".ui");
+    const lines = elem.querySelector(".inputLines").value;
+    const nayosed = (elem.querySelector(".isOrdered").checked)?
+        nayoseFromTop(lines, elem.querySelector(".isLeft").checked) :
+        nayose(lines, elem.querySelector(".isLeft").checked);
+    elem.querySelector(".result").value = nayosed.join("\n");
 }
-function clickBtn_nayose_copy() {
-    document.querySelector("#userinterface_forNayose form.nayose .displayResult").select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
+
+function click_copy() {
+    copyElem(document.querySelector(".ui .result"));
 }
 
 </script>
