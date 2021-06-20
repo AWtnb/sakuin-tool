@@ -18,6 +18,12 @@ function copyTable(tableElem) {
     alert("コピーしました！");
 }
 
+function copyELem(elem) {
+    elem.select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+
 function resetTable(tableElem) {
     const maxRow = tableElem.rows.length;
     if (maxRow > 1) {
