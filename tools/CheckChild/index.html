@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>子項目候補の確認</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+
+<h2 id="section_forCheckChild">子項目候補の確認</h2>
+<div class="caption">
+    <ul>
+        <li>名寄せ済みの索引に対して子項目の候補を探します。</li>
+        <li>機械的な検索なので必ず目でも確認してください。</li>
+    </ul>
+</div>
+
+<div class="userinterface" id="userinterface_forCheckChild">
+    <form class="searchPos">
+        <label><input type="radio" name="radio1" value="tail" checked>末尾一致</label>
+        <label><input type="radio" name="radio1" value="head"        >先頭一致</label>
+        <label><input type="radio" name="radio1" value="all"         >両方</label>
+    </form>
+    <div class="horizontal">
+        <form class="check">
+            <textarea class="userInput" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
+            <input type="button" value="チェック" onclick="clickBtn_checkChild()" class="button">
+        </form>
+    </div>
+
+    <div class="displayResult">
+    </div>
+</div>
+
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+
+function highlightChildItem(multilines, mode = "tail") {
+    const lines = multilines.split(/[\r\n]+/g);
+    const nonMiyoItems = lines.filter(line => !line.match(/→/g));
+    const indexItems = nonMiyoItems
+    .filter(line => line)
+    .filter(line => !line.match(/^　/g))
+    .map(line => line.replace(/　　\d.*$/g, ""))
+    .sort((a, b) => b.length - a.length);
+    const possibleChildItemArray = indexItems.map(item => {
+        const itemBaseName = item.replace(/（.*?）|［.*?］/g, "");
+        const escaped = escapeMeta(itemBaseName);
+
+        let reg
+        if (mode == "tail") {
+            reg = new RegExp(`${escaped}$`, "g");
+        }
+        else if (mode == "head") {
+            reg = new RegExp(`^${escaped}`, "g");
+        }
+        else {
+            reg = new RegExp(`^${escaped}|${escaped}$`, "g");
+        }
+
+        const grep = indexItems.filter(line => line.match(reg));
+        if (grep.length > 1) {
+            const markup = grep
+            .filter(line => (line != item))
+            .map(line => line.replace(reg, "<b class=\"blue\">$&</b>"))
+            .join("<br>");
+            return `<b>${item}</b> を含む項目：<br>${markup}`;
+        }
+        return null
+    }).filter(x => x);
+    return possibleChildItemArray.map(item => `<p>${item}</p>`).join("\n");
+}
+
+function clickBtn_checkChild() {
+    const checkChildElem = document.querySelector("#userinterface_forCheckChild");
+
+    const lines = checkChildElem.querySelector("form.check .userInput").value;
+    const mode = checkChildElem.querySelector("form.searchPos").radio1.value;
+    const markup = highlightChildItem(lines, mode);
+    checkChildElem.querySelector(".displayResult").innerHTML = markup;
+}
+
+</script>
+</body>
+
+</html>
