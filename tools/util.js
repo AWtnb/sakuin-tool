@@ -18,7 +18,7 @@ function copyTable(tableElem) {
     alert("コピーしました！");
 }
 
-function copyELem(elem) {
+function copyElem(elem) {
     elem.select();
     document.execCommand("Copy");
     alert("コピーしました！");
