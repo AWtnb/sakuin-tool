@@ -21,7 +21,12 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap');
 
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
     font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
     font-size: 18px;
     background-color: @black;
@@ -32,6 +37,7 @@ body {
 .container {
     background:@mainBg;
     max-width: 600px;
+    min-height: 100%;
     margin: auto;
     padding: 20px;
 
@@ -43,7 +49,7 @@ body {
         text-align: center;
     }
     h2 {
-        margin: 5rem 0 1rem 0;
+        margin: 2rem 0 1rem 0;
         border-bottom: solid 1px @blue;
         font-size: 1.25rem;
     }
@@ -81,9 +87,11 @@ body {
     .outline {
         max-width: 400px;
         margin: 0 auto;
+        li {
+            font-weight: bold;
+        }
     }
 
-    
     .caption {
         margin: 1rem;
         .imagebox {

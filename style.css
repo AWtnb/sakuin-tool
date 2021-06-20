@@ -6,7 +6,11 @@
   font-display: swap;
   src: url(https://fonts.gstatic.com/s/delagothicone/v4/hESp6XxvMDRA-2eD0lXpDa6QkBAGRQ.ttf) format('truetype');
 }
+html {
+  height: 100%;
+}
 body {
+  height: 100%;
   font-family: 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
   font-size: 18px;
   background-color: #073642;
@@ -16,6 +20,7 @@ body {
 .container {
   background: #e1e7e6;
   max-width: 600px;
+  min-height: 100%;
   margin: auto;
   padding: 20px;
 }
@@ -27,7 +32,7 @@ body {
   text-align: center;
 }
 .container h2 {
-  margin: 5rem 0 1rem 0;
+  margin: 2rem 0 1rem 0;
   border-bottom: solid 1px #268bd2;
   font-size: 1.25rem;
 }
@@ -61,6 +66,9 @@ body {
 .container .outline {
   max-width: 400px;
   margin: 0 auto;
+}
+.container .outline li {
+  font-weight: bold;
 }
 .container .caption {
   margin: 1rem;
