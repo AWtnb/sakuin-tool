@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>ノンブル並びの確認</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+
+<h2>ノンブル並びの確認</h2>
+<div class="caption">
+    <ul>
+        <li>チェック内容：</li>
+        <ul>
+            <li>ノンブルが正しく並んでいないもの</li>
+            <li>3つ連続しているもの</li>
+        </ul>
+        <li>カンマの全角半角は区別しません。</li>
+        <li>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</li>
+        <li>機械的な検索なので必ず目でも確認してください。</li>
+    </ul>
+</div>
+
+<div class="userinterface" id="userinterface_forCheckNombre">
+    <div class="horizontal">
+        <form class="check">
+            <textarea class="userInput" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
+            <input type="button" value="チェック" onclick="clickBtn_checkNombre()" class="button">
+        </form>
+    </div>
+
+    <div class="displayResult">
+    </div>
+</div>
+
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+
+function isSorted(array) {
+    for (let i = 0; i < array.length - 1; i++) {
+        if (Number(array[i]) >= Number(array[i + 1])) {
+            return false
+        }
+    }
+    return true
+}
+
+function hasConsecutiveTriplet(array) {
+    for (let i = 0; i < array.length - 2; i++) {
+        const current = Number(array[i]);
+        if (current + 1 == Number(array[i + 1]) && current + 2 == Number(array[i + 2])) {
+            return true
+        }
+    }
+    return false
+}
+
+function highlightInvalidNombreLine(multilines) {
+    const invalidLines = multilines.split(/[\r\n]+/g)
+        .filter(line => line)
+        .map(line => {
+            const nombres = line.replace(/^.+?　　/, "").replace(/\s+/, "").replace(/，/g, ",");
+            const nombreArray = nombres.replace(/-/g, ",").split(",");
+            const ret = [line];
+            if (!isSorted(nombreArray)) {
+                ret.push("<span style=\"font-weight:bold;color:red;margin:0 4px;\">←順番</span>");
+            }
+            if (hasConsecutiveTriplet(nombreArray)) {
+                ret.push("<span style=\"font-weight:bold;color:blue;margin:0 4px;\">←連続</span>");
+            }
+            return (ret.join("") == line)? null : ret.join("");
+        }).filter(x => x);
+    return (invalidLines.length < 1)? "<p>\u{1F389}問題は見当たりません！</p>" : "<p>" + invalidLines.join("<br>\n") + "</p>";
+}
+
+function clickBtn_checkNombre() {
+    const checkNombreElem = document.querySelector("#userinterface_forCheckNombre");
+    const lines = checkNombreElem.querySelector("form.check .userInput").value;
+    const markup = highlightInvalidNombreLine(lines);
+    checkNombreElem.querySelector(".displayResult").innerHTML = markup;
+}
+
+</script>
+</body>
+
+</html>
