@@ -55,11 +55,8 @@ body {
     }
     h3 {
         font-size: 20px;
-        margin-top: 4rem;
-        &::before {
-            content: "\25cf";
-            color: @red;
-        }
+        margin: 2rem 0 1rem 0;
+        border-bottom: 4px double @red;
     }
 
     a {
@@ -73,8 +70,10 @@ body {
         color: @red;
     }
 
-    ul li::marker {
-        color: @brblue;
+    ul{
+        li::marker {
+            color: @brblue;
+        }
     }
 
     .promotion {

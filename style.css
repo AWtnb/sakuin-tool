@@ -38,11 +38,8 @@ body {
 }
 .container h3 {
   font-size: 20px;
-  margin-top: 4rem;
-}
-.container h3::before {
-  content: "\25cf";
-  color: #dc322f;
+  margin: 2rem 0 1rem 0;
+  border-bottom: 4px double #dc322f;
 }
 .container a {
   color: #268bd2;
