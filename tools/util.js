@@ -26,3 +26,24 @@ function resetTable(tableElem) {
         }
     }
 }
+
+function hira2kata(str){
+    return str.replace(/[\u3041-\u3096]/g, function(match) {
+        const chr = match.charCodeAt(0) + 0x60;
+        return String.fromCharCode(chr);
+    });
+}
+
+function kata2hira(str){
+    return str.replace(/[\u30a1-\u30f6]/g, function(match) {
+        const chr = match.charCodeAt(0) - 0x60;
+        return String.fromCharCode(chr);
+    });
+}
+
+function convertHiraKata(str, mode){
+    if (mode == "toKata") {
+        return hira2kata(str)
+    }
+    return kata2hira(str)
+}

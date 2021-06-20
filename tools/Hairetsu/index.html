@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>配列よみに変換</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+<h2 id="section_forHairetsu">配列読みに変換</h2>
+
+<div class="caption">
+    <p>テキストボックスに入力された文字列を配列読みに変換します。</p>
+</div>
+
+<div class="userinterface" id="userinterface_forHairetsu">
+    <form class="removeFlag">
+        <input type="checkbox" class="removeFlag"> ひらがな・カタカナ・数字以外を削除する
+    </form>
+    <div class="horizontal">
+        <form class="hairetsu">
+            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="変換" onclick="clickBtn_hairetsu()" class="button">
+            <textarea class="displayResult" readonly placeholder="ここに結果が表示されます"></textarea>
+            <input type="button" value="コピー" onclick="clickBtn_hairetsu_copy()" class="button">
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+function toHairetsu (lines, removeNoise) {
+    const map = new Map();
+    [
+        ["ァ", "ア"], ["ィ", "イ"], ["ゥ", "ウ"], ["ェ", "エ"],["ォ", "オ"], ["ヴ", "ウ"],
+        ["ガ", "カ"], ["ギ", "キ"], ["グ", "ク"], ["ゲ", "ケ"],["ゴ", "コ"],
+        ["ザ", "サ"], ["ジ", "シ"], ["ズ", "ス"], ["ゼ", "セ"],["ゾ", "ソ"],
+        ["ダ", "タ"], ["ヂ", "チ"], ["ヅ", "ツ"], ["ッ", "ツ"],["デ", "テ"], ["ド", "ト"],
+        ["バ", "ハ"], ["ビ", "ヒ"], ["ブ", "フ"], ["ベ", "ヘ"],["ボ", "ホ"],
+        ["パ", "ハ"], ["ピ", "ヒ"], ["プ", "フ"], ["ペ", "ヘ"],["ポ", "ホ"],
+        ["ャ", "ヤ"], ["ュ", "ユ"], ["ョ", "ヨ"],
+        ["ー", ""]
+    ].forEach(x => map.set(...x));
+
+    let katakana = hira2kata(lines);
+    for (let k of map.keys()) {
+        const reg = new RegExp(k, "g");
+        katakana = katakana.replace(reg, map.get(k));
+    }
+    return (removeNoise)? katakana.replace(/[^ァ-ヴa-zA-Z0-9０-９\r\n]/g, "") : katakana;
+}
+
+function clickBtn_hairetsu() {
+    const hairetsuElem = document.querySelector("#userinterface_forHairetsu");
+    const lines_toHairetsu = hairetsuElem.querySelector("form.hairetsu .userInput").value;
+    const removeFlag = hairetsuElem.querySelector("form.removeFlag .removeFlag");
+
+    const converted = toHairetsu(lines_toHairetsu, removeFlag.checked);
+    const msg = converted;
+    // const msg = converted.join("\n");
+    hairetsuElem.querySelector("form.hairetsu .displayResult").value = msg;
+}
+function clickBtn_hairetsu_copy() {
+    document.querySelector("#userinterface_forHairetsu form.hairetsu .displayResult").select();
+    document.execCommand("Copy");
+    alert("コピーしました！");
+}
+</script>
+</body>
+
+</html>
