@@ -27,16 +27,14 @@
     </ul>
 </div>
 
-<div class="userinterface" id="userinterface_forRelease">
+<div class="ui">
     <div class="horizontal">
-        <form class="release">
-            <textarea class="userInput" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
-            <input type="button" value="名開き" onclick="clickBtn_release()">
-            <input type="button" value="表をコピー" onclick="clickBtn_release_copy()">
-        </form>
+        <textarea class="inputLines" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
+        <input type="button" value="名開き" onclick="click_release()">
+        <input type="button" value="表をコピー" onclick="click_copy()">
     </div>
 
-    <table class="resultTable">
+    <table class="result">
         <tr>
             <td>項目</td>
             <td>ノンブル</td>
@@ -73,13 +71,13 @@ function releaseNayoseLines (multiLines) {
     return releasedObj
 }
 
-function clickBtn_release() {
-    const releaseElem = document.querySelector("#userinterface_forRelease");
+function click_release() {
+    const elem = document.querySelector(".ui");
 
-    const linesToRelease = releaseElem.querySelector("form.release .userInput").value;
-    const releasedObj = releaseNayoseLines(linesToRelease);
+    const lines = elem.querySelector(".inputLines").value;
+    const releasedObj = releaseNayoseLines(lines);
 
-    const outputTable = releaseElem.querySelector(".resultTable");
+    const outputTable = elem.querySelector(".result");
     resetTable(outputTable);
 
     for (let item in releasedObj) {
@@ -90,8 +88,8 @@ function clickBtn_release() {
         cell2.innerHTML = releasedObj[item].nombre;
     }
 }
-function clickBtn_release_copy() {
-    const outputTable = document.querySelector("#userinterface_forRelease .resultTable");
+function click_copy() {
+    const outputTable = document.querySelector(".ui .result");
     copyTable(outputTable);
 }
 
