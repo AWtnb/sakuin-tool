@@ -81,9 +81,7 @@ function click_convert() {
 }
 
 function click_copy() {
-    document.querySelector(".ui .result").select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
+    copyElem(document.querySelector(".ui .result"));
 }
 
 </script>
