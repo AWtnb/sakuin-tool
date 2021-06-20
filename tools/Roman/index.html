@@ -28,14 +28,12 @@
     </ul>
 </div>
 
-<div class="userinterface" id="userinterface_forRoman">
+<div class="ui">
     <div class="horizontal">
-        <form class="convert">
-            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="変換" onclick="clickBtn_roman()" class="button">
-            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_roman_copy()" class="button">
-        </form>
+        <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
+        <input type="button" value="変換" onclick="click_convert()">
+        <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
+        <input type="button" value="コピー" onclick="click_copy()">
     </div>
 </div>
 
@@ -76,15 +74,14 @@ function toRoman(s) {
     return converted.toLowerCase();
 }
 
-function clickBtn_roman() {
-    const romanElem = document.querySelector("#userinterface_forRoman");
-    const lines_toConvert = romanElem.querySelector("form.convert .userInput").value;
-    const converted = toRoman(lines_toConvert);
-    romanElem.querySelector("form.convert .displayResult").value = converted;
+function click_convert() {
+    const elem = document.querySelector(".ui");
+    const targetLines = elem.querySelector(".userInput").value;
+    elem.querySelector(".displayResult").value = toRoman(targetLines);
 }
 
-function clickBtn_roman_copy() {
-    document.querySelector("#userinterface_forRoman form.convert .displayResult").select();
+function click_copy() {
+    document.querySelector(".ui .displayResult").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
