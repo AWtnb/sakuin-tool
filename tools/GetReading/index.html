@@ -26,14 +26,12 @@
     </ul>
 </div>
 
-<div class="userinterface" id="userinterface_forYomi">
+<div class="ui">
     <div class="horizontal">
-        <form class="yomi">
-            <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="取得" onclick="clickBtn_yomi()">
-            <textarea class="displayResult" placeholder="ここに結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_yomi_copy()">
-        </form>
+        <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
+        <input type="button" value="取得" onclick="click_get()">
+        <textarea class="result" placeholder="ここに結果が表示されます" readonly></textarea>
+        <input type="button" value="コピー" onclick="click_copy()">
     </div>
 </div>
 
@@ -83,16 +81,13 @@ function setYomi(outputArea, inputLines){
     });
 }
 
-function clickBtn_yomi() {
-    const yomiElem = document.querySelector("#userinterface_forYomi");
-    const lines = yomiElem.querySelector("form.yomi .userInput").value;
-    const outputArea = yomiElem.querySelector("form.yomi .displayResult");
-    setYomi(outputArea, lines);
+function click_get() {
+    const elem = document.querySelector(".ui");
+    const lines = elem.querySelector(".inputLines").value;
+    setYomi(elem.querySelector(".result"), lines);
 }
-function clickBtn_yomi_copy() {
-    document.querySelector("#userinterface_forYomi form.yomi .displayResult").select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
+function click_copy() {
+    copyElem(document.querySelector(".ui .result"))
 }
 
 
