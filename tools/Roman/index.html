@@ -32,7 +32,7 @@
     <div class="horizontal">
         <textarea class="userInput" placeholder="文字列を貼り付けてください"></textarea>
         <input type="button" value="変換" onclick="click_convert()">
-        <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
+        <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
         <input type="button" value="コピー" onclick="click_copy()">
     </div>
 </div>
@@ -77,11 +77,11 @@ function toRoman(s) {
 function click_convert() {
     const elem = document.querySelector(".ui");
     const targetLines = elem.querySelector(".userInput").value;
-    elem.querySelector(".displayResult").value = toRoman(targetLines);
+    elem.querySelector(".result").value = toRoman(targetLines);
 }
 
 function click_copy() {
-    document.querySelector(".ui .displayResult").select();
+    document.querySelector(".ui .result").select();
     document.execCommand("Copy");
     alert("コピーしました！");
 }
