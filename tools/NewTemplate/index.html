@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>入力テンプレートの作成</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+
+<h2 >索引拾いのテンプレート生成</h2>
+
+<div class="caption">
+    <div class="imagebox">
+        <div class="boxtitle">SAMPLE1</div>
+        <img src="./image/img_generate-template.png">
+    </div>
+    <div class="imagebox">
+        <div class="boxtitle">SAMPLE2</div>
+        <img src="./image/img_generate-index.png">
+    </div>
+    <ul>
+        <li>索引拾いのための Excel テンプレートを作成します。</li>
+        <li>各ページの項目数を上図 SAMPLE1 のように Excel に整理して下記ボックスに貼り付けてください。</li>
+        <li>“index” 列に条件付き書式で「偶数の場合に背景色変更」という設定をするとページの変わり目が見やすくなり便利です（SAMPLE2）。</li>
+    </ul>
+</div>
+
+<div class="userinterface" id="userinterface_toGenerate">
+    <div class="horizontal">
+        <form class="generate">
+            <textarea class="userInput" placeholder="図のように Excel から貼り付けてください"></textarea>
+            <input type="button" value="生成" onclick="clickBtn_generate()" class="button">
+            <input type="button" value="表をコピー" onclick="clickBtn_generate_copy()" class="button">
+        </form>
+    </div>
+
+    <table  class="resultTable">
+        <tr>
+            <td>ID</td>
+            <td>index</td>
+            <td>ページ</td>
+            <td>項目</td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+function generateTemplare(multiLines) {
+    const templateArray = [];
+    const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
+    lines
+    .filter(line => !(line.match(/(\t)0/)))
+    .forEach((line, index) => {
+        const [page, counter, ...rest] = line.split("\t");
+        const nItem = toHankaku(counter);
+        if (nItem.match(/^\d+$/)) {
+            for (let i = 0; i < Number(nItem); i++) {
+                templateArray.push({index:(index + 1), page:page});
+            }
+        }
+    });
+    return templateArray
+}
+
+function clickBtn_generate() {
+    const generateElem = document.querySelector("#userinterface_toGenerate");
+
+    const linesToGenerate = generateElem.querySelector("form.generate .userInput").value;
+    const templateArray = generateTemplare(linesToGenerate);
+
+    const outputTable = generateElem.querySelector(".resultTable");
+    resetTable(outputTable)
+
+    templateArray.forEach((line, idx) => {
+        const row = outputTable.insertRow(-1);
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+        const cell4 = row.insertCell(3);
+        cell1.innerHTML = (idx + 1);
+        cell2.innerHTML = line.index;
+        cell3.innerHTML = line.page;
+        cell4.innerHTML = "";
+    });
+}
+function clickBtn_generate_copy() {
+    const templateTable = document.querySelector("#userinterface_toGenerate .resultTable");
+    copyTable(templateTable);
+}
+
+</script>
+</body>
+
+</html>
