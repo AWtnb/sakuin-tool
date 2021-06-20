@@ -26,19 +26,17 @@
     </ul>
 </div>
 
-<div class="userinterface" id="userinterface_toComplete">
+<div class="ui">
     <label>項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：</label>
     <form class="delimiter">
-        <input type="radio" name="radio1" value="spaces" checked> 二倍アキ
-        <input type="radio" name="radio1" value="tab"          > タブ文字（Excel）
+        <input type="radio" name="type" value="spaces" checked> 二倍アキ
+        <input type="radio" name="type" value="tab"          > タブ文字（Excel）
     </form>
     <div class="horizontal">
-        <form class="complete">
-            <textarea class="userInput" placeholder="索引を貼り付けてください"></textarea>
-            <input type="button" value="復元" onclick="clickBtn_complete()">
-            <textarea class="displayResult" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="clickBtn_complete_copy()">
-        </form>
+        <textarea class="inputLines" placeholder="索引を貼り付けてください"></textarea>
+        <input type="button" value="復元" onclick="click_complete()">
+        <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+        <input type="button" value="コピー" onclick="click_copy()">
     </div>
 </div>
 
@@ -70,18 +68,15 @@ function completeChildItem (multiLines, delim) {
     return completedArray
 }
 
-function clickBtn_complete() {
-    const completeElem = document.querySelector("#userinterface_toComplete");
-
-    const delimiter = completeElem.querySelector("form.delimiter").radio1.value;
-    const lines_toComplete = completeElem.querySelector("form.complete .userInput").value;
-    const completedArray = completeChildItem(lines_toComplete, delimiter);
-    completeElem.querySelector("form.complete .displayResult").value = completedArray.join("\n");
+function click_complete() {
+    const elem = document.querySelector(".ui");
+    const delimiter = elem.querySelector("form.delimiter").type.value;
+    const lines = elem.querySelector(".inputLines").value;
+    elem.querySelector(".result").value = completeChildItem(lines, delimiter).join("\n");
 }
-function clickBtn_complete_copy() {
-    document.querySelector("#userinterface_toComplete form.complete .displayResult").select();
-    document.execCommand("Copy");
-    alert("コピーしました！");
+
+function click_copy() {
+    copyElem(document.querySelector(".ui .result"));
 }
 
 </script>
