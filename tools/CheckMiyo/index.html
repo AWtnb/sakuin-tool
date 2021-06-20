@@ -25,15 +25,13 @@
     </ul>
 </div>
 
-<div class="userinterface" id="userinterface_forCheckMiyo">
+<div class="ui">
     <div class="horizontal">
-        <form class="check">
-            <textarea class="userInput" placeholder="索引をコピー＆ペーストしてください"></textarea>
-            <input type="button" value="チェック" onclick="clickBtn_checkMiyo()">
-        </form>
+        <textarea class="inputLines" placeholder="索引をコピー＆ペーストしてください"></textarea>
+        <input type="button" value="チェック" onclick="click_check()">
     </div>
 
-    <div class="displayResult">
+    <div class="result">
     </div>
 </div>
 
@@ -81,10 +79,10 @@ function findLostMiyoItem(multilines) {
     return lostInfo
 }
 
-function clickBtn_checkMiyo(){
-    const checkMiyoElem = document.querySelector("#userinterface_forCheckMiyo");
+function click_check(){
+    const elem = document.querySelector(".ui");
 
-    const lines = checkMiyoElem.querySelector("form.check .userInput").value;
+    const lines = elem.querySelector(".inputLines").value;
     const lostMiyoParenInfo = findLostMiyoParenthesis(lines);
     const foundArray = [];
     if (lostMiyoParenInfo.length > 0) {
@@ -100,8 +98,7 @@ function clickBtn_checkMiyo(){
             foundArray.push(`<li style="margin-left:1em"><span style="font-weight:bold">${item.found}</span> …… <span style="color:blue">${item.shouldExist}</span></li>`);
         });
     }
-    const markup = foundArray.join("\n");
-    checkMiyoElem.querySelector(".displayResult").innerHTML = markup;
+    elem.querySelector(".result").innerHTML = foundArray.join("\n");
 }
 
 </script>
