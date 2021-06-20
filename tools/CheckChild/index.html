@@ -66,9 +66,9 @@ function highlightChildItem(multilines, mode = "tail") {
         if (grep.length > 1) {
             const markup = grep
             .filter(line => (line != item))
-            .map(line => line.replace(reg, "<b class=\"blue\">$&</b>"))
+            .map(line => line.replace(reg, "<span class=\"blue\">$&</span>"))
             .join("<br>");
-            return `<b>${item}</b> を含む項目：<br>${markup}`;
+            return `<span>${item}</span> を含む項目：<br>${markup}`;
         }
         return null
     }).filter(x => x);

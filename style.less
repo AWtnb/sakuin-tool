@@ -24,15 +24,14 @@
     color: @black;
     font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
     font-size: 12pt;
-
     a {
         color: @cyan;
         text-decoration: none;
     }
-    b.blue {
+    .blue {
         color: @blue;
     }
-    b.red {
+    .red {
         color: @red;
     }
     ul {
@@ -40,41 +39,35 @@
     }
 }
 
-#container{
-    display: -webkit-flex;
-    display: flex;
-}
+.main-container {
 
-.main {
-    margin: 20px;
-    padding: 12px;
-    width: 800px;
-    display: block;
-}
+    width: 80%;
+    margin: auto;
 
-.sidebar {
-    width: 220px;
-    border-right: @brwhite 1px solid;
-    .sidebar_fixeditem {
-        font-size: .9rem;
-        position: sticky;
-        z-index: 1;
-        top: 6px;
-        margin-top: 10px;
-        overflow: hidden;
-
-        ul {
-            list-style-type: none;
-            padding-left: .9rem;
-            li {
-                margin-left: -.9rem;
-            }
-        }
-
-        .sidebar_promotion {
-            border-top: 4px double @brwhite;
+    h1 {
+        font-size: 4rem;
+        color: @black;
+    }
+    h2 {
+        margin: 5rem 0 1rem 0;
+        border-bottom: solid 1px @blue;
+        font-size: 1.25rem;
+    }
+    h3 {
+        font-size: 1.1rem;
+        margin-top: 4rem;
+        &::before {
+            content: "\25cf";
+            color: @blue;
         }
     }
+
+    .promotion {
+        p {
+            text-align: center;
+        }
+    }
+
 }
 
 input[type="button"], .button {
@@ -159,23 +152,5 @@ input[type="number"] {
             background-color: @mainBg;
             transform: translateY(-50%) translateX(1em);
         }
-    }
-}
-
-h1 {
-    font-size: 1rem;
-    color: @black;
-}
-h2 {
-    margin: 5rem 0 1rem 0;
-    border-bottom: solid 1px @blue;
-    font-size: 1.25rem;
-}
-h3 {
-    font-size: 1.1rem;
-    margin-top: 4rem;
-    &::before {
-        content: "\25cf";
-        color: @blue;
     }
 }
