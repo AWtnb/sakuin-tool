@@ -41,6 +41,9 @@ body {
   margin: 2rem 0 1rem 0;
   border-bottom: 4px double #dc322f;
 }
+.container h4 {
+  margin: 0.5em;
+}
 .container a {
   color: #268bd2;
   text-decoration: none;
@@ -50,6 +53,9 @@ body {
 }
 .container .red {
   color: #dc322f;
+}
+.container ul {
+  margin: 0;
 }
 .container ul li::marker {
   color: #839496;
