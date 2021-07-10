@@ -68,13 +68,19 @@ function fromTsv (tsv) {
     });
 }
 
+function comparer (a, b) {
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
+}
+
 function sortByReading (obj) {
     return obj.sort((a,b) => {
-        return a.Item > b.Item;
+        return comparer(a.Item, b.Item);
     }).sort((a,b) => {
-        return a.Reading > b.Reading;
+        return comparer(a.Reading, b.Reading);
     }).sort((a,b) => {
-        return a.Norm > b.Norm;
+        return comparer(a.Norm, b.Norm);
     });
 }
 
