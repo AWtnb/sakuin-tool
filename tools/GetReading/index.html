@@ -17,17 +17,11 @@
     <ul>
         <li>最初の計算時は解析辞書読み込みのために少し時間がかかります。</li>
         <li>正しく読み情報が取得できているか必ず事後確認をしてください。</li>
-        <li>Microsoft Excel は安定ソート（<a href="https://ja.wikipedia.org/wiki/%E5%AE%89%E5%AE%9A%E3%82%BD%E3%83%BC%E3%83%88" target="_blank">Wikipedia</a>）です。<br>最初から配列読みでソートすると濁音・半濁音が混じってしまうため、Excel シート上では下記の順番でソートすることをおすすめします。</li>
-        <ol>
-            <li>元の項目名</li>
-            <li>本機能で取得した読み</li>
-            <li>配列読み</li>
-        </ol>
     </ul>
 </div>
 
 <div class="ui">
-    <input type="checkbox" class="removeFlag"> ←（名寄せ済み索引で）ノンブル部分が不要な場合はチェック
+    <input type="checkbox" class="removeFlag"> ←（名寄せ済み索引で）ノンブル部分の読みが不要な場合はチェック
     <div class="horizontal">
         <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
         <input type="button" value="取得" onclick="click_get()">
