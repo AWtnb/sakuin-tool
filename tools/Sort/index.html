@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>並べ替え</title>
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+
+<body>
+<!-- ============================== -->
+<div class="container">
+
+<h2>並べ替え</h2>
+
+<div class="caption">
+    <div class="imagebox">
+        <div class="boxtitle">SAMPLE</div>
+        <img src = "./image/img_sort.png">
+    </div>
+    <ul>
+        <li>項目を並べ替えます。</li>
+        <li>上図のように <code>項目</code> <code>読み</code> <code>配列読み</code> の3列を Excel から貼り付けてください。</li>
+        <li>配列読み列の情報を最優先にソートします。</li>
+        <ul>
+            <li>配列読みが同じ場合は読み列の情報でソートします。</li>
+            <li>読み情報も同じ場合は項目列の文字コード順にソートします（同じ文字種がまとまります）。</li>
+        </ul>
+    </ul>
+</div>
+
+<div class="ui">
+
+    <div class="horizontal">
+        <textarea class="inputLines" placeholder="上図のように Excel から貼り付けてください"></textarea>
+        <input type="button" value="ソート" onclick="click_sort()">
+        <input type="button" value="表をコピー" onclick="click_copy()">
+    </div>
+
+    <table class="result">
+        <tr>
+            <td>項目</td>
+            <td>読み</td>
+            <td>配列読み</td>
+        </tr>
+    </table>
+
+</div>
+
+</div>
+<!-- ============================== -->
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+
+
+function fromTsv (tsv) {
+    const lines = tsv.split(/[\r\n]+/g).filter(line => line);
+    return lines.map(line => {
+        const [item, reading, norm,  ...rest] = line.split("\t"); // 配列読み＝正規化＝normalized
+        return {
+           Item: item,
+           Reading: reading,
+           Norm: norm
+        }
+    });
+}
+
+function sortByReading (obj) {
+    return obj.sort((a,b) => {
+        return a.Item > b.Item;
+    }).sort((a,b) => {
+        return a.Reading > b.Reading;
+    }).sort((a,b) => {
+        return a.Norm > b.Norm;
+    });
+}
+
+function click_sort() {
+    const elem = document.querySelector(".ui");
+    const multiLine = elem.querySelector(".inputLines").value;
+
+    const outputTable = elem.querySelector("table.result");
+    resetTable(outputTable)
+
+    const parsed = fromTsv(multiLine);
+
+    sortByReading(parsed).forEach(obj => {
+        const row = outputTable.insertRow(-1);
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+        cell1.innerHTML = obj.Item;
+        cell2.innerHTML = obj.Reading;
+        cell3.innerHTML = obj.Norm;
+    });
+
+}
+
+function click_copy() {
+    const table = document.querySelector("table.result");
+    copyTable(table);
+}
+
+</script>
+</body>
+
+</html>
