@@ -24,65 +24,43 @@ body {
   margin: auto;
   padding: 20px;
 }
-.container h1 {
+.outline {
+  max-width: 400px;
+  margin: 0 auto;
+}
+.outline li {
+  font-weight: bold;
+}
+.outline li a:focus {
+  border: 1px solid #859900;
+  border-radius: 4px;
+  padding: 2px;
+  box-shadow: 0 0 5px 1px rgba(133, 153, 0, 0.6);
+}
+h1 {
   font-family: 'Dela Gothic One', cursive;
   font-size: 60px;
   color: #dc322f;
   max-width: 100%;
   text-align: center;
 }
-.container h2 {
+h2 {
   margin: 2rem 0 1rem 0;
   border-bottom: solid 1px #268bd2;
   font-size: 1.25rem;
 }
-.container h3 {
+h3 {
   font-size: 20px;
   margin: 2rem 0 1rem 0;
   border-bottom: 4px double #dc322f;
 }
-.container h4 {
+h4 {
   margin: 0.5em;
 }
-.container a {
-  color: #268bd2;
-  text-decoration: none;
+.caption {
+  margin: 10px;
 }
-.container .blue {
-  color: #268bd2;
-}
-.container .red {
-  color: #dc322f;
-}
-.container ul {
-  margin: 0;
-}
-.container ul li::marker {
-  color: #839496;
-}
-.container .promotion {
-  margin-top: 50px;
-}
-.container .promotion p {
-  text-align: center;
-}
-.container .outline {
-  max-width: 400px;
-  margin: 0 auto;
-}
-.container .outline li {
-  font-weight: bold;
-}
-.container .outline li a:focus {
-  border: 1px solid #859900;
-  border-radius: 4px;
-  padding: 2px;
-  box-shadow: 0 0 5px 1px rgba(133, 153, 0, 0.6);
-}
-.container .caption {
-  margin: 1rem;
-}
-.container .caption .imagebox {
+.caption .imagebox {
   position: relative;
   margin: 1rem auto;
   max-width: 90%;
@@ -90,12 +68,12 @@ body {
   border: 1px solid #839496;
   border-radius: 8px;
 }
-.container .caption .imagebox img {
+.caption .imagebox img {
   display: block;
   max-width: 100%;
   margin: 1rem auto;
 }
-.container .caption .imagebox .boxtitle {
+.caption .imagebox .boxtitle {
   color: #839496;
   font-size: 0.9rem;
   position: absolute;
@@ -105,32 +83,70 @@ body {
   background-color: #e1e7e6;
   transform: translateY(-50%) translateX(1em);
 }
-.container .ui {
+a {
+  color: #268bd2;
+  text-decoration: none;
+}
+p {
+  margin: 0 24px;
+}
+.blue {
+  color: #268bd2;
+}
+.red {
+  color: #dc322f;
+}
+code {
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 0.9em;
+  background: #eee8d5;
+  color: #002b36;
+  border: 1px solid #586e75;
+  border-radius: 4px;
+  padding: 0 2px;
+  margin: 0 2px;
+}
+ul {
+  text-align: justify;
+}
+ul li::marker {
+  color: #839496;
+}
+ul ul {
+  padding-left: 2em;
+}
+.caption > ul {
+  margin: 0 24px;
+}
+.promotion p {
+  text-align: center;
+}
+.ui {
   margin: 1rem;
   padding: 1rem;
   border: solid 1px #859900;
   border-radius: 8px;
 }
-.container .ui .horizontal {
+.ui .horizontal {
   display: inline-flex;
   max-width: 100%;
 }
-.container .ui .horizontal > span,
-.container .ui .horizontal > div {
+.ui .horizontal > span,
+.ui .horizontal > div {
   margin: 0 4px;
 }
-.container .ui textarea {
+.ui textarea {
   border: 1px dotted #dc322f;
   border-radius: 6px;
   padding: 0.5em;
   height: 250px;
 }
-.container .ui textarea:focus {
+.ui textarea:focus {
   border: 1px solid #dc322f;
   outline: none;
   box-shadow: 0 0 5px 1px rgba(220, 50, 47, 0.6);
 }
-.container .ui input[type="button"] {
+.ui input[type="button"] {
   margin: auto 4px;
   height: 30px;
   min-width: 50px;
@@ -138,25 +154,25 @@ body {
   color: #002b36;
   border-radius: 4px;
 }
-.container .ui input[type="number"] {
+.ui input[type="number"] {
   margin: 0 4px;
   width: 3em;
   border: 1px solid #d33682;
   border-radius: 2px;
 }
-.container .ui table {
+.ui table {
   border-collapse: collapse;
   border-spacing: 0;
   margin: 0.5em;
   font-size: 0.9rem;
   max-width: 100%;
 }
-.container .ui table td {
+.ui table td {
   min-width: 80px;
   padding: 2px;
   border: 1px solid #586e75;
 }
-.container .ui table tbody {
+.ui table tbody {
   display: block;
   max-height: 400px;
   overflow-y: scroll;
