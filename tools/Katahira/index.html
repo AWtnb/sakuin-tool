@@ -22,10 +22,14 @@
     <input type="checkbox" class="toHiraFlag"> ひらがなに変換（チェックしないとカタカナに変換します）
 
     <div class="horizontal">
-        <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
-        <input type="button" value="変換" onclick="click_katahira()">
-        <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
-        <input type="button" value="コピー" onclick="click_copy()">
+        <div class="vertical">
+            <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="変換" onclick="click_katahira()">
+        </div>
+        <div class="vertical">
+            <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="click_copy()">
+        </div>
     </div>
 </div>
 

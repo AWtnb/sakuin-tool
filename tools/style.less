@@ -146,58 +146,73 @@ ul{
     text-align: center;
 }
 
+textarea {
+    box-sizing: border-box;
+    display: block;
+    border: 1px dotted @red;
+    border-radius: 6px;
+    height: 250px;
+    width: 100%;
+    padding: .5em;
+    &:focus {
+        border: 1px solid @red;
+        outline: none;
+        box-shadow: 0 0 5px 1px fadeout(@red, 40%);
+    }
+}
+
+input {
+    display: inline-block;
+}
+input[type="button"] {
+    height: 30px;
+    min-width: 50px;
+    background: @brwhite;
+    color: @brblack;
+    border-radius: 4px;
+}
+input[type="number"] {
+    width: 3em;
+    border: 1px solid @magenta;
+    border-radius: 2px;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 10px 0;
+    font-size: .9rem;
+    max-width: 100%;
+    td {
+        min-width: 80px;
+        padding: 2px;
+        border: 1px solid @gray;
+    }
+    tbody {
+        display: block;
+        max-height: 400px;
+        overflow-y: scroll;
+    }
+}
+
 .ui {
     margin: 1rem;
     padding: 1rem;
     border: solid 1px @green;
     border-radius: 8px;
+}
+.ui {
     .horizontal {
         display: inline-flex;
-        max-width: 100%;
-        > span, > div {
-            margin: 0 4px;
-        }
-    }
-    textarea {
-        border: 1px dotted @red;
-        border-radius: 6px;
-        padding: .5em;
-        height: 250px;
-        &:focus {
-            border: 1px solid @red;
-            outline: none;
-            box-shadow: 0 0 5px 1px fadeout(@red, 40%);
-        }
-    }
-    input[type="button"] {
-        margin: auto 4px;
-        height: 30px;
-        min-width: 50px;
-        background: @brwhite;
-        color: @brblack;
-        border-radius: 4px;
-    }
-    input[type="number"] {
-        margin: 0 4px;
-        width: 3em;
-        border: 1px solid @magenta;
-        border-radius: 2px;
-    }
-    table {
-        border-collapse: collapse;
-        border-spacing: 0;
-        margin: .5em;
-        font-size: .9rem;
-        max-width: 100%;
-        td {
-            min-width: 80px;
-            padding: 2px;
-            border: 1px solid @gray;
-        }
-        tbody {
+        width: 100%;
+        .vertical {
             display: block;
-            max-height: 400px;
-            overflow-y: scroll;
+            width: 50%;
+            text-align: end;
+            margin: 0 4px;
+            textarea {
+                margin: 4px auto;
+            }
         }
     }
 }

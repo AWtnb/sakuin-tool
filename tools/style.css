@@ -121,6 +121,52 @@ ul ul {
 .promotion p {
   text-align: center;
 }
+textarea {
+  box-sizing: border-box;
+  display: block;
+  border: 1px dotted #dc322f;
+  border-radius: 6px;
+  height: 250px;
+  width: 100%;
+  padding: 0.5em;
+}
+textarea:focus {
+  border: 1px solid #dc322f;
+  outline: none;
+  box-shadow: 0 0 5px 1px rgba(220, 50, 47, 0.6);
+}
+input {
+  display: inline-block;
+}
+input[type="button"] {
+  height: 30px;
+  min-width: 50px;
+  background: #eee8d5;
+  color: #002b36;
+  border-radius: 4px;
+}
+input[type="number"] {
+  width: 3em;
+  border: 1px solid #d33682;
+  border-radius: 2px;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 10px 0;
+  font-size: 0.9rem;
+  max-width: 100%;
+}
+table td {
+  min-width: 80px;
+  padding: 2px;
+  border: 1px solid #586e75;
+}
+table tbody {
+  display: block;
+  max-height: 400px;
+  overflow-y: scroll;
+}
 .ui {
   margin: 1rem;
   padding: 1rem;
@@ -129,51 +175,14 @@ ul ul {
 }
 .ui .horizontal {
   display: inline-flex;
-  max-width: 100%;
+  width: 100%;
 }
-.ui .horizontal > span,
-.ui .horizontal > div {
-  margin: 0 4px;
-}
-.ui textarea {
-  border: 1px dotted #dc322f;
-  border-radius: 6px;
-  padding: 0.5em;
-  height: 250px;
-}
-.ui textarea:focus {
-  border: 1px solid #dc322f;
-  outline: none;
-  box-shadow: 0 0 5px 1px rgba(220, 50, 47, 0.6);
-}
-.ui input[type="button"] {
-  margin: auto 4px;
-  height: 30px;
-  min-width: 50px;
-  background: #eee8d5;
-  color: #002b36;
-  border-radius: 4px;
-}
-.ui input[type="number"] {
-  margin: 0 4px;
-  width: 3em;
-  border: 1px solid #d33682;
-  border-radius: 2px;
-}
-.ui table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  margin: 0.5em;
-  font-size: 0.9rem;
-  max-width: 100%;
-}
-.ui table td {
-  min-width: 80px;
-  padding: 2px;
-  border: 1px solid #586e75;
-}
-.ui table tbody {
+.ui .horizontal .vertical {
   display: block;
-  max-height: 400px;
-  overflow-y: scroll;
+  width: 50%;
+  text-align: end;
+  margin: 0 4px;
+}
+.ui .horizontal .vertical textarea {
+  margin: 4px auto;
 }

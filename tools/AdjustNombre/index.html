@@ -6,6 +6,17 @@
     <title>ノンブル加算減算</title>
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
+    <style>
+        table.adjuster {
+            margin: 0 10px;
+        }
+        table.adjuster tbody{
+            overflow-y: unset;
+        }
+        table.adjuster td {
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -24,17 +35,30 @@
 </div>
 
 <div class="ui">
-    <div class="horizontal">
-        <span><label>開始ノンブル<input type="number" value="1" min="1" class="startNombre"></label></span>
-        <span><label>終了ノンブル<input type="number" value="99" min="1" class="endNombre"></label></span>
-        <span><label>増分<input type="number" value="1" class="nombreDelta"></label></span>
-    </div>
+    <table class="adjuster">
+        <tr>
+            <td>開始ノンブル</td>
+            <td><input type="number" value="1" min="1" class="startNombre"></td>
+        </tr>
+        <tr>
+            <td>終了ノンブル</td>
+            <td><input type="number" value="99" min="1" class="endNombre"></td>
+        </tr>
+        <tr>
+            <td>増分</td>
+            <td><input type="number" value="1" class="nombreDelta"></td>
+        </tr>
+    </table>
 
     <div class="horizontal">
-        <textarea class="inputLines" placeholder="名寄せされた索引を貼り付けてください"></textarea>
-        <input type="button" value="計算" onclick="clickBtn_adjustNombre()">
-        <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
-        <input type="button" value="コピー" onclick="click_copy()">
+        <div class="vertical">
+            <textarea class="inputLines" placeholder="名寄せされた索引を貼り付けてください"></textarea>
+            <input type="button" value="計算" onclick="clickBtn_adjustNombre()">
+        </div>
+        <div class="vertical">
+            <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="click_copy()">
+        </div>
     </div>
     <div class="result">
     </div>

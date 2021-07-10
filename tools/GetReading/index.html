@@ -23,10 +23,14 @@
 <div class="ui">
     <div><input type="checkbox" class="removeFlag">（名寄せ済み索引で）ノンブル部分の読みをトル</div>
     <div class="horizontal">
-        <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
-        <input type="button" value="取得" onclick="click_get()">
-        <textarea class="result" placeholder="ここに結果が表示されます" readonly></textarea>
-        <input type="button" value="コピー" onclick="click_copy()">
+        <div class="vertical">
+            <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
+            <input type="button" value="取得" onclick="click_get()">
+        </div>
+        <div class="vertical">
+            <textarea class="result" placeholder="ここに結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="click_copy()">
+        </div>
     </div>
 </div>
 

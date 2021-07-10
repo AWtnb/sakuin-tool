@@ -33,10 +33,14 @@
         <input type="radio" name="type" value="tab"          > タブ文字（Excel）
     </form>
     <div class="horizontal">
-        <textarea class="inputLines" placeholder="索引を貼り付けてください"></textarea>
-        <input type="button" value="復元" onclick="click_complete()">
-        <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
-        <input type="button" value="コピー" onclick="click_copy()">
+        <div class="vertical">
+            <textarea class="inputLines" placeholder="索引を貼り付けてください"></textarea>
+            <input type="button" value="復元" onclick="click_complete()">
+        </div>
+        <div class="vertical">
+            <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="click_copy()">
+        </div>
     </div>
 </div>
 
