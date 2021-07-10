@@ -16,10 +16,10 @@
 <div class="caption">
     <ul>
         <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
+        <li>ノンブル間のコンマは必ず半角になります。</li>
         <li>ノンブルに数字以外が含まれていた場合は計算の対象外です。</li>
-        <ul>
-            <li>範囲を示すハイフンなどが含まれる場合もスキップします。<strong>必ず目でも再確認してください。</strong></li>
-        </ul>
+        <li>範囲を示すハイフンなどが含まれる場合もスキップします。</li>
+        <li><strong>必ず目でも再確認してください。</strong></li>
     </ul>
 </div>
 
@@ -29,8 +29,6 @@
         <span><label>終了ノンブル<input type="number" value="99" min="1" class="endNombre"></label></span>
         <span><label>増分<input type="number" value="1" class="nombreDelta"></label></span>
     </div>
-
-    <p><label><input type="checkbox" class="fullWidthCommaFlag">ノンブル間は全角カンマ</label></p>
 
     <div class="horizontal">
         <textarea class="inputLines" placeholder="名寄せされた索引を貼り付けてください"></textarea>
@@ -48,12 +46,9 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function adjustNombre(multiline, startNombre, endNombre, nombreDelta, useFullWidthComma = false) {
-    const commaType = (useFullWidthComma)? "，" : ", ";
+function adjustNombre(multiline, startNombre, endNombre, delta) {
     const lineArray = multiline.split(/[\r\n]+/g);
-    return lineArray
-    .filter(x => x)
-    .map(line => {
+    return lineArray.filter(x => x).map(line => {
         const [item, nombres, ...rest] = line.split("　　");
         if (!nombres) {
             return {
@@ -62,19 +57,17 @@ function adjustNombre(multiline, startNombre, endNombre, nombreDelta, useFullWid
                 isModified: false
             }
         }
-        const nombresArray = nombres
-        .split(commaType)
-        .map(nbr => {
-            if (Number(startNombre) <= Number(nbr) && Number(nbr) <= Number(endNombre)) {
-                return Number(nbr) + Number(nombreDelta);
+        const nombresArray = nombres.replace(/，/g, ",").replace(/\s/g, "").split(",").map(n => {
+            if (Number(startNombre) <= Number(n) && Number(n) <= Number(endNombre)) {
+                return Number(n) + Number(delta);
             }
-            return nbr
+            return n
         });
-        const adjustedLine = item + "　　" + nombresArray.join(commaType);
+        const adjusted = item + "　　" + nombresArray.join(", ");
         return {
             original: line,
-            adjusted: adjustedLine,
-            isModified: (line != adjustedLine)
+            adjusted: adjusted,
+            isModified: (line != adjusted)
         }
     });
 }
@@ -87,8 +80,7 @@ function clickBtn_adjustNombre(){
         elem.querySelector(".inputLines").value,
         elem.querySelector(".startNombre").value,
         elem.querySelector(".endNombre").value,
-        elem.querySelector(".nombreDelta").value,
-        elem.querySelector(".fullWidthCommaFlag").checked
+        elem.querySelector(".nombreDelta").value
     );
     const adjustedLines = adjustedArray.map(item => item.adjusted).join("\n");
     elem.querySelector("textarea.result").value = adjustedLines;
