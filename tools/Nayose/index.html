@@ -116,7 +116,7 @@ function nayose (lines, nombreOnLeft = false) {
 }
 
 function nayoseFromTop(lines, nombreOnLeft = false) {
-    const lineArray = lines.split(/[\r?\n]+/g).filter(line => line).filter(line => !line.match(/^\s+$/));
+    const lineArray = lines.split(/[\r\n]+/g).filter(line => line).filter(line => !line.match(/^\s+$/));
     const stack = [];
     for (let i = 0; i < lineArray.length; i++) {
         const line = lineArray[i];
