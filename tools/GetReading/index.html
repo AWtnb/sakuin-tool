@@ -71,7 +71,7 @@ function setReading(outputArea, inputLines, removeNombre=false){
         });
     });
     promise.then(tokenizer => {
-        const result = inputLines.split(/\r?\n/g).map(line => {
+        const result = inputLines.split(/[\r\n]+/g).map(line => {
             return tokenizer.tokenize(line).map(getReading).join("");
         });
         if (removeNombre) {
