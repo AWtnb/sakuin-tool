@@ -6,6 +6,21 @@
     <title>おまかせモード</title>
     <link rel="shortcut icon" href="/tools/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/tools/style.css">
+<style>
+    ol li::marker {
+        font-weight: bold;
+    }
+    div.notation {
+        font-size: .9em;
+        color: #586e75;
+        text-indent: -1em;
+        margin-left: 1em;
+    }
+    div.notation::before {
+        content: "\203b";
+        font-weight: bold;
+    }
+</style>
 </head>
 
 <body>
@@ -19,46 +34,115 @@
         <img src = "./image/img_auto.png">
     </div>
     <ul>
-        <li><code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。 </li>
-        <li>下記の操作を自動で行って整形済みの索引を出力します。</li>
-        <ul>
+        <li><code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
+        <li>自動で下記の整形を行って索引を出力します。</li>
+        <ol>
             <li>名寄せ</li>
             <ul>
                 <li>ノンブル部分のソート</li>
                 <li>3以上連続するノンブル部分のハイフネーション</li>
+                <div class="notation">太字にするなどの目的でノンブルに数字以外が含まれていた場合、上記2点の整形は行いません。</div>
+                <div class="notation">カンマは半角に統一されます。</div>
             </ul>
             <li>よみがな取得</li>
             <li>配列読みに変換</li>
             <li>並べ替え</li>
-        </ul>
-        <li>太字にするなどの目的でノンブルに数字以外が含まれていた場合、ソートやハイフネーションは行いません。</li>
+        </ol>
         <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
-        <li><strong>各種整形操作をまとめて適用します。必ず目でも再確認してください。</strong></li>
     </ul>
 </div>
 
 <div class="ui">
     <div class="horizontal">
-        <div class="vertical">
-            <textarea class="inputLines" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
-            <input type="button" value="名寄せ" onclick="click_nayose()">
-        </div>
-        <div class="vertical">
-            <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="click_copy()">
-        </div>
+        <textarea class="inputLines" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
     </div>
+    <input type="button" value="整形" onclick="click_execute()">
+    <div class="status"></div>
+    <table class="result">
+        <tr>
+            <td>項目</td>
+            <td>読み</td>
+            <td>配列読み</td>
+        </tr>
+    </table>
+    <input type="button" value="表をコピー" onclick="click_copy()">
 </div>
 
 </div>
 <!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
+<script type="text/javascript" src="/tools/util.js" defer></script>
+<script type="text/javascript" src="/tools/Nayose/src.js" defer></script>
+<script type="text/javascript" src="/tools/Hairetsu/src.js" defer></script>
+<script type="text/javascript" src="/tools/Sort/src.js" defer></script>
+<script type="text/javascript" src="/tools/GetReading/kuromoji.js" defer></script>
+<script type="text/javascript" src="/tools/GetReading/src.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
+function showStatus(s) {
+    const elem = document.querySelector(".status");
+    elem.innerHTML = s ;
+}
 
+function updateTable(elem, obj) {
+    resetTable(elem);
+    obj.forEach((item, idx) => {
+        const row = elem.insertRow(-1);
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+        cell1.innerHTML = item.Item;
+        cell2.innerHTML = item.Reading;
+        cell3.innerHTML = item.Norm;
+    });
 
+}
 
+function setValue(tokenizer) {
+    const elem = document.querySelector(".ui");
+    const lines = elem.querySelector(".inputLines").value;
+
+    const grouped = nayose(lines, false);
+
+    const obj = grouped.map(line => {
+        const trimmed = line.replace(/　　\d.*$/g, "");
+        const reading = tokenizer.tokenize(trimmed).map( getReading ).join("");
+        const norm = toHairetsu(reading, false);
+        return {
+           Item: line,
+           Reading: reading,
+           Norm: norm
+        }
+    });
+
+    const sorted = sortByReading(obj);
+
+    const outputTable = elem.querySelector("table.result")
+    updateTable(outputTable, sorted);
+
+    showStatus("");
+}
+
+function click_execute() {
+    showStatus("（\u{1f914}よみがな計算中…）");
+    const promise = new Promise((resolve, reject) => {
+        kuromoji.builder({ dicPath: "/tools/GetReading/dict" }).build((err, tokenizer) => {
+            if (err) {
+                return reject("failed to build tokenizer...");
+            }
+            return resolve(tokenizer);
+        });
+    });
+    promise.then( setValue ).catch(e => {
+        showStatus("解析失敗…\nやり直してみてください！");
+        console.log(e);
+    });
+}
+
+function click_copy() {
+    const table = document.querySelector("table.result");
+    copyTable(table);
+}
 
 </script>
 </body>
