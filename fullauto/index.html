@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>おまかせモード</title>
+    <link rel="shortcut icon" href="/tools/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/tools/style.css">
+</head>
+
+<body>
+<!-- ============================== -->
+<div class="container">
+
+<h2>おまかせモード</h2>
+<div class="caption">
+    <div class="imagebox">
+        <div class="boxtitle">SAMPLE</div>
+        <img src = "./image/img_auto.png">
+    </div>
+    <ul>
+        <li><code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。 </li>
+        <li>下記の操作を自動で行って整形済みの索引を出力します。</li>
+        <ul>
+            <li>名寄せ</li>
+            <ul>
+                <li>ノンブル部分のソート</li>
+                <li>3以上連続するノンブル部分のハイフネーション</li>
+            </ul>
+            <li>よみがな取得</li>
+            <li>配列読みに変換</li>
+            <li>並べ替え</li>
+        </ul>
+        <li>太字にするなどの目的でノンブルに数字以外が含まれていた場合、ソートやハイフネーションは行いません。</li>
+        <li><strong>各種整形操作をまとめて適用します。必ず目でも再確認してください。</strong></li>
+    </ul>
+</div>
+
+<div class="ui">
+    <div class="horizontal">
+        <div class="vertical">
+            <textarea class="inputLines" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
+            <input type="button" value="名寄せ" onclick="click_nayose()">
+        </div>
+        <div class="vertical">
+            <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" onclick="click_copy()">
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- ============================== -->
+<script type="text/javascript" src="../util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+
+
+
+
+
+</script>
+</body>
+
+</html>
