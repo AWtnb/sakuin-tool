@@ -6,6 +6,18 @@
     <title>名寄せ</title>
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
+    <style>
+        ul div {
+            font-size: .9em;
+            color: #586e75;
+            text-indent: -1em;
+            margin-left: 1em;
+        }
+        ul div::before {
+            content: "\203b";
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,16 +26,22 @@
 
 <h2>名寄せ</h2>
 <div class="caption">
-    <ul>
-        <li>ノンブルを昇順で名寄せします。重複を整理し、3以上連続するノンブルをハイフンでつなぎます。</li>
-        <li>ノンブルに半角数字以外が含まれている場合、「重複整理」と「ハイフンつなぎ」は行いません。</li>
-        <li>項目列ではソートしません。</li>
-        <li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
-    </ul>
     <div class="imagebox">
         <div class="boxtitle">SAMPLE</div>
         <img src = "./image/img_nayose.png">
     </div>
+    <ul>
+        <li><code>項目</code>列の情報で名寄せします。</li>
+        <li><code>ノンブル</code>列の情報に対して、下記の微調整を行います。</li>
+        <ul>
+            <li>ノンブル部分のソート・重複整理</li>
+            <li>3以上連続するノンブル部分のハイフネーション</li>
+            <div class="notation">太字にするなどの目的でノンブルに数字以外が含まれていた場合、上記2点の整形は行いません。</div>
+            <div class="notation">カンマは半角に統一されます。</div>
+        </ul>
+        <li>このツールはソートを行いません。</li>
+        <li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
+    </ul>
 </div>
 
 <div class="ui">
