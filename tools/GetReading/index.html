@@ -15,8 +15,8 @@
 
 <div class="caption">
     <ul>
-        <li>最初の計算時は解析辞書読み込みのために少し時間がかかります。</li>
-        <li>正しく読み情報が取得できているか必ず事後確認をしてください。</li>
+        <li>最初に解析辞書を読み込むため少し時間がかかります。</li>
+        <li>正しく読み情報が取得できているか必ず後から確認してください。</li>
     </ul>
 </div>
 
@@ -25,7 +25,7 @@
     <div class="horizontal">
         <div class="vertical">
             <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
-            <input type="button" value="取得" onclick="click_get()">
+            <input type="button" value="取得" onclick="click_setReading()">
         </div>
         <div class="vertical">
             <textarea class="result" placeholder="ここに結果が表示されます" readonly></textarea>
@@ -40,6 +40,10 @@
 <script src="./kuromoji.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
+
+function showMessage(s) {
+    document.querySelector(".ui .result").value = s;
+}
 
 function getReading(token) {
     console.log(token.surface_form, token.word_type, token.pos, token.reading);
@@ -56,41 +60,37 @@ function getReading(token) {
     return token.reading;
 }
 
-function setReading(outputArea, inputLines, removeNombre=false){
-    outputArea.value = "（\u{1f914}よみがな計算中…）";
-    const promise = new Promise((resolve, reject) => {
-        kuromoji.builder({ dicPath: "./dict" }).build(function(err, _tokenizer){
-            if (err) {
-                reject("failed to build tokenizer...");
-            }
-            else {
-                resolve(_tokenizer);
-            }
-        });
-    });
-    promise.then(tokenizer => {
-        const result = inputLines.split(/[\r\n]+/g).map(line => {
-            return tokenizer.tokenize(line).map(getReading).join("");
-        });
-        if (removeNombre) {
-            const trimmed = result.map(line => line.replace(/　　\d.+$/g, ""));
-            outputArea.value = trimmed.join("\n")
-        }
-        else {
-            outputArea.value = result.join("\n")
-        }
-    })
-    .catch((e) => {
-        outputArea.value = "解析失敗…\nやり直してみてください！";
-        console.log(e);
-    });
-}
-
-function click_get() {
+function setValue(tokenizer) {
     const elem = document.querySelector(".ui");
     const lines = elem.querySelector(".inputLines").value;
-    const removeFlag = elem.querySelector(".removeFlag").checked;
-    setReading(elem.querySelector(".result"), lines, removeFlag);
+    const removeNombre = elem.querySelector(".removeFlag").checked;
+    const outputArea = elem.querySelector(".result")
+    const result = lines.split(/[\r\n]+/g).map(line => {
+        return tokenizer.tokenize(line).map(getReading).join("");
+    });
+    if (removeNombre) {
+        const trimmed = result.map(line => line.replace(/　　\d.+$/g, ""));
+        outputArea.value = trimmed.join("\n")
+    }
+    else {
+        outputArea.value = result.join("\n")
+    }
+}
+
+function click_setReading() {
+    showMessage("（\u{1f914}よみがな計算中…）");
+    const promise = new Promise((resolve, reject) => {
+        kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {
+            if (err) {
+                return reject("failed to build tokenizer...");
+            }
+            return resolve(tokenizer);
+        });
+    });
+    promise.then( setValue ).catch(e => {
+        showMessage("解析失敗…\nやり直してみてください！");
+        console.log(e);
+    });
 }
 function click_copy() {
     copyElem(document.querySelector(".ui .result"))
