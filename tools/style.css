@@ -186,3 +186,11 @@ table tbody {
 .ui .horizontal .vertical textarea {
   margin: 4px auto;
 }
+.warning {
+  font-size: 12px;
+  margin-top: 100px;
+}
+.warning hr {
+  border: none;
+  border-top: 1px solid #839496;
+}
