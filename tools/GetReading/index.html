@@ -55,7 +55,7 @@ function setValue(tokenizer) {
         return tokenizer.tokenize(line).map(getReading).join("");
     });
     if (removeNombre) {
-        const trimmed = result.map(line => line.replace(/　　\d.+$/g, ""));
+        const trimmed = result.map(line => line.replace(/　　\d.*$/g, ""));
         outputArea.value = trimmed.join("\n")
     }
     else {
