@@ -126,7 +126,7 @@ function setValue(tokenizer) {
 function click_execute() {
     showStatus("（\u{1f914}よみがな計算中…）");
     const promise = new Promise((resolve, reject) => {
-        kuromoji.builder({ dicPath: "/tools/GetReading/dict" }).build((err, tokenizer) => {
+        kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
             if (err) {
                 return reject("failed to build tokenizer...");
             }
