@@ -37,16 +37,24 @@
         <li><code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
         <li>自動で下記の整形を行って索引を出力します。</li>
         <ol>
-            <li>名寄せ</li>
-            <ul>
-                <li>ノンブル部分のソート・重複整理</li>
-                <li>3以上連続するノンブル部分のハイフネーション</li>
-                <div class="notation">太字にするなどの目的でノンブルに数字以外が含まれていた場合、上記2点の整形は行いません。</div>
-                <div class="notation">カンマは半角に統一されます。</div>
-            </ul>
-            <li>よみがな取得</li>
-            <li>配列読みに変換</li>
-            <li>並べ替え</li>
+            <li><a href="../tools/Nayose/index.html">名寄せ</a>
+                <ul>
+                    <li>ノンブル部分のソート・重複整理</li>
+                    <li>3以上連続するノンブル部分のハイフネーション</li>
+                    <div class="notation">太字にするなどの目的でノンブルに数字以外が含まれていた場合、上記2点の整形は行いません。</div>
+                    <div class="notation">カンマは半角に統一されます。</div>
+                </ul>
+            </li>
+            <li><a href="../tools/GetReading/index.html">よみがな取得</a></li>
+            <li><a href="../tools/Hairetsu/index.html">配列読みに変換</a></li>
+            <div class="notation">ひらがな・カタカナ・数字以外の記号は削除されます。</div>
+            <li><a href="../tools/Sort/index.html">並べ替え</a>
+                <ul>
+                    <li>最優先は<code>配列読み</code>の情報。</li>
+                    <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+                    <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+                </ul>
+            </li>
         </ol>
         <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
     </ul>
@@ -107,7 +115,7 @@ function setValue(tokenizer) {
     const obj = grouped.map(line => {
         const trimmed = line.replace(/　　\d.*$/g, "");
         const reading = tokenizer.tokenize(trimmed).map( getReading ).join("");
-        const norm = toHairetsu(reading, false);
+        const norm = toHairetsu(reading, true);
         return {
            Item: line,
            Reading: reading,
