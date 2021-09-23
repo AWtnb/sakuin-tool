@@ -77,7 +77,7 @@ function click_nayose() {
     const elem = document.querySelector(".ui");
     const lines = elem.querySelector(".inputLines").value;
     const nayosed = (elem.querySelector(".isOrdered").checked)?
-        nayoseFromTop(lines, elem.querySelector(".isLeft").checked) :
+        nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
         nayose(lines, elem.querySelector(".isLeft").checked);
     elem.querySelector(".result").value = nayosed.join("\n");
 }

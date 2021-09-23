@@ -1,11 +1,14 @@
-function hasNaN(array) {
-    const reg = new RegExp(/[^\d]/)
-    return reg.test(array.join(""))
+
+function isConsecutive (a, b, c) {
+    if(/[^\d]/.test(a) || /[^\d]/.test(b) || /[^\d]/.test(c)) {
+        return false;
+    }
+    return (Number(a)+1 == b && Number(a)+2 == c);
 }
 
 function hyphenateConsecutive (inputArray) {
     if (inputArray.length < 3) {
-        return inputArray
+        return inputArray.join(", ");
     }
     const stack = [];
     stack.push({
@@ -14,12 +17,9 @@ function hyphenateConsecutive (inputArray) {
     });
     for (let i = 0; i <= inputArray.length - 3; i++) {
         const [current, next1, next2] = inputArray.slice(i, i+3);
-        const isConsecutive = (hasNaN(inputArray.slice(i, i+3)))?
-            false :
-            (Number(current)+1 == next1 && Number(current)+2 == next2)
         stack.push({
             Item: next1,
-            Hyphenate: isConsecutive
+            Hyphenate: isConsecutive(current, next1, next2)
         });
     }
     stack.push({
@@ -27,7 +27,15 @@ function hyphenateConsecutive (inputArray) {
         Hyphenate: false
     });
     const nombres = stack.map(x => ((x.Hyphenate)? "-" : x.Item));
-    return Array.from(new Set(nombres))
+    return nombres.reduce((acc, cur) => {
+        if (acc.endsWith(cur)) {
+            return acc;
+        }
+        if (cur == "-" || acc.endsWith("-")) {
+            return acc + cur;
+        }
+        return acc + ", " + cur;
+    });
 }
 
 function asNumber(s) {
@@ -58,13 +66,13 @@ function nayose (lines, nombreOnLeft = false) {
         }
         else {
             const hyphenated = hyphenateConsecutive(uniq);
-            ret.push(k + "　　" + hyphenated.join(", ").replace(", -, ", "-"));
+            ret.push(k + "　　" + hyphenated);
         }
     })
     return ret;
 }
 
-function nayoseFromTop(lines, nombreOnLeft = false) {
+function nayoseByOrder(lines, nombreOnLeft = false) {
     const lineArray = lines.split(/[\r\n]+/g).filter(line => line).filter(line => !line.match(/^\s+$/));
     const stack = [];
     for (let i = 0; i < lineArray.length; i++) {
@@ -90,7 +98,7 @@ function nayoseFromTop(lines, nombreOnLeft = false) {
             return item;
         }
         const hyphenated = hyphenateConsecutive(uniq);
-        return (item + "　　" + hyphenated.join(", ").replace(", -, ", "-"));
+        return (item + "　　" + hyphenated);
     });
 
 }
