@@ -32,7 +32,6 @@
 <div class="ui">
     <textarea class="inputLines" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
     <input type="button" value="名開き" onclick="click_release()">
-    
     <table class="result">
         <tr>
             <td>項目</td>
@@ -59,13 +58,21 @@ function releaseNayoseLines (multiLines) {
             return
         }
         const [name, nombres, ...rest] = line.split("\t");
-        if (!nombres) {
+        if (nombres.length < 1) {
             releasedObj.push({name: name, nombre: ""});
             return
         }
         const nombreArray = nombres.replace(/\s+/g, "").replace(/，/g, ",").split(",");
         nombreArray.forEach(n => {
-            releasedObj.push({name: name, nombre: n});
+            if (/[\u2013\u2014\u002d\u2010]/.test(n)) {
+                const [start, end] = n.split(/[\u2013\u2014\u002d\u2010]/);
+                for (let i = start; i <= end; i++) {
+                    releasedObj.push({name: name, nombre: i});
+                }
+            }
+            else {
+                releasedObj.push({name: name, nombre: n});
+            }
         });
     });
     return releasedObj
