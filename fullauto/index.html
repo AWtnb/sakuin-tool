@@ -136,12 +136,13 @@ function checkReferences(lines) {
 
 function main(tokenizer, lines, outputElem) {
     showStatus("");
-    const items = nayose(lines, false).map(line => line.replace(/　　\d.*$/g, ""));
-    const tokenized = tokenizeLines(tokenizer, items).map(t => {
+    const grouped = nayose(lines, false);
+    const tokenized = tokenizeLines(tokenizer, grouped).map(t => {
+        const r = t.Reading.replace(/　　\d.*$/g, "");
         return {
            "Item": t.Item,
-           "Reading": t.Reading,
-           "Norm": toHairetsu(t.Reading, true)
+           "Reading": r,
+           "Norm": toHairetsu(r, true)
         }
     });
     const sorted = sortByReading(tokenized);
@@ -153,6 +154,8 @@ function click_execute() {
     const elem = document.querySelector(".ui");
     const outputTable = elem.querySelector("table.result")
     const lines = splitline(elem.querySelector(".inputLines").value);
+    elem.querySelector("div.result .lostTo").innerHTML = "<p></p>";
+    elem.querySelector("div.result .lostFrom").innerHTML = "<p></p>";
     showStatus("（\u{1f914}よみがな計算中…）");
     resetTable(outputTable)
     kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
