@@ -1,3 +1,7 @@
+function splitline(multiline) {
+    return multiline.split(/[\r\n]+/g);
+}
+
 function escapeMeta(str) {
     return str.replace(/[-[\]{}()*+?.,\\^$|]/g, "\\$&");
 }
