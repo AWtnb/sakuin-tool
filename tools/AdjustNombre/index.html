@@ -100,7 +100,7 @@ function clickBtn_adjustNombre(){
     const elem = document.querySelector(".ui");
 
     const adjustedArray = adjustNombre(
-        splitline(elem.querySelector(".inputLines").value),
+        arrayByLine(elem.querySelector(".inputLines").value),
         elem.querySelector(".startNombre").value,
         elem.querySelector(".endNombre").value,
         elem.querySelector(".nombreDelta").value

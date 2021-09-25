@@ -1,4 +1,4 @@
-function splitline(multiline) {
+function arrayByLine(multiline) {
     return multiline.split(/[\r\n]+/g);
 }
 

@@ -77,7 +77,7 @@ function highlightInvalidNombreLine(lines) {
 
 function click_check() {
     const elem = document.querySelector(".ui");
-    const lines = splitline(elem.querySelector(".inputLines").value);
+    const lines = arrayByLine(elem.querySelector(".inputLines").value);
     elem.querySelector(".result").innerHTML = highlightInvalidNombreLine(lines);
 }
 

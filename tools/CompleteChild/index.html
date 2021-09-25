@@ -76,7 +76,7 @@ function completeChildItem (lines, delim) {
 function click_complete() {
     const elem = document.querySelector(".ui");
     const delimiter = elem.querySelector("form.delimiter").type.value;
-    const lines = splitline(elem.querySelector(".inputLines").value);
+    const lines = arrayByLine(elem.querySelector(".inputLines").value);
     elem.querySelector(".result").value = completeChildItem(lines, delimiter).join("\n");
 }
 
