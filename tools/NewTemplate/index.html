@@ -60,17 +60,17 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function generateTemplare(multiLines) {
+function generateTemplare(lines) {
     const templateArray = [];
-    const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
     lines
-    .filter(line => !(line.match(/(\t)0/)))
+    .filter(line => line)
+    .filter(line => !(/(\t)0/.test(line)))
     .forEach((line, index) => {
         const [page, counter, ...rest] = line.split("\t");
         const nItem = toHankaku(counter);
         if (nItem.match(/^\d+$/)) {
             for (let i = 0; i < Number(nItem); i++) {
-                templateArray.push({index:(index + 1), page:page});
+                templateArray.push({"Index":(index + 1), "Page":page});
             }
         }
     });
@@ -79,7 +79,7 @@ function generateTemplare(multiLines) {
 
 function click_generate() {
     const elem = document.querySelector(".ui");
-    const lines = elem.querySelector(".inputLines").value;
+    const lines = splitline(elem.querySelector(".inputLines").value);
 
     const outputTable = elem.querySelector("table.result");
     resetTable(outputTable)
@@ -91,8 +91,8 @@ function click_generate() {
         const cell3 = row.insertCell(2);
         const cell4 = row.insertCell(3);
         cell1.innerHTML = (idx + 1);
-        cell2.innerHTML = line.index;
-        cell3.innerHTML = line.page;
+        cell2.innerHTML = line.Index;
+        cell3.innerHTML = line.Page;
         cell4.innerHTML = "";
     });
 }

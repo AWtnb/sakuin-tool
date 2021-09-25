@@ -70,9 +70,8 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function adjustNombre(multiline, startNombre, endNombre, delta) {
-    const lineArray = multiline.split(/[\r\n]+/g);
-    return lineArray.filter(x => x).map(line => {
+function adjustNombre(lines, startNombre, endNombre, delta) {
+    return lines.filter(x => x).map(line => {
         const [item, nombres, ...rest] = line.split("　　");
         if (!nombres) {
             return {
@@ -101,7 +100,7 @@ function clickBtn_adjustNombre(){
     const elem = document.querySelector(".ui");
 
     const adjustedArray = adjustNombre(
-        elem.querySelector(".inputLines").value,
+        splitline(elem.querySelector(".inputLines").value),
         elem.querySelector(".startNombre").value,
         elem.querySelector(".endNombre").value,
         elem.querySelector(".nombreDelta").value

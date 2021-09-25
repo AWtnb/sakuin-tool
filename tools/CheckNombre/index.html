@@ -59,10 +59,8 @@ function hasConsecutiveTriplet(array) {
     return false
 }
 
-function highlightInvalidNombreLine(multilines) {
-    const invalidLines = multilines.split(/[\r\n]+/g)
-        .filter(line => line)
-        .map(line => {
+function highlightInvalidNombreLine(lines) {
+    const invalidLines = lines.filter(line => line).map(line => {
             const nombres = line.replace(/^.+?　　/, "").replace(/\s+/, "").replace(/，/g, ",");
             const nombreArray = nombres.replace(/-/g, ",").split(",");
             const ret = [line];
@@ -79,7 +77,7 @@ function highlightInvalidNombreLine(multilines) {
 
 function click_check() {
     const elem = document.querySelector(".ui");
-    const lines = elem.querySelector(".inputLines").value;
+    const lines = splitline(elem.querySelector(".inputLines").value);
     elem.querySelector(".result").innerHTML = highlightInvalidNombreLine(lines);
 }
 

@@ -47,23 +47,6 @@ function showMessage(s) {
     document.querySelector(".ui .result").value = s;
 }
 
-function setValue(tokenizer) {
-    const elem = document.querySelector(".ui");
-    const lines = elem.querySelector(".inputLines").value;
-    const removeNombre = elem.querySelector(".removeFlag").checked;
-    const outputArea = elem.querySelector(".result")
-    const result = lines.split(/[\r\n]+/g).map(line => {
-        return tokenizer.tokenize(line).map(getReading).join("");
-    });
-    if (removeNombre) {
-        const trimmed = result.map(line => line.replace(/　　\d.*$/g, ""));
-        outputArea.value = trimmed.join("\n")
-    }
-    else {
-        outputArea.value = result.join("\n")
-    }
-}
-
 function main(tokenizer, lines, outputArea, removeNombre) {
     const target = (removeNombre)? lines.map(line => line.replace(/　　\d.*$/g, "")) : lines;
     const t = tokenizeLines(tokenizer, target);

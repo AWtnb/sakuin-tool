@@ -47,9 +47,8 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function releaseNayoseLines (multiLines) {
+function releaseNayoseLines (lines) {
     const releasedObj = [];
-    const lines = multiLines.split(/[\r\n]+/g);
     lines.filter(line => line)
     .map(line => line.replace("　　", "\t"))
     .forEach(line => {
@@ -81,7 +80,7 @@ function releaseNayoseLines (multiLines) {
 function click_release() {
     const elem = document.querySelector(".ui");
 
-    const lines = elem.querySelector(".inputLines").value;
+    const lines = splitline(elem.querySelector(".inputLines").value);
     const releasedObj = releaseNayoseLines(lines);
 
     const outputTable = elem.querySelector(".result");

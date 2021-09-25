@@ -51,16 +51,16 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function completeChildItem (multiLines, delim) {
-    const lines = multiLines.split(/[\r\n]+/g).filter(line => line);
+function completeChildItem (lines, delim) {
+    const netArr = lines.filter(line => line);
     const delimiter = (delim == "spaces")? "　　": "\t";
     const regAfterDelim = new RegExp(`${delimiter}.+$`, "g");
     const regFiller = new RegExp("(\u2500|\u2015|\u2500)+");
     const completedArray = [];
-    completedArray.push(lines[0]);
-    let lastParentItem = lines[0].replace(regAfterDelim, "");
-    for (let i = 1; i < lines.length; i++) {
-        const currentLine = lines[i];
+    completedArray.push(netArr[0]);
+    let lastParentItem = netArr[0].replace(regAfterDelim, "");
+    for (let i = 1; i < netArr.length; i++) {
+        const currentLine = netArr[i];
         if (currentLine.match(regFiller)) {
             const completedItem = currentLine.replace(/^\s+/, "").replace(regFiller, lastParentItem);
             completedArray.push(completedItem);
@@ -76,7 +76,7 @@ function completeChildItem (multiLines, delim) {
 function click_complete() {
     const elem = document.querySelector(".ui");
     const delimiter = elem.querySelector("form.delimiter").type.value;
-    const lines = elem.querySelector(".inputLines").value;
+    const lines = splitline(elem.querySelector(".inputLines").value);
     elem.querySelector(".result").value = completeChildItem(lines, delimiter).join("\n");
 }
 
