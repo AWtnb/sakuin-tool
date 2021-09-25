@@ -1,10 +1,10 @@
-function getRegexForReference(from, to, searchReferencingItem = false) {
+function getRegexForReference(from, to, searchReferenced = false) {
     const f = escapeMeta(from);
     const t = escapeMeta(to);
-    if (searchReferencingItem) {
-        return new RegExp(`${f}\\s*→\\s*${t}`);
+    if (searchReferenced) {
+        return new RegExp(`^${t}[（［].*${f}.*[）］]`);
     }
-    return new RegExp(`^${t}[（［].*${f}.*[）］]`);
+    return new RegExp(`${f}\\s*→\\s*${t}`);
 }
 
 // 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
@@ -19,7 +19,7 @@ function findLostReferenceTo(lines) {
             "To": arr[1]
         };
     }).map(line => {
-        const reg = getRegexForReference(line.From, line.To, false)
+        const reg = getRegexForReference(line.From, line.To, true)
         const grep = items.filter(l => reg.test(l));
         if (grep.length > 0) {
             return null;
@@ -42,7 +42,7 @@ function findLostReferenceFrom(lines) {
             "To": line.replace(/[［（\(].+$/, "")
         };
     }).map(line => {
-        const reg = getRegexForReference(line.From, line.To, true);
+        const reg = getRegexForReference(line.From, line.To, false);
         const grep = items.filter(l => reg.test(l));
         if (grep.length > 0) {
             return null;
