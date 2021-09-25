@@ -66,8 +66,7 @@ function uniqueOrdered(arr) {
 
 function nayose (lines, nombreOnLeft = false) {
     const map = new Map()
-    const lineArray = lines.split(/[\r\n]+/g);
-    lineArray.filter(line => line).filter(line => !line.match(/^\s+$/)).forEach(line => {
+    lines.filter(line => line).filter(line => !line.match(/^\s+$/)).forEach(line => {
         const l = parseLine(line, nombreOnLeft);
         if (!map.has(l.Item)) {
             map.set(l.Item, [l.Nombre]);
@@ -91,10 +90,10 @@ function nayose (lines, nombreOnLeft = false) {
 }
 
 function nayoseByOrder(lines, nombreOnLeft = false) {
-    const lineArray = lines.split(/[\r\n]+/g).filter(line => line).filter(line => !line.match(/^\s+$/));
+    const netArr = lines.filter(line => line).filter(line => !line.match(/^\s+$/));
     const stack = [];
-    for (let i = 0; i < lineArray.length; i++) {
-        const l = parseLine(lineArray[i], nombreOnLeft);
+    for (let i = 0; i < netArr.length; i++) {
+        const l = parseLine(netArr[i], nombreOnLeft);
         if (i == 0) {
             stack.push({
                 "Item": l.Item,
