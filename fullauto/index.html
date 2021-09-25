@@ -21,6 +21,11 @@
         content: "\203b";
         font-weight: bold;
     }
+    .lostTo, .lostFrom {
+        font-weight: bold;
+        font-size: .8em;
+        margin-top: 1em;
+    }
 </style>
 </head>
 
@@ -75,6 +80,12 @@
         </tr>
     </table>
     <input type="button" value="表をコピー" onclick="click_copy()">
+    <div class="result">
+        <div class="lostTo">
+        </div>
+        <div class="lostFrom">
+        </div>
+    </div>
 </div>
 
 </div>
@@ -95,7 +106,6 @@ function showStatus(s) {
 }
 
 function updateTable(elem, obj) {
-    resetTable(elem);
     obj.forEach((item, idx) => {
         const row = elem.insertRow(-1);
         const cell1 = row.insertCell(0);
@@ -108,13 +118,11 @@ function updateTable(elem, obj) {
 
 }
 
-function setValue(tokenizer) {
-    const elem = document.querySelector(".ui");
-    const lines = elem.querySelector(".inputLines").value;
+function setValue(tokenizer, lines, outputElem) {
 
     const grouped = nayose(lines, false);
 
-    const obj = grouped.map(line => {
+    const info = grouped.map(line => {
         const trimmed = line.replace(/　　\d.*$/g, "");
         const reading = tokenizer.tokenize(trimmed).map( getReading ).join("");
         const norm = toHairetsu(reading, true);
@@ -125,27 +133,46 @@ function setValue(tokenizer) {
         }
     });
 
-    const sorted = sortByReading(obj);
+    const sorted = sortByReading(info);
 
-    const outputTable = elem.querySelector("table.result")
-    updateTable(outputTable, sorted);
+    updateTable(outputElem, sorted);
 
     showStatus("");
+
+    return sorted.map(x => x.Item);
+}
+
+function checkReferences(lines) {
+    const elem = document.querySelector("div.result");
+    const lostTo = findLostReferenceTo(lines).map(item => markupLostReference(item, "red"));
+    if (lostTo.length) {
+        elem.querySelector(".lostTo").innerHTML = [
+            "<label>見よ項目があるのに参照先に括弧で付記されていないものがあります！</label>"
+        ].concat(lostTo).join("\n");
+    }
+    const lostFrom = findLostReferenceFrom(lines).map(item => markupLostReference(item, "blue"));
+    if (lostFrom.length) {
+        elem.querySelector(".lostFrom").innerHTML = [
+            "<label>参照元として括弧書きされているのに見よ項目がないものがあります！</label>"
+        ].concat(lostFrom).join("\n");
+    }
+
 }
 
 function click_execute() {
+    const elem = document.querySelector(".ui");
+    const outputTable = elem.querySelector("table.result")
+    const lines = splitline(elem.querySelector(".inputLines").value);
     showStatus("（\u{1f914}よみがな計算中…）");
-    const promise = new Promise((resolve, reject) => {
-        kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
-            if (err) {
-                return reject("failed to build tokenizer...");
-            }
-            return resolve(tokenizer);
-        });
-    });
-    promise.then( setValue ).catch(e => {
-        showStatus("解析失敗…\nやり直してみてください！");
-        console.log(e);
+    resetTable(outputTable)
+    kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
+        if (err) {
+            showStatus("解析失敗…\nやり直してみてください！");
+        }
+        else {
+            const items = setValue(tokenizer, lines, outputTable);
+            checkReferences(items);
+        }
     });
 }
 
