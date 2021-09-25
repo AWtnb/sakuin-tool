@@ -137,8 +137,14 @@ function checkReferences(lines) {
 function main(tokenizer, lines, outputElem) {
     showStatus("");
     const items = nayose(lines, false).map(line => line.replace(/　　\d.*$/g, ""));
-    const t = tokenizeLines(tokenizer, items);
-    const sorted = sortByReading(t);
+    const tokenized = tokenizeLines(tokenizer, items).map(t => {
+        return {
+           "Item": t.Item,
+           "Reading": t.Reading,
+           "Norm": toHairetsu(t.Reading, true)
+        }
+    });
+    const sorted = sortByReading(tokenized);
     updateTable(outputElem, sorted);
     checkReferences(sorted.map(x => x.Item));
 }

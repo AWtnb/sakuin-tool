@@ -1,15 +1,3 @@
-function tokenizeLines(tokenizer, lines) {
-    return lines.map(line => {
-        const reading = tokenizer.tokenize(line).map( getReading ).join("");
-        const norm = toHairetsu(reading, true);
-        return {
-           "Item": line,
-           "Reading": reading,
-           "Norm": norm
-        }
-    });
-}
-
 function getReading(token) {
     console.log(token.surface_form, token.word_type, token.pos, token.reading);
     const surface = token.surface_form;
@@ -23,4 +11,14 @@ function getReading(token) {
         return token.surface_form;
     }
     return token.reading;
+}
+
+function tokenizeLines(tokenizer, lines) {
+    return lines.map(line => {
+        const reading = tokenizer.tokenize(line).map( getReading ).join("");
+        return {
+           "Item": line,
+           "Reading": reading
+        }
+    });
 }
