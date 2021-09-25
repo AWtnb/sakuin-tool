@@ -64,19 +64,26 @@ function setValue(tokenizer) {
     }
 }
 
+function main(tokenizer, lines, outputArea, removeNombre) {
+    const target = (removeNombre)? lines.map(line => line.replace(/　　\d.*$/g, "")) : lines;
+    const t = tokenizeLines(tokenizer, target);
+    outputArea.value = t.map(x => x.Reading).join("\n");
+}
+
 function click_setReading() {
     showMessage("（\u{1f914}よみがな計算中…）");
-    const promise = new Promise((resolve, reject) => {
-        kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {
-            if (err) {
-                return reject("failed to build tokenizer...");
-            }
-            return resolve(tokenizer);
-        });
-    });
-    promise.then( setValue ).catch(e => {
-        showMessage("解析失敗…\nやり直してみてください！");
-        console.log(e);
+    const elem = document.querySelector(".ui");
+    const lines = splitline(elem.querySelector(".inputLines").value);
+    const removeNombre = elem.querySelector(".removeFlag").checked;
+    const outputArea = elem.querySelector(".result")
+    kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {
+        if (err) {
+            console.log(err);
+            showMessage("解析失敗…\nやり直してみてください！");
+        }
+        else {
+            main(tokenizer, lines, outputArea, removeNombre);
+        }
     });
 }
 function click_copy() {
