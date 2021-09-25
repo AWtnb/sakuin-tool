@@ -77,14 +77,14 @@ function nayose (lines, nombreOnLeft = false) {
         }
     });
     const ret = [];
-    map.forEach((v, k) => {
-        const uniq = uniqueOrdered(v);
+    map.forEach((nombres, item) => {
+        const uniq = uniqueOrdered(nombres);
         if (uniq.length < 1) {
-            ret.push(k);
+            ret.push(item);
         }
         else {
             const hyphenated = hyphenateConsecutive(uniq);
-            ret.push(k + "　　" + hyphenated);
+            ret.push(item + "　　" + hyphenated);
         }
     })
     return ret;
