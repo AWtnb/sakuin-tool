@@ -3,9 +3,9 @@ function fromTsv (tsv) {
     return lines.map(line => {
         const [item, reading, norm,  ...rest] = line.split("\t"); // 配列読み＝正規化＝normalized
         return {
-           Item: item,
-           Reading: reading,
-           Norm: norm
+           "Item": item,
+           "Reading": reading,
+           "Norm": norm
         }
     });
 }

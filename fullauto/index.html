@@ -85,6 +85,7 @@
 <script type="text/javascript" src="../tools/Sort/src.js" defer></script>
 <script type="text/javascript" src="../tools/GetReading/kuromoji.js" defer></script>
 <script type="text/javascript" src="../tools/GetReading/src.js" defer></script>
+<script type="text/javascript" src="../tools/CheckMiyo/src.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
@@ -118,9 +119,9 @@ function setValue(tokenizer) {
         const reading = tokenizer.tokenize(trimmed).map( getReading ).join("");
         const norm = toHairetsu(reading, true);
         return {
-           Item: line,
-           Reading: reading,
-           Norm: norm
+           "Item": line,
+           "Reading": reading,
+           "Norm": norm
         }
     });
 
