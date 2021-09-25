@@ -38,29 +38,47 @@ function hyphenateConsecutive (inputArray) {
     });
 }
 
+function parseLine(s, nombreOnLeft = false) {
+    const arr = s.split("\t").slice(0, 2);
+    if (arr.length < 2) {
+        return {
+            "Item": arr[0],
+            "Nombre": ""
+        };
+    }
+    if (nombreOnLeft) {
+        arr.reverse()
+    }
+    return {
+        "Item": arr[0],
+        "Nombre": arr[1]
+    };
+}
+
 function asNumber(s) {
     return Number(toHankaku(s.replace(/[^[0-9０-９]/g, "")))
+}
+
+function uniqueOrdered(arr) {
+    const sorted = arr.filter(x => x).sort((a, b) => asNumber(a) - asNumber(b));
+    return Array.from(new Set(sorted));
 }
 
 function nayose (lines, nombreOnLeft = false) {
     const map = new Map()
     const lineArray = lines.split(/[\r\n]+/g);
-    // 集約
     lineArray.filter(line => line).filter(line => !line.match(/^\s+$/)).forEach(line => {
-        const [item, nombre, ...rest] = (nombreOnLeft)? line.split("\t").slice(0, 2).reverse() : line.split("\t");
-        if (map.has(item)) {
-            map.get(item).push(nombre);
+        const l = parseLine(line, nombreOnLeft);
+        if (!map.has(l.Item)) {
+            map.set(l.Item, [l.Nombre]);
         }
         else {
-            map.set(item, [nombre]);
+            map.get(l.Item).push(l.Nombre);
         }
     });
-
-    // 整形
     const ret = [];
     map.forEach((v, k) => {
-        const sorted = v.filter(x => x).sort((a, b) => asNumber(a) - asNumber(b));
-        const uniq = Array.from(new Set(sorted));
+        const uniq = uniqueOrdered(v);
         if (uniq.length < 1) {
             ret.push(k);
         }
@@ -76,29 +94,33 @@ function nayoseByOrder(lines, nombreOnLeft = false) {
     const lineArray = lines.split(/[\r\n]+/g).filter(line => line).filter(line => !line.match(/^\s+$/));
     const stack = [];
     for (let i = 0; i < lineArray.length; i++) {
-        const line = lineArray[i];
-        const [item, nombre, ...rest] = (nombreOnLeft)? line.split("\t").slice(0, 2).reverse() : line.split("\t");
+        const l = parseLine(lineArray[i], nombreOnLeft);
         if (i == 0) {
-            stack.push([item, [nombre]]);
+            stack.push({
+                "Item": l.Item,
+                "Nombres": [l.Nombre]
+            });
             continue;
         }
         const lastIdx = stack.length - 1;
-        if (item == stack[lastIdx][0]) {
-            stack[lastIdx][1].push(nombre);
-            continue;
+        if (l.Item == (stack[lastIdx]).Item) {
+            (stack[lastIdx]).Nombres.push(l.Nombre);
         }
-        stack.push([item, [nombre]]);
+        else {
+            stack.push({
+                "Item": l.Item,
+                "Nombres": [l.Nombre]
+            });
+        }
     }
 
     return stack.map(pair => {
-        const [item, nombreArray] = pair;
-        const sorted = nombreArray.filter(x => x).sort((a, b) => asNumber(a) - asNumber(b));
-        const uniq = Array.from(new Set(sorted));
+        const uniq = uniqueOrdered(pair.Nombres);
         if (uniq.length < 1) {
-            return item;
+            return pair.Item;
         }
         const hyphenated = hyphenateConsecutive(uniq);
-        return (item + "　　" + hyphenated);
+        return (pair.Item + "　　" + hyphenated);
     });
 
 }
