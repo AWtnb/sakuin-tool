@@ -118,30 +118,6 @@ function updateTable(elem, obj) {
 
 }
 
-function setValue(tokenizer, lines, outputElem) {
-
-    const grouped = nayose(lines, false);
-
-    const info = grouped.map(line => {
-        const trimmed = line.replace(/　　\d.*$/g, "");
-        const reading = tokenizer.tokenize(trimmed).map( getReading ).join("");
-        const norm = toHairetsu(reading, true);
-        return {
-           "Item": line,
-           "Reading": reading,
-           "Norm": norm
-        }
-    });
-
-    const sorted = sortByReading(info);
-
-    updateTable(outputElem, sorted);
-
-    showStatus("");
-
-    return sorted.map(x => x.Item);
-}
-
 function checkReferences(lines) {
     const elem = document.querySelector("div.result");
     const lostTo = findLostReferenceTo(lines).map(item => markupLostReference(item, "red"));
@@ -156,7 +132,15 @@ function checkReferences(lines) {
             "<label>参照元として括弧書きされているのに見よ項目がないものがあります！</label>"
         ].concat(lostFrom).join("\n");
     }
+}
 
+function main(tokenizer, lines, outputElem) {
+    showStatus("");
+    const items = nayose(lines, false).map(line => line.replace(/　　\d.*$/g, ""));
+    const t = tokenizeLines(tokenizer, items);
+    const sorted = sortByReading(t);
+    updateTable(outputElem, sorted);
+    checkReferences(sorted.map(x => x.Item));
 }
 
 function click_execute() {
@@ -170,8 +154,7 @@ function click_execute() {
             showStatus("解析失敗…\nやり直してみてください！");
         }
         else {
-            const items = setValue(tokenizer, lines, outputTable);
-            checkReferences(items);
+            main(tokenizer, lines, outputTable);
         }
     });
 }
