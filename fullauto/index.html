@@ -67,8 +67,9 @@
 </div>
 
 <div class="ui">
-    <div class="horizontal">
-        <textarea class="inputLines" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
+    <textarea class="inputLines" placeholder="上図のように Excel からコピー＆ペーストしてください"></textarea>
+    <div>
+        <input type="checkbox" class="isLeft"> ←ノンブルが左列（上図と逆）の場合はチェック
     </div>
     <input type="button" value="整形" onclick="click_execute()">
     <div class="status"></div>
@@ -134,9 +135,9 @@ function checkReferences(lines) {
     }
 }
 
-function main(tokenizer, lines, outputElem) {
+function main(tokenizer, lines, nombreOnLeft, outputElem) {
     showStatus("");
-    const grouped = nayose(lines, false);
+    const grouped = nayose(lines, nombreOnLeft);
     const tokenized = tokenizeLines(tokenizer, grouped).map(t => {
         const r = t.Reading.replace(/　　\d.*$/g, "");
         return {
@@ -154,6 +155,7 @@ function click_execute() {
     const elem = document.querySelector(".ui");
     const outputTable = elem.querySelector("table.result")
     const lines = arrayByLine(elem.querySelector(".inputLines").value);
+    const nombreOnLeft = elem.querySelector(".isLeft").checked;
     elem.querySelector("div.result .lostTo").innerHTML = "<p></p>";
     elem.querySelector("div.result .lostFrom").innerHTML = "<p></p>";
     showStatus("（\u{1f914}よみがな計算中…）");
@@ -163,7 +165,7 @@ function click_execute() {
             showStatus("解析失敗…\nやり直してみてください！");
         }
         else {
-            main(tokenizer, lines, outputTable);
+            main(tokenizer, lines, nombreOnLeft, outputTable);
         }
     });
 }
