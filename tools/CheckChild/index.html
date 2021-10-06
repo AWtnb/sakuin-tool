@@ -7,14 +7,7 @@
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
-    <style>
-        .match {
-            color: red;
-        }
-        .result {
-            background: white;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="./table.css">
 </head>
 
 <body>
@@ -43,7 +36,7 @@
             <td>子項目候補</td>
         </tr>
     </table>
-    <input type="button" value="表をコピー" onclick="click_copy()">
+    <input type="button" value="プリント用ページを開く" onclick="click_print()">
 </div>
 
 </div>
@@ -102,9 +95,8 @@ function click_check() {
     });
 }
 
-function click_copy() {
-    const table = document.querySelector("table.result");
-    copyTable(table);
+function click_print() {
+    window.open('./print.html', 'newwindow', 'width=800,height=890');
 }
 
 </script>
