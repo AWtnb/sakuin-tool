@@ -42,43 +42,9 @@
 </div>
 <!-- ============================== -->
 <script type="text/javascript" src="../util.js" defer></script>
+<script type="text/javascript" src="./src.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
-
-function getIndexItems(lines) {
-    const nonMiyoItems = lines.filter(line => !line.match(/→/g));
-    return nonMiyoItems.filter(line => line).filter(line => !line.match(/^　/g)).map(line => line.replace(/　　\d.*$/g, "")).sort((a, b) => b.length - a.length);
-}
-
-function getRegexpPattern(s, mode) {
-    const escaped = escapeMeta(s);
-    if (mode == "tail") {
-        return new RegExp(`${escaped}$`, "g");
-    }
-    if (mode == "head") {
-        return new RegExp(`^${escaped}`, "g");
-    }
-    return new RegExp(`^${escaped}|${escaped}$`, "g");
-}
-
-function findPossibleChildItems(lines, mode = "tail") {
-    const indexItems = getIndexItems(lines);
-    return indexItems.map(item => {
-        const baseName = item.replace(/（.*?）|［.*?］/g, "");
-        const reg = getRegexpPattern(baseName, mode);
-        const grep = indexItems.filter(line => line.match(reg));
-        if (grep.length > 1) {
-            const markup = grep.filter(line => (line != item)).map(line => {
-                return line.replace(reg, '<span class="match">$&</span>');
-            }).map(line => `・${line}`);
-            return {
-                "Found": item,
-                "Markup": markup.join("<br>")
-            };
-        }
-        return null;
-    }).filter(x => x);
-}
 
 function click_check() {
     const elem = document.querySelector(".ui");
