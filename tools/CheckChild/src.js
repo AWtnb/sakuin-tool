@@ -1,6 +1,6 @@
 function getIndexItems(lines) {
-    const nonMiyoItems = lines.filter(line => !line.match(/→/g));
-    return nonMiyoItems.filter(line => line).filter(line => !line.match(/^　/g)).map(line => line.replace(/　　\d.*$/g, "")).sort((a, b) => b.length - a.length);
+    const nonMiyoItems = lines.filter(line => line.indexOf("→") == -1);
+    return nonMiyoItems.filter(line => line).filter(line => !line.match(/^　/)).map(line => line.replace(/　　\d.*$/g, ""));
 }
 
 function getRegexForChild(s, mode) {
@@ -19,7 +19,7 @@ function findPossibleChildItems(lines, mode = "tail") {
     return indexItems.map(item => {
         const baseName = item.replace(/（.*?）|［.*?］/g, "");
         const reg = getRegexForChild(baseName, mode);
-        const grep = indexItems.filter(line => reg.test(line));
+        const grep = indexItems.filter(line => line.match(reg));
         if (grep.length > 1) {
             const markup = grep.filter(line => (line != item)).map(line => {
                 return line.replace(reg, '<span class="match">$&</span>');
@@ -30,5 +30,5 @@ function findPossibleChildItems(lines, mode = "tail") {
             };
         }
         return null;
-    }).filter(x => x);
+    }).filter(x => x).sort((a, b) => b.Found.length - a.Found.length);
 }
