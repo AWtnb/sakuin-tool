@@ -1,6 +1,6 @@
 
 function isConsecutive (a, b, c) {
-    if(/[^\d]/.test(a) || /[^\d]/.test(b) || /[^\d]/.test(c)) {
+    if(a.match(/[^\d]/) || b.match(/[^\d]/) || c.match(/[^\d]/)) {
         return false;
     }
     return (Number(a)+1 == b && Number(a)+2 == c);

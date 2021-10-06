@@ -64,7 +64,7 @@ function generateTemplare(lines) {
     const templateArray = [];
     lines
     .filter(line => line)
-    .filter(line => !(/(\t)0/.test(line)))
+    .filter(line => !line.match(/(\t)0/))
     .forEach((line, index) => {
         const [page, counter, ...rest] = line.split("\t");
         const nItem = toHankaku(counter);

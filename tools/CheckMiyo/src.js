@@ -20,7 +20,7 @@ function findLostReferenceTo(lines) {
         };
     }).map(line => {
         const reg = getRegexForReference(line.From, line.To, true)
-        const grep = items.filter(l => reg.test(l));
+        const grep = items.filter(l => l.match(reg));
         if (grep.length > 0) {
             return null;
         }
@@ -34,7 +34,7 @@ function findLostReferenceTo(lines) {
 // 括弧書きで付記されているのに見よ項目がないものを探す関数
 function findLostReferenceFrom(lines) {
     const items = lines.map(line => line.replace(/　　\d.+$/, "")).filter(line => line);
-    const reffered = items.filter(line => /[［（\(].+?[］）\)]/.test(line));
+    const reffered = items.filter(line => line.match(/[［（\(].+?[］）\)]/));
     return reffered.map(line => {
         return {
             "Text": line,
@@ -43,7 +43,7 @@ function findLostReferenceFrom(lines) {
         };
     }).map(line => {
         const reg = getRegexForReference(line.From, line.To, false);
-        const grep = items.filter(l => reg.test(l));
+        const grep = items.filter(l => l.match(reg));
         if (grep.length > 0) {
             return null;
         }

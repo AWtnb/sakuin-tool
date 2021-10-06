@@ -63,14 +63,14 @@ function releaseNayoseLines (lines) {
         }
         const nombreArray = nombres.replace(/\s+/g, "").replace(/，/g, ",").split(",");
         nombreArray.forEach(n => {
-            if (/[\u2013\u2014\u002d\u2010]/.test(n)) {
+            if (n.match(/[\u2013\u2014\u002d\u2010]/)) {
                 const [start, end] = n.split(/[\u2013\u2014\u002d\u2010]/);
-                for (let i = start; i <= end; i++) {
+                for (let i = Number(start); i <= Number(end); i++) {
                     releasedObj.push({name: name, nombre: i});
                 }
             }
             else {
-                releasedObj.push({name: name, nombre: n});
+                releasedObj.push({name: name, nombre: String(n)});
             }
         });
     });
