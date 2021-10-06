@@ -91,6 +91,7 @@ function click_check() {
     const elem = document.querySelector(".ui");
     const lines = arrayByLine(elem.querySelector(".inputLines").value);
     const outputTable = elem.querySelector("table.result");
+    resetTable(outputTable);
     const markup = findPossibleChildItems(lines, elem.querySelector("form.searchPos").pos.value);
     markup.forEach(r => {
         const row = outputTable.insertRow(-1);
