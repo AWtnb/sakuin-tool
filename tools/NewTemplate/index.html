@@ -62,13 +62,10 @@
 
 function generateTemplare(lines) {
     const templateArray = [];
-    lines
-    .filter(line => line)
-    .filter(line => !line.match(/(\t)0/))
-    .forEach((line, index) => {
+    lines.filter(line => line).forEach((line, index) => {
         const [page, counter, ...rest] = line.split("\t");
         const nItem = toHankaku(counter);
-        if (nItem.match(/^\d+$/)) {
+        if (Number(nItem) > 0) {
             for (let i = 0; i < Number(nItem); i++) {
                 templateArray.push({"Index":(index + 1), "Page":page});
             }
