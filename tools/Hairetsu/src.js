@@ -11,7 +11,7 @@ function toHairetsu (lines, removeNoise) {
         ["ー", ""]
     ].forEach(x => map.set(...x));
 
-    let katakana = hira2kata(lines);
+    let katakana = toHankaku(hira2kata(lines));
     for (let k of map.keys()) {
         const reg = new RegExp(k, "g");
         katakana = katakana.replace(reg, map.get(k));
