@@ -7,6 +7,14 @@
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
+    <style>
+        .match {
+            color: red;
+        }
+        .result {
+            background: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -29,8 +37,13 @@
     <textarea class="inputLines" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
     <input type="button" value="チェック" onclick="click_check()">
 
-    <div class="result">
-    </div>
+    <table class="result">
+        <tr>
+            <td>項目</td>
+            <td>子項目候補</td>
+        </tr>
+    </table>
+    <input type="button" value="表をコピー" onclick="click_copy()">
 </div>
 
 </div>
@@ -39,47 +52,58 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function highlightChildItem(lines, mode = "tail") {
+function getIndexItems(lines) {
     const nonMiyoItems = lines.filter(line => !line.match(/→/g));
-    const indexItems = nonMiyoItems
-        .filter(line => line)
-        .filter(line => !line.match(/^　/g))
-        .map(line => line.replace(/　　\d.*$/g, ""))
-        .sort((a, b) => b.length - a.length);
-    const possibleChildItemArray = indexItems.map(item => {
-        const itemBaseName = item.replace(/（.*?）|［.*?］/g, "");
-        const escaped = escapeMeta(itemBaseName);
+    return nonMiyoItems.filter(line => line).filter(line => !line.match(/^　/g)).map(line => line.replace(/　　\d.*$/g, "")).sort((a, b) => b.length - a.length);
+}
 
-        const reg = (() => {
-            if (mode == "tail") {
-                return new RegExp(`${escaped}$`, "g");
-            }
-            if (mode == "head") {
-                return new RegExp(`^${escaped}`, "g");
-            }
-            return new RegExp(`^${escaped}|${escaped}$`, "g");
-        })();
+function getRegexpPattern(s, mode) {
+    const escaped = escapeMeta(s);
+    if (mode == "tail") {
+        return new RegExp(`${escaped}$`, "g");
+    }
+    if (mode == "head") {
+        return new RegExp(`^${escaped}`, "g");
+    }
+    return new RegExp(`^${escaped}|${escaped}$`, "g");
+}
 
+function findPossibleChildItems(lines, mode = "tail") {
+    const indexItems = getIndexItems(lines);
+    return indexItems.map(item => {
+        const baseName = item.replace(/（.*?）|［.*?］/g, "");
+        const reg = getRegexpPattern(baseName, mode);
         const grep = indexItems.filter(line => line.match(reg));
         if (grep.length > 1) {
-            const markup = grep
-                .filter(line => (line != item))
-                .map(line => line.replace(reg, "<span class=\"blue\">$&</span>"))
-                .join("<br>");
-            return `<span>${item}</span> を含む項目：<br>${markup}`;
+            const markup = grep.filter(line => (line != item)).map(line => {
+                return line.replace(reg, '<span class="match">$&</span>');
+            }).map(line => `・${line}`);
+            return {
+                "Found": item,
+                "Markup": markup.join("<br>")
+            };
         }
-
-        return null
+        return null;
     }).filter(x => x);
-    return possibleChildItemArray.map(item => `<p>${item}</p>`).join("\n");
 }
 
 function click_check() {
     const elem = document.querySelector(".ui");
-
     const lines = arrayByLine(elem.querySelector(".inputLines").value);
-    const markup = highlightChildItem(lines, elem.querySelector("form.searchPos").pos.value);
-    elem.querySelector(".result").innerHTML = markup;
+    const outputTable = elem.querySelector("table.result");
+    const markup = findPossibleChildItems(lines, elem.querySelector("form.searchPos").pos.value);
+    markup.forEach(r => {
+        const row = outputTable.insertRow(-1);
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        cell1.innerHTML = r.Found;
+        cell2.innerHTML = r.Markup;
+    });
+}
+
+function click_copy() {
+    const table = document.querySelector("table.result");
+    copyTable(table);
 }
 
 </script>
