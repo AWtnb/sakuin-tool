@@ -16,5 +16,5 @@ function toHairetsu (lines, removeNoise) {
         const reg = new RegExp(k, "g");
         katakana = katakana.replace(reg, map.get(k));
     }
-    return (removeNoise)? katakana.replace(/[^ァ-ヴa-zA-Z0-9０-９\r\n]/g, "") : katakana;
+    return (removeNoise)? katakana.replace(/[^ァ-ヴa-zA-Zａ-ｚＡ-Ｚ0-9０-９\r\n]/g, "") : katakana;
 }
