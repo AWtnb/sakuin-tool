@@ -24,7 +24,7 @@
 <body>
     <table id="show"></table>
     <script>
-        const SOURCE_TABLE = window.opener.document.querySelector("table.result");
+        const SOURCE_TABLE = window.opener.document.querySelector("#possibles");
         window.onload = function () {
             document.querySelector("#show").innerHTML = SOURCE_TABLE.innerHTML;
         }

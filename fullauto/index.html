@@ -21,10 +21,17 @@
         content: "\203b";
         font-weight: bold;
     }
-    .lostTo, .lostFrom {
+    .lostTo, .lostFrom, .possibles label {
         font-weight: bold;
         font-size: .8em;
         margin-top: 1em;
+    }
+    .possibles label {
+        margin-top: 2em;
+        display: block;
+    }
+    .possibles table.result .match {
+        color: red;
     }
 </style>
 </head>
@@ -87,6 +94,18 @@
         <div class="lostFrom">
         </div>
     </div>
+
+    <div class="possibles" style="visibility: hidden;">
+        <label>子項目候補があります！</label>
+        <table class="result" id="possibles">
+            <tr>
+                <td>項目</td>
+                <td>子項目候補</td>
+            </tr>
+        </table>
+        <input type="button" value="プリント用ページを開く" onclick="click_print()">
+    </div>
+
 </div>
 
 </div>
@@ -98,6 +117,7 @@
 <script type="text/javascript" src="../tools/GetReading/kuromoji.js" defer></script>
 <script type="text/javascript" src="../tools/GetReading/src.js" defer></script>
 <script type="text/javascript" src="../tools/CheckMiyo/src.js" defer></script>
+<script type="text/javascript" src="../tools/CheckChild/src.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
@@ -148,6 +168,20 @@ function main(tokenizer, lines, nombreOnLeft, outputElem) {
     const sorted = sortByReading(tokenized);
     updateTable(outputElem, sorted);
     checkReferences(sorted.map(x => x.Item));
+
+    const possibles = findPossibleChildItems(sorted.map(x => x.Item), "both");
+    if (possibles.length > 0) {
+        document.querySelector(".ui .possibles").style.visibility = "visible";
+        const outputTable = document.querySelector(".ui .possibles table.result");
+        resetTable(outputTable);
+        possibles.forEach(r => {
+            const row = outputTable.insertRow(-1);
+            const cell1 = row.insertCell(0);
+            const cell2 = row.insertCell(1);
+            cell1.innerHTML = r.Found;
+            cell2.innerHTML = r.Markup;
+        });
+    }
 }
 
 function click_execute() {
@@ -172,6 +206,10 @@ function click_execute() {
 function click_copy() {
     const table = document.querySelector("table.result");
     copyTable(table);
+}
+
+function click_print() {
+    window.open("../tools/CheckChild/print.html", 'newwindow', 'width=800,height=890');
 }
 
 </script>
