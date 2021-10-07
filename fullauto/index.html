@@ -95,7 +95,7 @@
         </div>
     </div>
 
-    <div class="possibles" style="visibility: hidden;">
+    <div class="possibles" style="display: none;">
         <label>子項目候補があります！</label>
         <table class="result" id="possibles">
             <tr>
@@ -171,7 +171,7 @@ function main(tokenizer, lines, nombreOnLeft, outputElem) {
 
     const possibles = findPossibleChildItems(sorted.map(x => x.Item), "both");
     if (possibles.length > 0) {
-        document.querySelector(".ui .possibles").style.visibility = "visible";
+        document.querySelector(".ui .possibles").style.display = "block";
         const outputTable = document.querySelector(".ui .possibles table.result");
         resetTable(outputTable);
         possibles.forEach(r => {
@@ -192,6 +192,7 @@ function click_execute() {
     elem.querySelector("div.result .lostTo").innerHTML = "<p></p>";
     elem.querySelector("div.result .lostFrom").innerHTML = "<p></p>";
     showStatus("（\u{1f914}よみがな計算中…）");
+    elem.querySelector(".possibles").style.display = "none";
     resetTable(outputTable)
     kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
         if (err) {
