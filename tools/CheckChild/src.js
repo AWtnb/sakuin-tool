@@ -3,6 +3,19 @@ function getIndexItems(lines) {
     return nonMiyoItems.filter(line => line).filter(line => !line.match(/^　/)).map(line => line.replace(/　　\d.*$/g, ""));
 }
 
+function isChild(s, search, mode) {
+    if (String(s).startsWith(search) || String(s).endsWith(search)) {
+        if (mode == "head" && !String(s).startsWith(search)) {
+            return false;
+        }
+        if (mode == "tail" && !String(s).endsWith(search)) {
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
 function getRegexForChild(s, mode) {
     const escaped = escapeMeta(s);
     if (mode == "tail") {
