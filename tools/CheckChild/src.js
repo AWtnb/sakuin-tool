@@ -1,6 +1,6 @@
 function getIndexItems(lines) {
-    const nonMiyoItems = lines.filter(line => line.indexOf("→") == -1);
-    return nonMiyoItems.filter(line => line).filter(line => !line.match(/^　/)).map(line => line.replace(/　　\d.*$/g, ""));
+    const nonReferenceItems = lines.filter(line => line.indexOf("→") == -1);
+    return nonReferenceItems.filter(line => line).filter(line => !line.match(/^　/)).map(line => line.replace(/　　\d.*$/g, ""));
 }
 
 function isChild(s, search, mode) {
