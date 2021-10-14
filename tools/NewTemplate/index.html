@@ -77,7 +77,7 @@ function generateTemplare(lines) {
 
 function click_generate() {
     const elem = document.querySelector(".ui");
-    const lines = arrayByLine(elem.querySelector(".inputLines").value);
+    const lines = multiline2array(elem.querySelector(".inputLines").value);
 
     const outputTable = elem.querySelector("table.result");
     resetTable(outputTable)
