@@ -11,11 +11,26 @@
         table.adjuster {
             margin: 0 10px;
         }
-        table.adjuster tbody{
-            overflow-y: unset;
+        table.adjuster {
+            overflow: unset;
         }
         table.adjuster td {
             border: none;
+        }
+        div.msg {
+            font-size: .9rem;
+            font-weight: bold;
+        }
+        div.wrap {
+            margin: .5em 0;
+            line-height: 1;
+            font-size: 1rem;
+        }
+        div.original {
+            color: gray;
+        }
+        div.adjusted {
+            color: red;
         }
     </style>
 </head>
@@ -72,25 +87,25 @@
 
 function adjustNombre(lines, startNombre, endNombre, delta) {
     return lines.filter(x => x).map(line => {
-        const [item, nombres, ...rest] = line.split("　　");
-        if (!nombres) {
+        const [item, nombre, ...rest] = line.split("　　");
+        if (!nombre) {
             return {
-                original: line,
-                adjusted: line,
-                isModified: false
+                "original": line,
+                "adjusted": line,
+                "isModified": false
             }
         }
-        const nombresArray = nombres.replace(/，/g, ",").replace(/\s/g, "").split(",").map(n => {
+        const nombres = nombre.replace(/，/g, ",").replace(/\s/g, "").split(",").map(n => {
             if (Number(startNombre) <= Number(n) && Number(n) <= Number(endNombre)) {
                 return Number(n) + Number(delta);
             }
-            return n
+            return n;
         });
-        const adjusted = item + "　　" + nombresArray.join(", ");
+        const adjusted = item + "　　" + nombres.join(", ");
         return {
-            original: line,
-            adjusted: adjusted,
-            isModified: (line != adjusted)
+            "original": line,
+            "adjusted": adjusted,
+            "isModified": (line != adjusted)
         }
     });
 }
@@ -105,19 +120,20 @@ function clickBtn_adjustNombre(){
         elem.querySelector(".endNombre").value,
         elem.querySelector(".nombreDelta").value
     );
-    const adjustedLines = adjustedArray.map(item => item.adjusted).join("\n");
-    elem.querySelector("textarea.result").value = adjustedLines;
+    const adjustedLines = adjustedArray.map(item => item.adjusted);
+    elem.querySelector("textarea.result").value = adjustedLines.join("\r\n");
     const modified = adjustedArray.filter(item => item.isModified);
     const markup = (modified.length)?
-        `<p>■${modified.length}行の変更：</p>` + modified.map(item => {
-            return `<p style="margin:2px 0;"><span style="color:gray">${item.original}</span><br><span style="color:red">${item.adjusted}</span></p>`;
-        }).join("\n") :
-        "<p>（変更箇所はありません）</p>";
+        `<div class="msg">${modified.length}行の変更：</div>${
+            modified.map(item => {
+                return `<div class="wrap"><div class="original">${item.original}</div><div class="adjusted">${item.adjusted}</div></div>`;
+            }).join("")
+        }` : "<p>（変更箇所はありません）</p>";
     elem.querySelector("div.result").innerHTML = markup;
 }
 
 function click_copy(){
-    copyValue(document.querySelector(".ui div.result"));
+    copyValue(document.querySelector(".ui textarea.result"));
 }
 
 
