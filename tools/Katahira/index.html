@@ -49,8 +49,8 @@ function convertHiraKata(str, toHira=false){
 
 function click_katahira() {
     const elem = document.querySelector(".ui");
-    const lines = elem.querySelector(".inputLines").value;
-    elem.querySelector(".result").value = convertHiraKata(lines, elem.querySelector(".toHiraFlag").checked);
+    const s = elem.querySelector(".inputLines").value;
+    elem.querySelector(".result").value = convertHiraKata(s, elem.querySelector(".toHiraFlag").checked);
 }
 
 function click_copy() {
