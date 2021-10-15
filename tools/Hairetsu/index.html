@@ -45,9 +45,9 @@
 
 function click_hairetsu() {
     const elem = document.querySelector(".ui");
-    const lines = elem.querySelector(".inputLines").value;
+    const s = elem.querySelector(".inputLines").value;
 
-    const converted = toHairetsu(lines, elem.querySelector(".removeFlag").checked);
+    const converted = toHairetsu(s, elem.querySelector(".removeFlag").checked);
     elem.querySelector(".result").value = converted;
 }
 
