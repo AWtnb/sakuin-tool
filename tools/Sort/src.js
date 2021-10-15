@@ -1,5 +1,5 @@
 function fromTsv (tsv) {
-    const lines = tsv.split(/[\r\n]+/g).filter(line => line);
+    const lines = multiline2array(tsv).filter(line => line);
     return lines.map(line => {
         const [item, reading, norm,  ...rest] = line.split("\t"); // 配列読み＝正規化＝normalized
         return {
