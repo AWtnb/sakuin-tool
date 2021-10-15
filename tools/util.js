@@ -22,7 +22,7 @@ function copyTable(tableElem) {
     alert("コピーしました！");
 }
 
-function copyElem(elem) {
+function copyValue(elem) {
     elem.select();
     document.execCommand("Copy");
     alert("コピーしました！");
