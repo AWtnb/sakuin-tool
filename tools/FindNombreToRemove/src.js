@@ -4,7 +4,7 @@ function grepNombredReference(lines) {
 }
 
 function grepItemToAddNombre(lines) {
-    return lines.map(line => line.replace(/^.+?→\s*/)).map(line => {
+    return lines.map(line => line.replace(/^.+?→\s*/, "")).map(line => {
         const [item, nombre, ...rest] = line.split("　　");
         return {
             "ReferTo": item,
