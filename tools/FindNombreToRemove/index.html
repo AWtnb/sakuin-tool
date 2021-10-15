@@ -8,6 +8,16 @@
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
+        .result .msg {
+            font-weight: bold;
+        }
+        .result .detail {
+            padding: 2px 1em;
+        }
+        .result .detail p {
+            font-size: .9rem;
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -22,8 +32,8 @@
     <textarea class="inputLines" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
     <input type="button" value="チェック" onclick="click_check()">
 
-    <div class="result">
-    </div>
+    <div class="result"></div>
+
 </div>
 
 </div>
@@ -35,12 +45,18 @@
 
 function click_check(){
     const elem = document.querySelector(".ui");
-    // const arr = [];
-    // const lines = multiline2array(elem.querySelector(".inputLines").value);
-    // const lostTo = findLostReferenceTo(lines).map(item => markupLostReference(item, "red"));
-    // elem.querySelector(".result .lostTo .output").innerHTML = lostTo.join("\n");
-    // const lostFrom = findLostReferenceFrom(lines).map(item => markupLostReference(item, "blue"));
-    // elem.querySelector(".result .lostFrom .output").innerHTML = lostFrom.join("\n");
+    const output = elem.querySelector(".result");
+    output.innerHTML = "";
+    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const found = grepNombredReference(lines);
+    if (found.length) {
+        const markup = found.map(x => `<p>${x}</p>`).join("\r\n")
+        output.innerHTML = `<div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${markup}</div>`;
+    }
+}
+
+function click_copy() {
+    copyValue(document.querySelector(".ui .result"));
 }
 
 </script>
