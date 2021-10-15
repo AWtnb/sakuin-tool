@@ -33,16 +33,19 @@
     .possibles table .match {
         color: red;
     }
-    div.result .msg {
-            font-weight: bold;
-            font-size: .9rem;
-        }
-    div.result .detail {
+    div.nombredRefs .msg {
+        font-weight: bold;
+        font-size: .9rem;
+    }
+    div.lostTo div, div.lostFrom div, div.nombredRefs .detail {
+        border: 1px solid white;
+    }
+    div.nombredRefs .detail {
         padding: 2px 1em;
         max-height: 15em;
-        overflow: scroll;
+        overflow-y: scroll;
     }
-    div.result .detail p {
+    div.nombredRefs .detail p {
         font-size: .9rem;
         margin: 0;
     }
@@ -180,15 +183,15 @@ function checkReferences(lines) {
     const elem = document.querySelector("div.result");
     const lostTo = findLostReferenceTo(lines).map(item => markupLostReference(item, "red"));
     if (lostTo.length) {
-        elem.querySelector(".lostTo").innerHTML = [
-            "<label>見よ項目があるのに参照先に括弧で付記されていないものがあります！</label>"
-        ].concat(lostTo).join("\n");
+        elem.querySelector(".lostTo").innerHTML = `<label>見よ項目があるのに参照先に括弧で付記されていないものがあります！</label><div>${
+                lostTo.join("")
+        }</div>`;
     }
     const lostFrom = findLostReferenceFrom(lines).map(item => markupLostReference(item, "blue"));
     if (lostFrom.length) {
-        elem.querySelector(".lostFrom").innerHTML = [
-            "<label>参照元として括弧書きされているのに見よ項目がないものがあります！</label>"
-        ].concat(lostFrom).join("\n");
+        elem.querySelector(".lostFrom").innerHTML = `<label>参照元として括弧書きされているのに見よ項目がないものがあります！</label><div>${
+            lostFrom.join("")
+        }</div>`;
     }
 }
 
