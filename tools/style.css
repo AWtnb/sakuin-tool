@@ -115,6 +115,9 @@ ul li::marker {
 ul ul {
   padding-left: 2em;
 }
+ol li::marker {
+  color: #839496;
+}
 .caption > ul {
   margin: 0 24px;
 }
