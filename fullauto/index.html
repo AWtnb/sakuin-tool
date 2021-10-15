@@ -33,6 +33,19 @@
     .possibles table.result .match {
         color: red;
     }
+    div.result .msg {
+            font-weight: bold;
+            font-size: .9rem;
+        }
+    div.result .detail {
+        padding: 2px 1em;
+        max-height: 15em;
+        overflow: scroll;
+    }
+    div.result .detail p {
+        font-size: .9rem;
+        margin: 0;
+    }
 </style>
 </head>
 
@@ -89,6 +102,8 @@
     </table>
     <input type="button" value="表をコピー" onclick="click_copy()">
     <div class="result">
+        <div class="nombredRefs">
+        </div>
         <div class="lostTo">
         </div>
         <div class="lostFrom">
@@ -139,6 +154,22 @@ function updateTable(elem, obj) {
     });
 }
 
+function checkReferenceNombre(lines) {
+    const found = grepNombredReference(lines);
+    if (found.length) {
+        const output = document.querySelector("div.result .nombredRefs");
+        const markupNombreToRemove = found.map(x => `<p>${x}</p>`).join("\r\n");
+        const markupItemToAddNombre = grepItemToAddNombre(lines, found).map(item => {
+            return `<p>${item.ReferTo}　←${item.NombreToAdd}</p>`
+        }).join("\r\n");
+        output.innerHTML = `<div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
+            markupNombreToRemove
+        }</div><div class="msg">見よ先にノンブルを追加する必要があります：</div><div class="detail">${
+            markupItemToAddNombre
+        }</div>`;
+    }
+}
+
 function checkReferences(lines) {
     const elem = document.querySelector("div.result");
     const lostTo = findLostReferenceTo(lines).map(item => markupLostReference(item, "red"));
@@ -173,7 +204,7 @@ function main(tokenizer, lines, nombreOnLeft, outputElem) {
     const indexLines = sorted.map(x => x.Item);
 
     // check nombre in reference
-    
+    checkReferenceNombre(indexLines);
 
     // check cross-reference
     checkReferences(indexLines);
