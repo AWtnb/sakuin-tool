@@ -110,9 +110,9 @@
 
 </div>
 <!-- ============================== -->
+<script type="text/javascript" src="../tools/AdjustReferenceNombre/src.js" defer></script>
 <script type="text/javascript" src="../tools/CheckChild/src.js" defer></script>
 <script type="text/javascript" src="../tools/CheckReference/src.js" defer></script>
-<script type="text/javascript" src="../tools/FindNombreToRemove/src.js" defer></script>
 <script type="text/javascript" src="../tools/GetReading/kuromoji.js" defer></script>
 <script type="text/javascript" src="../tools/GetReading/src.js" defer></script>
 <script type="text/javascript" src="../tools/Hairetsu/src.js" defer></script>
@@ -157,6 +157,8 @@ function checkReferences(lines) {
 
 function main(tokenizer, lines, nombreOnLeft, outputElem) {
     showStatus("");
+
+    // main process
     const grouped = nayose(lines, nombreOnLeft);
     const tokenized = tokenizeLines(tokenizer, grouped).map(t => {
         const r = t.Reading.replace(/　　\d.*$/g, "");
@@ -168,9 +170,16 @@ function main(tokenizer, lines, nombreOnLeft, outputElem) {
     });
     const sorted = sortByReading(tokenized);
     updateTable(outputElem, sorted);
-    checkReferences(sorted.map(x => x.Item));
+    const indexLines = sorted.map(x => x.Item);
 
-    const possibles = findPossibleChildItems(sorted.map(x => x.Item), "both");
+    // check nombre in reference
+    
+
+    // check cross-reference
+    checkReferences(indexLines);
+
+    // check possible childitem
+    const possibles = findPossibleChildItems(indexLines, "both");
     if (possibles.length > 0) {
         document.querySelector(".ui .possibles").style.display = "block";
         const outputTable = document.querySelector(".ui .possibles table.result");
