@@ -68,11 +68,11 @@ function nayose (lines, nombreOnLeft = false) {
     const map = new Map()
     lines.filter(line => line).filter(line => !line.match(/^\s+$/)).forEach(line => {
         const l = parseLine(line, nombreOnLeft);
-        if (!map.has(l.Item)) {
-            map.set(l.Item, [l.Nombre]);
+        if (map.has(l.Item)) {
+            map.set(l.Item, map.get(l.Item).concat(l.Nombre));
         }
         else {
-            map.get(l.Item).push(l.Nombre);
+            map.set(l.Item, [l.Nombre]);
         }
     });
     const ret = [];
