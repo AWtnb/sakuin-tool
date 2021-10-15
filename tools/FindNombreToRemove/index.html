@@ -13,6 +13,8 @@
         }
         .result .detail {
             padding: 2px 1em;
+            max-height: 20em;
+            overflow: scroll;
         }
         .result .detail p {
             font-size: .9rem;
@@ -50,8 +52,15 @@ function click_check(){
     const lines = multiline2array(elem.querySelector(".inputLines").value);
     const found = grepNombredReference(lines);
     if (found.length) {
-        const markup = found.map(x => `<p>${x}</p>`).join("\r\n")
-        output.innerHTML = `<div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${markup}</div>`;
+        const markupNombreToRemove = found.map(x => `<p>${x}</p>`).join("\r\n");
+        const markupItemToAddNombre = grepItemToAddNombre(found).map(item => {
+            return `<p>${item.ReferTo}　←${item.Nombre}</p>`
+        }).join("\r\n");
+        output.innerHTML = `<div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
+            markupNombreToRemove
+        }</div><div class="msg">見よ先にノンブルを追加する必要があります：</div><div class="detail">${
+            markupItemToAddNombre
+        }</div>`;
     }
 }
 
