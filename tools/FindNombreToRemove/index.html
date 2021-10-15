@@ -10,10 +10,11 @@
     <style>
         .result .msg {
             font-weight: bold;
+            font-size: .9rem;
         }
         .result .detail {
             padding: 2px 1em;
-            max-height: 20em;
+            max-height: 15em;
             overflow: scroll;
         }
         .result .detail p {
@@ -53,8 +54,8 @@ function click_check(){
     const found = grepNombredReference(lines);
     if (found.length) {
         const markupNombreToRemove = found.map(x => `<p>${x}</p>`).join("\r\n");
-        const markupItemToAddNombre = grepItemToAddNombre(found).map(item => {
-            return `<p>${item.ReferTo}　←${item.Nombre}</p>`
+        const markupItemToAddNombre = grepItemToAddNombre(lines, found).map(item => {
+            return `<p>${item.ReferTo}　←${item.NombreToAdd}</p>`
         }).join("\r\n");
         output.innerHTML = `<div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
             markupNombreToRemove
