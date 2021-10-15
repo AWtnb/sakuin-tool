@@ -8,10 +8,10 @@ function grepItemToAddNombre(lines, references) {
     references.map(line => line.replace(/^.+?→\s*/, "")).forEach(line => {
         const [item, nombre, ...rest] = line.split("　　");
         if (refMap.has(item)) {
-            refMap.set(item, refMap.get(item).concat(nombre))
+            refMap.set(item, refMap.get(item).concat(String(nombre)));
         }
         else {
-            refMap.set(item, [nombre]);
+            refMap.set(item, [String(nombre)]);
         }
     });
     const baseItems = lines.map(line => line.replace(/(（.+?）)?　　.+$/, ""));

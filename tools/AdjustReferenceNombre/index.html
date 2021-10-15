@@ -15,7 +15,8 @@
         .result .detail {
             padding: 2px 1em;
             max-height: 15em;
-            overflow: scroll;
+            overflow-y: scroll;
+            border: 1px solid white;
         }
         .result .detail p {
             font-size: .9rem;
@@ -53,14 +54,14 @@ function click_check(){
     const lines = multiline2array(elem.querySelector(".inputLines").value);
     const found = grepNombredReference(lines);
     if (found.length) {
-        const markupNombreToRemove = found.map(x => `<p>${x}</p>`).join("\r\n");
-        const markupItemToAddNombre = grepItemToAddNombre(lines, found).map(item => {
+        const markupNombresToRemove = found.map(x => `<p>${x}</p>`);
+        const markupItemsToAddNombre = grepItemToAddNombre(lines, found).map(item => {
             return `<p>${item.ReferTo}　←${item.NombreToAdd}</p>`
-        }).join("\r\n");
+        });
         output.innerHTML = `<div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
-            markupNombreToRemove
+            markupNombresToRemove.join("")
         }</div><div class="msg">見よ先にノンブルを追加する必要があります：</div><div class="detail">${
-            markupItemToAddNombre
+            markupItemsToAddNombre.join("")
         }</div>`;
     }
 }
