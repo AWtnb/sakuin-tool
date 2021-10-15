@@ -186,15 +186,13 @@ table {
     margin: 10px 0;
     font-size: .9rem;
     max-width: 100%;
-    td {
+    display: block;
+    max-height: 400px;
+    overflow-y: scroll;
+    td, th {
         min-width: 80px;
         padding: 2px;
         border: 1px solid @gray;
-    }
-    tbody {
-        display: block;
-        max-height: 400px;
-        overflow-y: scroll;
     }
 }
 

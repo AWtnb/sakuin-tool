@@ -159,16 +159,15 @@ table {
   margin: 10px 0;
   font-size: 0.9rem;
   max-width: 100%;
-}
-table td {
-  min-width: 80px;
-  padding: 2px;
-  border: 1px solid #586e75;
-}
-table tbody {
   display: block;
   max-height: 400px;
   overflow-y: scroll;
+}
+table td,
+table th {
+  min-width: 80px;
+  padding: 2px;
+  border: 1px solid #586e75;
 }
 .ui {
   margin: 1rem;
