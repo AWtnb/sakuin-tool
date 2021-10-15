@@ -44,12 +44,15 @@
     <textarea class="inputLines" placeholder="図のように Excel から貼り付けてください"></textarea>
     <input type="button" value="生成" onclick="click_generate()">
     <table class="result">
-        <tr>
-            <td>ID</td>
-            <td>index</td>
-            <td>ページ</td>
-            <td>項目</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>index</th>
+                <th>ページ</th>
+                <th>項目</td>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
     <input type="button" value="表をコピー" onclick="click_copy()">
 
@@ -72,15 +75,15 @@ function generateTemplare(lines) {
             }
         }
     });
-    return templateArray
+    return templateArray;
 }
 
 function click_generate() {
     const elem = document.querySelector(".ui");
     const lines = multiline2array(elem.querySelector(".inputLines").value);
 
-    const outputTable = elem.querySelector("table.result");
-    resetTable(outputTable)
+    const outputTable = elem.querySelector("table.result tbody");
+    resetTable(outputTable);
 
     generateTemplare(lines).forEach((line, idx) => {
         const row = outputTable.insertRow(-1);
@@ -95,7 +98,7 @@ function click_generate() {
     });
 }
 function click_copy() {
-    const table = document.querySelector("table.result");
+    const table = document.querySelector("table.result tbody");
     copyTable(table);
 }
 

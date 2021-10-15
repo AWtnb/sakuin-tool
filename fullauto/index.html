@@ -93,12 +93,15 @@
     </div>
     <input type="button" value="整形" onclick="click_execute()">
     <div class="status"></div>
-    <table class="result">
-        <tr>
-            <td>項目</td>
-            <td>読み</td>
-            <td>配列読み</td>
-        </tr>
+    <table class="formatResult">
+        <thead>
+            <tr>
+                <th>項目</th>
+                <th>読み</th>
+                <th>配列読み</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
     <input type="button" value="表をコピー" onclick="click_copy()">
     <div class="result">
@@ -112,11 +115,14 @@
 
     <div class="possibles" style="display: none;">
         <label>子項目候補があります！</label>
-        <table class="result" id="src-table">
-            <tr>
-                <td>項目</td>
-                <td>子項目候補</td>
-            </tr>
+        <table class="findResult" id="src-table">
+            <thead>
+                <tr>
+                    <th>項目</th>
+                    <th>子項目候補</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
         </table>
         <input type="button" value="プリント用ページを開く" onclick="click_print()">
     </div>
@@ -213,7 +219,7 @@ function main(tokenizer, lines, nombreOnLeft, outputElem) {
     const possibles = findPossibleChildItems(indexLines, "both");
     if (possibles.length > 0) {
         document.querySelector(".ui .possibles").style.display = "block";
-        const outputTable = document.querySelector(".ui .possibles table.result");
+        const outputTable = document.querySelector(".ui .possibles table.findResult tbody");
         resetTable(outputTable);
         possibles.forEach(r => {
             const row = outputTable.insertRow(-1);
@@ -227,7 +233,7 @@ function main(tokenizer, lines, nombreOnLeft, outputElem) {
 
 function click_execute() {
     const elem = document.querySelector(".ui");
-    const outputTable = elem.querySelector("table.result")
+    const outputTable = elem.querySelector("table.formatResult tbody");
     const lines = multiline2array(elem.querySelector(".inputLines").value);
     const nombreOnLeft = elem.querySelector(".isLeft").checked;
     elem.querySelector("div.result .lostTo").innerHTML = "<p></p>";
@@ -246,7 +252,7 @@ function click_execute() {
 }
 
 function click_copy() {
-    const table = document.querySelector("table.result");
+    const table = document.querySelector("table.formatResult tbody");
     copyTable(table);
 }
 

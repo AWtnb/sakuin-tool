@@ -37,11 +37,14 @@
     <input type="button" value="ソート" onclick="click_sort()">
 
     <table class="result">
-        <tr>
-            <td>項目</td>
-            <td>読み</td>
-            <td>配列読み</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>項目</th>
+                <th>読み</th>
+                <th>配列読み</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
     <input type="button" value="表をコピー" onclick="click_copy()">
 
@@ -58,7 +61,7 @@ function click_sort() {
     const elem = document.querySelector(".ui");
     const multiLine = elem.querySelector(".inputLines").value;
 
-    const outputTable = elem.querySelector("table.result");
+    const outputTable = elem.querySelector("table.result tbody");
     resetTable(outputTable)
 
     const parsed = fromTsv(multiLine);
@@ -76,7 +79,7 @@ function click_sort() {
 }
 
 function click_copy() {
-    const table = document.querySelector("table.result");
+    const table = document.querySelector("table.result tbody");
     copyTable(table);
 }
 

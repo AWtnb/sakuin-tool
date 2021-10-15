@@ -12,9 +12,9 @@ function toHankaku(str) {
     });
 }
 
-function copyTable(tableElem) {
+function copyTable(tbody) {
     const range = document.createRange();
-    range.selectNodeContents(tableElem);
+    range.selectNodeContents(tbody);
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
@@ -28,11 +28,11 @@ function copyValue(elem) {
     alert("コピーしました！");
 }
 
-function resetTable(tableElem) {
-    const maxRow = tableElem.rows.length;
+function resetTable(tbody) {
+    const maxRow = tbody.rows.length;
     if (maxRow > 1) {
-        for (let r = maxRow - 1; r >= 1; r--) {
-            tableElem.deleteRow(r);
+        for (let r = maxRow - 1; r >= 0; r--) {
+            tbody.deleteRow(r);
         }
     }
 }

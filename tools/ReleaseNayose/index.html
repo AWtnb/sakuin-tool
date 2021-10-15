@@ -33,10 +33,13 @@
     <textarea class="inputLines" placeholder="名寄せ済みの文字列を貼り付けてください"></textarea>
     <input type="button" value="名開き" onclick="click_release()">
     <table class="result">
-        <tr>
-            <td>項目</td>
-            <td>ノンブル</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>項目</th>
+                <th>ノンブル</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
     <input type="button" value="表をコピー" onclick="click_copy()">
 </div>
@@ -83,7 +86,7 @@ function click_release() {
     const lines = multiline2array(elem.querySelector(".inputLines").value);
     const releasedObj = releaseNayoseLines(lines);
 
-    const outputTable = elem.querySelector(".result");
+    const outputTable = elem.querySelector(".result tbody");
     resetTable(outputTable);
 
     for (let item in releasedObj) {
@@ -95,7 +98,7 @@ function click_release() {
     }
 }
 function click_copy() {
-    const outputTable = document.querySelector(".ui .result");
+    const outputTable = document.querySelector(".ui .result tbody");
     copyTable(outputTable);
 }
 
