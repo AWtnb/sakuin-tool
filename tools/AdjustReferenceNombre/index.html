@@ -38,6 +38,7 @@
 
     <div class="result"></div>
 
+    <input type="button" value="チェックリストを印刷" onclick="click_print()">
 </div>
 
 </div>
@@ -58,17 +59,22 @@ function click_check(){
         const markupItemsToAddNombre = grepItemToAddNombre(lines, found).map(item => {
             return `<p>${item.ReferTo}　←${item.NombreToAdd}</p>`
         });
-        output.innerHTML = `<div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
+        output.innerHTML = `<div id="src-nombre-to-remove"><div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
             markupNombresToRemove.join("")
-        }</div><div class="msg">見よ先にノンブルを追加する必要があります：</div><div class="detail">${
+        }</div></div>` + `<div id="src-nombre-to-add"><div class="msg">見よ先にノンブルを追加する必要があります：</div><div class="detail">${
             markupItemsToAddNombre.join("")
-        }</div>`;
+        }</div></div>`;
     }
 }
 
 function click_copy() {
     copyValue(document.querySelector(".ui .result"));
 }
+
+function click_print() {
+    window.open('./print.html', 'newwindow', 'width=800,height=890');
+}
+
 
 </script>
 </body>
