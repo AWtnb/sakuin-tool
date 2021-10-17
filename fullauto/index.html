@@ -167,15 +167,15 @@ function checkReferenceNombre(lines) {
     const found = grepNombredReference(lines);
     if (found.length) {
         const output = document.querySelector("div.result .nombredRefs");
-        const markupNombreToRemove = found.map(x => `<p>${x}</p>`).join("\r\n");
-        const markupItemToAddNombre = grepItemToAddNombre(lines, found).map(item => {
+        const markupNombresToRemove = found.map(x => `<p>${x}</p>`);
+        const markupItemsToAddNombre = grepItemToAddNombre(lines, found).map(item => {
             return `<p>${item.ReferTo}　←${item.NombreToAdd}</p>`
-        }).join("\r\n");
-        output.innerHTML = `<div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
-            markupNombreToRemove
-        }</div><div class="msg">見よ先にノンブルを追加する必要があります：</div><div class="detail">${
-            markupItemToAddNombre
-        }</div>`;
+        });
+        output.innerHTML = `<div id="src-nombre-to-remove"><div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
+            markupNombresToRemove.join("")
+        }</div></div>` + `<div id="src-nombre-to-add"><div class="msg">見よ先にノンブルを追加する必要があります：</div><div class="detail">${
+            markupItemsToAddNombre.join("")
+        }</div></div>` + `<input type="button" value="チェックリストを印刷" onclick="click_print_list()">`;
     }
 }
 
@@ -261,6 +261,9 @@ function click_copy() {
 
 function click_print() {
     window.open("../tools/CheckChild/print.html", 'newwindow', 'width=800,height=890');
+}
+function click_print_list() {
+    window.open("../tools/AdjustReferenceNombre/print.html", 'newwindow', 'width=800,height=890');
 }
 
 </script>
