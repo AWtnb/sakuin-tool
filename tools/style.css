@@ -30,6 +30,7 @@ body {
 }
 .outline li {
   font-weight: bold;
+  color: #586e75;
 }
 .outline li a:focus {
   border: 1px solid #859900;
@@ -55,7 +56,8 @@ h3 {
   border-bottom: 4px double #dc322f;
 }
 h4 {
-  margin: 0.5em;
+  border-bottom: 1px solid #dc322f;
+  font-size: 1.25rem;
 }
 .caption {
   margin: 10px;
