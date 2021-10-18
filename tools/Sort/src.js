@@ -18,7 +18,7 @@ function comparer (a, b) {
 
 function sortByReading (obj) {
     return obj.sort((a,b) => {
-        return comparer(a.Item, b.Item);
+        return comparer(String(a.Item).toLowerCase(), String(b.Item).toLowerCase());
     }).sort((a,b) => {
         return comparer(a.Reading, b.Reading);
     }).sort((a,b) => {
