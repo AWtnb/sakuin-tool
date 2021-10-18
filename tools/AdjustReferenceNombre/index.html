@@ -61,7 +61,7 @@ function click_check(){
         });
         output.innerHTML = `<div id="src-nombre-to-remove"><div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
             markupNombresToRemove.join("")
-        }</div></div>` + `<div id="src-nombre-to-add"><div class="msg">見よ先にノンブルを追加する必要があります：</div><div class="detail">${
+        }</div></div>` + `<div id="src-nombre-to-add"><div class="msg">見よ先にノンブルを追加する必要があるかもしれません（追加する必要がないノンブルは<span style="color: #aaa">灰色</span>になります）：</div><div class="detail">${
             markupItemsToAddNombre.join("")
         }</div></div>`;
     }
