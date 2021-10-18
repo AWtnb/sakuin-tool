@@ -19,7 +19,7 @@ function grepItemToAddNombre(lines, references) {
     return uniq.filter(item => refMap.has(item)).map(line => {
         return {
             "ReferTo": line,
-            "NombreToAdd": refMap.get(line)
+            "NombreToAdd": refMap.get(line).join(", ")
         }
     });
 }
