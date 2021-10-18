@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>重複した見よ項目を探す</title>
+    <base target="_blank">
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <style>
+        .result .msg {
+            font-size: .9rem;
+            font-weight: bold;
+        }
+        .result .detail {
+            font-size: .9rem;
+        }
+        .result .detail p {
+            margin: .5em 0;
+        }
+    </style>
+</head>
+
+<body>
+<!-- ============================== -->
+<div class="container">
+
+
+<h2>重複した見よ項目がないかチェック</h2>
+
+<div class="ui">
+    <textarea class="inputLines" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
+    <input type="button" value="チェック" onclick="click_check()">
+
+    <div class="result"></div>
+
+</div>
+
+</div>
+<!-- ============================== -->
+<script type="text/javascript" src="../util.js" defer></script>
+<script type="text/javascript" src="./src.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+<script>
+
+function click_check(){
+    const elem = document.querySelector(".ui");
+    const output = elem.querySelector(".result");
+    output.innerHTML = "";
+    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const found = getReferencesToGroup(lines);
+    if (found.length) {
+        const markup = found.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
+        output.innerHTML = `<div class="msg">項目をまとめる必要があります：</div><div class="detail">${markup}</div>`;
+    }
+    else {
+        output.innerHTML = "<p>問題ありません！</p>";
+    }
+}
+
+
+
+</script>
+</body>
+
+</html>
