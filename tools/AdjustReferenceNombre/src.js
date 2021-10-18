@@ -8,18 +8,31 @@ function grepItemToAddNombre(lines, references) {
     references.map(line => line.replace(/^.+?→\s*/, "")).forEach(line => {
         const [item, nombre, ...rest] = line.split("　　");
         if (refMap.has(item)) {
-            refMap.set(item, refMap.get(item).concat(String(nombre)));
+            refMap.set(item, refMap.get(item).concat(nombre));
         }
         else {
-            refMap.set(item, [String(nombre)]);
+            refMap.set(item, [nombre]);
         }
     });
-    const baseItems = lines.map(line => line.replace(/(（.+?）)?　　.+$/, ""));
-    const uniq = Array.from(new Set(baseItems));
-    return uniq.filter(item => refMap.has(item)).map(line => {
+    const baseItems = lines.filter(Boolean).filter(line => line.indexOf("→") < 0).map(line => {
+        const [item, nombre, ...rest] = line.split("　　");
         return {
-            "ReferTo": line,
-            "NombreToAdd": refMap.get(line).join(", ")
+            "Name": item,
+            "Basename": item.replace(/(（.+?）)/, ""),
+            "Nombres": nombre.split(", ")
+        }
+    });
+    return baseItems.filter(item => refMap.has(item.Basename)).map(item => {
+        const nsOrigin = item.Nombres.map(n => String(n));
+        const nsToAdd = refMap.get(item.Basename).map(n => String(n));
+        return {
+            "ReferTo": item.Name,
+            "NombreToAdd": nsToAdd.map(s => {
+                if (nsOrigin.indexOf(s) != -1) {
+                    return `<span style="color:#aaa">${s}</span>`;
+                }
+                return s;
+            }).join(", ")
         }
     });
 }
