@@ -1,10 +1,11 @@
 function getRegexForReference(from, to, searchReferenced = false) {
-    const f = escapeMeta(from);
     const t = escapeMeta(to);
     if (searchReferenced) {
+        const f = escapeMeta(from);
         return new RegExp(`^${t}[（［].*${f}.*[）］]`);
     }
-    return new RegExp(`${f}\\s*→\\s*${t}`);
+    const f = from.replace(/,\s*/g, "，").split("，").map(s => escapeMeta(s)).join("|");
+    return new RegExp(`(${f})\\s*→\\s*${t}`);
 }
 
 // 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
