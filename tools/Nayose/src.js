@@ -42,7 +42,7 @@ function parseLine(s, nombreOnLeft = false) {
     const arr = s.split("\t").slice(0, 2);
     if (arr.length < 2) {
         return {
-            "Item": arr[0],
+            "Item": String(arr[0]).trim(),
             "Nombre": ""
         };
     }
@@ -50,7 +50,7 @@ function parseLine(s, nombreOnLeft = false) {
         arr.reverse()
     }
     return {
-        "Item": arr[0],
+        "Item": String(arr[0]).trim(),
         "Nombre": arr[1]
     };
 }
