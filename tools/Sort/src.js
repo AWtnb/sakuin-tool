@@ -11,14 +11,16 @@ function fromTsv (tsv) {
 }
 
 function comparer (a, b) {
-    if (a > b) return 1;
-    if (a < b) return -1;
+    const aNorm = String(a).toLowerCase();
+    const bNorm = String(b).toLowerCase();
+    if (aNorm > bNorm) return 1;
+    if (aNorm < bNorm) return -1;
     return 0;
 }
 
 function sortByReading (obj) {
     return obj.sort((a,b) => {
-        return comparer(String(a.Item).toLowerCase(), String(b.Item).toLowerCase());
+        return comparer(a.Item, b.Item);
     }).sort((a,b) => {
         return comparer(a.Reading, b.Reading);
     }).sort((a,b) => {
