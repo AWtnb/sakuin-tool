@@ -21,7 +21,7 @@ function copyTable(tbody) {
         const cells = [];
         for (let c = 0; c < maxCol; c++) {
             const cell = row.cells[c];
-            cells.push(String(cell.innerHTML));
+            cells.push(String(cell.innerHTML).replace(/&amp;/g, "&"));
         }
         lines.push(cells.join("\t"));
     }
@@ -31,7 +31,7 @@ function copyTable(tbody) {
 }
 
 function copyValue(elem) {
-    navigator.clipboard.writeText(elem.value);
+    navigator.clipboard.writeText(String(elem.value).replace(/&amp;/g, "&"));
     alert("コピーしました！");
 }
 
