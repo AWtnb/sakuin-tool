@@ -13,8 +13,24 @@ function toHankaku(str) {
 }
 
 function copyTable(tbody) {
+    const lines = [];
+    const maxRow = tbody.rows.length;
+    for (let i = 0; i < maxRow; i++) {
+        const row = tbody.rows[i];
+        const maxCol = row.cells.length;
+        const cells = [];
+        for (let c = 0; c < maxCol; c++) {
+            cells.push(c.innerText);
+        }
+        lines.push(cells.join("\t"));
+    }
+    const s = lines.join("\r\n");
+    const dummy = document.createElement("div");
+    dummy.style.display = "none";
+    dummy.innerHTML = s;
+    document.body.appendChild(dummy);
     const range = document.createRange();
-    range.selectNodeContents(tbody);
+    range.selectNodeContents(dummy);
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
