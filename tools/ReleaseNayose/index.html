@@ -64,10 +64,9 @@ function releaseNayoseLines (lines) {
             releasedObj.push({name: name, nombre: ""});
             return
         }
-        const nombreArray = nombres.replace(/\s+/g, "").replace(/，/g, ",").split(",");
-        nombreArray.forEach(n => {
-            if (n.match(/[\u2013\u2014\u002d\u2010]/)) {
-                const [start, end] = n.split(/[\u2013\u2014\u002d\u2010]/);
+        nombres.replace(/\s+/g, "").replace(/，/g, ",").replace(/[\u2010\u2011\u2012\u2013\u2014\u2015]/g, "-").split(",").forEach(n => {
+            if (String(n).indexOf("-") != -1) {
+                const [start, end] = n.split("-");
                 for (let i = Number(start); i <= Number(end); i++) {
                     releasedObj.push({name: name, nombre: i});
                 }
@@ -77,7 +76,7 @@ function releaseNayoseLines (lines) {
             }
         });
     });
-    return releasedObj
+    return releasedObj;
 }
 
 function click_release() {
