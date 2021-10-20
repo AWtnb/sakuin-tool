@@ -8,6 +8,19 @@
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
+        .pair {
+            word-break: break-all;
+            font-size: .8em;
+            margin: .5em 0;
+            line-height: 1;
+            border-left: 2px solid #ccc;
+            padding: 2px;
+        }
+        .origin {color: gray;}
+        .modified {color: red;}
+        .msg {
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -35,6 +48,7 @@
             <input type="button" value="コピー" onclick="click_copy()">
         </div>
     </div>
+    <div class="diff"></div>
 </div>
 
 </div>
@@ -43,8 +57,8 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function formatSepartor(s) {
-    const f = s.replace(/　/g, "　　").replace(/　+/g, "　　").replace(/　　→/, "　→").replace(/　　(?!\d)/g, "");
+function formatFullWidthSpace(s) {
+    const f = s.replace(/　/g, "　　").replace(/　+/g, "　　").replace(/　　→/, "　→").replace(/(?<=.{2,})　　(?!\d)/, "　").replace(/　　(?!\d)/g, "");
     if (s.startsWith("　")) {
         return `　${f}`;
     }
@@ -52,7 +66,7 @@ function formatSepartor(s) {
 }
 
 function formatNombre(s) {
-    return s.replace(/，/g, ",").replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D]+/g, "-");
+    return s.replace(/ /g, "").replace(/，/g, ",").replace(/,/g, ", ").replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D]+/g, "-");
 }
 
 function formatChild(s) {
@@ -60,20 +74,51 @@ function formatChild(s) {
 }
 
 function formatLines(lines) {
-    return lines.map(line => line.replace(/ /g, "")).map(line => formatSepartor(line)).map(line => {
+    return lines.map(line => formatFullWidthSpace(line)).map(line => {
         if (line.indexOf("　　") != -1) {
             const [item, nombre, ...rest] = line.split("　　");
-            const fmt = (item.startsWith("　"))? formatChild(item) : item;
+            const fmt = (item.startsWith("　"))? formatChild(item) : item.trim();
             return `${fmt}　　${formatNombre(nombre)}`;
         }
         return line;
     });
 }
 
+function getDeltas(origins, news) {
+    const deltas = [];
+    for (let i = 0; i < origins.length; i++) {
+        const orgItem = origins[i];
+        if (i > news.length - 1) {
+            deltas.push({
+                "Origin": orgItem,
+                "Modified": "（行数が変わっています）"
+            });
+            continue;
+        }
+        const newItem = news[i];
+        if (orgItem != newItem) {
+            deltas.push({
+                "Origin": orgItem,
+                "Modified": newItem
+            });
+        }
+    }
+    return deltas;
+}
+
 function click_format() {
     const elem = document.querySelector(".ui");
     const lines = multiline2array(elem.querySelector(".inputLines").value);
-    elem.querySelector(".result").value = formatLines(lines).join("\n");
+    const formatted = formatLines(lines);
+    elem.querySelector(".result").value = formatted.join("\n");
+    const output = elem.querySelector(".diff");
+    output.innerHTML = "";
+    const diff = getDeltas(lines, formatted);
+    if (diff.length) {
+        output.innerHTML = `<div class="msg">${diff.length}箇所を修正しました：</msg>` + diff.map(d => {
+            return `<div class="pair"><div class="origin">${d.Origin}</div><div class="modified">${d.Modified}</div></div>`;
+        }).join("");
+    }
 }
 
 function click_copy() {
