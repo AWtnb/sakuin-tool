@@ -64,7 +64,7 @@ function releaseNayoseLines (lines) {
             releasedObj.push({name: name, nombre: ""});
             return
         }
-        nombres.replace(/\s+/g, "").replace(/，/g, ",").replace(/[\u2010\u2011\u2012\u2013\u2014\u2015]/g, "-").split(",").forEach(n => {
+        nombres.replace(/\s+/g, "").replace(/，/g, ",").replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D]/g, "-").split(",").forEach(n => {
             if (String(n).indexOf("-") != -1) {
                 const [start, end] = n.split("-");
                 for (let i = Number(start); i <= Number(end); i++) {
