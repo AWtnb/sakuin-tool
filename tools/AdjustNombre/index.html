@@ -67,11 +67,11 @@
 
     <div class="horizontal">
         <div class="vertical">
-            <textarea class="inputLines" placeholder="名寄せされた索引を貼り付けてください"></textarea>
+            <textarea id="leftTA" class="inputLines" placeholder="名寄せされた索引を貼り付けてください"></textarea>
             <input type="button" value="計算" onclick="clickBtn_adjustNombre()">
         </div>
         <div class="vertical">
-            <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+            <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="click_copy()">
         </div>
     </div>
@@ -136,6 +136,14 @@ function click_copy(){
     copyValue(document.querySelector(".ui textarea.result"));
 }
 
+const leftTA = document.getElementById("leftTA");
+const rightTA = document.getElementById("rightTA");
+leftTA.addEventListener("scroll", () => {
+    rightTA.scrollTop = leftTA.scrollTop;
+});
+rightTA.addEventListener("scroll", () => {
+    leftTA.scrollTop = rightTA.scrollTop;
+});
 
 </script>
 </body>

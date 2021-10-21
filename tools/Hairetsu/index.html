@@ -25,11 +25,11 @@
 
     <div class="horizontal">
         <div class="vertical">
-            <textarea class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
+            <textarea id="leftTA" class="inputLines" placeholder="文字列を貼り付けてください"></textarea>
             <input type="button" value="変換" onclick="click_hairetsu()">
         </div>
         <div class="vertical">
-            <textarea class="result" readonly placeholder="ここに結果が表示されます"></textarea>
+            <textarea id="rightTA" class="result" readonly placeholder="ここに結果が表示されます"></textarea>
             <input type="button" value="コピー" onclick="click_copy()">
         </div>
     </div>
@@ -54,6 +54,15 @@ function click_hairetsu() {
 function click_copy() {
     copyValue(document.querySelector(".ui .result"));
 }
+
+const leftTA = document.getElementById("leftTA");
+const rightTA = document.getElementById("rightTA");
+leftTA.addEventListener("scroll", () => {
+    rightTA.scrollTop = leftTA.scrollTop;
+});
+rightTA.addEventListener("scroll", () => {
+    leftTA.scrollTop = rightTA.scrollTop;
+});
 
 </script>
 </body>

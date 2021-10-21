@@ -40,11 +40,11 @@
 <div class="ui">
     <div class="horizontal">
         <div class="vertical">
-            <textarea class="inputLines" placeholder="旧版索引から抽出した索引をコピー＆ペーストしてください"></textarea>
+            <textarea id="leftTA" class="inputLines" placeholder="旧版索引から抽出した索引をコピー＆ペーストしてください"></textarea>
             <input type="button" value="整形" onclick="click_format()">
         </div>
         <div class="vertical">
-            <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+            <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
             <input type="button" value="コピー" onclick="click_copy()">
         </div>
     </div>
@@ -124,6 +124,15 @@ function click_format() {
 function click_copy() {
     copyValue(document.querySelector(".ui .result"));
 }
+
+const leftTA = document.getElementById("leftTA");
+const rightTA = document.getElementById("rightTA");
+leftTA.addEventListener("scroll", () => {
+    rightTA.scrollTop = leftTA.scrollTop;
+});
+rightTA.addEventListener("scroll", () => {
+    leftTA.scrollTop = rightTA.scrollTop;
+});
 
 </script>
 </body>
