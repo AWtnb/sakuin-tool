@@ -134,6 +134,7 @@ textarea {
   height: 250px;
   width: 100%;
   padding: 0.5em;
+  word-break: break-all;
 }
 textarea:focus {
   border: 1px solid #dc322f;
