@@ -140,9 +140,11 @@ const leftTA = document.getElementById("leftTA");
 const rightTA = document.getElementById("rightTA");
 leftTA.addEventListener("scroll", () => {
     rightTA.scrollTop = leftTA.scrollTop;
+    rightTA.scrollLeft = leftTA.scrollLeft;
 });
 rightTA.addEventListener("scroll", () => {
     leftTA.scrollTop = rightTA.scrollTop;
+    leftTA.scrollLeft = rightTA.scrollLeft;
 });
 
 </script>
