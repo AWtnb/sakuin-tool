@@ -66,7 +66,7 @@ function formatFullWidthSpace(s) {
 }
 
 function formatNombre(s) {
-    return s.replace(/ /g, "").replace(/，/g, ",").replace(/,/g, ", ").replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D]+/g, "-");
+    return s.replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D]+/g, "-");
 }
 
 function formatChild(s) {
@@ -74,7 +74,7 @@ function formatChild(s) {
 }
 
 function formatLines(lines) {
-    return lines.map(line => formatFullWidthSpace(line)).map(line => {
+    return lines.map(line => line.replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
         if (line.indexOf("　　") != -1) {
             const [item, nombre, ...rest] = line.split("　　");
             const fmt = (item.startsWith("　"))? formatChild(item) : item.trim();
@@ -96,7 +96,7 @@ function getDeltas(origins, news) {
             continue;
         }
         const newItem = news[i];
-        if (orgItem != newItem) {
+        if (orgItem.replace(/\t/, "　　") != newItem) {
             deltas.push({
                 "Origin": orgItem,
                 "Modified": newItem
