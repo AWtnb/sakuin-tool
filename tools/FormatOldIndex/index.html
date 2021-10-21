@@ -74,7 +74,7 @@ function formatChild(s) {
 }
 
 function formatLines(lines) {
-    return lines.map(line => line.replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
+    return lines.map(line => line.replace(/\t$/, "").replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
         if (line.indexOf("　　") != -1) {
             const [item, nombre, ...rest] = line.split("　　");
             const fmt = (item.startsWith("　"))? formatChild(item) : item.trim();
@@ -96,7 +96,7 @@ function getDeltas(origins, news) {
             continue;
         }
         const newItem = news[i];
-        if (orgItem.replace(/\t/, "　　") != newItem) {
+        if (orgItem != newItem) {
             deltas.push({
                 "Origin": orgItem,
                 "Modified": newItem
