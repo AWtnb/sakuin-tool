@@ -66,11 +66,11 @@ function formatFullWidthSpace(s) {
 }
 
 function formatNombre(s) {
-    return s.replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D]+/g, "-");
+    return s.replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]+/g, "-");
 }
 
 function formatChild(s) {
-    return "　" + s.trim().replace(/^[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D]+|[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D]+$/, "――");
+    return "　" + s.trim().replace(/^[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]+|[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]+$/, "――");
 }
 
 function formatLines(lines) {
