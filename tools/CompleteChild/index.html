@@ -22,17 +22,12 @@
     </div>
     <ul>
         <li>索引項目中の子項目を復元します（上図）。</li>
-        <li>ノンブルが入っていても動作します。</li>
+        <li>ノンブルが入っていても動作しますが、事前に<a href="../FormatOldIndex/index.html">こちら</a>で整形しておくと動作が安定します。</li>
         <li>改訂時に旧版の索引を再利用する際などにご利用ください。</li>
     </ul>
 </div>
 
 <div class="ui">
-    <label>項目とノンブルの間の文字（ノンブルが入っていない場合はどちらを選択しても同じ結果になります）：</label>
-    <form class="delimiter">
-        <input type="radio" name="type" value="spaces" checked> 二倍アキ
-        <input type="radio" name="type" value="tab"          > タブ文字（Excel）
-    </form>
     <div class="horizontal">
         <div class="vertical">
             <textarea class="inputLines" placeholder="索引を貼り付けてください"></textarea>
@@ -51,10 +46,9 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function completeChildItem (lines, delim) {
+function completeChildItem (lines) {
     const netArr = lines.filter(line => line);
-    const delimiter = (delim == "spaces")? "　　": "\t";
-    const regAfterDelim = new RegExp(`${delimiter}.+$`, "g");
+    const regAfterDelim = new RegExp("　　.+$", "g");
     const regFiller = new RegExp("(\u2500|\u2015|\u2500)+");
     const completedArray = [];
     completedArray.push(netArr[0]);
@@ -75,9 +69,8 @@ function completeChildItem (lines, delim) {
 
 function click_complete() {
     const elem = document.querySelector(".ui");
-    const delimiter = elem.querySelector("form.delimiter").type.value;
     const lines = multiline2array(elem.querySelector(".inputLines").value);
-    elem.querySelector(".result").value = completeChildItem(lines, delimiter).join("\n");
+    elem.querySelector(".result").value = completeChildItem(lines).join("\n");
 }
 
 function click_copy() {
