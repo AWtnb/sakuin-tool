@@ -135,6 +135,7 @@ textarea {
   width: 100%;
   padding: 0.5em;
   word-break: break-all;
+  white-space: pre;
 }
 textarea:focus {
   border: 1px solid #dc322f;
