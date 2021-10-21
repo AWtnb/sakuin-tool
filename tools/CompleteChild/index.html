@@ -46,25 +46,27 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
+function trimNombre(s) {
+    return s.replace(/　　.+$/, "");
+}
+
 function completeChildItem (lines) {
-    const netArr = lines.filter(line => line);
-    const regAfterDelim = new RegExp("　　.+$", "g");
-    const regFiller = new RegExp("(\u2500|\u2015|\u2500)+");
-    const completedArray = [];
-    completedArray.push(netArr[0]);
-    let lastParentItem = netArr[0].replace(regAfterDelim, "");
-    for (let i = 1; i < netArr.length; i++) {
-        const currentLine = netArr[i];
-        if (currentLine.match(regFiller)) {
-            const completedItem = currentLine.replace(/^\s+/, "").replace(regFiller, lastParentItem);
-            completedArray.push(completedItem);
+    const arr = lines.filter(line => line);
+    const completed = [];
+    completed.push(arr[0]);
+    let lastParentItem = trimNombre(arr[0]);
+    for (let i = 1; i < arr.length; i++) {
+        const curLine = String(arr[i]);
+        if (curLine.startsWith("　") && curLine.indexOf("――") != -1) {
+            const completedItem = curLine.replace(/^\s+/, "").replace(/――/, lastParentItem);
+            completed.push(completedItem);
         }
         else {
-            completedArray.push(currentLine);
-            lastParentItem = currentLine.replace(regAfterDelim, "");
+            completed.push(curLine);
+            lastParentItem = trimNombre(curLine);
         }
     }
-    return completedArray
+    return completed;
 }
 
 function click_complete() {
