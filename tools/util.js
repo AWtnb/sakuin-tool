@@ -1,5 +1,5 @@
 function multiline2array(multiline) {
-    return multiline.split(/[\r\n]+/g).map(line => String(line));
+    return multiline.replace(/\r\n/g, "\n").split(/\n/).map(line => String(line));
 }
 
 function escapeMeta(str) {
