@@ -142,6 +142,7 @@ function clickBtn_adjustNombre(){
         elem.querySelector(".nombreDelta").value
     );
     const adjustedLines = adjustedArray.map(item => item.adjusted);
+    elem.querySelector("textarea.result").value = adjustedLines.join("\r\n");
     const modified = adjustedArray.filter(item => item.isModified);
     const markup = (modified.length)?
         `<div class="msg">${modified.length}行の変更：</div>${
