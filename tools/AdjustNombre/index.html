@@ -26,14 +26,20 @@
             line-height: 1;
             font-size: 1rem;
         }
-        div.original {
-            color: gray;
-        }
         div.adjusted {
-            color: red;
+            color: #333;
         }
         div.adjusted .same {
             color: gray;
+        }
+        div.adjusted .mod {
+            color: red;
+        }
+        div.adjusted .del {
+            text-decoration: line-through;
+            color: #35618a;
+            letter-spacing: -1px;
+            margin: 0;
         }
     </style>
 </head>
@@ -46,7 +52,7 @@
 <div class="caption">
     <ul>
         <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
-        <li>ノンブル間のコンマは必ず半角になります。</li>
+        <li>ノンブル間のカンマは必ず半角になります。</li>
         <li>ノンブルに数字以外が含まれていた場合は計算の対象外です。</li>
         <li>範囲を示すハイフンなどが含まれる場合もスキップします。</li>
     </ul>
@@ -60,7 +66,7 @@
         </tr>
         <tr>
             <td>終了ノンブル</td>
-            <td><input type="number" value="99" min="1" class="endNombre"></td>
+            <td><input type="number" value="999" min="1" class="endNombre"></td>
         </tr>
         <tr>
             <td>増分</td>
@@ -124,12 +130,14 @@ function adjustNombre(lines, startNombre, endNombre, delta) {
 function diffNombre(origin, adjusted) {
     const nsOrigin = origin.replace(/^.+　　/, "").replace(/\s/g, "").replace(/，/g, ",").split(",");
     const nsAdjusted = adjusted.replace(/^.+　　/, "").replace(/\s/g, "").replace(/，/g, ",").split(",");
-    return adjusted.replace(/　　.+$/, "") + "　　" + nsAdjusted.map((n,i) => {
+    return `${adjusted.replace(/　　.+$/, "")}　　${
+        nsAdjusted.map((n,i) => {
         if (Number(n) == Number(nsOrigin[i])) {
             return `<span class="same">${n}</span>`;
         }
-        return n;
-    }).join(", ");
+        return `<span class="del">${nsOrigin[i]}</span><span class="mod">${n}</span>`;
+    }).join(", ")
+    }`;
 }
 
 
@@ -147,7 +155,7 @@ function clickBtn_adjustNombre(){
     const markup = (modified.length)?
         `<div class="msg">${modified.length}行の変更：</div>${
             modified.map(item => {
-                return `<div class="wrap"><div class="original">${item.original}</div><div class="adjusted">${ diffNombre(item.original, item.adjusted) }</div></div>`;
+                return `<div class="wrap"><div class="adjusted">${ diffNombre(item.original, item.adjusted) }</div></div>`;
             }).join("")
         }` : "<p>（変更箇所はありません）</p>";
     elem.querySelector("div.result").innerHTML = markup;
