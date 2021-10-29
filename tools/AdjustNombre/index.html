@@ -32,6 +32,9 @@
         div.adjusted {
             color: red;
         }
+        div.adjusted .same {
+            color: gray;
+        }
     </style>
 </head>
 
@@ -118,6 +121,17 @@ function adjustNombre(lines, startNombre, endNombre, delta) {
     });
 }
 
+function diffNombre(origin, adjusted) {
+    const nsOrigin = origin.replace(/^.+　　/, "").replace(/\s/g, "").replace(/，/g, ",").split(",");
+    const nsAdjusted = adjusted.replace(/^.+　　/, "").replace(/\s/g, "").replace(/，/g, ",").split(",");
+    return adjusted.replace(/　　.+$/, "") + "　　" + nsAdjusted.map((n,i) => {
+        if (Number(n) == Number(nsOrigin[i])) {
+            return `<span class="same">${n}</span>`;
+        }
+        return n;
+    }).join(", ");
+}
+
 
 function clickBtn_adjustNombre(){
     const elem = document.querySelector(".ui");
@@ -132,7 +146,7 @@ function clickBtn_adjustNombre(){
     const markup = (modified.length)?
         `<div class="msg">${modified.length}行の変更：</div>${
             modified.map(item => {
-                return `<div class="wrap"><div class="original">${item.original}</div><div class="adjusted">${item.adjusted}</div></div>`;
+                return `<div class="wrap"><div class="original">${item.original}</div><div class="adjusted">${ diffNombre(item.original, item.adjusted) }</div></div>`;
             }).join("")
         }` : "<p>（変更箇所はありません）</p>";
     elem.querySelector("div.result").innerHTML = markup;
