@@ -75,7 +75,8 @@
             <input type="button" value="コピー" onclick="click_copy()">
         </div>
     </div>
-    <div class="result">
+    <input type="button" value="チェックリストを印刷" onclick="click_print()">
+    <div id="src-detail" class="result">
     </div>
 </div>
 
@@ -86,7 +87,14 @@
 <script>
 
 function adjustNombre(lines, startNombre, endNombre, delta) {
-    return lines.filter(x => x).map(line => {
+    return lines.map(line => {
+        if (line.replace(/\s/g, "").length < 1) {
+            return {
+                "original": "",
+                "adjusted": "",
+                "isModified": false
+            }
+        }
         const [item, nombre, ...rest] = line.split("　　");
         if (!nombre) {
             return {
@@ -113,7 +121,6 @@ function adjustNombre(lines, startNombre, endNombre, delta) {
 
 function clickBtn_adjustNombre(){
     const elem = document.querySelector(".ui");
-
     const adjustedArray = adjustNombre(
         multiline2array(elem.querySelector(".inputLines").value),
         elem.querySelector(".startNombre").value,
@@ -121,7 +128,6 @@ function clickBtn_adjustNombre(){
         elem.querySelector(".nombreDelta").value
     );
     const adjustedLines = adjustedArray.map(item => item.adjusted);
-    elem.querySelector("textarea.result").value = adjustedLines.join("\r\n");
     const modified = adjustedArray.filter(item => item.isModified);
     const markup = (modified.length)?
         `<div class="msg">${modified.length}行の変更：</div>${
@@ -135,6 +141,11 @@ function clickBtn_adjustNombre(){
 function click_copy(){
     copyValue(document.querySelector(".ui textarea.result"));
 }
+
+function click_print() {
+    window.open('./print.html', 'newwindow', 'width=800,height=890');
+}
+
 
 const leftTA = document.getElementById("leftTA");
 const rightTA = document.getElementById("rightTA");

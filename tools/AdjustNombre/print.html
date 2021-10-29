@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <style>
+        .original {
+            color: gray;
+        }
+        .adjusted {
+            color: red;
+        }
+        .wrap-pair, input {
+            display: block;
+        }
+        .wrap-check {
+            display: flex;
+            font-size: 16px;
+            margin: .5em 0;
+            line-height: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="detail"></div>
+    <script>
+        const SOURCE = window.opener.document.querySelector("#src-detail");
+        window.onload = function () {
+            const markup = Array.from(SOURCE.querySelectorAll(".wrap")).map(elm => {
+                return `<div class="wrap-check"><input type="checkbox"><div class="wrap-pair">${elm.innerHTML}</div></div>`;
+            })
+            document.querySelector("#detail").innerHTML = markup.join("");
+        }
+    </script>
+</body>
+
+</html>
