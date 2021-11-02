@@ -18,24 +18,21 @@ function hyphenateConsecutive (inputArray) {
     for (let i = 0; i <= inputArray.length - 3; i++) {
         const [current, next1, next2] = inputArray.slice(i, i+3);
         stack.push({
-            Item: next1,
-            Hyphenate: isConsecutive(current, next1, next2)
+            "Item": next1,
+            "Hyphenate": isConsecutive(current, next1, next2)
         });
     }
     stack.push({
-        Item: inputArray[inputArray.length - 1],
-        Hyphenate: false
+        "Item": inputArray[inputArray.length - 1],
+        "Hyphenate": false
     });
-    const nombres = stack.map(x => ((x.Hyphenate)? "-" : x.Item));
-    return nombres.reduce((acc, cur) => {
-        if (acc.endsWith(cur)) {
-            return acc;
+    const nombres = stack.map(x => {
+        if (x.Hyphenate) {
+            return "\u2013";
         }
-        if (cur == "-" || acc.endsWith("-")) {
-            return acc + cur;
-        }
-        return acc + ", " + cur;
+        return x.Item;
     });
+    return nombres.join(", ").replace(/, (\u2013, )+/g, "\u2013");
 }
 
 function parseLine(s, nombreOnLeft = false) {
@@ -51,12 +48,12 @@ function parseLine(s, nombreOnLeft = false) {
     }
     return {
         "Item": String(arr[0]).trim(),
-        "Nombre": arr[1]
+        "Nombre": String(arr[1]).trim()
     };
 }
 
 function asNumber(s) {
-    return Number(toHankaku(s.replace(/[^[0-9０-９]/g, "")))
+    return Number(toHankaku(s.replace(/[^[0-9０-９]/g, "")));
 }
 
 function uniqueOrdered(arr) {
@@ -69,7 +66,8 @@ function nayose (lines, nombreOnLeft = false) {
     lines.filter(line => line).filter(line => !line.match(/^\s+$/)).forEach(line => {
         const l = parseLine(line, nombreOnLeft);
         if (map.has(l.Item)) {
-            map.set(l.Item, map.get(l.Item).concat(l.Nombre));
+            const conc = map.get(l.Item).concat(l.Nombre);
+            map.set(l.Item, conc);
         }
         else {
             map.set(l.Item, [l.Nombre]);
