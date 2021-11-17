@@ -3,26 +3,27 @@ function grepNombredReference(lines) {
     return lines.filter(line => line.match(/→.*\d/));
 }
 
-function grepItemToAddNombre(lines, references) {
+function grepItemToAddNombre(lines, referencesToRemoveNombre) {
     const refMap = new Map();
-    references.map(line => line.replace(/^.+?→\s*/, "")).forEach(line => {
+    referencesToRemoveNombre.map(line => line.replace(/^.+?→\s*/, "")).forEach(line => {
         const [item, nombre, ...rest] = line.split("　　");
+        const nombres = nombre.split(/, */);
         if (refMap.has(item)) {
-            refMap.set(item, refMap.get(item).concat(nombre));
+            refMap.set(item, refMap.get(item).concat(nombres));
         }
         else {
-            refMap.set(item, [nombre]);
+            refMap.set(item, nombres);
         }
     });
-    const baseItems = lines.filter(Boolean).filter(line => line.indexOf("→") < 0).map(line => {
+    const nonReferItems = lines.filter(Boolean).filter(line => line.indexOf("→") < 0).map(line => {
         const [item, nombre, ...rest] = line.split("　　");
         return {
             "Name": item,
             "Basename": item.replace(/(（.+?）)/, ""),
-            "Nombres": nombre.split(", ")
+            "Nombres": nombre.split(/, */)
         }
     });
-    return baseItems.filter(item => refMap.has(item.Basename)).map(item => {
+    return nonReferItems.filter(item => refMap.has(item.Basename)).map(item => {
         const nsOrigin = item.Nombres.map(n => String(n));
         const nsToAdd = refMap.get(item.Basename).map(n => String(n));
         return {
