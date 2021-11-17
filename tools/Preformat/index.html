@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>入力テンプレートの事前整形</title>
+    <base target="_blank">
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+
+<body>
+<!-- ============================== -->
+<div class="container">
+
+<h2 >入力テンプレートの事前整形</h2>
+
+<div class="caption">
+    <div class="imagebox">
+        <div class="boxtitle">SAMPLE</div>
+        <img src="./image/image_template.png">
+    </div>
+    <p>入力した<a href="../NewTemplate/index.html">テンプレート</a>の<code>見よ先</code>が入力されている行について下記の整形をします。</p>
+    <ul>
+        <li><code>　→</code>でつないで見よ項目形式にします。</li>
+        <li>見よ項目のノンブルを削除します。</li>
+        <li>見よ先項目を作成します。</li>
+    </ul>
+</div>
+
+<div class="ui">
+    <textarea class="inputLines" placeholder="図のように Excel から貼り付けてください"></textarea>
+    <input type="button" value="生成" onclick="click_format()">
+    <table class="result">
+        <thead>
+            <tr>
+                <th>ノンブル</th>
+                <th>項目</td>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <input type="button" value="表をコピー" onclick="click_copy()">
+
+</div>
+
+</div>
+<!-- ============================== -->
+<script type="text/javascript" src="../util.js" defer></script>
+<script type="text/javascript" src="./src.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+
+<script>
+
+function click_format() {
+    const elem = document.querySelector(".ui");
+    const lines = multiline2array(elem.querySelector(".inputLines").value);
+
+    const outputTable = elem.querySelector("table.result tbody");
+    resetTable(outputTable);
+
+    formatTemplare(lines).forEach((line, idx) => {
+        const row = outputTable.insertRow(-1);
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        cell1.innerHTML = line.Nombre;
+        cell2.innerHTML = line.Item;
+    });
+}
+
+function click_copy() {
+    const table = document.querySelector("table.result tbody");
+    copyTable(table);
+}
+
+</script>
+</body>
+
+</html>
