@@ -63,7 +63,7 @@ function uniqueOrdered(arr) {
 
 function nayose (lines, nombreOnLeft = false) {
     const map = new Map()
-    lines.filter(line => line).filter(line => !line.match(/^\s+$/)).forEach(line => {
+    lines.filter(Boolean).filter(line => line.replace(/\s/g, "")).forEach(line => {
         const l = parseLine(line, nombreOnLeft);
         if (map.has(l.Item)) {
             const conc = map.get(l.Item).concat(l.Nombre);
