@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>重複した見よ項目を探す</title>
+    <title>名寄せ項目の重複チェック</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
@@ -14,9 +14,10 @@
         }
         .result .detail {
             font-size: .9rem;
+            line-height: 1.2;
         }
         .result .detail p {
-            margin: .5em 0;
+            margin: 1em 0;
         }
     </style>
 </head>
@@ -26,7 +27,11 @@
 <div class="container">
 
 
-<h2>重複した見よ項目がないかチェック</h2>
+<h2>名寄せ項目の重複チェック</h2>
+
+<div class="caption">
+    <p>名寄せを修正したら<a href="../CheckNombre/index.html">こちら</a>でノンブルなど再チェックしておくと安全です。</p>
+</div>
 
 <div class="ui">
     <textarea class="inputLines" placeholder="名寄せした索引をコピー＆ペーストしてください"></textarea>
@@ -48,13 +53,13 @@ function click_check(){
     const output = elem.querySelector(".result");
     output.innerHTML = "";
     const lines = multiline2array(elem.querySelector(".inputLines").value);
-    const found = getReferencesToGroup(lines);
+    const found = getDuplicatedItemsInNayose(lines);
     if (found.length) {
         const markup = found.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
-        output.innerHTML = `<div class="msg">項目をまとめる必要があります：</div><div class="detail">${markup}</div>`;
+        output.innerHTML = `<div class="msg">名寄せできていない項目が見つかりました！</div><div class="detail">${markup}</div>`;
     }
     else {
-        output.innerHTML = "<p>問題ありません！</p>";
+        output.innerHTML = "<div class=\"msg\">問題ありません！</div>";
     }
 }
 

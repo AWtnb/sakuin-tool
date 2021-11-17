@@ -1,5 +1,5 @@
 
-function getReferencesToGroup(lines) {
+function getDuplicatedItemsInNayose(lines) {
     const nonReferred = lines.filter(Boolean).filter(line => !line.match(/（.+?）/));
     const referred = lines.filter(Boolean).filter(line => line.match(/（.+?）/));
     return referred.map(line => {
