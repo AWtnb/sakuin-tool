@@ -104,17 +104,25 @@ h4 {
             background-color: @mainBg;
             transform: translateY(-50%) translateX(1em);
         }
+        .diff-v {
+            text-align: center;
+            img {
+                margin: 0 auto;
+            }
+            .arrow::after {
+                content: "\2B9F";
+                font-size: 40px;
+            }
+        }
         .diff {
             display: inline-flex;
+            align-items: center;
             .arrow {
-                height: 30px;
-                margin: auto;
                 padding: .5rem;
             }
             .arrow::after {
-                content: "\27A1";
-                font-weight: bold;
-                font-size: 30px;
+                content: "\2B9E";
+                font-size: 40px;
             }
         }
     }

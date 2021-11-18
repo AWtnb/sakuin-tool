@@ -86,18 +86,26 @@ h4 {
   background-color: #e1e7e6;
   transform: translateY(-50%) translateX(1em);
 }
+.caption .imagebox .diff-v {
+  text-align: center;
+}
+.caption .imagebox .diff-v img {
+  margin: 0 auto;
+}
+.caption .imagebox .diff-v .arrow::after {
+  content: "\2B9F";
+  font-size: 40px;
+}
 .caption .imagebox .diff {
   display: inline-flex;
+  align-items: center;
 }
 .caption .imagebox .diff .arrow {
-  height: 30px;
-  margin: auto;
   padding: 0.5rem;
 }
 .caption .imagebox .diff .arrow::after {
-  content: "\27A1";
-  font-weight: bold;
-  font-size: 30px;
+  content: "\2B9E";
+  font-size: 40px;
 }
 a {
   color: #268bd2;
