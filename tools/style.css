@@ -19,14 +19,14 @@ body {
 }
 .container {
   background: #e1e7e6;
-  width: 80%;
+  width: 60%;
   max-width: 800px;
   min-height: 100%;
   margin: auto;
   padding: 20px;
 }
 .outline {
-  max-width: 400px;
+  width: 80%;
   margin: 0 auto;
 }
 .outline li {
