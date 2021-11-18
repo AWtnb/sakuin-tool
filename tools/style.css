@@ -4,7 +4,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/delagothicone/v4/hESp6XxvMDRA-2eD0lXpDa6QkBAGRQ.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/delagothicone/v8/~ChEKD0RlbGEgR290aGljIE9uZSAA.ttf) format('truetype');
 }
 html {
   height: 100%;
@@ -19,7 +19,8 @@ body {
 }
 .container {
   background: #e1e7e6;
-  max-width: 600px;
+  width: 80%;
+  max-width: 800px;
   min-height: 100%;
   margin: auto;
   padding: 20px;
@@ -84,6 +85,19 @@ h4 {
   padding: 0 4px;
   background-color: #e1e7e6;
   transform: translateY(-50%) translateX(1em);
+}
+.caption .imagebox .diff {
+  display: inline-flex;
+}
+.caption .imagebox .diff .arrow {
+  height: 30px;
+  margin: auto;
+  padding: 0.5rem;
+}
+.caption .imagebox .diff .arrow::after {
+  content: "\27A1";
+  font-weight: bold;
+  font-size: 30px;
 }
 a {
   color: #268bd2;
