@@ -92,7 +92,9 @@
 <div class="ui">
     <textarea class="inputLines"placeholder="paste here!" ></textarea>
     <div>
-        <input type="checkbox" class="isLeft"> ←ノンブルが左列（上図と逆）の場合はチェック
+        <label for="nombreOnLeft">
+            <input type="checkbox" class="isLeft" id="nombreOnLeft">ノンブルが左列（上図と逆）
+        </label>
     </div>
     <input type="button" value="整形" onclick="click_execute()">
     <div class="status"></div>
