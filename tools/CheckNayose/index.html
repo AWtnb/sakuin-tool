@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>名寄せ項目の重複チェック</title>
+    <title>名寄せのチェック</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
@@ -27,15 +27,27 @@
 <div class="container">
 
 
-<h2>名寄せ項目の重複チェック</h2>
+<h2>名寄せのチェック</h2>
 
 <div class="caption">
     <p>名寄せを修正したら<a href="../CheckNombre/index.html">こちら</a>でノンブルなど再チェックしておくと安全です。</p>
 </div>
 
-<div class="ui">
+<h3>名寄せ漏れがないか</h3>
+
+<div class="ui check-non-grouped">
     <textarea class="inputLines"placeholder="paste here!" ></textarea>
-    <input type="button" value="チェック" onclick="click_check()">
+    <input type="button" value="チェック" onclick="click_checkNonGrouped()">
+
+    <div class="result"></div>
+
+</div>
+
+<h3>見よ項目が本項目として残っていないか</h3>
+
+<div class="ui check-illegal-item">
+    <textarea class="inputLines"placeholder="paste here!" ></textarea>
+    <input type="button" value="チェック" onclick="click_checkIllegalItem()">
 
     <div class="result"></div>
 
@@ -48,8 +60,8 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function click_check(){
-    const elem = document.querySelector(".ui");
+function click_checkNonGrouped(){
+    const elem = document.querySelector(".check-non-grouped");
     const output = elem.querySelector(".result");
     output.innerHTML = "";
     const lines = multiline2array(elem.querySelector(".inputLines").value);
@@ -63,7 +75,20 @@ function click_check(){
     }
 }
 
-
+function click_checkIllegalItem() {
+    const elem = document.querySelector(".check-illegal-item");
+    const output = elem.querySelector(".result");
+    output.innerHTML = "";
+    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const found = [];
+    if (found.length) {
+        const markup = found.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
+        output.innerHTML = `<div class="msg">見よ項目が本項目としても残っています！</div><div class="detail">${markup}</div>`;
+    }
+    else {
+        output.innerHTML = "<div class=\"msg\">問題ありません！</div>";
+    }
+}
 
 </script>
 </body>
