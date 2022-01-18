@@ -13,10 +13,12 @@ function formatTemplare(lines) {
             });
         }
         else {
-            arr.push({
-                "Nombre": String(nombre),
-                "Item": item,
-            });
+            if (String(item).length > 0) {
+                arr.push({
+                    "Nombre": String(nombre),
+                    "Item": item,
+                });
+            }
         }
     });
     return arr;
