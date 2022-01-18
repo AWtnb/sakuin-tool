@@ -26,9 +26,14 @@
     </div>
     <p>入力した<a href="../NewTemplate/index.html">テンプレート</a>の<code>見よ先</code>が入力されている行について下記の整形をします。</p>
     <ul>
-        <li><code>　→</code>でつないで見よ項目形式にします。</li>
-        <li>見よ項目のノンブルを削除します。</li>
-        <li>代わりに同じノンブルで見よ先項目を作成します。</li>
+        <li>項目を左列に、ページを右列に配置します</li>
+        <li>見よ項目が入力されている場合：
+            <ul>
+                <li><code>　→</code>でつないで見よ項目を作成します</li>
+                <li>ノンブルを削除します</li>
+                <li>代わりに同じノンブルで見よ先項目を作成します</li>
+            </ul>
+        </li>
     </ul>
 </div>
 
@@ -38,8 +43,8 @@
     <table class="result">
         <thead>
             <tr>
-                <th>ノンブル</th>
                 <th>項目</td>
+                <th>ノンブル</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -67,8 +72,8 @@ function click_format() {
         const row = outputTable.insertRow(-1);
         const cell1 = row.insertCell(0);
         const cell2 = row.insertCell(1);
-        cell1.innerHTML = line.Nombre;
-        cell2.innerHTML = line.Item;
+        cell1.innerHTML = line.Item;
+        cell2.innerHTML = line.Nombre;
     });
 }
 
