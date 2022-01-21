@@ -77,7 +77,7 @@ function parseNombre(strNombre) {
             "display": s,
             "range": range,
             "hasRange": (range.length > 0),
-            "intValue": Number(toHalfWidth(s).replace(/[^\d]/g, ""))
+            "intValue": (range.length > 0)? range[0][0].intValue : Number(toHalfWidth(s).replace(/[^\d]/g, ""))
         }
     });
 }
