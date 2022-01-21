@@ -6,7 +6,7 @@ function escapeMeta(str) {
     return str.replace(/[-[\]{}()*+?.,\\^$|]/g, "\\$&");
 }
 
-function toHankaku(str) {
+function toHalfWidth(str) {
     return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
         return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
     });
@@ -62,7 +62,7 @@ function parseNombre(strNombre) {
     return strNombre.replace(/，/g, ",").split(",").map(nStr => String(nStr).trim()).map(nStr => {
         return {
             "display": String(nStr),
-            "intValue": toHankaku(String(nStr)).replace(/[^\d]/g, "")
+            "intValue": toHalfWidth(String(nStr)).replace(/[^\d]/g, "")
         }
     });
 }
