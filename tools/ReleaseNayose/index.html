@@ -72,15 +72,14 @@ function releaseNayoseLines (lines) {
             releasedObj.push({name: name, nombre: ""});
             return
         }
-        nombres.replace(/\s+/g, "").replace(/，/g, ",").replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]/g, "-").split(",").forEach(n => {
-            if (String(n).indexOf("-") != -1) {
-                const [start, end] = n.split("-");
-                for (let i = Number(start); i <= Number(end); i++) {
-                    releasedObj.push({name: name, nombre: i});
-                }
+        parseNombre(nombres).forEach(nombre => {
+            if (nombre.hasRange) {
+                nombre.range.forEach(n => {
+                    releasedObj.push({name: name, nombre: n[0].display});
+                });
             }
             else {
-                releasedObj.push({name: name, nombre: String(n)});
+                releasedObj.push({name: name, nombre: nombre.display});
             }
         });
     });
