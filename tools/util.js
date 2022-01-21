@@ -59,15 +59,24 @@ function kata2hira(str){
 }
 
 function parseNombre(strNombre) {
+    const reg = new RegExp("[\u002d\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]+");
     return strNombre.replace(/，/g, ",").split(",").map(nStr => String(nStr).trim()).map(nStr => {
         const s = String(nStr)
-        const prefix = s.split(/\d+/)[0];
-        const suffix = s.split(/\d+/).slice(-1)[0];
+        const range = [];
+        if (s.match(reg)) {
+            const [start, end] = s.split(reg);
+            const startObj = parseNombre(start);
+            const endObj = parseNombre(end);
+            range.push(startObj);
+            for (let idx = startObj[0].intValue + 1; idx < endObj[0].intValue; idx++) {
+                range.push(parseNombre(String(idx)));
+            }
+            range.push(endObj);
+        }
         return {
             "display": s,
-            "prefix": prefix,
-            "suffix": suffix,
-            "intValue": toHalfWidth(s).replace(/[^\d]/g, "")
+            "range": range,
+            "intValue": Number(toHalfWidth(s).replace(/[^\d]/g, ""))
         }
     });
 }
