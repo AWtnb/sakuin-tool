@@ -33,21 +33,8 @@
     .possibles table .match {
         color: red;
     }
-    div.nombredRefs .msg {
-        font-weight: bold;
-        font-size: .9rem;
-    }
-    div.lostTo div, div.lostFrom div, div.nombredRefs .detail {
+    div.lostTo div, div.lostFrom div {
         border: 1px solid white;
-    }
-    div.nombredRefs .detail {
-        padding: 2px 1em;
-        max-height: 15em;
-        overflow-y: scroll;
-    }
-    div.nombredRefs .detail p {
-        font-size: .9rem;
-        margin: 0;
     }
 </style>
 </head>
@@ -111,8 +98,6 @@
     </table>
     <input type="button" value="表をコピー" onclick="click_copy()">
     <div class="result">
-        <div class="nombredRefs">
-        </div>
         <div class="lostTo">
         </div>
         <div class="lostFrom">
@@ -137,7 +122,6 @@
 
 </div>
 <!-- ============================== -->
-<script type="text/javascript" src="../tools/AdjustReferenceNombre/src.js" defer></script>
 <script type="text/javascript" src="../tools/CheckChild/src.js" defer></script>
 <script type="text/javascript" src="../tools/CheckReference/src.js" defer></script>
 <script type="text/javascript" src="../tools/GetReading/kuromoji.js" defer></script>
@@ -164,22 +148,6 @@ function updateTable(elem, obj) {
         cell2.innerHTML = item.Reading;
         cell3.innerHTML = item.Norm;
     });
-}
-
-function checkReferenceNombre(lines) {
-    const found = grepNombredReference(lines);
-    if (found.length) {
-        const output = document.querySelector("div.result .nombredRefs");
-        const markupNombresToRemove = found.map(x => `<p>${x}</p>`);
-        const markupItemsToAddNombre = grepItemToAddNombre(lines, found).map(item => {
-            return `<p>${item.ReferTo}　←${item.NombreToAdd}</p>`
-        });
-        output.innerHTML = `<div id="src-nombre-to-remove"><div class="msg">見よ項目にノンブルが残っています：</div><div class="detail">${
-            markupNombresToRemove.join("")
-        }</div></div>` + `<div id="src-nombre-to-add"><div class="msg">見よ先にノンブルを追加する必要があります：</div><div class="detail">${
-            markupItemsToAddNombre.join("")
-        }</div></div>` + `<input type="button" value="チェックリストを印刷" onclick="click_print_list()">`;
-    }
 }
 
 function checkReferences(lines) {
@@ -214,9 +182,6 @@ function main(tokenizer, lines, nombreOnLeft, outputElem) {
     const sorted = sortByReading(tokenized);
     updateTable(outputElem, sorted);
     const indexLines = sorted.map(x => x.Item);
-
-    // check nombre in reference
-    checkReferenceNombre(indexLines);
 
     // check cross-reference
     checkReferences(indexLines);
