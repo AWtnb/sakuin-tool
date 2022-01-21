@@ -58,3 +58,11 @@ function kata2hira(str){
     });
 }
 
+function parseNombre(strNombre) {
+    return strNombre.replace(/，/g, ",").split(",").map(nStr => String(nStr).trim()).map(nStr => {
+        return {
+            "display": String(nStr),
+            "intValue": toHankaku(String(nStr)).replace(/[^\d]/g, "")
+        }
+    });
+}

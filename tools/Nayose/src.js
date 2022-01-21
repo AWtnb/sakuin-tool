@@ -53,7 +53,7 @@ function parseLine(s, nombreOnLeft = false) {
 }
 
 function asNumber(s) {
-    return Number(toHankaku(s.replace(/[^[0-9０-９]/g, "")));
+    return Number(toHalfWidth(s.replace(/[^[0-9０-９]/g, "")));
 }
 
 function uniqueOrdered(arr) {

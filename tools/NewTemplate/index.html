@@ -76,7 +76,7 @@ function generateTemplare(lines) {
     let idx = 0;
     lines.filter(line => line).forEach(line => {
         const [page, counter, ...rest] = line.split("\t");
-        const nItem = toHankaku(counter);
+        const nItem = toHalfWidth(counter);
         if (Number(nItem) > 0) {
             idx += 1;
             for (let i = 0; i < Number(nItem); i++) {
