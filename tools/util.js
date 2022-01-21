@@ -58,26 +58,36 @@ function kata2hira(str){
     });
 }
 
-function parseNombre(strNombre) {
-    const reg = new RegExp("[\u002d\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]+");
-    return strNombre.replace(/，/g, ",").split(",").map(nStr => String(nStr).trim()).map(nStr => {
-        const s = toHalfWidth(nStr);
-        const range = [];
-        if (s.match(reg)) {
-            const [start, end] = s.split(reg);
-            const startObj = parseNombre(start);
-            const endObj = parseNombre(end);
-            range.push(startObj);
-            for (let idx = startObj[0].intValue + 1; idx < endObj[0].intValue; idx++) {
-                range.push(parseNombre(String(idx)));
+class Nombre {
+
+    static parse(nombres) {
+        const reg = new RegExp("\s*[\u002d\u2010\u2011\u2012\u2013\u2014\uFF0D]+\s*");
+        return nombres.replace(/，/g, ",").split(",").map(nStr => String(nStr).trim()).map(nStr => {
+            const s = toHalfWidth(nStr);
+            const range = [];
+            if (s.match(reg)) {
+                const [start, end] = s.split(reg);
+                this.getRange(start, end).forEach(x => range.push(x));
             }
-            range.push(endObj);
+            return {
+                "display": s,
+                "range": range,
+                "hasRange": (range.length > 0),
+                "intValue": (range.length > 0)? range[0][0].intValue : Number(s.replace(/[^\d]/g, ""))
+            }
+        });
+    }
+
+    static getRange(start, end) {
+        const range = [];
+        const s = this.parse(start);
+        const e = this.parse(end);
+        range.push(s);
+        for (let idx = s[0].intValue + 1; idx < e[0].intValue; idx++) {
+            range.push(this.parse(String(idx)));
         }
-        return {
-            "display": s,
-            "range": range,
-            "hasRange": (range.length > 0),
-            "intValue": (range.length > 0)? range[0][0].intValue : Number(toHalfWidth(s).replace(/[^\d]/g, ""))
-        }
-    });
+        range.push(e);
+        return range;
+    }
+
 }

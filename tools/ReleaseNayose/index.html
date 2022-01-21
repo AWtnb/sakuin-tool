@@ -72,7 +72,7 @@ function releaseNayoseLines (lines) {
             releasedObj.push({name: name, nombre: ""});
             return
         }
-        parseNombre(nombres).forEach(nombre => {
+        Nombre.parse(nombres).forEach(nombre => {
             if (nombre.hasRange) {
                 nombre.range.forEach(n => {
                     releasedObj.push({name: name, nombre: n[0].display});
