@@ -3,28 +3,28 @@ function getIndexItems(lines) {
     return nonReferenceItems.filter(line => line).filter(line => !line.match(/^　/)).map(line => line.replace(/　　\d.*$/g, ""));
 }
 
-function isChild(s, search, mode) {
-    if (String(s).startsWith(search) || String(s).endsWith(search)) {
-        if (mode == "head" && !String(s).startsWith(search)) {
-            return false;
-        }
-        if (mode == "tail" && !String(s).endsWith(search)) {
-            return false;
-        }
-        return true;
-    }
-    return false;
-}
+// function isChild(s, search, mode) {
+//     if (String(s).startsWith(search) || String(s).endsWith(search)) {
+//         if (mode == "head" && !String(s).startsWith(search)) {
+//             return false;
+//         }
+//         if (mode == "tail" && !String(s).endsWith(search)) {
+//             return false;
+//         }
+//         return true;
+//     }
+//     return false;
+// }
 
 function getRegexForChild(s, mode) {
     const escaped = escapeMeta(s);
     if (mode == "tail") {
-        return new RegExp(`${escaped}$`, "g");
+        return new RegExp(`${escaped}$`);
     }
     if (mode == "head") {
-        return new RegExp(`^${escaped}`, "g");
+        return new RegExp(`^${escaped}`);
     }
-    return new RegExp(`^${escaped}|${escaped}$`, "g");
+    return new RegExp(`^${escaped}|${escaped}$`);
 }
 
 function findPossibleChildItems(lines, mode = "tail") {
