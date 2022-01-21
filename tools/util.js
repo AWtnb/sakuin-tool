@@ -60,9 +60,14 @@ function kata2hira(str){
 
 function parseNombre(strNombre) {
     return strNombre.replace(/，/g, ",").split(",").map(nStr => String(nStr).trim()).map(nStr => {
+        const s = String(nStr)
+        const prefix = s.split(/\d+/)[0];
+        const suffix = s.split(/\d+/).slice(-1)[0];
         return {
-            "display": String(nStr),
-            "intValue": toHalfWidth(String(nStr)).replace(/[^\d]/g, "")
+            "display": s,
+            "prefix": prefix,
+            "suffix": suffix,
+            "intValue": toHalfWidth(s).replace(/[^\d]/g, "")
         }
     });
 }
