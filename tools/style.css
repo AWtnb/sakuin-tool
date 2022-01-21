@@ -223,3 +223,13 @@ table th {
   border: none;
   border-top: 1px solid #839496;
 }
+.navi {
+  font-size: 12px;
+  font-weight: bold;
+}
+.navi a {
+  color: #dc322f;
+}
+.navi::before {
+  content: "BACK TO ";
+}
