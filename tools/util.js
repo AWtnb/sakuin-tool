@@ -61,7 +61,7 @@ function kata2hira(str){
 function parseNombre(strNombre) {
     const reg = new RegExp("[\u002d\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]+");
     return strNombre.replace(/，/g, ",").split(",").map(nStr => String(nStr).trim()).map(nStr => {
-        const s = String(nStr)
+        const s = toHalfWidth(nStr);
         const range = [];
         if (s.match(reg)) {
             const [start, end] = s.split(reg);
@@ -76,6 +76,7 @@ function parseNombre(strNombre) {
         return {
             "display": s,
             "range": range,
+            "hasRange": (range.length > 0),
             "intValue": Number(toHalfWidth(s).replace(/[^\d]/g, ""))
         }
     });
