@@ -59,26 +59,32 @@
 <script>
 
 function formatFullWidthSpace(s) {
-    const f = s.replace(/　/g, "　　").replace(/　+/g, "　　").replace(/　　→/, "　→").replace(/(?<=.{2,})　　(?!\d)/, "　").replace(/　　(?!\d)/g, "");
+    const doubleSpaced = s.replace(/　/g, "　　").replace(/　+/g, "　　");
+    const f = doubleSpaced.replace(/　　→/, "　→").replace(/(?<=.{2,})　　(?!\d)/, "　").replace(/　　(?!\d)/g, "");
     if (s.startsWith("　")) {
         return `　${f}`;
     }
     return f;
 }
 
+const POSSIBLE_BARS = "[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]";
+
 function formatNombre(s) {
-    return s.replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]+/g, "-");
+    const reg = new RegExp(`${POSSIBLE_BARS}+`, "g")
+    return s.replace(reg, "-");
 }
 
 function formatChild(s) {
-    return "　" + s.trim().replace(/^[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]+|[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]+$/, "――");
+    const reg = new RegExp(`^${POSSIBLE_BARS}+|${POSSIBLE_BARS}+$`);
+    return "　" + s.trim().replace(reg, "――");
 }
 
 function formatLines(lines) {
+    const reg = new RegExp(POSSIBLE_BARS);
     return lines.map(line => line.replace(/\t$/, "").replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
         if (line.indexOf("　　") != -1) {
             const [item, nombre, ...rest] = line.split("　　");
-            const fmt = (item.startsWith("　"))? formatChild(item) : item.trim();
+            const fmt = (String(item).startsWith("　") || String(item).match(reg))? formatChild(item) : item.trim();
             return `${fmt}　　${formatNombre(nombre)}`;
         }
         return line;
