@@ -118,7 +118,7 @@ class Nombre {
     }
 
     order() {
-         this.parsed = this.parsed.filter(x => x.display).sort((a, b) => a.intValue - b.intValue);
+        this.parsed = this.parsed.filter(x => x.display).sort((a, b) => a.intValue - b.intValue);
     }
 
     unique() {
