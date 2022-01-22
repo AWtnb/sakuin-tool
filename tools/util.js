@@ -58,16 +58,23 @@ function kata2hira(str){
     });
 }
 
-class Nombre {
+class NombreParser {
+
+    static get barsReg() {
+        return new RegExp("\s*[\u002d\u2010\u2011\u2012\u2013\u2014\uFF0D]+\s*");
+    }
+
+    static arrayByComma(s) {
+        return s.replace(/，/g, ",").split(",");
+    }
 
     static parse(nombres) {
-        const reg = new RegExp("\s*[\u002d\u2010\u2011\u2012\u2013\u2014\uFF0D]+\s*");
-        return nombres.replace(/，/g, ",").split(",").map(nStr => String(nStr).trim()).map(nStr => {
-            const s = toHalfWidth(nStr);
+        return this.arrayByComma(nombres).map(nStr => {
+            const s = toHalfWidth(nStr).trim();
             const range = [];
-            if (s.match(reg)) {
-                const [start, end] = s.split(reg);
-                this.getRange(start, end).forEach(x => range.push(x));
+            if (s.match(this.barsReg)) {
+                const [start, end] = s.split(this.barsReg);
+                this.rangedNombres(start, end).forEach(x => range.push(x));
             }
             return {
                 "display": s,
@@ -78,7 +85,7 @@ class Nombre {
         });
     }
 
-    static getRange(start, end) {
+    static rangedNombres(start, end) {
         const range = [];
         const s = this.parse(start);
         const e = this.parse(end);
@@ -88,6 +95,15 @@ class Nombre {
         }
         range.push(e);
         return range;
+    }
+
+}
+
+class Nombre {
+
+    constructor(text) {
+        this.text = text;
+        this.parsed = NombreParser.parse(text);
     }
 
 }
