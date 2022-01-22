@@ -47,8 +47,8 @@ function parseLine(s, nombreOnLeft = false) {
         arr.reverse()
     }
     return {
-        "item": String(arr[0]).trim(),
-        "nombre": String(arr[1]).trim()
+        "Item": String(arr[0]).trim(),
+        "Nombre": String(arr[1]).trim()
     };
 }
 
@@ -65,12 +65,12 @@ function nayose (lines, nombreOnLeft = false) {
     const map = new Map()
     lines.filter(Boolean).filter(line => line.replace(/\s/g, "")).forEach(line => {
         const l = parseLine(line, nombreOnLeft);
-        if (map.has(l.item)) {
-            const conc = map.get(l.item).concat(l.nombre);
-            map.set(l.item, conc);
+        if (map.has(l.Item)) {
+            const conc = map.get(l.Item).concat(l.Nombre);
+            map.set(l.Item, conc);
         }
         else {
-            map.set(l.item, [l.nombre]);
+            map.set(l.Item, [l.Nombre]);
         }
     });
     const ret = [];
