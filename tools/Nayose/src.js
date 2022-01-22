@@ -66,23 +66,20 @@ function nayose (lines, nombreOnLeft = false) {
     lines.filter(Boolean).filter(line => line.replace(/\s/g, "")).forEach(line => {
         const l = parseLine(line, nombreOnLeft);
         if (map.has(l.Item)) {
-            const conc = map.get(l.Item).concat(l.Nombre);
+            const conc = map.get(l.Item) + ", " + l.Nombre;
             map.set(l.Item, conc);
         }
         else {
-            map.set(l.Item, [l.Nombre]);
+            map.set(l.Item, l.Nombre);
         }
     });
     const ret = [];
     map.forEach((nombres, item) => {
-        const uniq = uniqueOrdered(nombres);
-        if (uniq.length < 1) {
-            ret.push(item);
-        }
-        else {
-            const hyphenated = hyphenateConsecutive(uniq);
-            ret.push(item + "　　" + hyphenated);
-        }
+        const parsed = new Nombre(nombres);
+        parsed.order();
+        parsed.unique();
+        parsed.hyphenate();
+        ret.push((item + "　　" + parsed.toString()).trim());
     })
     return ret;
 }
