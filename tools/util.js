@@ -72,20 +72,21 @@ class NombreParser {
         /**
          * nombre: must be string sepatated by comma
          */
-        return this.arrayByComma(nombre).map(nStr => {
+        const stack = [];
+        this.arrayByComma(nombre).map(nStr => {
             const s = toHalfWidth(nStr).trim();
-            const range = [];
             if (s.match(this.barsReg)) {
                 const [start, end] = s.split(this.barsReg);
-                this.rangedNombres(start, end).forEach(x => range.push(x));
+                this.rangedNombres(start, end).forEach(x => stack.push(x[0]));
             }
-            return {
-                "display": s,
-                "range": range,
-                "hasRange": (range.length > 0),
-                "intValue": (range.length > 0)? range[0][0].intValue : Number(s.replace(/[^\d]/g, ""))
+            else {
+                stack.push({
+                    "display": s,
+                    "intValue": Number(s.replace(/[^\d]/g, ""))
+                });
             }
         });
+        return stack;
     }
 
     static rangedNombres(start, end) {
@@ -113,8 +114,8 @@ class NombreParser {
 
 class Nombre {
 
-    constructor(text) {
-        this.parsed = NombreParser.parse(text);
+    constructor(s) {
+        this.parsed = NombreParser.parse(s);
     }
 
     order() {
