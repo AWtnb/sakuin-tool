@@ -68,8 +68,11 @@ class NombreParser {
         return s.replace(/，/g, ",").split(",");
     }
 
-    static parse(nombres) {
-        return this.arrayByComma(nombres).map(nStr => {
+    static parse(nombre) {
+        /**
+         * nombre: must be string sepatated by comma
+         */
+        return this.arrayByComma(nombre).map(nStr => {
             const s = toHalfWidth(nStr).trim();
             const range = [];
             if (s.match(this.barsReg)) {
@@ -97,13 +100,68 @@ class NombreParser {
         return range;
     }
 
+    static isConsecutive (a, b, c) {
+        if (a.intValue+1 == b.intValue && a.intValue+2 == c.intValue) {
+            if (!b.display.match(/[^\d]/)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 class Nombre {
 
     constructor(text) {
-        this.text = text;
         this.parsed = NombreParser.parse(text);
+    }
+
+    order() {
+         this.parsed = this.parsed.filter(x => x.display).sort((a, b) => a.intValue - b.intValue);
+    }
+
+    unique() {
+        const stack = [];
+        this.parsed = this.parsed.filter(nombre => {
+            if (stack.includes(nombre.display)) {
+                return false;
+            }
+            stack.push(nombre.display);
+            return true;
+        });
+    }
+
+    hyphenate() {
+        if (this.parsed.length > 2) {
+            const stack = [];
+            stack.push({
+                "item": this.parsed[0],
+                "isHyphen": false
+            });
+            for (let i = 0; i <= this.parsed.length - 3; i++) {
+                const [current, next1, next2] = this.parsed.slice(i, i+3);
+                stack.push({
+                    "item": next1,
+                    "isHyphen": NombreParser.isConsecutive(current, next1, next2)
+                });
+            }
+            stack.push({
+                "item": this.parsed.slice(-1)[0],
+                "isHyphen": false
+            });
+            this.parsed = stack.map(x => {
+                if (x.isHyphen) {
+                    return {
+                        "display": "\u2013",
+                        "range": [],
+                        "hasRange": false,
+                        "intValue": x.item.intValue
+                    }
+                }
+                return x.item;
+            });
+        }
     }
 
 }
