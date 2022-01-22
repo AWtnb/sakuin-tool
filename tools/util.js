@@ -103,7 +103,7 @@ class NombreParser {
 
     static isConsecutive (a, b, c) {
         if (a.intValue+1 == b.intValue && a.intValue+2 == c.intValue) {
-            if (!b.display.match(/[^\d]/)) {
+            if (!isNaN(b.display)) {
                 return true;
             }
         }
@@ -134,35 +134,38 @@ class Nombre {
     }
 
     hyphenate() {
-        if (this.parsed.length > 2) {
-            const stack = [];
+        if (this.parsed.length < 3) {
+            return;
+        }
+        const stack = [];
+        stack.push({
+            "item": this.parsed[0],
+            "isHyphen": false
+        });
+        for (let i = 0; i < this.parsed.length - 2; i++) {
+            const [current, next1, next2] = this.parsed.slice(i, i+3);
             stack.push({
-                "item": this.parsed[0],
-                "isHyphen": false
-            });
-            for (let i = 0; i <= this.parsed.length - 3; i++) {
-                const [current, next1, next2] = this.parsed.slice(i, i+3);
-                stack.push({
-                    "item": next1,
-                    "isHyphen": NombreParser.isConsecutive(current, next1, next2)
-                });
-            }
-            stack.push({
-                "item": this.parsed.slice(-1)[0],
-                "isHyphen": false
-            });
-            this.parsed = stack.map(x => {
-                if (x.isHyphen) {
-                    return {
-                        "display": "\u2013",
-                        "range": [],
-                        "hasRange": false,
-                        "intValue": x.item.intValue
-                    }
-                }
-                return x.item;
+                "item": next1,
+                "isHyphen": NombreParser.isConsecutive(current, next1, next2)
             });
         }
+        stack.push({
+            "item": this.parsed.slice(-1)[0],
+            "isHyphen": false
+        });
+        this.parsed = stack.map(x => {
+            if (x.isHyphen) {
+                return {
+                    "display": "\u2013",
+                    "intValue": x.item.intValue
+                }
+            }
+            return x.item;
+        });
+    }
+
+    toString() {
+        return this.parsed.map(p => p.display).join(", ").replace(/, (\u2013, )+/g, "\u2013");
     }
 
 }
