@@ -1,21 +1,22 @@
 function formatTemplare(lines) {
     const arr = [];
-    lines.filter(Boolean).filter(line => line.replace(/\s/g, "")).forEach(line => {
-        const [nombre, item, referTo, ...rest] = line.split("\t");
+    lines.filter(x => x.trim()).forEach(line => {
+        const [nombre, item, referTo, ...rest] = line.split("\t").map(x => x.trim());
+        const nStr = String(toHalfWidth(nombre));
         if (String(referTo).length > 0) {
             arr.push({
                 "Nombre": "",
                 "Item": `${item}　→${referTo}`,
             });
             arr.push({
-                "Nombre": String(nombre),
+                "Nombre": nStr,
                 "Item": `${referTo}（${item}）`,
             });
         }
         else {
             if (String(item).length > 0) {
                 arr.push({
-                    "Nombre": String(nombre),
+                    "Nombre": nStr,
                     "Item": item,
                 });
             }
