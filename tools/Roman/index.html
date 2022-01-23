@@ -71,7 +71,7 @@ function toRoman(s) {
         ["ャ", "Lya"], ["ュ", "Lyu"], ["ョ", "Lyo"], ["ッ", "Ltu"]
     ].forEach(x => map.set(...x))
 
-    let converted = hira2kata(s);
+    let converted = toKatakana(s);
     for (let k of map.keys()) {
         const reg = new RegExp(k, "g");
         converted = converted.replace(reg, map.get(k));

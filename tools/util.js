@@ -44,14 +44,14 @@ function resetTable(tbody) {
     }
 }
 
-function hira2kata(str){
+function toKatakana(str){
     return str.replace(/[\u3041-\u3096]/g, function(match) {
         const chr = match.charCodeAt(0) + 0x60;
         return String.fromCharCode(chr);
     });
 }
 
-function kata2hira(str){
+function toHiragana(str){
     return str.replace(/[\u30a1-\u30f6]/g, function(match) {
         const chr = match.charCodeAt(0) - 0x60;
         return String.fromCharCode(chr);

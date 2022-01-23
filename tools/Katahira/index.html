@@ -46,9 +46,9 @@
 
 function convertHiraKata(str, toHira=false){
     if (toHira) {
-        return kata2hira(str)
+        return toHiragana(str)
     }
-    return hira2kata(str)
+    return toKatakana(str)
 }
 
 function click_katahira() {
