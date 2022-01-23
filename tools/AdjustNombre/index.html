@@ -98,7 +98,7 @@
 
 function adjustNombre(lines, startNombre, endNombre, delta) {
     return lines.map(line => {
-        if (line.replace(/\s/g, "").length < 1) {
+        if (line.trim().length < 1) {
             return {
                 "original": "",
                 "adjusted": "",
