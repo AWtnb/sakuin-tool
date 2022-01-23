@@ -77,12 +77,13 @@ class NombreParser {
             const s = toHalfWidth(nStr).trim();
             if (s.match(this.barsReg)) {
                 const [start, end] = s.split(this.barsReg);
-                this.rangedNombres(start, end).forEach(x => stack.push(x[0]));
+                this.rangedNombres(start, end).forEach(x => stack.push(x));
             }
             else {
                 stack.push({
                     "display": s,
-                    "intValue": Number(s.replace(/[^\d]/g, ""))
+                    "intValue": Number(s.replace(/[^\d]/g, "")),
+                    "hyphenated": false
                 });
             }
         });
@@ -93,11 +94,13 @@ class NombreParser {
         const range = [];
         const s = this.parse(start);
         const e = this.parse(end);
-        range.push(s);
+        range.push(s[0]);
         for (let idx = s[0].intValue + 1; idx < e[0].intValue; idx++) {
-            range.push(this.parse(String(idx)));
+            const p = this.parse(String(idx))[0];
+            p.hyphenated = true;
+            range.push(p);
         }
-        range.push(e);
+        range.push(e[0]);
         return range;
     }
 
