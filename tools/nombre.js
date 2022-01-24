@@ -26,8 +26,14 @@ class NombreParser {
                 this.rangedNombres(start, end).forEach(x => stack.push(x));
             }
             else {
+                const prefix = s.split(/\d+/)[0];
+                const suffix = s.split(/\d+/).slice(-1)[0];
                 stack.push({
-                    "display": s,
+                    "display": {
+                        "text": s,
+                        "prefix": prefix,
+                        "suffix": suffix,
+                    },
                     "intValue": Number(s.replace(/[^\d]/g, "")),
                     "hyphenated": false
                 });
@@ -38,21 +44,21 @@ class NombreParser {
 
     static rangedNombres(start, end) {
         const range = [];
-        const s = this.parse(start);
-        const e = this.parse(end);
-        range.push(s[0]);
-        for (let idx = s[0].intValue + 1; idx < e[0].intValue; idx++) {
+        const s = this.parse(start)[0];
+        const e = this.parse(end)[0];
+        range.push(s);
+        for (let idx = s.intValue + 1; idx < e.intValue; idx++) {
             const p = this.parse(String(idx))[0];
             p.hyphenated = true;
             range.push(p);
         }
-        range.push(e[0]);
+        range.push(e);
         return range;
     }
 
     static isConsecutive (a, b, c) {
         if (a.intValue+1 == b.intValue && a.intValue+2 == c.intValue) {
-            if (!isNaN(b.display)) {
+            if (!isNaN(b.display.text)) {
                 return true;
             }
         }
@@ -68,16 +74,16 @@ class Nombre {
     }
 
     order() {
-        this.parsed = this.parsed.filter(x => x.display).sort((a, b) => a.intValue - b.intValue);
+        this.parsed = this.parsed.filter(x => x.display.text).sort((a, b) => a.intValue - b.intValue);
     }
 
     unique() {
         const stack = [];
         this.parsed = this.parsed.filter(nombre => {
-            if (stack.includes(nombre.display)) {
+            if (stack.includes(nombre.display.text)) {
                 return false;
             }
-            stack.push(nombre.display);
+            stack.push(nombre.display.text);
             return true;
         });
     }
@@ -105,7 +111,11 @@ class Nombre {
         this.parsed = stack.map(x => {
             if (x.isHyphen) {
                 return {
-                    "display": "\u2013",
+                    "display": {
+                        "text": "\u2013",
+                        "prefix": "",
+                        "suffix": "",
+                    },
                     "intValue": x.item.intValue
                 }
             }
@@ -114,7 +124,7 @@ class Nombre {
     }
 
     toString() {
-        return this.parsed.map(p => p.display).join(", ").replace(/, (\u2013, )+/g, "\u2013");
+        return this.parsed.map(p => p.display.text).join(", ").replace(/, (\u2013, )+/g, "\u2013");
     }
 
 }
