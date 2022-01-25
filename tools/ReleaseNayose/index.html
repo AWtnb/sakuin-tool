@@ -73,7 +73,7 @@ function releaseNayoseLines (lines) {
             releasedObj.push({name: name, nombre: ""});
             return
         }
-        NombreParser.parse(nombres).forEach(nombre => {
+        Nombre.parse(nombres).forEach(nombre => {
             releasedObj.push({name: name, nombre: nombre.display.text});
         });
     });

@@ -123,8 +123,8 @@ function adjustNombresLine(lines, start, end, delta) {
                 },
             }
         }
-        const adjustedNombres = NombreParser.arrayByComma(nombre).map(n => {
-            const parsed = NombreParser.parse(n);
+        const adjustedNombres = Nombre.arrayByComma(nombre).map(n => {
+            const parsed = Nombre.parse(n);
             if (parsed.length > 1) {
                 return adjustNombre(parsed[0], start, end, delta)
                     + "\u2013"
@@ -135,7 +135,7 @@ function adjustNombresLine(lines, start, end, delta) {
         return {
             "basename": item,
             "nombres": {
-                "origin": NombreParser.arrayByComma(nombre),
+                "origin": Nombre.arrayByComma(nombre),
                 "adjusted": adjustedNombres,
             },
         }

@@ -1,3 +1,64 @@
+class NombreGroup {
+
+    constructor(s) {
+        this.parsed = Nombre.parse(s);
+    }
+
+    order() {
+        this.parsed = this.parsed.filter(x => x.display.text).sort((a, b) => a.intValue - b.intValue);
+    }
+
+    unique() {
+        const stack = [];
+        this.parsed = this.parsed.filter(nombre => {
+            if (stack.includes(nombre.display.text)) {
+                return false;
+            }
+            stack.push(nombre.display.text);
+            return true;
+        });
+    }
+
+    hyphenate() {
+        if (this.parsed.length < 3) {
+            return;
+        }
+        const stack = [];
+        stack.push({
+            "item": this.parsed[0],
+            "isHyphen": false
+        });
+        for (let i = 0; i < this.parsed.length - 2; i++) {
+            const [current, next1, next2] = this.parsed.slice(i, i+3);
+            stack.push({
+                "item": next1,
+                "isHyphen": Nombre.isConsecutive(current, next1, next2)
+            });
+        }
+        stack.push({
+            "item": this.parsed.slice(-1)[0],
+            "isHyphen": false
+        });
+        this.parsed = stack.map(x => {
+            if (x.isHyphen) {
+                return {
+                    "display": {
+                        "text": "\u2013",
+                        "prefix": "",
+                        "suffix": "",
+                    },
+                    "intValue": x.item.intValue
+                }
+            }
+            return x.item;
+        });
+    }
+
+    toString() {
+        return this.parsed.map(p => p.display.text).join(", ").replace(/, (\u2013, )+/g, "\u2013");
+    }
+
+}
 
 function parseLine(s, nombreOnLeft = false) {
     const arr = s.split("\t").slice(0, 2).map(x => String(x).trim());
@@ -30,7 +91,7 @@ function nayose (lines, nombreOnLeft = false) {
     });
     const ret = [];
     map.forEach((nombres, item) => {
-        const parsed = new Nombre(nombres);
+        const parsed = new NombreGroup(nombres);
         parsed.order();
         parsed.unique();
         parsed.hyphenate();
@@ -65,7 +126,7 @@ function nayoseByOrder(lines, nombreOnLeft = false) {
     }
 
     return stack.map(pair => {
-        const parsed = new Nombre(pair.Nombres);
+        const parsed = new NombreGroup(pair.Nombres);
         parsed.order();
         parsed.unique();
         parsed.hyphenate();
