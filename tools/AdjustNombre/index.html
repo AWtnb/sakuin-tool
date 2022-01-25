@@ -93,6 +93,7 @@
 </div>
 <!-- ============================== -->
 <script type="text/javascript" src="../util.js" defer></script>
+<script type="text/javascript" src="../nombre.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
@@ -113,7 +114,7 @@ function adjustNombre(lines, startNombre, endNombre, delta) {
                 "isModified": false
             }
         }
-        const nombres = nombre.replace(/，/g, ",").replace(/\s/g, "").split(",").map(n => {
+        const nombres = NombreParser.arrayByComma(nombre).map(x => x.trim()).map(n => {
             if (Number(startNombre) <= Number(n) && Number(n) <= Number(endNombre)) {
                 return Number(n) + Number(delta);
             }
