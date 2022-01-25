@@ -123,7 +123,7 @@ function adjustNombresLine(lines, start, end, delta) {
                 },
             }
         }
-        const adjustedNombres = NombreParser.arrayByComma(nombre).map(x => x.trim()).map(n => {
+        const adjustedNombres = NombreParser.arrayByComma(nombre).map(n => {
             const parsed = NombreParser.parse(n);
             if (parsed.length > 1) {
                 return adjustNombre(parsed[0], start, end, delta)

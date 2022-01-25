@@ -5,7 +5,7 @@ class NombreParser {
     }
 
     static arrayByComma(s) {
-        return s.replace(/，/g, ",").split(",");
+        return s.replace(/，/g, ",").split(",").map(x => x.trim());
     }
 
     static removeFullWidth(s) {
@@ -20,7 +20,7 @@ class NombreParser {
          */
         const stack = [];
         this.arrayByComma(nombre).map(nStr => {
-            const s = this.removeFullWidth(nStr).trim();
+            const s = this.removeFullWidth(nStr);
             if (s.match(this.barsReg)) {
                 const [start, end] = s.split(this.barsReg);
                 this.rangedNombres(start, end).forEach(x => stack.push(x));
