@@ -54,8 +54,6 @@
     <ul>
         <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
         <li>ノンブル間のカンマは必ず半角になります。</li>
-        <li>ノンブルに数字以外が含まれていた場合は計算の対象外です。</li>
-        <li>範囲を示すハイフンなどが含まれる場合もスキップします。</li>
     </ul>
 </div>
 
@@ -108,20 +106,24 @@ function adjustNombresLine(lines, start, end, delta) {
     return lines.map(line => {
         if (line.trim().length < 1) {
             return {
-                "original": "",
-                "adjusted": "",
-                "isModified": false
+                "basename": "",
+                "nombres": {
+                    "origin": [],
+                    "adjusted": [],
+                },
             }
         }
         const [item, nombre, ...rest] = line.split("　　");
         if (!nombre) {
             return {
-                "original": line,
-                "adjusted": line,
-                "isModified": false
+                "basename": item,
+                "nombres": {
+                    "origin": [],
+                    "adjusted": [],
+                },
             }
         }
-        const nombres = NombreParser.arrayByComma(nombre).map(x => x.trim()).map(n => {
+        const adjustedNombres = NombreParser.arrayByComma(nombre).map(x => x.trim()).map(n => {
             const parsed = NombreParser.parse(n);
             if (parsed.length > 1) {
                 return adjustNombre(parsed[0], start, end, delta)
@@ -130,26 +132,23 @@ function adjustNombresLine(lines, start, end, delta) {
             }
             return adjustNombre(parsed[0], start, end, delta);
         });
-        const adjusted = `${item}　　${nombres.join(", ")}`;
         return {
-            "original": line,
-            "adjusted": adjusted,
-            "isModified": (line != adjusted)
+            "basename": item,
+            "nombres": {
+                "origin": NombreParser.arrayByComma(nombre),
+                "adjusted": adjustedNombres,
+            },
         }
     });
 }
 
 function diffNombre(origin, adjusted) {
-    const nsOrigin = origin.replace(/^.+　　/, "").replace(/\s/g, "").replace(/，/g, ",").split(",");
-    const nsAdjusted = adjusted.replace(/^.+　　/, "").replace(/\s/g, "").replace(/，/g, ",").split(",");
-    return `${adjusted.replace(/　　.+$/, "")}　　${
-        nsAdjusted.map((n,i) => {
-        if (Number(n) == Number(nsOrigin[i])) {
+    return adjusted.map((n,i) => {
+        if (n == origin[i]) {
             return `<span class="same">${n}</span>`;
         }
-        return `<span class="del">${nsOrigin[i]}</span><span class="mod">${n}</span>`;
-    }).join(", ")
-    }`;
+        return `<span class="del">${origin[i]}</span><span class="mod">${n}</span>`;
+    }).join(", ");
 }
 
 
@@ -161,15 +160,15 @@ function clickBtn_adjustNombre(){
         elem.querySelector(".endNombre").value,
         elem.querySelector(".nombreDelta").value
     );
-    const adjustedLines = adjustedArray.map(item => item.adjusted);
-    elem.querySelector("textarea.result").value = adjustedLines.join("\r\n");
-    const modified = adjustedArray.filter(item => item.isModified);
-    const markup = (modified.length)?
-        `<div class="msg">${modified.length}行の変更：</div>${
-            modified.map(item => {
-                return `<div class="wrap"><div class="adjusted">${ diffNombre(item.original, item.adjusted) }</div></div>`;
-            }).join("")
-        }` : "<p>（変更箇所はありません）</p>";
+    elem.querySelector("textarea.result").value = adjustedArray.map(l => `${l.basename}　　${l.nombres.adjusted.join(", ")}`).join("\r\n");
+    const modified = adjustedArray.filter(line => line.nombres.origin.join() != line.nombres.adjusted.join());
+    let markup = "<p>（変更箇所はありません）</p>";
+    if (modified.length) {
+        const diffs = modified.map(item => {
+                return `<div class="wrap"><div class="adjusted">${item.basename}　　${ diffNombre(item.nombres.origin, item.nombres.adjusted) }</div></div>`;
+            });
+        markup = `<div class="msg">${modified.length}行の変更：</div>${diffs.join("")}`
+    }
     elem.querySelector("div.result").innerHTML = markup;
 }
 
