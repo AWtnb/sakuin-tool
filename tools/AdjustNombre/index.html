@@ -97,7 +97,14 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function adjustNombre(lines, startNombre, endNombre, delta) {
+function adjustNombre(parsed, start, end, delta) {
+    if (Number(start) <= parsed.intValue && parsed.intValue <= Number(end)) {
+        return (parsed.display.prefix + (parsed.intValue + Number(delta)) + parsed.display.suffix);
+    }
+    return parsed.display.text;
+}
+
+function adjustNombresLine(lines, start, end, delta) {
     return lines.map(line => {
         if (line.trim().length < 1) {
             return {
@@ -115,12 +122,15 @@ function adjustNombre(lines, startNombre, endNombre, delta) {
             }
         }
         const nombres = NombreParser.arrayByComma(nombre).map(x => x.trim()).map(n => {
-            if (Number(startNombre) <= Number(n) && Number(n) <= Number(endNombre)) {
-                return Number(n) + Number(delta);
+            const parsed = NombreParser.parse(n);
+            if (parsed.length > 1) {
+                return adjustNombre(parsed[0], start, end, delta)
+                    + "\u2013"
+                    + adjustNombre(parsed.slice(-1)[0], start, end, delta);
             }
-            return n;
+            return adjustNombre(parsed[0], start, end, delta);
         });
-        const adjusted = item + "　　" + nombres.join(", ");
+        const adjusted = `${item}　　${nombres.join(", ")}`;
         return {
             "original": line,
             "adjusted": adjusted,
@@ -145,7 +155,7 @@ function diffNombre(origin, adjusted) {
 
 function clickBtn_adjustNombre(){
     const elem = document.querySelector(".ui");
-    const adjustedArray = adjustNombre(
+    const adjustedArray = adjustNombresLine(
         multiline2array(elem.querySelector(".inputLines").value),
         elem.querySelector(".startNombre").value,
         elem.querySelector(".endNombre").value,
