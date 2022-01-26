@@ -11,10 +11,10 @@ function fromTsv (tsv) {
 }
 
 function comparer (a, b) {
-    const aNorm = String(a).toLowerCase();
-    const bNorm = String(b).toLowerCase();
-    if (aNorm > bNorm) return 1;
-    if (aNorm < bNorm) return -1;
+    const aLower = String(a).toLowerCase();
+    const bLower = String(b).toLowerCase();
+    if (aLower > bLower) return 1;
+    if (aLower < bLower) return -1;
     return 0;
 }
 
