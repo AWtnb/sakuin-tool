@@ -41,14 +41,7 @@ class NombreGroup {
         });
         this.parsed = stack.map(x => {
             if (x.isHyphen) {
-                return {
-                    "display": {
-                        "text": "\u2013",
-                        "prefix": "",
-                        "suffix": "",
-                    },
-                    "intValue": x.item.intValue
-                }
+                x.item.display.text = "\u2013";
             }
             return x.item;
         });
