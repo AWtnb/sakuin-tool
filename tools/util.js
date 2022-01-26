@@ -59,7 +59,10 @@ function toHiragana(str){
 }
 
 function parseParen(s) {
-    const inner = s.replace(/^.*[（\(［\[]/, "").replace(/[）\)］\]].*/);
+    const inner = s.replace(/^.*[（\(［\[]/, "").replace(/[）\)］\]].*/, "");
+    if (inner == s) {
+        return [];
+    }
     return inner.replace("，", ",").split(",").map(x => String(x).trim());
 }
 
@@ -74,7 +77,7 @@ function parseEntry(s, separator = "　　") {
     let info = {
         "name": "",
         "nombre": "",
-        "referredFrom": "",
+        "referredFrom": [],
         "referTo": "",
         "isChild": false
     }
