@@ -62,38 +62,36 @@ function parseEntry(s, separator = "　　") {
     /**
      * split index entry to name and nombre
      */
-    const elems = s.split(separator).filter(Boolean).map(x => String(x));
-    if (elems.length > 2) {
-        const name = elems.slice(0,-1).join(separator);
-        return {
-            "name": name,
-            "nombre": elems.slice(-1)[0],
-            "isReference": false,
-            "isChild": (name.trimStart() != name)
-        }
-    }
-    if (elems.length == 2) {
-        const name = elems[0];
-        return {
-            "name": name,
-            "nombre": elems[1],
-            "isReference": false,
-            "isChild": (name.trimStart() != name)
-        }
-    }
-    if (elems[0]) {
-        const name = elems[0];
-        return {
-            "name": name,
-            "nombre": "",
-            "isReference": elems[0].includes("→"),
-            "isChild": (name.trimStart() != name)
-        }
-    }
-    return {
+    let info = {
         "name": "",
         "nombre": "",
         "isReference": false,
+        "referredFrom": "",
+        "referTo": "",
         "isChild": false
     }
+    const elems = s.split(separator).filter(Boolean).map(x => String(x));
+    if (elems.length > 2) {
+        const name = elems.slice(0,-1).join(separator);
+        info.name = name;
+        info.nombre = elems.slice(-1)[0];
+        info.isChild = (name.trimStart() != name);
+        return info;
+    }
+    if (elems.length == 2) {
+        const name = elems[0];
+        info.name = name;
+        info.nombre = elems[1];
+        info.isChild = (name.trimStart() != name);
+        return info;
+    }
+    if (elems[0]) {
+        const name = elems[0];
+        info.name = name;
+        info.isReference = name.includes("→");
+        info.referTo = name.split(/\s*→\s*/).slice(-1)[0];
+        info.isChild = (name.trimStart() != name);
+        return info;
+    }
+    return info;
 }

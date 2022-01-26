@@ -11,7 +11,7 @@ function getRegexForReference(from, to, searchReferenced = false) {
 // 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
 function findLostReferenceTo(lines) {
     const items = lines.map(line => parseEntry(line).name).filter(Boolean);
-    const refs = items.filter(line => line.indexOf("→") != -1);
+    const refs = items.filter(line => parseEntry(line).referTo);
     return refs.map(line => {
         const arr = line.split(/\s*→\s*/);
         return {
