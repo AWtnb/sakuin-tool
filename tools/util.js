@@ -66,6 +66,10 @@ function parseParen(s) {
     return inner.replace("，", ",").split(",").map(x => String(x).trim());
 }
 
+function getBasename(s) {
+    return s.replace(/[（［\(\[].+?[）］\)\]]$/, "");
+}
+
 function isIndented(s) {
     return s.trimStart() != s;
 }
@@ -76,6 +80,7 @@ function parseEntry(s, separator = "　　") {
      */
     let info = {
         "name": "",
+        "basename": "",
         "nombre": "",
         "referredFrom": [],
         "referTo": "",
@@ -85,6 +90,7 @@ function parseEntry(s, separator = "　　") {
     if (elems.length > 2) {
         const name = elems.slice(0,-1).join(separator);
         info.name = name;
+        info.basename = getBasename(name);
         info.nombre = elems.slice(-1)[0];
         info.referredFrom = parseParen(name);
         info.isChild = isIndented(name);
@@ -93,6 +99,7 @@ function parseEntry(s, separator = "　　") {
     if (elems.length == 2) {
         const name = elems[0];
         info.name = name;
+        info.basename = getBasename(name);
         info.nombre = elems[1];
         info.referredFrom = parseParen(name);
         info.isChild = isIndented(name);
@@ -101,6 +108,7 @@ function parseEntry(s, separator = "　　") {
     if (elems[0]) {
         const name = elems[0];
         info.name = name;
+        info.basename = getBasename(name);
         info.isChild = isIndented(name);
         const refs = name.split("→").map(x => String(x).trim());
         if (refs.length > 1) {
