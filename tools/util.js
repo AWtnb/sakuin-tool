@@ -58,6 +58,15 @@ function toHiragana(str){
     });
 }
 
+function parseParen(s) {
+    const inner = s.replace(/^.*[（\(［\[]/, "").replace(/[）\)］\]].*/);
+    return inner.replace("，", ",").split(",").map(x => String(x).trim());
+}
+
+function isIndented(s) {
+    return s.trimStart() != s;
+}
+
 function parseEntry(s, separator = "　　") {
     /**
      * split index entry to name and nombre
@@ -65,7 +74,6 @@ function parseEntry(s, separator = "　　") {
     let info = {
         "name": "",
         "nombre": "",
-        "isReference": false,
         "referredFrom": "",
         "referTo": "",
         "isChild": false
@@ -75,22 +83,26 @@ function parseEntry(s, separator = "　　") {
         const name = elems.slice(0,-1).join(separator);
         info.name = name;
         info.nombre = elems.slice(-1)[0];
-        info.isChild = (name.trimStart() != name);
+        info.referredFrom = parseParen(name);
+        info.isChild = isIndented(name);
         return info;
     }
     if (elems.length == 2) {
         const name = elems[0];
         info.name = name;
         info.nombre = elems[1];
-        info.isChild = (name.trimStart() != name);
+        info.referredFrom = parseParen(name);
+        info.isChild = isIndented(name);
         return info;
     }
     if (elems[0]) {
         const name = elems[0];
         info.name = name;
-        info.isReference = name.includes("→");
-        info.referTo = name.split(/\s*→\s*/).slice(-1)[0];
-        info.isChild = (name.trimStart() != name);
+        info.isChild = isIndented(name);
+        const refs = name.split("→").map(x => String(x).trim());
+        if (refs.length > 1) {
+            info.referTo = refs.slice(-1)[0];
+        }
         return info;
     }
     return info;
