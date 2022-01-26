@@ -82,10 +82,10 @@ function formatChild(s) {
 function formatLines(lines) {
     const reg = new RegExp(POSSIBLE_BARS);
     return lines.map(line => line.replace(/\t$/, "").replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
-        if (line.indexOf("　　") != -1) {
-            const [item, nombre, ...rest] = line.split("　　");
-            const fmt = (String(item).startsWith("　") || String(item).match(reg))? formatChild(item) : item.trim();
-            return `${fmt}　　${formatNombre(nombre)}`;
+        const entry = parseEntry(line);
+        if (entry.name && entry.nombre) {
+            const fmt = (entry.name.startsWith("　") || entry.name.match(reg))? formatChild(entry.name) : entry.name.trim();
+            return `${fmt}　　${formatNombre(entry.nombre)}`;
         }
         return line;
     });

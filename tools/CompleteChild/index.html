@@ -51,24 +51,21 @@
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function trimNombre(s) {
-    return s.replace(/　　.+$/, "");
-}
 
 function completeChildItem (lines) {
-    const arr = lines.filter(line => line);
+    const arr = lines.filter(Boolean);
     const completed = [];
     completed.push(arr[0]);
-    let lastParentItem = trimNombre(arr[0]);
+    let lastParentItem = parseEntry(arr[0]).name;
     for (let i = 1; i < arr.length; i++) {
         const curLine = String(arr[i]);
         if (curLine.startsWith("　") && curLine.indexOf("――") != -1) {
-            const completedItem = curLine.replace(/^\s+/, "").replace(/――/, lastParentItem);
+            const completedItem = curLine.trimStart().replace(/――/, lastParentItem);
             completed.push(completedItem);
         }
         else {
             completed.push(curLine);
-            lastParentItem = trimNombre(curLine);
+            lastParentItem = parseEntry(curLine).name;
         }
     }
     return completed;

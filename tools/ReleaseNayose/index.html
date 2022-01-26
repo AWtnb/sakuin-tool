@@ -33,7 +33,6 @@
             <li>事前に<a href="../CompleteChild/index.html">子項目を復元</a>しておくと効率的です。</li>
         </ul>
         <li>項目とノンブル間が Excel 上で別の列になっていても同じように動作します。</li>
-        <li><code>日　　本</code>などと字間に2つ以上スペースが含まれていると正常に動作しませんのでご注意ください。</li>
     </ul>
 </div>
 
@@ -61,20 +60,15 @@
 
 function releaseNayoseLines (lines) {
     const releasedObj = [];
-    lines.filter(line => line)
-    .map(line => line.replace("　　", "\t"))
+    lines.filter(line => line.trim())
+    .map(line => line.replace("\t", "　　"))
     .forEach(line => {
-        if (line.indexOf("\t") == -1) {
-            releasedObj.push({name: line, nombre: ""});
-            return
-        }
-        const [name, nombres, ...rest] = line.split("\t");
-        if (nombres.length < 1) {
-            releasedObj.push({name: name, nombre: ""});
-            return
-        }
-        Nombre.parse(nombres).forEach(nombre => {
-            releasedObj.push({name: name, nombre: nombre.display.text});
+        const entry = parseEntry(line);
+        Nombre.parse(entry.nombre).forEach(nombre => {
+            releasedObj.push({
+                "name": entry.name,
+                "nombre": nombre.display.text
+            });
         });
     });
     return releasedObj;

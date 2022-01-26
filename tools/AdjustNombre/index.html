@@ -113,17 +113,17 @@ function adjustNombresLine(lines, start, end, delta) {
                 },
             }
         }
-        const [item, nombre, ...rest] = line.split("　　");
-        if (!nombre) {
+        const entry = parseEntry(line);
+        if (!entry.nombre) {
             return {
-                "basename": item,
+                "basename": entry.name,
                 "nombres": {
                     "origin": [],
                     "adjusted": [],
                 },
             }
         }
-        const adjustedNombres = Nombre.arrayByComma(nombre).map(n => {
+        const adjustedNombres = Nombre.arrayByComma(entry.nombre).map(n => {
             const parsed = Nombre.parse(n);
             if (parsed.length > 1) {
                 return adjustNombre(parsed[0], start, end, delta)
@@ -133,9 +133,9 @@ function adjustNombresLine(lines, start, end, delta) {
             return adjustNombre(parsed[0], start, end, delta);
         });
         return {
-            "basename": item,
+            "basename": entry.name,
             "nombres": {
-                "origin": Nombre.arrayByComma(nombre),
+                "origin": Nombre.arrayByComma(entry.nombre),
                 "adjusted": adjustedNombres,
             },
         }

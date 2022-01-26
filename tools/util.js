@@ -58,3 +58,31 @@ function toHiragana(str){
     });
 }
 
+function parseEntry(s, separator = "　　") {
+    /**
+     * split index entry to name and nombre
+     */
+    const elems = s.split(separator);
+    if (elems.length > 2) {
+        return {
+            "name": elems.slice(0,-1).join(separator),
+            "nombre": elems.slice(-1)[0]
+        }
+    }
+    if (elems.length == 2) {
+        return {
+            "name": elems[0],
+            "nombre": elems[1]
+        }
+    }
+    if (elems.length == 1) {
+        return {
+            "name": elems[0],
+            "nombre": ""
+        }
+    }
+    return {
+        "name": "",
+        "nombre": ""
+    }
+}

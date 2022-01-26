@@ -1,6 +1,6 @@
 function getIndexItems(lines) {
     const nonReferenceItems = lines.filter(line => line.indexOf("→") == -1);
-    return nonReferenceItems.filter(line => line).filter(line => !line.match(/^　/)).map(line => line.replace(/　　\d.*$/g, ""));
+    return nonReferenceItems.filter(Boolean).filter(line => !line.match(/^　/)).map(line => parseEntry(line).name);
 }
 
 // function isChild(s, search, mode) {

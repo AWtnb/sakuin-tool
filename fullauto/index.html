@@ -172,7 +172,7 @@ function main(tokenizer, lines, nombreOnLeft, outputElem) {
     // main process
     const grouped = nayose(lines, nombreOnLeft);
     const tokenized = tokenizeLines(tokenizer, grouped).map(t => {
-        const r = t.Reading.replace(/　　\d.*$/g, "");
+        const r = parseEntry(t.Reading).name;
         return {
            "Item": t.Item,
            "Reading": r,
