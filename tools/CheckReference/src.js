@@ -4,24 +4,27 @@ function getRegexForReference(from, to, searchReferenced = false) {
         const f = escapeMeta(from);
         return new RegExp(`^${t}[（［].*${f}.*[）］]`);
     }
-    const f = from.replace(/,\s*/g, "，").split("，").map(s => escapeMeta(s)).join("|");
+    // 条件によって from が文字列だったり配列だったりするのはどうにかしたい
+    const f = from.map(s => escapeMeta(s)).join("|");
     return new RegExp(`(${f})\\s*→\\s*${t}`);
 }
 
 // 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
 function findLostReferenceTo(lines) {
-    const items = lines.map(line => parseEntry(line).name).filter(Boolean);
-    const refs = items.filter(line => parseEntry(line).referTo);
-    return refs.map(line => {
-        const arr = line.split(/\s*→\s*/);
+    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    return entries.map(entry => {
+        if (entry.referTo.length < 1) {
+            return null;
+        }
+        const arr = entry.name.split(/\s*→\s*/);
         return {
-            "Text": line,
+            "Text": entry.name,
             "From": arr[0],
             "To": arr[1]
         };
-    }).map(line => {
+    }).filter(Boolean).map(line => {
         const reg = getRegexForReference(line.From, line.To, true)
-        const grep = items.filter(l => l.match(reg));
+        const grep = entries.map(x => x.name).filter(l => l.match(reg));
         if (grep.length > 0) {
             return null;
         }
@@ -34,25 +37,27 @@ function findLostReferenceTo(lines) {
 
 // 括弧書きで付記されているのに見よ項目がないものを探す関数
 function findLostReferenceFrom(lines) {
-    const items = lines.map(line => line.replace(/　　\d.+$/, "")).filter(line => line);
-    const reffered = items.filter(line => line.match(/[［（\(].+?[］）\)]/));
-    return reffered.map(line => {
+    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    return entries.map(entry => {
+        if (entry.name.length < 1 || entry.referredFrom.length < 1) {
+            return null;
+        }
         return {
-            "Text": line,
-            "From": line.replace(/^.+?[［（\(](.+?)[］）\)].*$/, "$1"),
-            "To": line.replace(/[［（\(].+$/, "")
+            "Text": entry.name,
+            "Froms": entry.referredFrom,
+            "To": entry.basename
         };
-    }).map(line => {
-        const reg = getRegexForReference(line.From, line.To, false);
-        const grep = items.filter(l => l.match(reg));
+    }).filter(Boolean).map(entry => {
+        const reg = getRegexForReference(entry.Froms, entry.To, false);
+        const grep = entries.map(x => x.name).filter(l => l.match(reg));
         if (grep.length > 0) {
             return null;
         }
         return {
-            "Text": line.Text,
-            "Lost": `${line.From}　→${line.To}`
+            "Text": entry.Text,
+            "Lost": `${entry.Froms}　→${entry.To}`
         }
-    }).filter(x => x);
+    }).filter(Boolean);
 }
 
 function markupLostReference(item, color = "red") {
