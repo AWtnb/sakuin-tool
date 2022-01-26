@@ -62,27 +62,31 @@ function parseEntry(s, separator = "　　") {
     /**
      * split index entry to name and nombre
      */
-    const elems = s.split(separator);
+    const elems = s.split(separator).map(x => String(x));
     if (elems.length > 2) {
         return {
             "name": elems.slice(0,-1).join(separator),
-            "nombre": elems.slice(-1)[0]
+            "nombre": elems.slice(-1)[0],
+            "isReference": false
         }
     }
-    if (elems.length == 2) {
+    if (elems.length == 2 && elems[1]) {
         return {
             "name": elems[0],
-            "nombre": elems[1]
+            "nombre": elems[1],
+            "isReference": false
         }
     }
-    if (elems.length == 1) {
+    if (elems[0]) {
         return {
             "name": elems[0],
-            "nombre": ""
+            "nombre": "",
+            "isReference": elems[0].includes("→")
         }
     }
     return {
         "name": "",
-        "nombre": ""
+        "nombre": "",
+        "isReference": false
     }
 }
