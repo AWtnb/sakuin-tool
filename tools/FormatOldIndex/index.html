@@ -84,7 +84,7 @@ function formatLines(lines) {
     return lines.map(line => line.replace(/\t$/, "").replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
         const entry = parseEntry(line);
         if (entry.name && entry.nombre) {
-            const fmt = (entry.name.startsWith("　") || entry.name.match(reg))? formatChild(entry.name) : entry.name.trim();
+            const fmt = (entry.isChild || entry.name.match(reg))? formatChild(entry.name) : entry.name.trim();
             return `${fmt}　　${formatNombre(entry.nombre)}`;
         }
         return line;

@@ -13,7 +13,7 @@ function getUngroupedReferencedItems(lines) {
 }
 
 function getConflictReferringItems(lines) {
-    const referring = lines.filter(Boolean).filter(line => line.match(/\s+→/));
+    const referring = lines.filter(Boolean).filter(line => parseEntry(line).isReference);
     const nonReferring = lines.filter(Boolean).filter(line => !referring.includes(line));
     return referring.map(line => {
         const basename = line.replace(/\s*→.+$/, "");
