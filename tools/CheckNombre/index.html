@@ -7,6 +7,18 @@
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
+    <style>
+        .info {
+            font-weight:bold;
+            margin:0 4px;
+        }
+        .unsorted {
+            color:red;
+        }
+        .needhyphen {
+            color:blue;
+        }
+    </style>
 </head>
 
 <body>
@@ -38,48 +50,61 @@
 </div>
 <!-- ============================== -->
 <script type="text/javascript" src="../util.js" defer></script>
+<script type="text/javascript" src="../nombre.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 <script>
 
-function isSorted(array) {
-    for (let i = 0; i < array.length - 1; i++) {
-        if (Number(array[i]) >= Number(array[i + 1])) {
-            return false
+function unSorted(parsedNombres) {
+    for (let i = 0; i < parsedNombres.length - 1; i++) {
+        if (parsedNombres[i].intValue >= parsedNombres[i+1].intValue) {
+            return true;
         }
     }
-    return true
+    return false;
 }
 
-function hasConsecutiveTriplet(array) {
-    for (let i = 0; i < array.length - 2; i++) {
-        const current = Number(array[i]);
-        if (current + 1 == Number(array[i + 1]) && current + 2 == Number(array[i + 2])) {
-            return true
+function needHyphenate(parsedNombres) {
+    for (let i = 0; i < parsedNombres.length - 2; i++) {
+        const current = parsedNombres[i];
+        const next1 = parsedNombres[i+1];
+        const next2 = parsedNombres[i+2];
+        if (current.intValue + 1 == next1.intValue && current.intValue + 2 == next2.intValue) {
+            if (!next1.hyphenated) {
+                return true;
+            }
         }
     }
-    return false
+    return false;
 }
 
-function highlightInvalidNombreLine(lines) {
-    const invalidLines = lines.filter(line => line).map(line => {
-            const nombres = line.replace(/^.+?　　/, "").replace(/\s+/, "").replace(/，/g, ",");
-            const nombreArray = nombres.replace(/-/g, ",").split(",");
-            const ret = [line];
-            if (!isSorted(nombreArray)) {
-                ret.push("<span style=\"font-weight:bold;color:red;margin:0 4px;\">←順番</span>");
-            }
-            if (hasConsecutiveTriplet(nombreArray)) {
-                ret.push("<span style=\"font-weight:bold;color:blue;margin:0 4px;\">←連続</span>");
-            }
-            return (ret.join("") == line)? null : ret.join("");
-        }).filter(x => x);
-    return (invalidLines.length < 1)? "<p>\u{1F389}問題は見当たりません！</p>" : "<p>" + invalidLines.join("<br>\n") + "</p>";
-}
+function grepInvalidNombreLine(lines) {
+    return lines.filter(x => String(x).trim()).map(line => {
+        let s = line;
+        const entry = parseEntry(line);
+        const parsed = Nombre.parse(entry.nombre);
+        if (unSorted(parsed)) {
+            s = s + '<span class="info unsorted">←順番</span>';
+        }
+        if (needHyphenate(parsed)) {
+            s = s + '<span class="info needhyphen">←連続</span>';
+        }
+        return {
+            "line": s,
+            "invalid": (line != s)
+        }
+        }).filter(x => x.invalid).map(x => x.line);
+    }
 
-function click_check() {
-    const elem = document.querySelector(".ui");
-    const lines = multiline2array(elem.querySelector(".inputLines").value);
-    elem.querySelector(".result").innerHTML = highlightInvalidNombreLine(lines);
+    function click_check() {
+        const elem = document.querySelector(".ui");
+        const lines = multiline2array(elem.querySelector(".inputLines").value);
+        const invalid = grepInvalidNombreLine(lines);
+        if (invalid.length < 1) {
+            elem.querySelector(".result").innerHTML = "<p>\u{1F389}問題は見当たりません！</p>";
+        }
+        else {
+            elem.querySelector(".result").innerHTML = `<p>${invalid.join("<br>")}</p>`;
+        }
 }
 
 </script>
