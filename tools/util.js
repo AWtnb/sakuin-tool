@@ -67,7 +67,7 @@ function parseParen(s) {
 }
 
 function getBasename(s) {
-    return s.replace(/[（［\(\[].+?[）］\)\]]$/, "");
+    return s.replace(/(（.+?）|［.+?］|\(.+?\)|\[.+?\])$/, "");
 }
 
 function isIndented(s) {
