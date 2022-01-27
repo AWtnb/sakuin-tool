@@ -113,6 +113,7 @@ function parseEntry(s, separator = "　　") {
         const refs = nm.split("→").map(x => String(x).trim());
         if (refs.length > 1) {
             info.referTo = refs.slice(-1)[0];
+            info.basename = refs[0];
         }
         return info;
     }
