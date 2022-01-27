@@ -5,7 +5,7 @@ class Nombre {
     }
 
     static arrayByComma(s) {
-        return s.replace(/，/g, ",").split(",").map(x => x.trim());
+        return s.replace(/，/g, ",").split(",").map(x => x.trim()).filter(Boolean);
     }
 
     static removeFullWidth(s) {
