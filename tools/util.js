@@ -63,7 +63,7 @@ function parseParen(s) {
     if (inner == s) {
         return [];
     }
-    return inner.replace("，", ",").split(",").filter(Boolean).map(x => String(x).trim());
+    return inner.replace("，", ",").split(",").map(x => String(x).trim()).filter(Boolean);
 }
 
 function getBasename(s) {
