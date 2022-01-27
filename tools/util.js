@@ -88,29 +88,29 @@ function parseEntry(s, separator = "　　") {
     }
     const elems = s.split(separator).filter(Boolean).map(x => String(x));
     if (elems.length > 2) {
-        const name = elems.slice(0,-1).join(separator);
-        info.name = name;
-        info.basename = getBasename(name);
+        const nm = elems.slice(0,-1).join(separator);
+        info.name = nm;
+        info.basename = getBasename(nm);
         info.nombre = elems.slice(-1)[0];
-        info.referredFrom = parseParen(name);
-        info.isChild = isIndented(name);
+        info.referredFrom = parseParen(nm);
+        info.isChild = isIndented(nm);
         return info;
     }
     if (elems.length == 2) {
-        const name = elems[0];
-        info.name = name;
-        info.basename = getBasename(name);
+        const nm = elems[0];
+        info.name = nm;
+        info.basename = getBasename(nm);
         info.nombre = elems[1];
-        info.referredFrom = parseParen(name);
-        info.isChild = isIndented(name);
+        info.referredFrom = parseParen(nm);
+        info.isChild = isIndented(nm);
         return info;
     }
     if (elems[0]) {
-        const name = elems[0];
-        info.name = name;
-        info.basename = getBasename(name);
-        info.isChild = isIndented(name);
-        const refs = name.split("→").map(x => String(x).trim());
+        const nm = elems[0];
+        info.name = nm;
+        info.basename = getBasename(nm);
+        info.isChild = isIndented(nm);
+        const refs = nm.split("→").map(x => String(x).trim());
         if (refs.length > 1) {
             info.referTo = refs.slice(-1)[0];
         }
