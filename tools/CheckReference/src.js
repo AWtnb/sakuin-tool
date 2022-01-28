@@ -1,22 +1,22 @@
 // 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
 function findLostReferenceTo(lines) {
     const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
-    return entries.filter(entry => entry.referTo.length > 0).map(entry => {
+    return entries.filter(entry => entry.isReference).map(entry => {
         return {
             "text": entry.name,
-            "referFrom": entry.basename,
+            "refEntryName": entry.basename,
             "referTo": entry.referTo
         };
     }).map(line => {
         const grep = entries.filter(entry => {
-            return (entry.referTo.length < 1 && entry.name.startsWith(line.referTo) && entry.referredFrom.includes(line.referFrom));
+            return (!entry.isReference && entry.basename == line.referTo && entry.referredFrom.includes(line.refEntryName));
         });
         if (grep.length > 0) {
             return null;
         }
         return {
             "text": line.text,
-            "lost": `${line.referTo}（${line.referFrom}）`
+            "lost": `${line.referTo}（${line.refEntryName}）`
         }
     }).filter(Boolean);
 }
@@ -31,16 +31,19 @@ function findLostReferenceFrom(lines) {
             "basename": entry.basename
         };
     }).map(line => {
-        const grep = entries.filter(entry => {
-            return (entry.referTo == line.basename && line.referredFrom.includes(entry.basename));
+        const refs = entries.filter(entry => entry.isReference);
+        const grep = line.referredFrom.filter(s => {
+            return refs.filter(entry => entry.basename == s && entry.referTo == line.basename).length > 0
         });
-        if (grep.length > 0) {
+        console.log(grep);
+        if (grep.length == line.referredFrom.length) {
             return null;
         }
+        const lost = line.referredFrom.filter(s => !grep.includes(s));
         return {
             "text": line.text,
-            "lost": line.referredFrom.map(frm => `${frm}　→${line.basename}`).join(" OR ")
-        }
+            "lost": lost.map(s => `${s}　→${line.basename}`).join("<br>")
+            }
     }).filter(Boolean);
 }
 

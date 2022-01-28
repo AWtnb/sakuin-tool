@@ -1,25 +1,27 @@
 
 function getUngroupedReferencedItems(lines) {
-    const referred = lines.filter(Boolean).filter(line => parseEntry(line).referredFrom.length > 0);
-    const nonReferred = lines.filter(Boolean).filter(line => !referred.includes(line));
-    return referred.map(line => {
-        const basename = parseEntry(line).basename;
-        const grep = nonReferred.filter(line => parseEntry(line).name == basename);
+    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    const refs = entries.filter(entry => entry.isReference);
+    const nonReferred = entries.filter(entry => entry.referredFrom.length < 1);
+    return refs.map(entry => {
+        const referTo = entry.referTo;
+        const grep = nonReferred.filter(entry => entry.basename == referTo);
         if (grep.length > 0) {
-            return [line].concat(grep);
+            return [entry.name].concat(grep.map(entry => entry.name));
         }
         return null;
     }).filter(Boolean);
 }
 
 function getConflictReferringItems(lines) {
-    const referring = lines.filter(Boolean).filter(line => parseEntry(line).referTo.length > 0);
-    const nonReferring = lines.filter(Boolean).filter(line => !referring.includes(line));
-    return referring.map(line => {
-        const referFrom = line.replace(/\s*→.+$/, "");
-        const grep = nonReferring.filter(line => parseEntry(line).basename == referFrom);
+    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    const refs = entries.filter(entry => entry.isReference);
+    const nonReferring = entries.filter(entry => !entry.isReference);
+    return refs.map(entry => {
+        const basename = entry.basename;
+        const grep = nonReferring.filter(entry => entry.basename == basename);
         if (grep.length > 0) {
-            return [line].concat(grep);
+            return [entry.name].concat(grep.map(entry => entry.name));
         }
         return null;
     }).filter(Boolean);

@@ -1,7 +1,7 @@
 function getMainEntries(lines) {
     return lines.filter(x => String(x).trim()).map(line => {
         const p = parseEntry(line);
-        if (p.referTo.length < 1 && !p.isChild) {
+        if (!p.isReference && !p.isChild) {
             return {
                 "name": p.name,
                 "basename": p.basename
