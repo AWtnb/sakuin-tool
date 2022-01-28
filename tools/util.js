@@ -59,7 +59,7 @@ function toHiragana(str){
 }
 
 function parseParen(s) {
-    const inner = s.replace(/^.*[（\(［\[]/, "").replace(/[）\)］\]].*/, "");
+    const inner = s.replace(/^.*[（\(［\[](.+?)[）\)］\]]$/, "$1");
     if (inner == s) {
         return [];
     }
@@ -84,6 +84,7 @@ function parseEntry(s, separator = "　　") {
         "nombre": "",
         "referredFrom": [],
         "referTo": "",
+        "isReference": false,
         "isChild": false
     }
     const elems = s.split(separator).filter(Boolean).map(x => String(x));
@@ -114,6 +115,7 @@ function parseEntry(s, separator = "　　") {
         if (refs.length > 1) {
             info.referTo = refs.slice(-1)[0];
             info.basename = refs[0];
+            info.isReference = true;
         }
         return info;
     }
