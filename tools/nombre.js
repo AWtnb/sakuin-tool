@@ -1,7 +1,15 @@
 class Nombre {
 
-    static get barsReg() {
-        return new RegExp("\s*[\u002d\u2010\u2011\u2012\u2013\u2014\uFF0D]+\s*");
+    static get connectors() {
+        return [
+            "\u002d",
+            "\u2010",
+            "\u2011",
+            "\u2012",
+            "\u2013",
+            "\u2014",
+            "\uFF0D"
+        ];
     }
 
     static arrayByComma(s) {
@@ -19,10 +27,11 @@ class Nombre {
          * nombre: must be string sepatated by comma
          */
         const stack = [];
+        const barsReg = new RegExp(`\\s*[${this.connectors.join("")}]+\\s*`);
         this.arrayByComma(nombre).map(nStr => {
             const s = this.removeFullWidth(nStr);
-            if (s.match(this.barsReg)) {
-                const [start, end] = s.split(this.barsReg);
+            if (s.match(barsReg)) {
+                const [start, end] = s.split(barsReg);
                 this.rangedNombres(start, end).forEach(x => stack.push(x));
             }
             else {
