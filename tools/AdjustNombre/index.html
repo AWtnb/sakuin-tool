@@ -102,28 +102,36 @@ function adjustNombre(parsed, start, end, delta) {
     return parsed.display.text;
 }
 
+function differentNombres(originNombres, adjustedNombres) {
+    const barsReg = new RegExp(`\\s*[${Nombre.connectors.join("")}]+\\s*`, "g");
+    return (originNombres.join("").replace(barsReg, "") != adjustedNombres.join("").replace(barsReg, ""))
+}
+
 function adjustNombresLine(lines, start, end, delta) {
     return lines.map(line => {
         if (line.trim().length < 1) {
             return {
-                "basename": "",
+                "entryName": "",
                 "nombres": {
                     "origin": [],
                     "adjusted": [],
                 },
+                "changed": false
             }
         }
         const entry = parseEntry(line);
         if (!entry.nombre) {
             return {
-                "basename": entry.name,
+                "entryName": entry.name,
                 "nombres": {
                     "origin": [],
                     "adjusted": [],
                 },
+                "changed": false
             }
         }
-        const adjustedNombres = Nombre.arrayByComma(entry.nombre).map(n => {
+        const origin = Nombre.arrayByComma(entry.nombre);
+        const adjustedNombres = origin.map(n => {
             const parsed = Nombre.parse(n);
             if (parsed.length > 1) {
                 return adjustNombre(parsed[0], start, end, delta)
@@ -133,21 +141,23 @@ function adjustNombresLine(lines, start, end, delta) {
             return adjustNombre(parsed[0], start, end, delta);
         });
         return {
-            "basename": entry.name,
+            "entryName": entry.name,
             "nombres": {
-                "origin": Nombre.arrayByComma(entry.nombre),
+                "origin": origin,
                 "adjusted": adjustedNombres,
             },
+            "changed": differentNombres(origin, adjustedNombres)
         }
     });
 }
 
 function diffNombre(origin, adjusted) {
-    return adjusted.map((n,i) => {
-        if (n == origin[i]) {
-            return `<span class="same">${n}</span>`;
+    const barsReg = new RegExp(`\\s*[${Nombre.connectors.join("")}]+\\s*`, "g");
+    return adjusted.map((adNbr,i) => {
+        if (adNbr.replace(barsReg, "") == origin[i].replace(barsReg, "")) {
+            return `<span class="same">${adNbr}</span>`;
         }
-        return `<span class="del">${origin[i]}</span><span class="mod">${n}</span>`;
+        return `<span class="del">${origin[i]}</span><span class="mod">${adNbr}</span>`;
     }).join(", ");
 }
 
@@ -160,12 +170,17 @@ function clickBtn_adjustNombre(){
         elem.querySelector(".endNombre").value,
         elem.querySelector(".nombreDelta").value
     );
-    elem.querySelector("textarea.result").value = adjustedArray.map(l => `${l.basename}　　${l.nombres.adjusted.join(", ")}`).join("\r\n");
-    const modified = adjustedArray.filter(line => line.nombres.origin.join() != line.nombres.adjusted.join());
+    elem.querySelector("textarea.result").value = adjustedArray.map(l => {
+        if (l.entryName) {
+            return `${l.entryName}　　${l.nombres.adjusted.join(", ")}`;
+        }
+        return ""
+    }).join("\r\n");
+    const modified = adjustedArray.filter(line => line.changed);
     let markup = "<p>（変更箇所はありません）</p>";
     if (modified.length) {
         const diffs = modified.map(item => {
-                return `<div class="wrap"><div class="adjusted">${item.basename}　　${ diffNombre(item.nombres.origin, item.nombres.adjusted) }</div></div>`;
+                return `<div class="wrap"><div class="adjusted">${item.entryName}　　${ diffNombre(item.nombres.origin, item.nombres.adjusted) }</div></div>`;
             });
         markup = `<div class="msg">${modified.length}行の変更：</div>${diffs.join("")}`
     }
