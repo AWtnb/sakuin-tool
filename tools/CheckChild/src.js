@@ -4,38 +4,54 @@ function getMainEntries(lines) {
         if (!p.isReference && !p.isChild) {
             return {
                 "name": p.name,
-                "basename": p.basename
+                "basename": p.basename,
+                "subInfo": p.name.slice(p.basename.length)
             };
         }
         return null;
     }).filter(Boolean);
 }
 
-function getRegexForChild(s, mode) {
-    const escaped = escapeMeta(s);
-    if (mode == "tail") {
-        return new RegExp(`${escaped}$`);
+function markupHead(line, search) {
+    if (line.startsWith(search)) {
+        return `<span class="match">${search}</span>` + line.slice(search.length);
     }
-    if (mode == "head") {
-        return new RegExp(`^${escaped}`);
+    return line;
+}
+
+function markupTail(line, search) {
+    if (line.endsWith(search)) {
+        return line.slice(0, 0 - search.length) + `<span class="match">${search}</span>`;
     }
-    return new RegExp(`^${escaped}|${escaped}$`);
+    return line;
 }
 
 function findPossibleChildItems(lines, mode = "tail") {
     const mainEntries = getMainEntries(lines);
     return mainEntries.map(entry => {
-        const reg = getRegexForChild(entry.basename, mode);
-        const grep = mainEntries.map(etr => etr.name).filter(line => line.match(reg));
-        if (grep.length > 1) {
-            const markup = grep.filter(line => (line != entry.name)).map(line => {
-                return line.replace(reg, '<span class="match">$&</span>');
-            }).map(line => `・${line}`);
+        const search = entry.basename;
+        const possibles = mainEntries.filter(entry => entry.basename != search).map(entry => {
+            let markup = entry.basename;
+            if (mode == "head") {
+                markup = markupHead(markup, search);
+            }
+            else if (mode == "tail") {
+                markup = markupTail(markup, search);
+            }
+            else {
+                markup = markupHead(markupTail(markup, search), search);
+            }
             return {
-                "Found": entry.name,
-                "Markup": markup.join("<br>")
-            };
+                "markup": markup + entry.subInfo,
+                "changed": entry.basename != markup
+            }
+        }).filter(x => x.changed);
+        if (possibles.length > 0) {
+            return {
+                "found": search,
+                "markup": possibles.map(p => `・${p.markup}`).join("<br>")
+            }
         }
         return null;
-    }).filter(Boolean).sort((a, b) => b.Found.length - a.Found.length);
+    }).filter(Boolean).sort((a, b) => b.found.length - a.found.length);
 }
