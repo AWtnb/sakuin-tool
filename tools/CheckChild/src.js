@@ -27,19 +27,21 @@ function markupTail(line, search) {
 }
 
 function findPossibleChildItems(lines, mode = "tail") {
+    const params = {
+        "head": {"markupHead": true, "markupTail": false},
+        "tail": {"markupHead": false, "markupTail": true},
+        "all": {"markupHead": true, "markupTail": true}
+    }[mode];
     const mainEntries = getMainEntries(lines);
     return mainEntries.map(entry => {
         const search = entry.basename;
         const possibles = mainEntries.filter(entry => entry.basename != search).map(entry => {
             let markup = entry.basename;
-            if (mode == "head") {
+            if (params.markupHead) {
                 markup = markupHead(markup, search);
             }
-            else if (mode == "tail") {
+            if (params.markupTail) {
                 markup = markupTail(markup, search);
-            }
-            else {
-                markup = markupHead(markupTail(markup, search), search);
             }
             return {
                 "markup": markup + entry.subInfo,
