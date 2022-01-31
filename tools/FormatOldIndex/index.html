@@ -115,7 +115,7 @@ function getDeltas(origins, news) {
 
 function click_format() {
     const elem = document.querySelector(".ui");
-    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const lines = linesArray(elem.querySelector(".inputLines").value);
     const formatted = formatLines(lines);
     elem.querySelector(".result").value = formatted.join("\n");
     const output = elem.querySelector(".diff");

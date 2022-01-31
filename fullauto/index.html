@@ -205,7 +205,7 @@ function main(tokenizer, lines, nombreOnLeft, outputElem) {
 function click_execute() {
     const elem = document.querySelector(".ui");
     const outputTable = elem.querySelector("table.formatResult tbody");
-    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const lines = linesArray(elem.querySelector(".inputLines").value);
     const nombreOnLeft = elem.querySelector(".isLeft").checked;
     elem.querySelector("div.result .lostTo").innerHTML = "<p></p>";
     elem.querySelector("div.result .lostFrom").innerHTML = "<p></p>";

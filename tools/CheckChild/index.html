@@ -52,7 +52,7 @@
 
 function click_check() {
     const elem = document.querySelector(".ui");
-    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const lines = linesArray(elem.querySelector(".inputLines").value);
     const outputTable = elem.querySelector("table.result");
     resetTable(outputTable);
     const markup = findPossibleChildItems(lines, elem.querySelector("form.searchPos").pos.value);

@@ -88,7 +88,7 @@
 
 function click_nayose() {
     const elem = document.querySelector(".ui");
-    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const lines = linesArray(elem.querySelector(".inputLines").value);
     const nayosed = (elem.querySelector(".isOrdered").checked)?
         nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
         nayose(lines, elem.querySelector(".isLeft").checked);

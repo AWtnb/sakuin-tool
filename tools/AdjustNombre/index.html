@@ -165,7 +165,7 @@ function diffNombre(origin, adjusted) {
 function clickBtn_adjustNombre(){
     const elem = document.querySelector(".ui");
     const adjustedArray = adjustNombresLine(
-        multiline2array(elem.querySelector(".inputLines").value),
+        linesArray(elem.querySelector(".inputLines").value),
         elem.querySelector(".startNombre").value,
         elem.querySelector(".endNombre").value,
         elem.querySelector(".nombreDelta").value

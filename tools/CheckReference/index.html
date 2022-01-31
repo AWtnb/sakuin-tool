@@ -50,7 +50,7 @@
 function click_check(){
     const elem = document.querySelector(".ui");
     const arr = [];
-    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const lines = linesArray(elem.querySelector(".inputLines").value);
     const lostTo = findLostReferenceTo(lines).map(item => markupLostReference(item, "red"));
     elem.querySelector(".result .lostTo .output").innerHTML = (lostTo.length > 0)? lostTo.join("\n") : "<p>問題ありません！</p>";
     const lostFrom = findLostReferenceFrom(lines).map(item => markupLostReference(item, "blue"));

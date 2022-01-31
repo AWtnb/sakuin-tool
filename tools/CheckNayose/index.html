@@ -62,7 +62,7 @@ function click_check(){
     const elem = document.querySelector(".ui");
     const output = elem.querySelector(".result");
     output.innerHTML = "";
-    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const lines = linesArray(elem.querySelector(".inputLines").value);
     const ungrouped = getUngroupedReferencedItems(lines);
     if (ungrouped.length) {
         const markup = ungrouped.map(arr => `<p>${arr.join("<br>")}</p>`).join("");

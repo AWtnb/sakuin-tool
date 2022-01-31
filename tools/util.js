@@ -1,4 +1,4 @@
-function multiline2array(multiline) {
+function linesArray(multiline) {
     /**
      * value of textarea never contains \r(carriage return)
      * 

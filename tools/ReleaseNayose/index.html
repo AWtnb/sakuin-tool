@@ -77,7 +77,7 @@ function releaseNayoseLines (lines) {
 function click_release() {
     const elem = document.querySelector(".ui");
 
-    const lines = multiline2array(elem.querySelector(".inputLines").value);
+    const lines = linesArray(elem.querySelector(".inputLines").value);
     const releasedObj = releaseNayoseLines(lines);
 
     const outputTable = elem.querySelector(".result tbody");
