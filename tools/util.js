@@ -1,5 +1,12 @@
 function multiline2array(multiline) {
-    return multiline.replace(/\r\n/g, "\n").split(/\n/).map(line => String(line));
+    /**
+     * value of textarea never contains \r(carriage return)
+     * 
+     * - https://html.spec.whatwg.org/multipage/form-elements.html#the-textarea-element
+     * - https://zzz.buzz/2017/12/21/javascript-traps-and-pitfalls-three-normalizations-of-textarea-elements-value/
+     * - https://knooto.info/html-textarea-newline-character/
+     */
+    return multiline.split(/\n/).map(line => String(line));
 }
 
 function escapeMeta(str) {
