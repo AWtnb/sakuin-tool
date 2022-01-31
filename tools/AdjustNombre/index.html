@@ -109,26 +109,21 @@ function differentNombres(originNombres, adjustedNombres) {
 
 function adjustNombresLine(lines, start, end, delta) {
     return lines.map(line => {
+        let nombreInfo= {
+            "entryName": "",
+            "nombres": {
+                "origin": [],
+                "adjusted": [],
+            },
+            "changed": false
+        };
         if (line.trim().length < 1) {
-            return {
-                "entryName": "",
-                "nombres": {
-                    "origin": [],
-                    "adjusted": [],
-                },
-                "changed": false
-            }
+            return nombreInfo;
         }
         const entry = parseEntry(line);
         if (!entry.nombre) {
-            return {
-                "entryName": entry.name,
-                "nombres": {
-                    "origin": [],
-                    "adjusted": [],
-                },
-                "changed": false
-            }
+            nombreInfo.entryName = entry.name;
+            return nombreInfo;
         }
         const origin = Nombre.arrayByComma(entry.nombre);
         const adjustedNombres = origin.map(n => {
@@ -140,14 +135,11 @@ function adjustNombresLine(lines, start, end, delta) {
             }
             return adjustNombre(parsed[0], start, end, delta);
         });
-        return {
-            "entryName": entry.name,
-            "nombres": {
-                "origin": origin,
-                "adjusted": adjustedNombres,
-            },
-            "changed": differentNombres(origin, adjustedNombres)
-        }
+        nombreInfo.entryName = entry.name;
+        nombreInfo.nombres.origin = origin;
+        nombreInfo.nombres.adjusted = adjustedNombres;
+        nombreInfo.changed = differentNombres(origin, adjustedNombres);
+        return nombreInfo;
     });
 }
 
@@ -172,9 +164,9 @@ function clickBtn_adjustNombre(){
     );
     elem.querySelector("textarea.result").value = adjustedArray.map(l => {
         if (l.entryName) {
-            return `${l.entryName}　　${l.nombres.adjusted.join(", ")}`;
+            return `${l.entryName}　　${l.nombres.adjusted.join(", ")}`.trim();
         }
-        return ""
+        return "";
     }).join("\r\n");
     const modified = adjustedArray.filter(line => line.changed);
     let markup = "<p>（変更箇所はありません）</p>";
