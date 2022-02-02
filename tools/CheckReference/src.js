@@ -1,5 +1,8 @@
-// 見よ項目があるのに見よ先の項目に括弧書きで付記されていないものを探す関数
-function findLostReferenceTo(lines) {
+function findReferenceEntriesWithoutGoal(lines) {
+    /**
+     * The reference item must be appended to the end of the referenced item in parentheses.
+     * Look for reference items where this relationship is not established correctly.
+     */
     const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
     return entries.filter(entry => entry.isReference).map(entry => {
         return {
@@ -16,14 +19,18 @@ function findLostReferenceTo(lines) {
         }
         return {
             "text": line.text,
-            "lost": `${line.referTo}（${line.refEntryName}）`
+            "require": `${line.referTo}（${line.refEntryName}）`
         }
     }).filter(Boolean);
 }
 
-// 括弧書きで付記されているのに見よ項目がないものを探す関数
-function findLostReferenceFrom(lines) {
+function findRequiredReferencingEntries(lines) {
+    /**
+     * In the parentheses of the referenced entry, there is information about the entry that refers to it.
+     * Find the referenced entry whose relationship is not properly established.
+     */
     const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    const refs = entries.filter(entry => entry.isReference);
     return entries.filter(entry => entry.referredFrom.length > 0).map(entry => {
         return {
             "text": entry.name,
@@ -31,22 +38,20 @@ function findLostReferenceFrom(lines) {
             "basename": entry.basename
         };
     }).map(line => {
-        const refs = entries.filter(entry => entry.isReference);
-        const grep = line.referredFrom.filter(s => {
-            return refs.filter(entry => entry.basename == s && entry.referTo == line.basename).length > 0
+        const required = line.referredFrom.filter(s => {
+            const correctRefs = refs.filter(entry => entry.basename == s && entry.referTo == line.basename);
+            return (correctRefs.length < 1);
         });
-        console.log(grep);
-        if (grep.length == line.referredFrom.length) {
+        if (required.length < 1) {
             return null;
         }
-        const lost = line.referredFrom.filter(s => !grep.includes(s));
         return {
             "text": line.text,
-            "lost": lost.map(s => `${s}　→${line.basename}`).join("<br>")
-            }
+            "require": required.map(s => `${s}　→${line.basename}`).join("<br>")
+        };
     }).filter(Boolean);
 }
 
-function markupLostReference(item, color = "red") {
-    return `<li style="margin-left:1em"><span style="font-weight:bold">${item.text}</span> …… <span style="color:${color}">${item.lost}</span></li>`
+function markupRequired(item, color = "red") {
+    return `<li style="margin-left:1em"><span style="font-weight:bold">${item.text}</span> …… <span style="color:${color}">${item.require}</span></li>`
 }
