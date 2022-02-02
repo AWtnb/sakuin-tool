@@ -8,10 +8,33 @@
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
-        .lostTo, .lostFrom, .adjacent {
-            font-weight: bold;
+        .result {
             font-size: .8em;
+        }
+        .lostTo,
+        .lostFrom,
+        .adjacent {
             margin-top: 1em;
+        }
+        .lostTo > label,
+        .lostFrom > label,
+        .adjacent > label {
+            font-size: .9em;
+            font-weight: bold;
+        }
+        .output div.detail {
+            display: list-item;
+            margin-left: 1em;
+            font-weight: normal;
+        }
+        .required::before {
+            content: " …… ";
+        }
+        .require-reference {
+            color: blue;
+        }
+        .require-info {
+            color: red;
         }
     </style>
 </head>
@@ -54,10 +77,12 @@
 function click_check(){
     const elem = document.querySelector(".ui");
     const lines = linesArray(elem.querySelector(".inputLines").value);
-    const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "red"));
+    const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "require-goal"));
     elem.querySelector(".result .lostTo .output").innerHTML = (lostTo.length > 0)? lostTo.join("\n") : "<p>問題ありません！</p>";
-    const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "blue"));
+    const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-reference"));
     elem.querySelector(".result .lostFrom .output").innerHTML = (lostFrom.length > 0)? lostFrom.join("\n") : "<p>問題ありません！</p>";
+    const adjacent = findAdjacentReferenceEntries(lines).map(item => `<div class="detail">${item.name}</div>`);
+    elem.querySelector(".result .adjacent .output").innerHTML = (adjacent.length > 0)? adjacent.join("\n") : "<p>問題ありません！</p>";
 }
 
 </script>

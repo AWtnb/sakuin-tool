@@ -52,6 +52,24 @@ function findRequiredReferencingEntries(lines) {
     }).filter(Boolean);
 }
 
-function markupRequired(item, color = "red") {
-    return `<li style="margin-left:1em"><span style="font-weight:bold">${item.text}</span> …… <span style="color:${color}">${item.require}</span></li>`
+function markupRequired(item, className = "require-reference") {
+    return `<div class="detail"><span>${item.text}</span><span class="required ${className}">${item.require}</span></div>`
+}
+
+function findAdjacentReferenceEntries(lines) {
+    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    return entries.filter((entry, idx) => {
+        if (!entry.isReference) {
+            return false;
+        }
+        const previous = entries[idx - 1];
+        if (previous && !previous.isReference && previous.referredFrom.includes(entry.basename)) {
+            return true;
+        }
+        const next = entries[idx + 1];
+        if (next && !next.isReference && next.referredFrom.includes(entry.basename)) {
+            return true;
+        }
+        return false;
+    });
 }
