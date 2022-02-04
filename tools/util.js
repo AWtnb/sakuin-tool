@@ -44,10 +44,8 @@ function copyValue(elem) {
 
 function resetTable(tbody) {
     const maxRow = tbody.rows.length;
-    if (maxRow > 1) {
-        for (let r = maxRow - 1; r >= 0; r--) {
-            tbody.deleteRow(r);
-        }
+    for (let r = maxRow - 1; r >= 0; r--) {
+        tbody.deleteRow(r);
     }
 }
 

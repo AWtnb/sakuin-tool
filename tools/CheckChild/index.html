@@ -38,7 +38,7 @@
                 <th>子項目候補</th>
             </tr>
         </thead>
-        <tbody></tbo>
+        <tbody></tbody>
     </table>
     <input type="button" value="プリント用ページを開く" onclick="click_print()">
 </div>
@@ -53,7 +53,7 @@
 function click_check() {
     const elem = document.querySelector(".ui");
     const lines = linesArray(elem.querySelector(".inputLines").value);
-    const outputTable = elem.querySelector("table.result");
+    const outputTable = elem.querySelector("table.result tbody");
     resetTable(outputTable);
     const markup = findPossibleChildItems(lines, elem.querySelector("form.searchPos").pos.value);
     markup.forEach(r => {
