@@ -11,6 +11,7 @@
         table tr td:nth-child(1) {
             color: #888;
         }
+
         table tr td:nth-child(2) {
             color: #888;
         }
@@ -18,102 +19,102 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
+    <!-- ============================== -->
+    <div class="container">
 
-<div class="navi"><a href="../../index.html">TOP</a></div>
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
-<h2 >索引拾いのテンプレート生成</h2>
+        <h2>索引拾いのテンプレート生成</h2>
 
-<div class="caption">
-    <div class="imagebox">
-        <div class="boxtitle">SAMPLE1</div>
-        <div class="diff">
-            <div class="before"><img src="./image/img_generate-template_before.png"></div>
-            <div class="arrow"></div>
-            <div class="after"><img src="./image/img_generate-template_after.png"></div>
+        <div class="caption">
+            <div class="imagebox">
+                <div class="boxtitle">SAMPLE1</div>
+                <div class="diff">
+                    <div class="before"><img src="./image/img_generate-template_before.png"></div>
+                    <div class="arrow"></div>
+                    <div class="after"><img src="./image/img_generate-template_after.png"></div>
+                </div>
+            </div>
+            <div class="imagebox">
+                <div class="boxtitle">SAMPLE2</div>
+                <img src="./image/img_generate-index.png">
+                <img src="./image/img_generate-index-rule.png">
+            </div>
+            <ul>
+                <li>索引拾いのための Excel テンプレートを作成します。</li>
+                <li>各ページの項目数を SAMPLE1 のように Excel に整理して下記ボックスに貼り付けてください。</li>
+                <li>SAMPLE2 のように<code>index</code>列に条件付き書式で<code>偶数の場合に背景色変更</code>という設定をするとページの変わり目が見やすくなり便利です。</li>
+            </ul>
         </div>
+
+        <div class="ui">
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="生成" onclick="click_generate()">
+            <table class="result">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>index</th>
+                        <th>ページ</th>
+                        <th>項目</td>
+                        <th>見よ先</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <input type="button" value="表をコピー" onclick="click_copy()">
+
+        </div>
+
     </div>
-    <div class="imagebox">
-        <div class="boxtitle">SAMPLE2</div>
-        <img src="./image/img_generate-index.png">
-        <img src="./image/img_generate-index-rule.png">
-    </div>
-    <ul>
-        <li>索引拾いのための Excel テンプレートを作成します。</li>
-        <li>各ページの項目数を SAMPLE1 のように Excel に整理して下記ボックスに貼り付けてください。</li>
-        <li>SAMPLE2 のように<code>index</code>列に条件付き書式で<code>偶数の場合に背景色変更</code>という設定をするとページの変わり目が見やすくなり便利です。</li>
-    </ul>
-</div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-<div class="ui">
-    <textarea class="inputLines" placeholder="paste here!" ></textarea>
-    <input type="button" value="生成" onclick="click_generate()">
-    <table class="result">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>index</th>
-                <th>ページ</th>
-                <th>項目</td>
-                <th>見よ先</td>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <input type="button" value="表をコピー" onclick="click_copy()">
-
-</div>
-
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
-
-function generateTemplare(lines) {
-    const templateArray = [];
-    let idx = 0;
-    lines.filter(line => line).forEach(line => {
-        const [page, counter, ...rest] = line.split("\t");
-        const nItem = toHalfWidth(counter);
-        if (Number(nItem) > 0) {
-            idx += 1;
-            for (let i = 0; i < Number(nItem); i++) {
-                templateArray.push({"Index":idx, "Page":page});
-            }
+        function generateTemplare(lines) {
+            const templateArray = [];
+            let idx = 0;
+            lines.filter(line => line).forEach(line => {
+                const [page, counter, ...rest] = line.split("\t");
+                const nItem = toHalfWidth(counter);
+                if (Number(nItem) > 0) {
+                    idx += 1;
+                    for (let i = 0; i < Number(nItem); i++) {
+                        templateArray.push({ "Index": idx, "Page": page });
+                    }
+                }
+            });
+            return templateArray;
         }
-    });
-    return templateArray;
-}
 
-function click_generate() {
-    const elem = document.querySelector(".ui");
-    const lines = linesArray(elem.querySelector(".inputLines").value);
+        function click_generate() {
+            const elem = document.querySelector(".ui");
+            const lines = linesArray(elem.querySelector(".inputLines").value);
 
-    const outputTable = elem.querySelector("table.result tbody");
-    resetTable(outputTable);
+            const outputTable = elem.querySelector("table.result tbody");
+            resetTable(outputTable);
 
-    generateTemplare(lines).forEach((line, idx) => {
-        const row = outputTable.insertRow(-1);
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-        const cell3 = row.insertCell(2);
-        const cell4 = row.insertCell(3);
-        const cell5 = row.insertCell(4);
-        cell1.innerHTML = (idx + 1);
-        cell2.innerHTML = line.Index;
-        cell3.innerHTML = line.Page;
-        cell4.innerHTML = "";
-        cell5.innerHTML = "";
-    });
-}
-function click_copy() {
-    const table = document.querySelector("table.result tbody");
-    copyTable(table);
-}
+            generateTemplare(lines).forEach((line, idx) => {
+                const row = outputTable.insertRow(-1);
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                const cell4 = row.insertCell(3);
+                const cell5 = row.insertCell(4);
+                cell1.innerHTML = (idx + 1);
+                cell2.innerHTML = line.Index;
+                cell3.innerHTML = line.Page;
+                cell4.innerHTML = "";
+                cell5.innerHTML = "";
+            });
+        }
+        function click_copy() {
+            const table = document.querySelector("table.result tbody");
+            copyTable(table);
+        }
 
-</script>
+    </script>
 </body>
 
 </html>

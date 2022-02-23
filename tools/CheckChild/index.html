@@ -11,65 +11,65 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
-<h2>子項目候補の確認</h2>
-<div class="caption">
-    <ul>
-        <li>名寄せ済みの索引に対して子項目の候補を探します。</li>
-    </ul>
-</div>
+        <h2>子項目候補の確認</h2>
+        <div class="caption">
+            <ul>
+                <li>名寄せ済みの索引に対して子項目の候補を探します。</li>
+            </ul>
+        </div>
 
-<div class="ui">
-    <form class="searchPos">
-        <label><input type="radio" name="pos" value="tail" checked>末尾一致</label>
-        <label><input type="radio" name="pos" value="head"        >先頭一致</label>
-        <label><input type="radio" name="pos" value="all"         >両方</label>
-    </form>
-    <textarea class="inputLines" placeholder="paste here!" ></textarea>
-    <input type="button" value="チェック" onclick="click_check()">
+        <div class="ui">
+            <form class="searchPos">
+                <label><input type="radio" name="pos" value="tail" checked>末尾一致</label>
+                <label><input type="radio" name="pos" value="head">先頭一致</label>
+                <label><input type="radio" name="pos" value="all">両方</label>
+            </form>
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="チェック" onclick="click_check()">
 
-    <table class="result" id="src-table">
-        <thead>
-            <tr>
-                <th>項目</th>
-                <th>子項目候補</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <input type="button" value="プリント用ページを開く" onclick="click_print()">
-</div>
+            <table class="result" id="src-table">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>子項目候補</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <input type="button" value="プリント用ページを開く" onclick="click_print()">
+        </div>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script type="text/javascript" src="./src.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
+    </div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script type="text/javascript" src="./src.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-function click_check() {
-    const elem = document.querySelector(".ui");
-    const lines = linesArray(elem.querySelector(".inputLines").value);
-    const outputTable = elem.querySelector("table.result tbody");
-    resetTable(outputTable);
-    const markup = findPossibleChildItems(lines, elem.querySelector("form.searchPos").pos.value);
-    markup.forEach(r => {
-        const row = outputTable.insertRow(-1);
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-        cell1.innerHTML = r.found;
-        cell2.innerHTML = r.markup;
-    });
-}
+        function click_check() {
+            const elem = document.querySelector(".ui");
+            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const outputTable = elem.querySelector("table.result tbody");
+            resetTable(outputTable);
+            const markup = findPossibleChildItems(lines, elem.querySelector("form.searchPos").pos.value);
+            markup.forEach(r => {
+                const row = outputTable.insertRow(-1);
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                cell1.innerHTML = r.found;
+                cell2.innerHTML = r.markup;
+            });
+        }
 
-function click_print() {
-    window.open('./print.html', 'newwindow', 'width=800,height=890');
-}
+        function click_print() {
+            window.open('./print.html', 'newwindow', 'width=800,height=890');
+        }
 
-</script>
+    </script>
 </body>
 
 </html>

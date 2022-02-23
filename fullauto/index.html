@@ -7,231 +7,241 @@
     <base target="_blank">
     <link rel="shortcut icon" href="../tools/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../tools/style.css">
-<style>
-    ol li::marker {
-        font-weight: bold;
-    }
-    div.notation {
-        font-size: .9em;
-        color: #586e75;
-        text-indent: -1em;
-        margin-left: 1em;
-    }
-    div.notation::before {
-        content: "\203b";
-        font-weight: bold;
-    }
-    .lostTo, .lostFrom, .possibles label {
-        font-weight: bold;
-        font-size: .8em;
-        margin-top: 1em;
-    }
-    .possibles label {
-        margin-top: 2em;
-        display: block;
-    }
-    .possibles table .match {
-        color: red;
-    }
-    div.lostTo div, div.lostFrom div {
-        border: 1px solid white;
-    }
-</style>
+    <style>
+        ol li::marker {
+            font-weight: bold;
+        }
+
+        div.notation {
+            font-size: .9em;
+            color: #586e75;
+            text-indent: -1em;
+            margin-left: 1em;
+        }
+
+        div.notation::before {
+            content: "\203b";
+            font-weight: bold;
+        }
+
+        .lostTo,
+        .lostFrom,
+        .possibles label {
+            font-weight: bold;
+            font-size: .8em;
+            margin-top: 1em;
+        }
+
+        .possibles label {
+            margin-top: 2em;
+            display: block;
+        }
+
+        .possibles table .match {
+            color: red;
+        }
+
+        div.lostTo div,
+        div.lostFrom div {
+            border: 1px solid white;
+        }
+    </style>
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../index.html">TOP</a></div>
 
-<h2>おまかせモード</h2>
-<div class="caption">
-    <div class="imagebox">
-        <div class="boxtitle">SAMPLE</div>
-        <img src = "./image/img_auto.png">
-    </div>
-    <ul>
-        <li><code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
-        <li>自動で下記の整形を行って索引を出力します。</li>
-        <li>
-            <ol>
-                <li><a href="../tools/Nayose/index.html">名寄せ</a>
-                    <ul>
-                        <li>ノンブル部分のソート・重複整理</li>
-                        <li>3以上連続するノンブル部分のハイフネーション<div class="notation">カンマは半角に統一されます。</div></li>
-                    </ul>
+        <h2>おまかせモード</h2>
+        <div class="caption">
+            <div class="imagebox">
+                <div class="boxtitle">SAMPLE</div>
+                <img src="./image/img_auto.png">
+            </div>
+            <ul>
+                <li><code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
+                <li>自動で下記の整形を行って索引を出力します。</li>
+                <li>
+                    <ol>
+                        <li><a href="../tools/Nayose/index.html">名寄せ</a>
+                            <ul>
+                                <li>ノンブル部分のソート・重複整理</li>
+                                <li>3以上連続するノンブル部分のハイフネーション<div class="notation">カンマは半角に統一されます。</div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="../tools/GetReading/index.html">よみがな取得</a></li>
+                        <li><a href="../tools/Hairetsu/index.html">配列読みに変換</a>
+                            <div class="notation">カタカナ・数字・アルファベット以外の記号は削除されます。</div>
+                        </li>
+                        <li><a href="../tools/Sort/index.html">並べ替え</a>
+                            <ul>
+                                <li>最優先は<code>配列読み</code>の情報。</li>
+                                <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+                                <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+                            </ul>
+                        </li>
+                    </ol>
                 </li>
-                <li><a href="../tools/GetReading/index.html">よみがな取得</a></li>
-                <li><a href="../tools/Hairetsu/index.html">配列読みに変換</a><div class="notation">カタカナ・数字・アルファベット以外の記号は削除されます。</div></li>
-                <li><a href="../tools/Sort/index.html">並べ替え</a>
-                    <ul>
-                        <li>最優先は<code>配列読み</code>の情報。</li>
-                        <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
-                        <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
-                    </ul>
-                </li>
-            </ol>
-        </li>
-        <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
-    </ul>
-</div>
-
-<div class="ui">
-    <textarea class="inputLines" placeholder="paste here!" ></textarea>
-    <div>
-        <label for="nombreOnLeft">
-            <input type="checkbox" class="isLeft" id="nombreOnLeft">ノンブルが左列（上図と逆）
-        </label>
-    </div>
-    <input type="button" value="整形" onclick="click_execute()">
-    <div class="status"></div>
-    <table class="formatResult">
-        <thead>
-            <tr>
-                <th>項目</th>
-                <th>読み</th>
-                <th>配列読み</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <input type="button" value="表をコピー" onclick="click_copy()">
-    <div class="result">
-        <div class="lostTo">
+                <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
+            </ul>
         </div>
-        <div class="lostFrom">
+
+        <div class="ui">
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <div>
+                <label for="nombreOnLeft">
+                    <input type="checkbox" class="isLeft" id="nombreOnLeft">ノンブルが左列（上図と逆）
+                </label>
+            </div>
+            <input type="button" value="整形" onclick="click_execute()">
+            <div class="status"></div>
+            <table class="formatResult">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>読み</th>
+                        <th>配列読み</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <input type="button" value="表をコピー" onclick="click_copy()">
+            <div class="result">
+                <div class="lostTo">
+                </div>
+                <div class="lostFrom">
+                </div>
+            </div>
+
+            <div class="possibles" style="display: none;">
+                <label>子項目候補があります！</label>
+                <table class="findResult" id="src-table">
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>子項目候補</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <input type="button" value="プリント用ページを開く" onclick="click_print()">
+            </div>
+
         </div>
+
     </div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../tools/util.js" defer></script>
+    <script type="text/javascript" src="../tools/nombre.js" defer></script>
+    <script type="text/javascript" src="../tools/CheckChild/src.js" defer></script>
+    <script type="text/javascript" src="../tools/CheckReference/src.js" defer></script>
+    <script type="text/javascript" src="../tools/GetReading/kuromoji.js" defer></script>
+    <script type="text/javascript" src="../tools/GetReading/src.js" defer></script>
+    <script type="text/javascript" src="../tools/Hairetsu/src.js" defer></script>
+    <script type="text/javascript" src="../tools/Nayose/src.js" defer></script>
+    <script type="text/javascript" src="../tools/Sort/src.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-    <div class="possibles" style="display: none;">
-        <label>子項目候補があります！</label>
-        <table class="findResult" id="src-table">
-            <thead>
-                <tr>
-                    <th>項目</th>
-                    <th>子項目候補</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <input type="button" value="プリント用ページを開く" onclick="click_print()">
-    </div>
-
-</div>
-
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../tools/util.js" defer></script>
-<script type="text/javascript" src="../tools/nombre.js" defer></script>
-<script type="text/javascript" src="../tools/CheckChild/src.js" defer></script>
-<script type="text/javascript" src="../tools/CheckReference/src.js" defer></script>
-<script type="text/javascript" src="../tools/GetReading/kuromoji.js" defer></script>
-<script type="text/javascript" src="../tools/GetReading/src.js" defer></script>
-<script type="text/javascript" src="../tools/Hairetsu/src.js" defer></script>
-<script type="text/javascript" src="../tools/Nayose/src.js" defer></script>
-<script type="text/javascript" src="../tools/Sort/src.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
-
-function showStatus(s) {
-    const elem = document.querySelector(".status");
-    elem.innerHTML = s;
-}
-
-function updateTable(elem, obj) {
-    obj.forEach((item, idx) => {
-        const row = elem.insertRow(-1);
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-        const cell3 = row.insertCell(2);
-        cell1.innerHTML = item.Item;
-        cell2.innerHTML = item.Reading;
-        cell3.innerHTML = item.Norm;
-    });
-}
-
-function checkReferences(lines) {
-    const elem = document.querySelector("div.result");
-    const lostTo = findLostReferenceTo(lines).map(item => markupLostReference(item, "red"));
-    if (lostTo.length) {
-        elem.querySelector(".lostTo").innerHTML = `<label>見よ項目があるのに参照先に括弧で付記されていないものがあります！</label><div>${
-                lostTo.join("")
-        }</div>`;
-    }
-    const lostFrom = findLostReferenceFrom(lines).map(item => markupLostReference(item, "blue"));
-    if (lostFrom.length) {
-        elem.querySelector(".lostFrom").innerHTML = `<label>参照元として括弧書きされているのに見よ項目がないものがあります！</label><div>${
-            lostFrom.join("")
-        }</div>`;
-    }
-}
-
-function main(tokenizer, lines, nombreOnLeft, outputElem) {
-    showStatus("");
-
-    // main process
-    const grouped = nayose(lines, nombreOnLeft);
-    const tokenized = tokenizeLines(tokenizer, grouped).map(t => {
-        const r = parseEntry(t.Reading).name;
-        return {
-           "Item": t.Item,
-           "Reading": r,
-           "Norm": toHairetsu(r, true)
+        function showStatus(s) {
+            const elem = document.querySelector(".status");
+            elem.innerHTML = s;
         }
-    });
-    const sorted = sortByReading(tokenized);
-    updateTable(outputElem, sorted);
-    const indexLines = sorted.map(x => x.Item);
 
-    // check cross-reference
-    checkReferences(indexLines);
-
-    // check possible childitem
-    const possibles = findPossibleChildItems(indexLines, "both");
-    if (possibles.length > 0) {
-        document.querySelector(".ui .possibles").style.display = "block";
-        const outputTable = document.querySelector(".ui .possibles table.findResult tbody");
-        resetTable(outputTable);
-        possibles.forEach(r => {
-            const row = outputTable.insertRow(-1);
-            const cell1 = row.insertCell(0);
-            const cell2 = row.insertCell(1);
-            cell1.innerHTML = r.Found;
-            cell2.innerHTML = r.Markup;
-        });
-    }
-}
-
-function click_execute() {
-    const elem = document.querySelector(".ui");
-    const outputTable = elem.querySelector("table.formatResult tbody");
-    const lines = linesArray(elem.querySelector(".inputLines").value);
-    const nombreOnLeft = elem.querySelector(".isLeft").checked;
-    elem.querySelector("div.result .lostTo").innerHTML = "<p></p>";
-    elem.querySelector("div.result .lostFrom").innerHTML = "<p></p>";
-    showStatus("（\u{1f914}よみがな計算中…）");
-    elem.querySelector(".possibles").style.display = "none";
-    resetTable(outputTable)
-    kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
-        if (err) {
-            showStatus("解析失敗…\nやり直してみてください！");
+        function updateTable(elem, obj) {
+            obj.forEach((item, idx) => {
+                const row = elem.insertRow(-1);
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                cell1.innerHTML = item.Item;
+                cell2.innerHTML = item.Reading;
+                cell3.innerHTML = item.Norm;
+            });
         }
-        else {
-            main(tokenizer, lines, nombreOnLeft, outputTable);
+
+        function checkReferences(lines) {
+            const elem = document.querySelector("div.result");
+            const lostTo = findLostReferenceTo(lines).map(item => markupLostReference(item, "red"));
+            if (lostTo.length) {
+                elem.querySelector(".lostTo").innerHTML = `<label>見よ項目があるのに参照先に括弧で付記されていないものがあります！</label><div>${lostTo.join("")
+                    }</div>`;
+            }
+            const lostFrom = findLostReferenceFrom(lines).map(item => markupLostReference(item, "blue"));
+            if (lostFrom.length) {
+                elem.querySelector(".lostFrom").innerHTML = `<label>参照元として括弧書きされているのに見よ項目がないものがあります！</label><div>${lostFrom.join("")
+                    }</div>`;
+            }
         }
-    });
-}
 
-function click_copy() {
-    const table = document.querySelector("table.formatResult tbody");
-    copyTable(table);
-}
+        function main(tokenizer, lines, nombreOnLeft, outputElem) {
+            showStatus("");
 
-function click_print() {
-    window.open("../tools/CheckChild/print.html", 'newwindow', 'width=800,height=890');
-}
+            // main process
+            const grouped = nayose(lines, nombreOnLeft);
+            const tokenized = tokenizeLines(tokenizer, grouped).map(t => {
+                const r = parseEntry(t.Reading).name;
+                return {
+                    "Item": t.Item,
+                    "Reading": r,
+                    "Norm": toHairetsu(r, true)
+                }
+            });
+            const sorted = sortByReading(tokenized);
+            updateTable(outputElem, sorted);
+            const indexLines = sorted.map(x => x.Item);
 
-</script>
+            // check cross-reference
+            checkReferences(indexLines);
+
+            // check possible childitem
+            const possibles = findPossibleChildItems(indexLines, "both");
+            if (possibles.length > 0) {
+                document.querySelector(".ui .possibles").style.display = "block";
+                const outputTable = document.querySelector(".ui .possibles table.findResult tbody");
+                resetTable(outputTable);
+                possibles.forEach(r => {
+                    const row = outputTable.insertRow(-1);
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    cell1.innerHTML = r.Found;
+                    cell2.innerHTML = r.Markup;
+                });
+            }
+        }
+
+        function click_execute() {
+            const elem = document.querySelector(".ui");
+            const outputTable = elem.querySelector("table.formatResult tbody");
+            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const nombreOnLeft = elem.querySelector(".isLeft").checked;
+            elem.querySelector("div.result .lostTo").innerHTML = "<p></p>";
+            elem.querySelector("div.result .lostFrom").innerHTML = "<p></p>";
+            showStatus("（\u{1f914}よみがな計算中…）");
+            elem.querySelector(".possibles").style.display = "none";
+            resetTable(outputTable)
+            kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
+                if (err) {
+                    showStatus("解析失敗…\nやり直してみてください！");
+                }
+                else {
+                    main(tokenizer, lines, nombreOnLeft, outputTable);
+                }
+            });
+        }
+
+        function click_copy() {
+            const table = document.querySelector("table.formatResult tbody");
+            copyTable(table);
+        }
+
+        function click_print() {
+            window.open("../tools/CheckChild/print.html", 'newwindow', 'width=800,height=890');
+        }
+
+    </script>
 </body>
 
 </html>

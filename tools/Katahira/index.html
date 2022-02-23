@@ -10,69 +10,69 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
 
-<h2>カタカナひらがな相互変換</h2>
-<div class="caption">
-    <p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
-</div>
-
-<div class="ui">
-
-    <label for="toHiraFlag">
-        <input type="checkbox" class="toHiraFlag" id="toHiraFlag"> ひらがなに変換（チェックしないとカタカナに変換します）
-    </label>
-
-    <div class="horizontal">
-        <div class="vertical">
-            <textarea id="leftTA" class="inputLines" placeholder="paste here!" ></textarea>
-            <input type="button" value="変換" onclick="click_katahira()">
+        <h2>カタカナひらがな相互変換</h2>
+        <div class="caption">
+            <p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
         </div>
-        <div class="vertical">
-            <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="click_copy()">
+
+        <div class="ui">
+
+            <label for="toHiraFlag">
+                <input type="checkbox" class="toHiraFlag" id="toHiraFlag"> ひらがなに変換（チェックしないとカタカナに変換します）
+            </label>
+
+            <div class="horizontal">
+                <div class="vertical">
+                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <input type="button" value="変換" onclick="click_katahira()">
+                </div>
+                <div class="vertical">
+                    <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
+                    <input type="button" value="コピー" onclick="click_copy()">
+                </div>
+            </div>
         </div>
+
     </div>
-</div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
+        function convertHiraKata(str, toHira = false) {
+            if (toHira) {
+                return toHiragana(str)
+            }
+            return toKatakana(str)
+        }
 
-function convertHiraKata(str, toHira=false){
-    if (toHira) {
-        return toHiragana(str)
-    }
-    return toKatakana(str)
-}
+        function click_katahira() {
+            const elem = document.querySelector(".ui");
+            const s = elem.querySelector(".inputLines").value;
+            elem.querySelector(".result").value = convertHiraKata(s, elem.querySelector(".toHiraFlag").checked);
+        }
 
-function click_katahira() {
-    const elem = document.querySelector(".ui");
-    const s = elem.querySelector(".inputLines").value;
-    elem.querySelector(".result").value = convertHiraKata(s, elem.querySelector(".toHiraFlag").checked);
-}
+        function click_copy() {
+            copyValue(document.querySelector(".ui .result"));
+        }
 
-function click_copy() {
-    copyValue(document.querySelector(".ui .result"));
-}
+        const leftTA = document.getElementById("leftTA");
+        const rightTA = document.getElementById("rightTA");
+        leftTA.addEventListener("scroll", () => {
+            rightTA.scrollTop = leftTA.scrollTop;
+            rightTA.scrollLeft = leftTA.scrollLeft;
+        });
+        rightTA.addEventListener("scroll", () => {
+            leftTA.scrollTop = rightTA.scrollTop;
+            leftTA.scrollLeft = rightTA.scrollLeft;
+        });
 
-const leftTA = document.getElementById("leftTA");
-const rightTA = document.getElementById("rightTA");
-leftTA.addEventListener("scroll", () => {
-    rightTA.scrollTop = leftTA.scrollTop;
-    rightTA.scrollLeft = leftTA.scrollLeft;
-});
-rightTA.addEventListener("scroll", () => {
-    leftTA.scrollTop = rightTA.scrollTop;
-    leftTA.scrollLeft = rightTA.scrollLeft;
-});
-
-</script>
+    </script>
 </body>
 
 </html>

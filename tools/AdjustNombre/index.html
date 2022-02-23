@@ -11,30 +11,38 @@
         table.adjuster {
             margin: 0 10px;
         }
+
         table.adjuster {
             overflow: unset;
         }
+
         table.adjuster td {
             border: none;
         }
+
         div.msg {
             font-size: .9rem;
             font-weight: bold;
         }
+
         div.wrap {
             margin: .5em 0;
             line-height: 1;
             font-size: 1rem;
         }
+
         div.adjusted {
             color: #333;
         }
+
         div.adjusted .same {
             color: gray;
         }
+
         div.adjusted .mod {
             color: red;
         }
+
         div.adjusted .del {
             text-decoration: line-through;
             color: #35618a;
@@ -45,161 +53,161 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
-<h2>ノンブル加算減算</h2>
-<div class="caption">
-    <ul>
-        <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
-        <li>ノンブル間のカンマは必ず半角になります。</li>
-    </ul>
-</div>
-
-<div class="ui">
-    <table class="adjuster">
-        <tr>
-            <td>開始ノンブル</td>
-            <td><input type="number" value="1" min="1" class="startNombre"></td>
-        </tr>
-        <tr>
-            <td>終了ノンブル</td>
-            <td><input type="number" value="999" min="1" class="endNombre"></td>
-        </tr>
-        <tr>
-            <td>増分</td>
-            <td><input type="number" value="1" class="nombreDelta"></td>
-        </tr>
-    </table>
-
-    <div class="horizontal">
-        <div class="vertical">
-            <textarea id="leftTA" class="inputLines" placeholder="paste here!" ></textarea>
-            <input type="button" value="計算" onclick="clickBtn_adjustNombre()">
+        <h2>ノンブル加算減算</h2>
+        <div class="caption">
+            <ul>
+                <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
+                <li>ノンブル間のカンマは必ず半角になります。</li>
+            </ul>
         </div>
-        <div class="vertical">
-            <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="click_copy()">
+
+        <div class="ui">
+            <table class="adjuster">
+                <tr>
+                    <td>開始ノンブル</td>
+                    <td><input type="number" value="1" min="1" class="startNombre"></td>
+                </tr>
+                <tr>
+                    <td>終了ノンブル</td>
+                    <td><input type="number" value="999" min="1" class="endNombre"></td>
+                </tr>
+                <tr>
+                    <td>増分</td>
+                    <td><input type="number" value="1" class="nombreDelta"></td>
+                </tr>
+            </table>
+
+            <div class="horizontal">
+                <div class="vertical">
+                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <input type="button" value="計算" onclick="clickBtn_adjustNombre()">
+                </div>
+                <div class="vertical">
+                    <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
+                    <input type="button" value="コピー" onclick="click_copy()">
+                </div>
+            </div>
+            <input type="button" value="チェックリストを印刷" onclick="click_print()">
+            <div id="src-detail" class="result">
+            </div>
         </div>
+
     </div>
-    <input type="button" value="チェックリストを印刷" onclick="click_print()">
-    <div id="src-detail" class="result">
-    </div>
-</div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script type="text/javascript" src="../nombre.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script type="text/javascript" src="../nombre.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
-
-function adjustNombre(parsed, start, end, delta) {
-    if (Number(start) <= parsed.intValue && parsed.intValue <= Number(end)) {
-        return (parsed.display.prefix + (parsed.intValue + Number(delta)) + parsed.display.suffix);
-    }
-    return parsed.display.text;
-}
-
-function differentNombres(originNombres, adjustedNombres) {
-    const barsReg = new RegExp(`\\s*[${Nombre.connectors.join("")}]+\\s*`, "g");
-    return (originNombres.join("").replace(barsReg, "") != adjustedNombres.join("").replace(barsReg, ""))
-}
-
-function adjustNombresLine(lines, start, end, delta) {
-    return lines.map(line => {
-        let nombreInfo= {
-            "entryName": "",
-            "nombres": {
-                "origin": [],
-                "adjusted": [],
-            },
-            "changed": false
-        };
-        if (line.trim().length < 1) {
-            return nombreInfo;
-        }
-        const entry = parseEntry(line);
-        if (!entry.nombre) {
-            nombreInfo.entryName = entry.name;
-            return nombreInfo;
-        }
-        const origin = Nombre.arrayByComma(entry.nombre);
-        const adjustedNombres = origin.map(n => {
-            const parsed = Nombre.parse(n);
-            if (parsed.length > 1) {
-                return adjustNombre(parsed[0], start, end, delta)
-                    + "\u2013"
-                    + adjustNombre(parsed.slice(-1)[0], start, end, delta);
+        function adjustNombre(parsed, start, end, delta) {
+            if (Number(start) <= parsed.intValue && parsed.intValue <= Number(end)) {
+                return (parsed.display.prefix + (parsed.intValue + Number(delta)) + parsed.display.suffix);
             }
-            return adjustNombre(parsed[0], start, end, delta);
-        });
-        nombreInfo.entryName = entry.name;
-        nombreInfo.nombres.origin = origin;
-        nombreInfo.nombres.adjusted = adjustedNombres;
-        nombreInfo.changed = differentNombres(origin, adjustedNombres);
-        return nombreInfo;
-    });
-}
-
-function diffNombre(origin, adjusted) {
-    const barsReg = new RegExp(`\\s*[${Nombre.connectors.join("")}]+\\s*`, "g");
-    return adjusted.map((adNbr,i) => {
-        if (adNbr.replace(barsReg, "") == origin[i].replace(barsReg, "")) {
-            return `<span class="same">${adNbr}</span>`;
+            return parsed.display.text;
         }
-        return `<span class="del">${origin[i]}</span><span class="mod">${adNbr}</span>`;
-    }).join(", ");
-}
 
-
-function clickBtn_adjustNombre(){
-    const elem = document.querySelector(".ui");
-    const adjustedArray = adjustNombresLine(
-        linesArray(elem.querySelector(".inputLines").value),
-        elem.querySelector(".startNombre").value,
-        elem.querySelector(".endNombre").value,
-        elem.querySelector(".nombreDelta").value
-    );
-    elem.querySelector("textarea.result").value = adjustedArray.map(l => {
-        if (l.entryName) {
-            return `${l.entryName}　　${l.nombres.adjusted.join(", ")}`.trim();
+        function differentNombres(originNombres, adjustedNombres) {
+            const barsReg = new RegExp(`\\s*[${Nombre.connectors.join("")}]+\\s*`, "g");
+            return (originNombres.join("").replace(barsReg, "") != adjustedNombres.join("").replace(barsReg, ""))
         }
-        return "";
-    }).join("\r\n");
-    const modified = adjustedArray.filter(line => line.changed);
-    let markup = "<p>（変更箇所はありません）</p>";
-    if (modified.length) {
-        const diffs = modified.map(item => {
-                return `<div class="wrap"><div class="adjusted">${item.entryName}　　${ diffNombre(item.nombres.origin, item.nombres.adjusted) }</div></div>`;
+
+        function adjustNombresLine(lines, start, end, delta) {
+            return lines.map(line => {
+                let nombreInfo = {
+                    "entryName": "",
+                    "nombres": {
+                        "origin": [],
+                        "adjusted": [],
+                    },
+                    "changed": false
+                };
+                if (line.trim().length < 1) {
+                    return nombreInfo;
+                }
+                const entry = parseEntry(line);
+                if (!entry.nombre) {
+                    nombreInfo.entryName = entry.name;
+                    return nombreInfo;
+                }
+                const origin = Nombre.arrayByComma(entry.nombre);
+                const adjustedNombres = origin.map(n => {
+                    const parsed = Nombre.parse(n);
+                    if (parsed.length > 1) {
+                        return adjustNombre(parsed[0], start, end, delta)
+                            + "\u2013"
+                            + adjustNombre(parsed.slice(-1)[0], start, end, delta);
+                    }
+                    return adjustNombre(parsed[0], start, end, delta);
+                });
+                nombreInfo.entryName = entry.name;
+                nombreInfo.nombres.origin = origin;
+                nombreInfo.nombres.adjusted = adjustedNombres;
+                nombreInfo.changed = differentNombres(origin, adjustedNombres);
+                return nombreInfo;
             });
-        markup = `<div class="msg">${modified.length}行の変更：</div>${diffs.join("")}`
-    }
-    elem.querySelector("div.result").innerHTML = markup;
-}
+        }
 
-function click_copy(){
-    copyValue(document.querySelector(".ui textarea.result"));
-}
+        function diffNombre(origin, adjusted) {
+            const barsReg = new RegExp(`\\s*[${Nombre.connectors.join("")}]+\\s*`, "g");
+            return adjusted.map((adNbr, i) => {
+                if (adNbr.replace(barsReg, "") == origin[i].replace(barsReg, "")) {
+                    return `<span class="same">${adNbr}</span>`;
+                }
+                return `<span class="del">${origin[i]}</span><span class="mod">${adNbr}</span>`;
+            }).join(", ");
+        }
 
-function click_print() {
-    window.open('./print.html', 'newwindow', 'width=800,height=890');
-}
+
+        function clickBtn_adjustNombre() {
+            const elem = document.querySelector(".ui");
+            const adjustedArray = adjustNombresLine(
+                linesArray(elem.querySelector(".inputLines").value),
+                elem.querySelector(".startNombre").value,
+                elem.querySelector(".endNombre").value,
+                elem.querySelector(".nombreDelta").value
+            );
+            elem.querySelector("textarea.result").value = adjustedArray.map(l => {
+                if (l.entryName) {
+                    return `${l.entryName}　　${l.nombres.adjusted.join(", ")}`.trim();
+                }
+                return "";
+            }).join("\r\n");
+            const modified = adjustedArray.filter(line => line.changed);
+            let markup = "<p>（変更箇所はありません）</p>";
+            if (modified.length) {
+                const diffs = modified.map(item => {
+                    return `<div class="wrap"><div class="adjusted">${item.entryName}　　${diffNombre(item.nombres.origin, item.nombres.adjusted)}</div></div>`;
+                });
+                markup = `<div class="msg">${modified.length}行の変更：</div>${diffs.join("")}`
+            }
+            elem.querySelector("div.result").innerHTML = markup;
+        }
+
+        function click_copy() {
+            copyValue(document.querySelector(".ui textarea.result"));
+        }
+
+        function click_print() {
+            window.open('./print.html', 'newwindow', 'width=800,height=890');
+        }
 
 
-const leftTA = document.getElementById("leftTA");
-const rightTA = document.getElementById("rightTA");
-leftTA.addEventListener("scroll", () => {
-    rightTA.scrollTop = leftTA.scrollTop;
-    rightTA.scrollLeft = leftTA.scrollLeft;
-});
-rightTA.addEventListener("scroll", () => {
-    leftTA.scrollTop = rightTA.scrollTop;
-    leftTA.scrollLeft = rightTA.scrollLeft;
-});
+        const leftTA = document.getElementById("leftTA");
+        const rightTA = document.getElementById("rightTA");
+        leftTA.addEventListener("scroll", () => {
+            rightTA.scrollTop = leftTA.scrollTop;
+            rightTA.scrollLeft = leftTA.scrollLeft;
+        });
+        rightTA.addEventListener("scroll", () => {
+            leftTA.scrollTop = rightTA.scrollTop;
+            leftTA.scrollLeft = rightTA.scrollLeft;
+        });
 
-</script>
+    </script>
 </body>
 
 </html>

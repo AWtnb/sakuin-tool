@@ -9,107 +9,109 @@
     <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
         .info {
-            font-weight:bold;
-            margin:0 4px;
+            font-weight: bold;
+            margin: 0 4px;
         }
+
         .unsorted {
-            color:red;
+            color: red;
         }
+
         .needhyphen {
-            color:blue;
+            color: blue;
         }
     </style>
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
-<h2>ノンブル並びの確認</h2>
-<div class="caption">
-    <ul>
-        <li>チェック内容：</li>
-        <li>
+        <h2>ノンブル並びの確認</h2>
+        <div class="caption">
             <ul>
-                <li>ノンブルが正しく並んでいないもの</li>
-                <li>3つ連続しているもの</li>
+                <li>チェック内容：</li>
+                <li>
+                    <ul>
+                        <li>ノンブルが正しく並んでいないもの</li>
+                        <li>3つ連続しているもの</li>
+                    </ul>
+                </li>
+                <li>カンマの全角半角は区別しません。</li>
+                <li>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</li>
             </ul>
-        </li>
-        <li>カンマの全角半角は区別しません。</li>
-        <li>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</li>
-    </ul>
-</div>
+        </div>
 
-<div class="ui">
-    <textarea class="inputLines" placeholder="paste here!" ></textarea>
-    <input type="button" value="チェック" onclick="click_check()">
+        <div class="ui">
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="チェック" onclick="click_check()">
 
-    <div class="result">
+            <div class="result">
+            </div>
+        </div>
+
     </div>
-</div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script type="text/javascript" src="../nombre.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script type="text/javascript" src="../nombre.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
-
-function unSorted(parsedNombres) {
-    for (let i = 0; i < parsedNombres.length - 1; i++) {
-        if (parsedNombres[i].intValue >= parsedNombres[i+1].intValue) {
-            return true;
+        function unSorted(parsedNombres) {
+            for (let i = 0; i < parsedNombres.length - 1; i++) {
+                if (parsedNombres[i].intValue >= parsedNombres[i + 1].intValue) {
+                    return true;
+                }
+            }
+            return false;
         }
-    }
-    return false;
-}
 
-function needHyphenate(parsedNombres) {
-    for (let i = 0; i < parsedNombres.length - 2; i++) {
-        const current = parsedNombres[i];
-        const next1 = parsedNombres[i+1];
-        const next2 = parsedNombres[i+2];
-        if (current.intValue + 1 == next1.intValue && current.intValue + 2 == next2.intValue) {
-            if (!next1.hyphenated) {
-                return true;
+        function needHyphenate(parsedNombres) {
+            for (let i = 0; i < parsedNombres.length - 2; i++) {
+                const current = parsedNombres[i];
+                const next1 = parsedNombres[i + 1];
+                const next2 = parsedNombres[i + 2];
+                if (current.intValue + 1 == next1.intValue && current.intValue + 2 == next2.intValue) {
+                    if (!next1.hyphenated) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function grepInvalidNombreLine(lines) {
+            return lines.filter(x => String(x).trim()).map(line => {
+                let s = line;
+                const entry = parseEntry(line);
+                const parsed = Nombre.parse(entry.nombre);
+                if (unSorted(parsed)) {
+                    s = s + '<span class="info unsorted">←順番</span>';
+                }
+                if (needHyphenate(parsed)) {
+                    s = s + '<span class="info needhyphen">←連続</span>';
+                }
+                return {
+                    "line": s,
+                    "invalid": (line != s)
+                }
+            }).filter(x => x.invalid).map(x => x.line);
+        }
+
+        function click_check() {
+            const elem = document.querySelector(".ui");
+            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const invalid = grepInvalidNombreLine(lines);
+            if (invalid.length < 1) {
+                elem.querySelector(".result").innerHTML = "<p>\u{1F389}問題は見当たりません！</p>";
+            }
+            else {
+                elem.querySelector(".result").innerHTML = `<p>${invalid.join("<br>")}</p>`;
             }
         }
-    }
-    return false;
-}
 
-function grepInvalidNombreLine(lines) {
-    return lines.filter(x => String(x).trim()).map(line => {
-        let s = line;
-        const entry = parseEntry(line);
-        const parsed = Nombre.parse(entry.nombre);
-        if (unSorted(parsed)) {
-            s = s + '<span class="info unsorted">←順番</span>';
-        }
-        if (needHyphenate(parsed)) {
-            s = s + '<span class="info needhyphen">←連続</span>';
-        }
-        return {
-            "line": s,
-            "invalid": (line != s)
-        }
-        }).filter(x => x.invalid).map(x => x.line);
-    }
-
-    function click_check() {
-        const elem = document.querySelector(".ui");
-        const lines = linesArray(elem.querySelector(".inputLines").value);
-        const invalid = grepInvalidNombreLine(lines);
-        if (invalid.length < 1) {
-            elem.querySelector(".result").innerHTML = "<p>\u{1F389}問題は見当たりません！</p>";
-        }
-        else {
-            elem.querySelector(".result").innerHTML = `<p>${invalid.join("<br>")}</p>`;
-        }
-}
-
-</script>
+    </script>
 </body>
 
 </html>

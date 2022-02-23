@@ -10,80 +10,80 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
-<h2 >入力テンプレートの事前整形</h2>
+        <h2>入力テンプレートの事前整形</h2>
 
 
-<div class="caption">
-    <div class="imagebox">
-        <div class="boxtitle">SAMPLE</div>
-        <div class="diff">
-            <div class="before"><img src="./image/image_preformat_before.png"></div>
-            <div class="arrow"></div>
-            <div class="after"><img src="./image/image_preformat_after.png"></div>
-        </div>
-    </div>
-    <p>入力した<a href="../NewTemplate/index.html">テンプレート</a>の<code>見よ先</code>が入力されている行について下記の整形をします。</p>
-    <ul>
-        <li>項目を左列に、ページを右列に配置します</li>
-        <li>見よ項目が入力されている場合：
+        <div class="caption">
+            <div class="imagebox">
+                <div class="boxtitle">SAMPLE</div>
+                <div class="diff">
+                    <div class="before"><img src="./image/image_preformat_before.png"></div>
+                    <div class="arrow"></div>
+                    <div class="after"><img src="./image/image_preformat_after.png"></div>
+                </div>
+            </div>
+            <p>入力した<a href="../NewTemplate/index.html">テンプレート</a>の<code>見よ先</code>が入力されている行について下記の整形をします。</p>
             <ul>
-                <li><code>　→</code>でつないで見よ項目を作成します</li>
-                <li>ノンブルを削除します</li>
-                <li>代わりに同じノンブルで見よ先項目を作成します</li>
+                <li>項目を左列に、ページを右列に配置します</li>
+                <li>見よ項目が入力されている場合：
+                    <ul>
+                        <li><code>　→</code>でつないで見よ項目を作成します</li>
+                        <li>ノンブルを削除します</li>
+                        <li>代わりに同じノンブルで見よ先項目を作成します</li>
+                    </ul>
+                </li>
             </ul>
-        </li>
-    </ul>
-</div>
+        </div>
 
-<div class="ui">
-    <textarea class="inputLines" placeholder="paste here!" ></textarea>
-    <input type="button" value="整形" onclick="click_format()">
-    <table class="result">
-        <thead>
-            <tr>
-                <th>項目</td>
-                <th>ノンブル</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <input type="button" value="表をコピー" onclick="click_copy()">
+        <div class="ui">
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="整形" onclick="click_format()">
+            <table class="result">
+                <thead>
+                    <tr>
+                        <th>項目</td>
+                        <th>ノンブル</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <input type="button" value="表をコピー" onclick="click_copy()">
 
-</div>
+        </div>
 
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script type="text/javascript" src="./src.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+        <!-- ============================== -->
+        <script type="text/javascript" src="../util.js" defer></script>
+        <script type="text/javascript" src="./src.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 
-<script>
+        <script>
 
-function click_format() {
-    const elem = document.querySelector(".ui");
-    const lines = linesArray(elem.querySelector(".inputLines").value);
+            function click_format() {
+                const elem = document.querySelector(".ui");
+                const lines = linesArray(elem.querySelector(".inputLines").value);
 
-    const outputTable = elem.querySelector("table.result tbody");
-    resetTable(outputTable);
+                const outputTable = elem.querySelector("table.result tbody");
+                resetTable(outputTable);
 
-    formatTemplare(lines).forEach((line, idx) => {
-        const row = outputTable.insertRow(-1);
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-        cell1.innerHTML = line.Item;
-        cell2.innerHTML = line.Nombre;
-    });
-}
+                formatTemplare(lines).forEach((line, idx) => {
+                    const row = outputTable.insertRow(-1);
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    cell1.innerHTML = line.Item;
+                    cell2.innerHTML = line.Nombre;
+                });
+            }
 
-function click_copy() {
-    const table = document.querySelector("table.result tbody");
-    copyTable(table);
-}
+            function click_copy() {
+                const table = document.querySelector("table.result tbody");
+                copyTable(table);
+            }
 
-</script>
+        </script>
 </body>
 
 </html>

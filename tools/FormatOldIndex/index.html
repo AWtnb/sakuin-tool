@@ -16,8 +16,15 @@
             border-left: 2px solid #ccc;
             padding: 2px;
         }
-        .origin {color: gray;}
-        .modified {color: red;}
+
+        .origin {
+            color: gray;
+        }
+
+        .modified {
+            color: red;
+        }
+
         .msg {
             font-weight: bold;
         }
@@ -25,125 +32,125 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
-<h2>旧版索引の事前整形</h2>
-<div class="caption">
-    <ul>
-        <li>項目とノンブルの間を2倍アキに統一します。</li>
-        <li>連続するノンブルを示すダーシの種類を統一します。</li>
-        <li>子項目のダーシの種類を統一します。</li>
-    </ul>
-</div>
+        <h2>旧版索引の事前整形</h2>
+        <div class="caption">
+            <ul>
+                <li>項目とノンブルの間を2倍アキに統一します。</li>
+                <li>連続するノンブルを示すダーシの種類を統一します。</li>
+                <li>子項目のダーシの種類を統一します。</li>
+            </ul>
+        </div>
 
-<div class="ui">
-    <div class="horizontal">
-        <div class="vertical">
-            <textarea id="leftTA" class="inputLines" placeholder="paste here!" ></textarea>
-            <input type="button" value="整形" onclick="click_format()">
+        <div class="ui">
+            <div class="horizontal">
+                <div class="vertical">
+                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <input type="button" value="整形" onclick="click_format()">
+                </div>
+                <div class="vertical">
+                    <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
+                    <input type="button" value="コピー" onclick="click_copy()">
+                </div>
+            </div>
+            <div class="diff"></div>
         </div>
-        <div class="vertical">
-            <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="click_copy()">
-        </div>
+
     </div>
-    <div class="diff"></div>
-</div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
-
-function formatFullWidthSpace(s) {
-    const doubleSpaced = s.replace(/　/g, "　　").replace(/　+/g, "　　");
-    const f = doubleSpaced.replace(/　　→/, "　→").replace(/(?<=.{2,})　　(?!\d)/, "　").replace(/　　(?!\d)/g, "");
-    if (s.startsWith("　")) {
-        return `　${f}`;
-    }
-    return f;
-}
-
-const POSSIBLE_BARS = "[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]";
-
-function formatNombre(s) {
-    const reg = new RegExp(`${POSSIBLE_BARS}+`, "g")
-    return s.replace(reg, "-");
-}
-
-function formatChild(s) {
-    const reg = new RegExp(`^${POSSIBLE_BARS}+|${POSSIBLE_BARS}+$`);
-    return "　" + s.trim().replace(reg, "――");
-}
-
-function formatLines(lines) {
-    const reg = new RegExp(POSSIBLE_BARS);
-    return lines.map(line => line.replace(/\t$/, "").replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
-        const entry = parseEntry(line);
-        if (entry.name && entry.nombre) {
-            const fmt = (entry.isChild || entry.name.match(reg))? formatChild(entry.name) : entry.name.trim();
-            return `${fmt}　　${formatNombre(entry.nombre)}`;
+        function formatFullWidthSpace(s) {
+            const doubleSpaced = s.replace(/　/g, "　　").replace(/　+/g, "　　");
+            const f = doubleSpaced.replace(/　　→/, "　→").replace(/(?<=.{2,})　　(?!\d)/, "　").replace(/　　(?!\d)/g, "");
+            if (s.startsWith("　")) {
+                return `　${f}`;
+            }
+            return f;
         }
-        return line;
-    });
-}
 
-function getDeltas(origins, news) {
-    const deltas = [];
-    for (let i = 0; i < origins.length; i++) {
-        const orgItem = origins[i];
-        if (i > news.length - 1) {
-            deltas.push({
-                "Origin": orgItem,
-                "Modified": "（行数が変わっています）"
-            });
-            continue;
+        const POSSIBLE_BARS = "[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]";
+
+        function formatNombre(s) {
+            const reg = new RegExp(`${POSSIBLE_BARS}+`, "g")
+            return s.replace(reg, "-");
         }
-        const newItem = news[i];
-        if (orgItem != newItem) {
-            deltas.push({
-                "Origin": orgItem,
-                "Modified": newItem
+
+        function formatChild(s) {
+            const reg = new RegExp(`^${POSSIBLE_BARS}+|${POSSIBLE_BARS}+$`);
+            return "　" + s.trim().replace(reg, "――");
+        }
+
+        function formatLines(lines) {
+            const reg = new RegExp(POSSIBLE_BARS);
+            return lines.map(line => line.replace(/\t$/, "").replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
+                const entry = parseEntry(line);
+                if (entry.name && entry.nombre) {
+                    const fmt = (entry.isChild || entry.name.match(reg)) ? formatChild(entry.name) : entry.name.trim();
+                    return `${fmt}　　${formatNombre(entry.nombre)}`;
+                }
+                return line;
             });
         }
-    }
-    return deltas;
-}
 
-function click_format() {
-    const elem = document.querySelector(".ui");
-    const lines = linesArray(elem.querySelector(".inputLines").value);
-    const formatted = formatLines(lines);
-    elem.querySelector(".result").value = formatted.join("\n");
-    const output = elem.querySelector(".diff");
-    output.innerHTML = "";
-    const diff = getDeltas(lines, formatted);
-    if (diff.length) {
-        output.innerHTML = `<div class="msg">${diff.length}箇所を修正しました：</msg>` + diff.map(d => {
-            return `<div class="pair"><div class="origin">${d.Origin}</div><div class="modified">${d.Modified}</div></div>`;
-        }).join("");
-    }
-}
+        function getDeltas(origins, news) {
+            const deltas = [];
+            for (let i = 0; i < origins.length; i++) {
+                const orgItem = origins[i];
+                if (i > news.length - 1) {
+                    deltas.push({
+                        "Origin": orgItem,
+                        "Modified": "（行数が変わっています）"
+                    });
+                    continue;
+                }
+                const newItem = news[i];
+                if (orgItem != newItem) {
+                    deltas.push({
+                        "Origin": orgItem,
+                        "Modified": newItem
+                    });
+                }
+            }
+            return deltas;
+        }
 
-function click_copy() {
-    copyValue(document.querySelector(".ui .result"));
-}
+        function click_format() {
+            const elem = document.querySelector(".ui");
+            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const formatted = formatLines(lines);
+            elem.querySelector(".result").value = formatted.join("\n");
+            const output = elem.querySelector(".diff");
+            output.innerHTML = "";
+            const diff = getDeltas(lines, formatted);
+            if (diff.length) {
+                output.innerHTML = `<div class="msg">${diff.length}箇所を修正しました：</msg>` + diff.map(d => {
+                    return `<div class="pair"><div class="origin">${d.Origin}</div><div class="modified">${d.Modified}</div></div>`;
+                }).join("");
+            }
+        }
 
-const leftTA = document.getElementById("leftTA");
-const rightTA = document.getElementById("rightTA");
-leftTA.addEventListener("scroll", () => {
-    rightTA.scrollTop = leftTA.scrollTop;
-    rightTA.scrollLeft = leftTA.scrollLeft;
-});
-rightTA.addEventListener("scroll", () => {
-    leftTA.scrollTop = rightTA.scrollTop;
-    leftTA.scrollLeft = rightTA.scrollLeft;
-});
+        function click_copy() {
+            copyValue(document.querySelector(".ui .result"));
+        }
 
-</script>
+        const leftTA = document.getElementById("leftTA");
+        const rightTA = document.getElementById("rightTA");
+        leftTA.addEventListener("scroll", () => {
+            rightTA.scrollTop = leftTA.scrollTop;
+            rightTA.scrollLeft = leftTA.scrollLeft;
+        });
+        rightTA.addEventListener("scroll", () => {
+            leftTA.scrollTop = rightTA.scrollTop;
+            leftTA.scrollLeft = rightTA.scrollLeft;
+        });
+
+    </script>
 </body>
 
 </html>

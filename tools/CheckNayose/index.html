@@ -12,10 +12,12 @@
             font-size: .9rem;
             font-weight: bold;
         }
+
         .result .detail {
             font-size: .9rem;
             line-height: 1.2;
         }
+
         .result .detail p {
             margin: 1em 0;
         }
@@ -23,65 +25,65 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
 
-<h2>見よ項目の名寄せをチェック</h2>
+        <h2>見よ項目の名寄せをチェック</h2>
 
-<div class="caption">
-    <ul>
-        <li>下記のチェックを行います。</li>
-        <li>
+        <div class="caption">
             <ul>
-                <li>見よ<u>先</u>項目も正しく名寄せされているか</li>
-                <li>見よ項目が本項目として残っていないか</li>
+                <li>下記のチェックを行います。</li>
+                <li>
+                    <ul>
+                        <li>見よ<u>先</u>項目も正しく名寄せされているか</li>
+                        <li>見よ項目が本項目として残っていないか</li>
+                    </ul>
+                </li>
+                <li>名寄せを修正したら<a href="../CheckNombre/index.html">こちら</a>でノンブルなど再チェックしておくと安全です。</li>
             </ul>
-        </li>
-        <li>名寄せを修正したら<a href="../CheckNombre/index.html">こちら</a>でノンブルなど再チェックしておくと安全です。</li>
-    </ul>
-</div>
+        </div>
 
 
-<div class="ui">
-    <textarea class="inputLines" placeholder="paste here!" ></textarea>
-    <input type="button" value="チェック" onclick="click_check()">
+        <div class="ui">
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="チェック" onclick="click_check()">
 
-    <div class="result"></div>
+            <div class="result"></div>
 
-</div>
-
-
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script type="text/javascript" src="./src.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
-
-function click_check(){
-    const elem = document.querySelector(".ui");
-    const output = elem.querySelector(".result");
-    output.innerHTML = "";
-    const lines = linesArray(elem.querySelector(".inputLines").value);
-    const ungrouped = getUngroupedReferencedItems(lines);
-    if (ungrouped.length) {
-        const markup = ungrouped.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
-        output.innerHTML = `<div class="msg">見よ先項目が名寄せされずに残っています！</div><div class="detail">${markup}</div>`;
-    }
-    const conflict = getConflictReferringItems(lines);
-    if (conflict.length) {
-        const markup = conflict.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
-        output.innerHTML = output.innerHTML + "\n" + `<div class="msg">見よ項目が本項目として残っています！</div><div class="detail">${markup}</div>`;
-    }
-    if (output.innerHTML.length < 1) {
-        output.innerHTML = "<div class=\"msg\">問題ありません！</div>";
-    }
-}
+        </div>
 
 
-</script>
+    </div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script type="text/javascript" src="./src.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
+
+        function click_check() {
+            const elem = document.querySelector(".ui");
+            const output = elem.querySelector(".result");
+            output.innerHTML = "";
+            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const ungrouped = getUngroupedReferencedItems(lines);
+            if (ungrouped.length) {
+                const markup = ungrouped.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
+                output.innerHTML = `<div class="msg">見よ先項目が名寄せされずに残っています！</div><div class="detail">${markup}</div>`;
+            }
+            const conflict = getConflictReferringItems(lines);
+            if (conflict.length) {
+                const markup = conflict.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
+                output.innerHTML = output.innerHTML + "\n" + `<div class="msg">見よ項目が本項目として残っています！</div><div class="detail">${markup}</div>`;
+            }
+            if (output.innerHTML.length < 1) {
+                output.innerHTML = "<div class=\"msg\">問題ありません！</div>";
+            }
+        }
+
+
+    </script>
 </body>
 
 </html>

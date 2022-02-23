@@ -10,88 +10,88 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
 
-<h2>並べ替え</h2>
+        <h2>並べ替え</h2>
 
-<div class="caption">
-    <div class="imagebox">
-        <div class="boxtitle">SAMPLE</div>
-        <div class="diff-v">
-            <div class="before"><img src = "./image/img_sort_before.png"></div>
-            <div class="arrow"></div>
-            <div class="after"><img src = "./image/img_sort_after.png"></div>
-        </div>
-    </div>
-    <ul>
-        <li>上図のように<code>項目</code><code>読み</code><code>配列読み</code>の3列を Excel から貼り付けてください。</li>
-        <li>ソート基準：</li>
-        <li>
+        <div class="caption">
+            <div class="imagebox">
+                <div class="boxtitle">SAMPLE</div>
+                <div class="diff-v">
+                    <div class="before"><img src="./image/img_sort_before.png"></div>
+                    <div class="arrow"></div>
+                    <div class="after"><img src="./image/img_sort_after.png"></div>
+                </div>
+            </div>
             <ul>
-                <li>最優先は<code>配列読み</code>の情報。</li>
-                <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
-                <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+                <li>上図のように<code>項目</code><code>読み</code><code>配列読み</code>の3列を Excel から貼り付けてください。</li>
+                <li>ソート基準：</li>
+                <li>
+                    <ul>
+                        <li>最優先は<code>配列読み</code>の情報。</li>
+                        <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+                        <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+                    </ul>
+                </li>
             </ul>
-        </li>
-    </ul>
-</div>
+        </div>
 
-<div class="ui">
+        <div class="ui">
 
-    <textarea class="inputLines" placeholder="paste here!" ></textarea>
-    <input type="button" value="ソート" onclick="click_sort()">
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="ソート" onclick="click_sort()">
 
-    <table class="result">
-        <thead>
-            <tr>
-                <th>項目</th>
-                <th>読み</th>
-                <th>配列読み</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <input type="button" value="表をコピー" onclick="click_copy()">
+            <table class="result">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>読み</th>
+                        <th>配列読み</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <input type="button" value="表をコピー" onclick="click_copy()">
 
-</div>
+        </div>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script type="text/javascript" src="./src.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
+    </div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script type="text/javascript" src="./src.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-function click_sort() {
-    const elem = document.querySelector(".ui");
-    const multiLine = elem.querySelector(".inputLines").value;
+        function click_sort() {
+            const elem = document.querySelector(".ui");
+            const multiLine = elem.querySelector(".inputLines").value;
 
-    const outputTable = elem.querySelector("table.result tbody");
-    resetTable(outputTable)
+            const outputTable = elem.querySelector("table.result tbody");
+            resetTable(outputTable)
 
-    const parsed = fromTsv(multiLine);
+            const parsed = fromTsv(multiLine);
 
-    sortByReading(parsed).forEach(obj => {
-        const row = outputTable.insertRow(-1);
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-        const cell3 = row.insertCell(2);
-        cell1.innerHTML = obj.Item;
-        cell2.innerHTML = obj.Reading;
-        cell3.innerHTML = obj.Norm;
-    });
+            sortByReading(parsed).forEach(obj => {
+                const row = outputTable.insertRow(-1);
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                cell1.innerHTML = obj.Item;
+                cell2.innerHTML = obj.Reading;
+                cell3.innerHTML = obj.Norm;
+            });
 
-}
+        }
 
-function click_copy() {
-    const table = document.querySelector("table.result tbody");
-    copyTable(table);
-}
+        function click_copy() {
+            const table = document.querySelector("table.result tbody");
+            copyTable(table);
+        }
 
-</script>
+    </script>
 </body>
 
 </html>

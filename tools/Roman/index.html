@@ -10,103 +10,103 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
 
-<h2>ローマ字に変換</h2>
-<div class="caption">
-    <p>テキストボックスに入力された文字列（カタカナ／ひらがな）をローマ字に変換します。</p>
-    <ul>
-        <li>ヘボン式ローマ字に従っています。</li>
-        <li>
+        <h2>ローマ字に変換</h2>
+        <div class="caption">
+            <p>テキストボックスに入力された文字列（カタカナ／ひらがな）をローマ字に変換します。</p>
             <ul>
-                <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
+                <li>ヘボン式ローマ字に従っています。</li>
+                <li>
+                    <ul>
+                        <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
+                    </ul>
+                </li>
+                <li>変換できなかった文字はそのまま表示します。</li>
+                <li>
+                    <ul>
+                        <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
+                        <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
+                    </ul>
+                </li>
             </ul>
-        </li>
-        <li>変換できなかった文字はそのまま表示します。</li>
-        <li>
-            <ul>
-                <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
-                <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
-            </ul>
-        </li>
-    </ul>
-</div>
+        </div>
 
-<div class="ui">
-    <div class="horizontal">
-        <div class="vertical">
-            <textarea id="leftTA" class="inputLines" placeholder="paste here!" ></textarea>
-            <input type="button" value="変換" onclick="click_convert()">
+        <div class="ui">
+            <div class="horizontal">
+                <div class="vertical">
+                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <input type="button" value="変換" onclick="click_convert()">
+                </div>
+                <div class="vertical">
+                    <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
+                    <input type="button" value="コピー" onclick="click_copy()">
+                </div>
+            </div>
         </div>
-        <div class="vertical">
-            <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="click_copy()">
-        </div>
+
     </div>
-</div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
+        function toRoman(s) {
+            const map = new Map();
+            [
+                ["ア", "A"], ["イ", "I"], ["ウ", "U"], ["エ", "E"], ["オ", "O"],
+                ["カ", "Ka"], ["キ", "Ki"], ["ク", "Ku"], ["ケ", "Ke"], ["コ", "Ko"],
+                ["サ", "Sa"], ["シ", "Shi"], ["ス", "Su"], ["セ", "Se"], ["ソ", "So"],
+                ["タ", "Ta"], ["チ", "Chi"], ["ツ", "Tsu"], ["テ", "Te"], ["ト", "To"],
+                ["ナ", "Na"], ["ニ", "Ni"], ["ヌ", "Nu"], ["ネ", "Ne"], ["ノ", "No"],
+                ["ハ", "Ha"], ["ヒ", "Hi"], ["フ", "Fu"], ["ヘ", "He"], ["ホ", "Ho"],
+                ["マ", "Ma"], ["ミ", "Mi"], ["ム", "Mu"], ["メ", "Me"], ["モ", "Mo"],
+                ["ヤ", "Ya"], ["ユ", "Yu"], ["ヨ", "Yo"],
+                ["ラ", "Ra"], ["リ", "Ri"], ["ル", "Ru"], ["レ", "Re"], ["ロ", "Ro"],
+                ["ワ", "Wa"], ["ヲ", "Wo"], ["ン", "N"],
+                ["ガ", "Ga"], ["ギ", "Gi"], ["グ", "Gu"], ["ゲ", "Ge"], ["ゴ", "Go"],
+                ["ザ", "Za"], ["ジ", "Ji"], ["ズ", "Zu"], ["ゼ", "Ze"], ["ゾ", "Zo"],
+                ["ダ", "Da"], ["ヂ", "Di"], ["ヅ", "Zu"], ["デ", "De"], ["ド", "Do"],
+                ["バ", "Ba"], ["ビ", "Bi"], ["ブ", "Bu"], ["ベ", "Be"], ["ボ", "Bo"],
+                ["パ", "Pa"], ["ピ", "Pi"], ["プ", "Pu"], ["ペ", "Pe"], ["ポ", "Po"],
+                ["ャ", "Lya"], ["ュ", "Lyu"], ["ョ", "Lyo"], ["ッ", "Ltu"]
+            ].forEach(x => map.set(...x))
 
-function toRoman(s) {
-    const map = new Map();
-    [
-        ["ア", "A"], ["イ", "I"], ["ウ", "U"], ["エ", "E"], ["オ", "O"],
-        ["カ", "Ka"], ["キ", "Ki"], ["ク", "Ku"], ["ケ", "Ke"], ["コ", "Ko"],
-        ["サ", "Sa"], ["シ", "Shi"], ["ス", "Su"], ["セ", "Se"], ["ソ", "So"],
-        ["タ", "Ta"], ["チ", "Chi"], ["ツ", "Tsu"], ["テ", "Te"], ["ト", "To"],
-        ["ナ", "Na"], ["ニ", "Ni"], ["ヌ", "Nu"], ["ネ", "Ne"], ["ノ", "No"],
-        ["ハ", "Ha"], ["ヒ", "Hi"], ["フ", "Fu"], ["ヘ", "He"], ["ホ", "Ho"],
-        ["マ", "Ma"], ["ミ", "Mi"], ["ム", "Mu"], ["メ", "Me"], ["モ", "Mo"],
-        ["ヤ", "Ya"], ["ユ", "Yu"], ["ヨ", "Yo"],
-        ["ラ", "Ra"], ["リ", "Ri"], ["ル", "Ru"], ["レ", "Re"], ["ロ", "Ro"],
-        ["ワ", "Wa"], ["ヲ", "Wo"], ["ン", "N"],
-        ["ガ", "Ga"], ["ギ", "Gi"], ["グ", "Gu"], ["ゲ", "Ge"], ["ゴ", "Go"],
-        ["ザ", "Za"], ["ジ", "Ji"], ["ズ", "Zu"], ["ゼ", "Ze"], ["ゾ", "Zo"],
-        ["ダ", "Da"], ["ヂ", "Di"], ["ヅ", "Zu"], ["デ", "De"], ["ド", "Do"],
-        ["バ", "Ba"], ["ビ", "Bi"], ["ブ", "Bu"], ["ベ", "Be"], ["ボ", "Bo"],
-        ["パ", "Pa"],["ピ", "Pi"],["プ", "Pu"],["ペ", "Pe"],["ポ", "Po"],
-        ["ャ", "Lya"], ["ュ", "Lyu"], ["ョ", "Lyo"], ["ッ", "Ltu"]
-    ].forEach(x => map.set(...x))
+            let converted = toKatakana(s);
+            for (let k of map.keys()) {
+                const reg = new RegExp(k, "g");
+                converted = converted.replace(reg, map.get(k));
+            }
+            // サ行タ行の拗音処理 → 拗音処理 → 促音処理
+            converted = converted.replace(/([CS]h|J)iLy(.)/g, '$1$2').replace(/([A-Z])iL(y.)/g, '$1$2').replace(/Ltu(.)/g, '$1$1')
+            return converted.toLowerCase();
+        }
 
-    let converted = toKatakana(s);
-    for (let k of map.keys()) {
-        const reg = new RegExp(k, "g");
-        converted = converted.replace(reg, map.get(k));
-    }
-    // サ行タ行の拗音処理 → 拗音処理 → 促音処理
-    converted = converted.replace(/([CS]h|J)iLy(.)/g, '$1$2').replace(/([A-Z])iL(y.)/g, '$1$2').replace(/Ltu(.)/g, '$1$1')
-    return converted.toLowerCase();
-}
+        function click_convert() {
+            const elem = document.querySelector(".ui");
+            const targetLines = elem.querySelector(".inputLines").value;
+            elem.querySelector(".result").value = toRoman(targetLines);
+        }
 
-function click_convert() {
-    const elem = document.querySelector(".ui");
-    const targetLines = elem.querySelector(".inputLines").value;
-    elem.querySelector(".result").value = toRoman(targetLines);
-}
+        function click_copy() {
+            copyValue(document.querySelector(".ui .result"));
+        }
 
-function click_copy() {
-    copyValue(document.querySelector(".ui .result"));
-}
+        const leftTA = document.getElementById("leftTA");
+        const rightTA = document.getElementById("rightTA");
+        leftTA.addEventListener("scroll", () => {
+            rightTA.scrollTop = leftTA.scrollTop;
+            rightTA.scrollLeft = leftTA.scrollLeft;
+        });
+        rightTA.addEventListener("scroll", () => {
+            leftTA.scrollTop = rightTA.scrollTop;
+            leftTA.scrollLeft = rightTA.scrollLeft;
+        });
 
-const leftTA = document.getElementById("leftTA");
-const rightTA = document.getElementById("rightTA");
-leftTA.addEventListener("scroll", () => {
-    rightTA.scrollTop = leftTA.scrollTop;
-    rightTA.scrollLeft = leftTA.scrollLeft;
-});
-rightTA.addEventListener("scroll", () => {
-    leftTA.scrollTop = rightTA.scrollTop;
-    leftTA.scrollLeft = rightTA.scrollLeft;
-});
-
-</script>
+    </script>
 </body>
 
 </html>

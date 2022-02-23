@@ -11,28 +11,34 @@
         .result {
             font-size: .8em;
         }
+
         .lostTo,
         .lostFrom,
         .adjacent {
             margin-top: 1em;
         }
-        .lostTo > label,
-        .lostFrom > label,
-        .adjacent > label {
+
+        .lostTo>label,
+        .lostFrom>label,
+        .adjacent>label {
             font-size: .9em;
             font-weight: bold;
         }
+
         .output div.detail {
             display: list-item;
             margin-left: 1em;
             font-weight: normal;
         }
+
         .required::before {
             content: " …… ";
         }
+
         .require-reference {
             color: blue;
         }
+
         .require-info {
             color: red;
         }
@@ -40,52 +46,52 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
 
-<h2>見よ項目のチェック</h2>
+        <h2>見よ項目のチェック</h2>
 
-<div class="ui">
-    <textarea class="inputLines" placeholder="paste here!" ></textarea>
-    <input type="button" value="チェック" onclick="click_check()">
+        <div class="ui">
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="チェック" onclick="click_check()">
 
-    <div class="result">
-        <div class="lostTo">
-            <label>見よ項目があるのに参照先に括弧で付記されていないもの：</label>
-            <div class="output"></div>
+            <div class="result">
+                <div class="lostTo">
+                    <label>見よ項目があるのに参照先に括弧で付記されていないもの：</label>
+                    <div class="output"></div>
+                </div>
+                <div class="lostFrom">
+                    <label>参照元として括弧書きされているのに見よ項目がないもの：</label>
+                    <div class="output"></div>
+                </div>
+                <div class="adjacent">
+                    <label>見よ項目と見よ先項目が隣接しているもの：</label>
+                    <div class="output"></div>
+                </div>
+            </div>
         </div>
-        <div class="lostFrom">
-            <label>参照元として括弧書きされているのに見よ項目がないもの：</label>
-            <div class="output"></div>
-        </div>
-        <div class="adjacent">
-            <label>見よ項目と見よ先項目が隣接しているもの：</label>
-            <div class="output"></div>
-        </div>
+
     </div>
-</div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script type="text/javascript" src="./src.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script type="text/javascript" src="./src.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
+        function click_check() {
+            const elem = document.querySelector(".ui");
+            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "require-goal"));
+            elem.querySelector(".result .lostTo .output").innerHTML = (lostTo.length > 0) ? lostTo.join("\n") : "<p>問題ありません！</p>";
+            const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-reference"));
+            elem.querySelector(".result .lostFrom .output").innerHTML = (lostFrom.length > 0) ? lostFrom.join("\n") : "<p>問題ありません！</p>";
+            const adjacent = findAdjacentReferenceEntries(lines).map(item => `<div class="detail">${item.name}</div>`);
+            elem.querySelector(".result .adjacent .output").innerHTML = (adjacent.length > 0) ? adjacent.join("\n") : "<p>問題ありません！</p>";
+        }
 
-function click_check(){
-    const elem = document.querySelector(".ui");
-    const lines = linesArray(elem.querySelector(".inputLines").value);
-    const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "require-goal"));
-    elem.querySelector(".result .lostTo .output").innerHTML = (lostTo.length > 0)? lostTo.join("\n") : "<p>問題ありません！</p>";
-    const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-reference"));
-    elem.querySelector(".result .lostFrom .output").innerHTML = (lostFrom.length > 0)? lostFrom.join("\n") : "<p>問題ありません！</p>";
-    const adjacent = findAdjacentReferenceEntries(lines).map(item => `<div class="detail">${item.name}</div>`);
-    elem.querySelector(".result .adjacent .output").innerHTML = (adjacent.length > 0)? adjacent.join("\n") : "<p>問題ありません！</p>";
-}
-
-</script>
+    </script>
 </body>
 
 </html>

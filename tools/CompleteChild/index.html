@@ -10,89 +10,89 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
-<h2>子項目の復元</h2>
+        <h2>子項目の復元</h2>
 
-<div class="caption">
-    <div class="imagebox">
-        <div class="boxtitle">SAMPLE</div>
-        <div class="diff">
-            <div class="before"><img src="./image/img_complete_before.png"></div>
-            <div class="arrow"></div>
-            <div class="after"><img src="./image/img_complete_after.png"></div>
+        <div class="caption">
+            <div class="imagebox">
+                <div class="boxtitle">SAMPLE</div>
+                <div class="diff">
+                    <div class="before"><img src="./image/img_complete_before.png"></div>
+                    <div class="arrow"></div>
+                    <div class="after"><img src="./image/img_complete_after.png"></div>
+                </div>
+            </div>
+            <ul>
+                <li>索引項目中の子項目を復元します（上図）。</li>
+                <li>並びは変化しません。</li>
+                <li>ノンブルが入っていても動作しますが、事前に<a href="../FormatOldIndex/index.html">こちら</a>で整形しておくと動作が安定します。</li>
+            </ul>
         </div>
+
+        <div class="ui">
+            <div class="horizontal">
+                <div class="vertical">
+                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <input type="button" value="復元" onclick="click_complete()">
+                </div>
+                <div class="vertical">
+                    <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
+                    <input type="button" value="コピー" onclick="click_copy()">
+                </div>
+            </div>
+        </div>
+
     </div>
-    <ul>
-        <li>索引項目中の子項目を復元します（上図）。</li>
-        <li>並びは変化しません。</li>
-        <li>ノンブルが入っていても動作しますが、事前に<a href="../FormatOldIndex/index.html">こちら</a>で整形しておくと動作が安定します。</li>
-    </ul>
-</div>
-
-<div class="ui">
-    <div class="horizontal">
-        <div class="vertical">
-            <textarea id="leftTA" class="inputLines" placeholder="paste here!" ></textarea>
-            <input type="button" value="復元" onclick="click_complete()">
-        </div>
-        <div class="vertical">
-            <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="click_copy()">
-        </div>
-    </div>
-</div>
-
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
 
-function completeChildItem (lines) {
-    const arr = lines.filter(Boolean);
-    const completed = [];
-    completed.push(arr[0]);
-    let lastParentItem = parseEntry(arr[0]).name;
-    for (let i = 1; i < arr.length; i++) {
-        const curLine = String(arr[i]);
-        if (curLine.startsWith("　") && curLine.indexOf("――") != -1) {
-            const completedItem = curLine.trimStart().replace(/――/, lastParentItem);
-            completed.push(completedItem);
+        function completeChildItem(lines) {
+            const arr = lines.filter(Boolean);
+            const completed = [];
+            completed.push(arr[0]);
+            let lastParentItem = parseEntry(arr[0]).name;
+            for (let i = 1; i < arr.length; i++) {
+                const curLine = String(arr[i]);
+                if (curLine.startsWith("　") && curLine.indexOf("――") != -1) {
+                    const completedItem = curLine.trimStart().replace(/――/, lastParentItem);
+                    completed.push(completedItem);
+                }
+                else {
+                    completed.push(curLine);
+                    lastParentItem = parseEntry(curLine).name;
+                }
+            }
+            return completed;
         }
-        else {
-            completed.push(curLine);
-            lastParentItem = parseEntry(curLine).name;
+
+        function click_complete() {
+            const elem = document.querySelector(".ui");
+            const lines = linesArray(elem.querySelector(".inputLines").value);
+            elem.querySelector(".result").value = completeChildItem(lines).join("\n");
         }
-    }
-    return completed;
-}
 
-function click_complete() {
-    const elem = document.querySelector(".ui");
-    const lines = linesArray(elem.querySelector(".inputLines").value);
-    elem.querySelector(".result").value = completeChildItem(lines).join("\n");
-}
+        function click_copy() {
+            copyValue(document.querySelector(".ui .result"));
+        }
 
-function click_copy() {
-    copyValue(document.querySelector(".ui .result"));
-}
+        const leftTA = document.getElementById("leftTA");
+        const rightTA = document.getElementById("rightTA");
+        leftTA.addEventListener("scroll", () => {
+            rightTA.scrollTop = leftTA.scrollTop;
+            rightTA.scrollLeft = leftTA.scrollLeft;
+        });
+        rightTA.addEventListener("scroll", () => {
+            leftTA.scrollTop = rightTA.scrollTop;
+            leftTA.scrollLeft = rightTA.scrollLeft;
+        });
 
-const leftTA = document.getElementById("leftTA");
-const rightTA = document.getElementById("rightTA");
-leftTA.addEventListener("scroll", () => {
-    rightTA.scrollTop = leftTA.scrollTop;
-    rightTA.scrollLeft = leftTA.scrollLeft;
-});
-rightTA.addEventListener("scroll", () => {
-    leftTA.scrollTop = rightTA.scrollTop;
-    leftTA.scrollLeft = rightTA.scrollLeft;
-});
-
-</script>
+    </script>
 </body>
 
 </html>

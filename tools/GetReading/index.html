@@ -10,88 +10,88 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
-<h2 >読みがなの取得</h2>
+        <h2>読みがなの取得</h2>
 
-<div class="caption">
-    <ul>
-        <li>解析辞書を読み込むため少し時間がかかります。</li>
-        <li><code>心　理</code>のように項目内にスペースが含まれていると正しくよみがなを取得できません。</li>
-        <li>正しく読み情報が取得できているか必ず後から確認してください。</li>
-    </ul>
-</div>
-
-<div class="ui">
-    <div>
-        <label for="removeFlag">
-            <input type="checkbox" class="removeFlag" id="removeFlag">ノンブル部分の読みをスキップする
-        </label>
-    </div>
-    <div class="horizontal">
-        <div class="vertical">
-            <textarea id="leftTA" class="inputLines" placeholder="paste here!" ></textarea>
-            <input type="button" value="取得" onclick="click_setReading()">
+        <div class="caption">
+            <ul>
+                <li>解析辞書を読み込むため少し時間がかかります。</li>
+                <li><code>心　理</code>のように項目内にスペースが含まれていると正しくよみがなを取得できません。</li>
+                <li>正しく読み情報が取得できているか必ず後から確認してください。</li>
+            </ul>
         </div>
-        <div class="vertical">
-            <textarea id="rightTA" class="result" placeholder="ここに結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="click_copy()">
+
+        <div class="ui">
+            <div>
+                <label for="removeFlag">
+                    <input type="checkbox" class="removeFlag" id="removeFlag">ノンブル部分の読みをスキップする
+                </label>
+            </div>
+            <div class="horizontal">
+                <div class="vertical">
+                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <input type="button" value="取得" onclick="click_setReading()">
+                </div>
+                <div class="vertical">
+                    <textarea id="rightTA" class="result" placeholder="ここに結果が表示されます" readonly></textarea>
+                    <input type="button" value="コピー" onclick="click_copy()">
+                </div>
+            </div>
         </div>
+
     </div>
-</div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script src="./src.js"></script>
+    <script src="./kuromoji.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script src="./src.js"></script>
-<script src="./kuromoji.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
-
-function showMessage(s) {
-    document.querySelector(".ui .result").value = s;
-}
-
-function main(tokenizer, lines, outputArea, removeNombre) {
-    const target = (removeNombre)? lines.map(line => parseEntry(line).name) : lines;
-    const t = tokenizeLines(tokenizer, target);
-    outputArea.value = t.map(x => x.Reading).join("\n");
-}
-
-function click_setReading() {
-    showMessage("（\u{1f914}よみがな計算中…）");
-    const elem = document.querySelector(".ui");
-    const lines = linesArray(elem.querySelector(".inputLines").value);
-    const removeNombre = elem.querySelector(".removeFlag").checked;
-    const outputArea = elem.querySelector(".result")
-    kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {
-        if (err) {
-            console.log(err);
-            showMessage("解析失敗…\nやり直してみてください！");
+        function showMessage(s) {
+            document.querySelector(".ui .result").value = s;
         }
-        else {
-            main(tokenizer, lines, outputArea, removeNombre);
+
+        function main(tokenizer, lines, outputArea, removeNombre) {
+            const target = (removeNombre) ? lines.map(line => parseEntry(line).name) : lines;
+            const t = tokenizeLines(tokenizer, target);
+            outputArea.value = t.map(x => x.Reading).join("\n");
         }
-    });
-}
-function click_copy() {
-    copyValue(document.querySelector(".ui .result"))
-}
 
-const leftTA = document.getElementById("leftTA");
-const rightTA = document.getElementById("rightTA");
-leftTA.addEventListener("scroll", () => {
-    rightTA.scrollTop = leftTA.scrollTop;
-    rightTA.scrollLeft = leftTA.scrollLeft;
-});
-rightTA.addEventListener("scroll", () => {
-    leftTA.scrollTop = rightTA.scrollTop;
-    leftTA.scrollLeft = rightTA.scrollLeft;
-});
+        function click_setReading() {
+            showMessage("（\u{1f914}よみがな計算中…）");
+            const elem = document.querySelector(".ui");
+            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const removeNombre = elem.querySelector(".removeFlag").checked;
+            const outputArea = elem.querySelector(".result")
+            kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {
+                if (err) {
+                    console.log(err);
+                    showMessage("解析失敗…\nやり直してみてください！");
+                }
+                else {
+                    main(tokenizer, lines, outputArea, removeNombre);
+                }
+            });
+        }
+        function click_copy() {
+            copyValue(document.querySelector(".ui .result"))
+        }
 
-</script>
+        const leftTA = document.getElementById("leftTA");
+        const rightTA = document.getElementById("rightTA");
+        leftTA.addEventListener("scroll", () => {
+            rightTA.scrollTop = leftTA.scrollTop;
+            rightTA.scrollLeft = leftTA.scrollLeft;
+        });
+        rightTA.addEventListener("scroll", () => {
+            leftTA.scrollTop = rightTA.scrollTop;
+            leftTA.scrollLeft = rightTA.scrollLeft;
+        });
+
+    </script>
 </body>
 
 </html>

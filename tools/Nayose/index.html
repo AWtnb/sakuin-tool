@@ -14,6 +14,7 @@
             text-indent: -1em;
             margin-left: 1em;
         }
+
         ul div::before {
             content: "\203b";
             font-weight: bold;
@@ -22,87 +23,88 @@
 </head>
 
 <body>
-<!-- ============================== -->
-<div class="container">
-<div class="navi"><a href="../../index.html">TOP</a></div>
+    <!-- ============================== -->
+    <div class="container">
+        <div class="navi"><a href="../../index.html">TOP</a></div>
 
 
-<h2>名寄せ</h2>
-<div class="caption">
-    <div class="imagebox">
-        <div class="boxtitle">SAMPLE</div>
-        <div class="diff">
-            <div class="before"><img src = "./image/img_nayose_before.png"></div>
-            <div class="arrow"></div>
-            <div class="after"><img src = "./image/img_nayose_after.png"></div>
-        </div>
-        <p>ノンブルの<span style="color: red;">並び</span>、<span style="color: blue;">重複</span>、<span style="color: green;">連続</span>を整理。記号での装飾にも対応。</p>
-    </div>
-    <ul>
-        <li><code>項目</code>列の情報で名寄せします。</li>
-        <li><code>ノンブル</code>列の情報に対して、下記の微調整を行います。</li>
-        <li>
+        <h2>名寄せ</h2>
+        <div class="caption">
+            <div class="imagebox">
+                <div class="boxtitle">SAMPLE</div>
+                <div class="diff">
+                    <div class="before"><img src="./image/img_nayose_before.png"></div>
+                    <div class="arrow"></div>
+                    <div class="after"><img src="./image/img_nayose_after.png"></div>
+                </div>
+                <p>ノンブルの<span style="color: red;">並び</span>、<span style="color: blue;">重複</span>、<span
+                        style="color: green;">連続</span>を整理。記号での装飾にも対応。</p>
+            </div>
             <ul>
-                <li>ノンブル部分のソート・重複整理</li>
-                <li>3以上連続するノンブル部分のハイフネーション
-                    <div class="notation">連続するノンブルは<code>&ndash;</code>（enダーシ<code>U+2013</code>）でつなぎます。</div>
-                    <div class="notation">カンマは半角に統一されます。</div>
+                <li><code>項目</code>列の情報で名寄せします。</li>
+                <li><code>ノンブル</code>列の情報に対して、下記の微調整を行います。</li>
+                <li>
+                    <ul>
+                        <li>ノンブル部分のソート・重複整理</li>
+                        <li>3以上連続するノンブル部分のハイフネーション
+                            <div class="notation">連続するノンブルは<code>&ndash;</code>（enダーシ<code>U+2013</code>）でつなぎます。</div>
+                            <div class="notation">カンマは半角に統一されます。</div>
+                        </li>
+                    </ul>
                 </li>
+                <li>このツールはソートを行いません。</li>
+                <li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
+                <li>名寄せ後に重複が残っていないか<a href="../CheckNayose/index.html">こちら</a>でチェックしておくと安全です。</li>
             </ul>
-        </li>
-        <li>このツールはソートを行いません。</li>
-        <li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
-        <li>名寄せ後に重複が残っていないか<a href="../CheckNayose/index.html">こちら</a>でチェックしておくと安全です。</li>
-    </ul>
-</div>
-
-<div class="ui">
-
-    <div>
-        <label for="isLeft">
-            <input type="checkbox" class="isLeft" id="isLeft">ノンブルが左列（上図と逆）
-        </label>
-    </div>
-    <div>
-        <label for="isOrdered">
-            <input type="checkbox" class="isOrdered" id="isOrdered">連続している項目のみ名寄せする
-        </label>
-    </div>
-
-    <div class="horizontal">
-        <div class="vertical">
-            <textarea class="inputLines" placeholder="paste here!" ></textarea>
-            <input type="button" value="名寄せ" onclick="click_nayose()">
         </div>
-        <div class="vertical">
-            <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" onclick="click_copy()">
+
+        <div class="ui">
+
+            <div>
+                <label for="isLeft">
+                    <input type="checkbox" class="isLeft" id="isLeft">ノンブルが左列（上図と逆）
+                </label>
+            </div>
+            <div>
+                <label for="isOrdered">
+                    <input type="checkbox" class="isOrdered" id="isOrdered">連続している項目のみ名寄せする
+                </label>
+            </div>
+
+            <div class="horizontal">
+                <div class="vertical">
+                    <textarea class="inputLines" placeholder="paste here!"></textarea>
+                    <input type="button" value="名寄せ" onclick="click_nayose()">
+                </div>
+                <div class="vertical">
+                    <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+                    <input type="button" value="コピー" onclick="click_copy()">
+                </div>
+            </div>
         </div>
+
     </div>
-</div>
+    <!-- ============================== -->
+    <script type="text/javascript" src="../util.js" defer></script>
+    <script type="text/javascript" src="../nombre.js" defer></script>
+    <script type="text/javascript" src="./src.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
+    <script>
 
-</div>
-<!-- ============================== -->
-<script type="text/javascript" src="../util.js" defer></script>
-<script type="text/javascript" src="../nombre.js" defer></script>
-<script type="text/javascript" src="./src.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
-<script>
+        function click_nayose() {
+            const elem = document.querySelector(".ui");
+            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const nayosed = (elem.querySelector(".isOrdered").checked) ?
+                nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
+                nayose(lines, elem.querySelector(".isLeft").checked);
+            elem.querySelector(".result").value = nayosed.join("\n");
+        }
 
-function click_nayose() {
-    const elem = document.querySelector(".ui");
-    const lines = linesArray(elem.querySelector(".inputLines").value);
-    const nayosed = (elem.querySelector(".isOrdered").checked)?
-        nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
-        nayose(lines, elem.querySelector(".isLeft").checked);
-    elem.querySelector(".result").value = nayosed.join("\n");
-}
+        function click_copy() {
+            copyValue(document.querySelector(".ui .result"));
+        }
 
-function click_copy() {
-    copyValue(document.querySelector(".ui .result"));
-}
-
-</script>
+    </script>
 </body>
 
 </html>
