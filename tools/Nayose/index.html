@@ -41,12 +41,15 @@
     <ul>
         <li><code>項目</code>列の情報で名寄せします。</li>
         <li><code>ノンブル</code>列の情報に対して、下記の微調整を行います。</li>
-        <ul>
-            <li>ノンブル部分のソート・重複整理</li>
-            <li>3以上連続するノンブル部分のハイフネーション</li>
-            <div class="notation">連続するノンブルは<code>&ndash;</code>（enダーシ<code>U+2013</code>）でつなぎます。</div>
-            <div class="notation">カンマは半角に統一されます。</div>
-        </ul>
+        <li>
+            <ul>
+                <li>ノンブル部分のソート・重複整理</li>
+                <li>3以上連続するノンブル部分のハイフネーション
+                    <div class="notation">連続するノンブルは<code>&ndash;</code>（enダーシ<code>U+2013</code>）でつなぎます。</div>
+                    <div class="notation">カンマは半角に統一されます。</div>
+                </li>
+            </ul>
+        </li>
         <li>このツールはソートを行いません。</li>
         <li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
         <li>名寄せ後に重複が残っていないか<a href="../CheckNayose/index.html">こちら</a>でチェックしておくと安全です。</li>
@@ -68,7 +71,7 @@
 
     <div class="horizontal">
         <div class="vertical">
-            <textarea class="inputLines"placeholder="paste here!" ></textarea>
+            <textarea class="inputLines" placeholder="paste here!" ></textarea>
             <input type="button" value="名寄せ" onclick="click_nayose()">
         </div>
         <div class="vertical">

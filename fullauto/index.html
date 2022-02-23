@@ -53,31 +53,31 @@
     <ul>
         <li><code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
         <li>自動で下記の整形を行って索引を出力します。</li>
-        <ol>
-            <li><a href="../tools/Nayose/index.html">名寄せ</a>
-                <ul>
-                    <li>ノンブル部分のソート・重複整理</li>
-                    <li>3以上連続するノンブル部分のハイフネーション</li>
-                    <div class="notation">カンマは半角に統一されます。</div>
-                </ul>
-            </li>
-            <li><a href="../tools/GetReading/index.html">よみがな取得</a></li>
-            <li><a href="../tools/Hairetsu/index.html">配列読みに変換</a></li>
-            <div class="notation">カタカナ・数字・アルファベット以外の記号は削除されます。</div>
-            <li><a href="../tools/Sort/index.html">並べ替え</a>
-                <ul>
-                    <li>最優先は<code>配列読み</code>の情報。</li>
-                    <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
-                    <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
-                </ul>
-            </li>
-        </ol>
+        <li>
+            <ol>
+                <li><a href="../tools/Nayose/index.html">名寄せ</a>
+                    <ul>
+                        <li>ノンブル部分のソート・重複整理</li>
+                        <li>3以上連続するノンブル部分のハイフネーション<div class="notation">カンマは半角に統一されます。</div></li>
+                    </ul>
+                </li>
+                <li><a href="../tools/GetReading/index.html">よみがな取得</a></li>
+                <li><a href="../tools/Hairetsu/index.html">配列読みに変換</a><div class="notation">カタカナ・数字・アルファベット以外の記号は削除されます。</div></li>
+                <li><a href="../tools/Sort/index.html">並べ替え</a>
+                    <ul>
+                        <li>最優先は<code>配列読み</code>の情報。</li>
+                        <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+                        <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+                    </ul>
+                </li>
+            </ol>
+        </li>
         <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
     </ul>
 </div>
 
 <div class="ui">
-    <textarea class="inputLines"placeholder="paste here!" ></textarea>
+    <textarea class="inputLines" placeholder="paste here!" ></textarea>
     <div>
         <label for="nombreOnLeft">
             <input type="checkbox" class="isLeft" id="nombreOnLeft">ノンブルが左列（上図と逆）

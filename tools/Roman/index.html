@@ -20,21 +20,25 @@
     <p>テキストボックスに入力された文字列（カタカナ／ひらがな）をローマ字に変換します。</p>
     <ul>
         <li>ヘボン式ローマ字に従っています。</li>
-        <ul>
-            <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
-        </ul>
+        <li>
+            <ul>
+                <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
+            </ul>
+        </li>
         <li>変換できなかった文字はそのまま表示します。</li>
-        <ul>
-            <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
-            <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
-        </ul>
+        <li>
+            <ul>
+                <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
+                <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
+            </ul>
+        </li>
     </ul>
 </div>
 
 <div class="ui">
     <div class="horizontal">
         <div class="vertical">
-            <textarea id="leftTA" class="inputLines"placeholder="paste here!" ></textarea>
+            <textarea id="leftTA" class="inputLines" placeholder="paste here!" ></textarea>
             <input type="button" value="変換" onclick="click_convert()">
         </div>
         <div class="vertical">
