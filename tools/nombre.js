@@ -22,6 +22,20 @@ class Nombre {
         });
     }
 
+    static getPrefix(s) {
+        if (s.match(/^[0-9]/)) {
+            return "";
+        }
+        return s.split(/\d+/)[0];
+    }
+
+    static getSuffix(s) {
+        if (s.match(/[0-9]$/)) {
+            return "";
+        }
+        return s.split(/\d+/).slice(-1)[0];
+    }
+
     static parse(nombre) {
         /**
          * nombre: must be string sepatated by comma
@@ -35,13 +49,11 @@ class Nombre {
                 this.rangedNombres(start, end).forEach(x => stack.push(x));
             }
             else {
-                const prefix = s.split(/\d+/)[0];
-                const suffix = s.split(/\d+/).slice(-1)[0];
                 stack.push({
                     "display": {
                         "text": s,
-                        "prefix": prefix,
-                        "suffix": suffix,
+                        "prefix": getPrefix(s),
+                        "suffix": getSuffix(s),
                     },
                     "intValue": Number(s.replace(/[^\d]/g, "")),
                     "hyphenated": false
