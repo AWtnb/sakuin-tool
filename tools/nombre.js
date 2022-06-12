@@ -1,4 +1,11 @@
-class NombreParser {
+class Nombre {
+
+    constructor(s) {
+        const sanitized = Nombre.sanitize(s);
+        this.RawElements = sanitized.split(",").map(x => x.trim()).filter(Boolean);
+        this.Parsed = Nombre.parse(sanitized);
+    }
+
 
     static parse(s) {
         const stack = [];
@@ -6,14 +13,14 @@ class NombreParser {
             const nStr = String(nombre);
             if (nStr.indexOf("-") != -1) {
                 const [start, end, ...rest] = nStr.split("-");
-                NombreParser.parseRange(start, end).forEach(x => stack.push(x));
+                Nombre.parseRange(start, end).forEach(x => stack.push(x));
             }
             else {
                 stack.push({
                     "display": {
                         "text": nStr,
-                        "prefix": NombreParser.getPrefix(nStr),
-                        "suffix": NombreParser.getSuffix(nStr),
+                        "prefix": Nombre.getPrefix(nStr),
+                        "suffix": Nombre.getSuffix(nStr),
                     },
                     "intValue": Number(nStr.replace(/[^\d]/g, "")),
                     "hyphenated": false,
@@ -45,26 +52,16 @@ class NombreParser {
 
     static parseRange(start, end) {
         const range = [];
-        const s = NombreParser.parse(String(start))[0];
-        const e = NombreParser.parse(String(end))[0];
+        const s = Nombre.parse(String(start))[0];
+        const e = Nombre.parse(String(end))[0];
         range.push(s);
         for (let idx = s.intValue + 1; idx < e.intValue; idx++) {
-            const p = NombreParser.parse(String(idx))[0];
+            const p = Nombre.parse(String(idx))[0];
             p.hyphenated = true;
             range.push(p);
         }
         range.push(e);
         return range;
-    }
-
-}
-
-class Nombre {
-
-    constructor(s) {
-        const sanitized = NombreParser.sanitize(s);
-        this.RawElements = sanitized.split(",").map(x => x.trim()).filter(Boolean);
-        this.Parsed = NombreParser.parse(sanitized);
     }
 
     isConsecutiveTriplet(startIdx) {

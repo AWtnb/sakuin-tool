@@ -130,7 +130,7 @@
                 }
                 const origin = new Nombre(entry.nombre);
                 const adjustedNombres = origin.RawElements.map(n => {
-                    const parsed = NombreParser.parse(n);
+                    const parsed = Nombre.parse(n);
                     if (parsed.length > 1) {
                         return adjustNombre(parsed[0], start, end, delta)
                             + "\u2013"
