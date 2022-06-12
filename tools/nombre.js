@@ -64,13 +64,4 @@ class Nombre {
         return range;
     }
 
-    static isConsecutive (a, b, c) {
-        if (a.intValue+1 == b.intValue && a.intValue+2 == c.intValue) {
-            if (!isNaN(b.display.text)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }

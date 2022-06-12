@@ -4,6 +4,15 @@ class NombreGroup {
         this.parsed = new Nombre(s).parse();
     }
 
+    static isConsecutive (a, b, c) {
+        if (a.intValue+1 == b.intValue && a.intValue+2 == c.intValue) {
+            if (!isNaN(b.display.text)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     order() {
         this.parsed = this.parsed.filter(x => x.display.text).sort((a, b) => a.intValue - b.intValue);
     }
@@ -32,7 +41,7 @@ class NombreGroup {
             const [current, next1, next2] = this.parsed.slice(i, i+3);
             stack.push({
                 "item": next1,
-                "isHyphen": Nombre.isConsecutive(current, next1, next2)
+                "isHyphen": NombreGroup.isConsecutive(current, next1, next2)
             });
         }
         stack.push({
