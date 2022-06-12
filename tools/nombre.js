@@ -18,7 +18,7 @@ class Nombre {
             else {
                 stack.push({
                     "display": {
-                        "text": s,
+                        "text": String(s),
                         "prefix": Nombre.getPrefix(s),
                         "suffix": Nombre.getSuffix(s),
                     },
