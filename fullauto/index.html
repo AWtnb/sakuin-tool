@@ -54,7 +54,7 @@
             color: blue;
         }
 
-        .require-info {
+        .require-reference {
             color: red;
         }
     </style>
@@ -181,7 +181,7 @@
                 elem.querySelector(".lostTo").innerHTML = `<label>見よ項目があるのに参照先に括弧で付記されていないものがあります！</label><div>${lostTo.join("")
                     }</div>`;
             }
-            const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-info"));
+            const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-reference"));
             if (lostFrom.length) {
                 elem.querySelector(".lostFrom").innerHTML = `<label>参照元として括弧書きされているのに見よ項目がないものがあります！</label><div>${lostFrom.join("")
                     }</div>`;
