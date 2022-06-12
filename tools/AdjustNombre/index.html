@@ -166,7 +166,7 @@
             );
             elem.querySelector("textarea.result").value = adjustedArray.map(l => {
                 if (l.entryName) {
-                    return `${l.entryName}　　${l.nombres.adjusted.join(", ")}`.trim();
+                    return `${l.entryName}　　${l.nombres.adjusted.join(", ")}`.trimEnd();
                 }
                 return "";
             }).join("\r\n");
