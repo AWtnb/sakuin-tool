@@ -6,7 +6,7 @@ class NombreGroup {
 
     static isConsecutive (a, b, c) {
         if (a.intValue+1 == b.intValue && a.intValue+2 == c.intValue) {
-            if (!isNaN(b.display.text)) {
+            if (String(b.display.text).match(/^\d+$/)) {
                 return true;
             }
         }
@@ -38,7 +38,9 @@ class NombreGroup {
             "isHyphen": false
         });
         for (let i = 0; i < this.parsed.length - 2; i++) {
-            const [current, next1, next2] = this.parsed.slice(i, i+3);
+            const current = this.parsed[i];
+            const next1 = this.parsed[i+1];
+            const next2 = this.parsed[i+2];
             stack.push({
                 "item": next1,
                 "isHyphen": NombreGroup.isConsecutive(current, next1, next2)
@@ -66,16 +68,16 @@ function parseLine(s, nombreOnLeft = false) {
     const arr = s.split("\t").slice(0, 2).map(x => String(x).trim());
     if (arr.length < 2) {
         return {
-            "item": String(arr[0]),
-            "nombre": ""
+            "Item": String(arr[0]),
+            "Nombre": ""
         };
     }
     if (nombreOnLeft) {
         arr.reverse()
     }
     return {
-        "item": String(arr[0]),
-        "nombre": String(arr[1])
+        "Item": String(arr[0]),
+        "Nombre": String(arr[1])
     };
 }
 
@@ -83,12 +85,12 @@ function nayose (lines, nombreOnLeft = false) {
     const map = new Map()
     lines.filter(x => x.trim()).forEach(line => {
         const l = parseLine(line, nombreOnLeft);
-        if (map.has(l.item)) {
-            const conc = map.get(l.item) + ", " + l.nombre;
-            map.set(l.item, conc);
+        if (map.has(l.Item)) {
+            const conc = map.get(l.Item) + ", " + l.Nombre;
+            map.set(l.Item, conc);
         }
         else {
-            map.set(l.item, l.nombre);
+            map.set(l.Item, l.Nombre);
         }
     });
     const ret = [];
@@ -109,20 +111,20 @@ function nayoseByOrder(lines, nombreOnLeft = false) {
         const l = parseLine(netArr[i], nombreOnLeft);
         if (i == 0) {
             stack.push({
-                "item": l.item,
-                "Nombres": l.nombre
+                "Item": l.Item,
+                "Nombres": l.Nombre
             });
             continue;
         }
         const lastIdx = stack.length - 1;
-        if (l.item == (stack[lastIdx]).item) {
-            const conc = (stack[lastIdx]).Nombres + ", " + l.nombre;
+        if (l.Item == (stack[lastIdx]).Item) {
+            const conc = (stack[lastIdx]).Nombres + ", " + l.Nombre;
             (stack[lastIdx]).Nombres = conc;
         }
         else {
             stack.push({
-                "item": l.item,
-                "Nombres": l.nombre
+                "Item": l.Item,
+                "Nombres": l.Nombre
             });
         }
     }
@@ -132,7 +134,7 @@ function nayoseByOrder(lines, nombreOnLeft = false) {
         parsed.order();
         parsed.unify();
         parsed.hyphenate();
-        return (pair.item + "　　" + parsed.toString()).trim();
+        return (pair.Item + "　　" + parsed.toString()).trim();
     });
 
 }
