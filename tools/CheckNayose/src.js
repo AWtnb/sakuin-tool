@@ -1,6 +1,6 @@
 
 function getUngroupedReferencedItems(lines) {
-    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    const entries = lines.filter(x => String(x).trim()).map(line => Entry.parse(line));
     const refs = entries.filter(entry => entry.isReference);
     const nonReferred = entries.filter(entry => entry.referredFrom.length < 1);
     return refs.map(entry => {
@@ -14,7 +14,7 @@ function getUngroupedReferencedItems(lines) {
 }
 
 function getConflictReferringItems(lines) {
-    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    const entries = lines.filter(x => String(x).trim()).map(line => Entry.parse(line));
     const refs = entries.filter(entry => entry.isReference);
     const nonReferring = entries.filter(entry => !entry.isReference);
     return refs.map(entry => {

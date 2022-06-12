@@ -65,7 +65,7 @@
             lines.filter(line => line.trim())
                 .map(line => line.replace("\t", "　　"))
                 .forEach(line => {
-                    const entry = parseEntry(line);
+                    const entry = Entry.parse(line);
                     new Nombre(entry.nombre).Parsed.forEach(nombre => {
                         releasedObj.push({
                             "name": entry.name,

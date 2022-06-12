@@ -56,7 +56,7 @@
             const arr = lines.filter(Boolean);
             const completed = [];
             completed.push(arr[0]);
-            let lastParentItem = parseEntry(arr[0]).name;
+            let lastParentItem = Entry.parse(arr[0]).name;
             for (let i = 1; i < arr.length; i++) {
                 const curLine = String(arr[i]);
                 if (curLine.startsWith("　") && curLine.indexOf("――") != -1) {
@@ -65,7 +65,7 @@
                 }
                 else {
                     completed.push(curLine);
-                    lastParentItem = parseEntry(curLine).name;
+                    lastParentItem = Entry.parse(curLine).name;
                 }
             }
             return completed;

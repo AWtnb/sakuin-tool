@@ -63,67 +63,72 @@ function toHiragana(str){
     });
 }
 
-function parseParen(s) {
-    const inner = s.replace(/^.*[（\(［\[](.+?)[）\)］\]]$/, "$1");
-    if (inner == s) {
-        return [];
-    }
-    return inner.replace(/，/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
-}
 
-function trimTrailingParen(s) {
-    return s.replace(/(（.+?）|［.+?］|\(.+?\)|\[.+?\])$/, "");
-}
+class Entry {
 
-function isIndented(s) {
-    return s.trimStart() != s;
-}
+    static parseParen(s) {
+        const inner = s.replace(/^.*[（\(［\[](.+?)[）\)］\]]$/, "$1");
+        if (inner == s) {
+            return [];
+        }
+        return inner.replace(/，/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
+    }
 
-function parseEntry(s, separator = "　　") {
-    /**
-     * split index entry to name and nombre
-     */
-    let info = {
-        "name": "",
-        "basename": "",
-        "nombre": "",
-        "referredFrom": [],
-        "referTo": "",
-        "isReference": false,
-        "isChild": false
+    static trimTrailingParen(s) {
+        return s.replace(/(（.+?）|［.+?］|\(.+?\)|\[.+?\])$/, "");
     }
-    const elems = s.split(separator).filter(Boolean).map(x => String(x));
-    if (elems.length > 2) {
-        const nm = elems.slice(0,-1).join(separator);
-        info.name = nm;
-        info.basename = trimTrailingParen(nm);
-        info.nombre = elems.slice(-1)[0];
-        info.referredFrom = parseParen(nm);
-        info.isChild = isIndented(nm);
-        return info;
+
+    static isIndented(s) {
+        return s.trimStart() != s;
     }
-    if (elems.length == 2) {
-        const nm = elems[0];
-        info.name = nm;
-        info.basename = trimTrailingParen(nm);
-        info.nombre = elems[1];
-        info.referredFrom = parseParen(nm);
-        info.isChild = isIndented(nm);
-        return info;
-    }
-    if (elems[0]) {
-        const nm = elems[0];
-        info.name = nm;
-        info.basename = trimTrailingParen(nm);
-        info.isChild = isIndented(nm);
-        info.referredFrom = parseParen(nm);
-        const refs = nm.split("→").map(x => String(x).trim()).filter(Boolean);
-        if (refs.length > 1) {
-            info.referTo = refs.slice(-1)[0];
-            info.basename = refs[0];
-            info.isReference = true;
+
+    static parse(s, separator = "　　") {
+        /**
+         * split index entry to name and nombre
+         */
+        let info = {
+            "name": "",
+            "basename": "",
+            "nombre": "",
+            "referredFrom": [],
+            "referTo": "",
+            "isReference": false,
+            "isChild": false
+        }
+        const elems = s.split(separator).filter(Boolean).map(x => String(x));
+        if (elems.length > 2) {
+            const nm = elems.slice(0,-1).join(separator);
+            info.name = nm;
+            info.basename = Entry.trimTrailingParen(nm);
+            info.nombre = elems.slice(-1)[0];
+            info.referredFrom = Entry.parseParen(nm);
+            info.isChild = Entry.isIndented(nm);
+            return info;
+        }
+        if (elems.length == 2) {
+            const nm = elems[0];
+            info.name = nm;
+            info.basename = Entry.trimTrailingParen(nm);
+            info.nombre = elems[1];
+            info.referredFrom = Entry.parseParen(nm);
+            info.isChild = Entry.isIndented(nm);
+            return info;
+        }
+        if (elems[0]) {
+            const nm = elems[0];
+            info.name = nm;
+            info.basename = Entry.trimTrailingParen(nm);
+            info.isChild = Entry.isIndented(nm);
+            info.referredFrom = Entry.parseParen(nm);
+            const refs = nm.split("→").map(x => String(x).trim()).filter(Boolean);
+            if (refs.length > 1) {
+                info.referTo = refs.slice(-1)[0];
+                info.basename = refs[0];
+                info.isReference = true;
+            }
+            return info;
         }
         return info;
     }
-    return info;
+
 }

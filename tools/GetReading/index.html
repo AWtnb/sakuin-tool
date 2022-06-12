@@ -55,7 +55,7 @@
         }
 
         function main(tokenizer, lines, outputArea, removeNombre) {
-            const target = (removeNombre) ? lines.map(line => parseEntry(line).name) : lines;
+            const target = (removeNombre) ? lines.map(line => Entry.parse(line).name) : lines;
             const t = tokenizeLines(tokenizer, target);
             outputArea.value = t.map(x => x.Reading).join("\n");
         }

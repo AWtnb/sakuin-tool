@@ -3,7 +3,7 @@ function findReferenceEntriesWithoutGoal(lines) {
      * The reference item must be appended to the end of the referenced item in parentheses.
      * Look for reference items where this relationship is not established correctly.
      */
-    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    const entries = lines.filter(x => String(x).trim()).map(line => Entry.parse(line));
     return entries.filter(entry => entry.isReference).map(entry => {
         return {
             "text": entry.name,
@@ -29,7 +29,7 @@ function findRequiredReferencingEntries(lines) {
      * In the parentheses of the referenced entry, there is information about the entry that refers to it.
      * Find the referenced entry whose relationship is not properly established.
      */
-    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    const entries = lines.filter(x => String(x).trim()).map(line => Entry.parse(line));
     const refs = entries.filter(entry => entry.isReference);
     return entries.filter(entry => entry.referredFrom.length > 0).map(entry => {
         return {
@@ -57,7 +57,7 @@ function markupRequired(item, className = "require-reference") {
 }
 
 function findAdjacentReferenceEntries(lines) {
-    const entries = lines.filter(x => String(x).trim()).map(line => parseEntry(line));
+    const entries = lines.filter(x => String(x).trim()).map(line => Entry.parse(line));
     return entries.filter((entry, idx) => {
         if (!entry.isReference) {
             return false;

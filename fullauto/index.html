@@ -194,7 +194,7 @@
             // main process
             const grouped = nayose(lines, nombreOnLeft);
             const tokenized = tokenizeLines(tokenizer, grouped).map(t => {
-                const r = parseEntry(t.Reading).name;
+                const r = Entry.parse(t.Reading).name;
                 return {
                     "Item": t.Item,
                     "Reading": r,

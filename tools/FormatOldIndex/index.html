@@ -89,7 +89,7 @@
         function formatLines(lines) {
             const reg = new RegExp(POSSIBLE_BARS);
             return lines.map(line => line.replace(/\t$/, "").replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
-                const entry = parseEntry(line);
+                const entry = Entry.parse(line);
                 if (entry.name && entry.nombre) {
                     const fmt = (entry.isChild || entry.name.match(reg)) ? formatChild(entry.name) : entry.name.trim();
                     return `${fmt}　　${formatNombre(entry.nombre)}`;

@@ -1,6 +1,6 @@
 function getMainEntries(lines) {
     return lines.filter(x => String(x).trim()).map(line => {
-        const p = parseEntry(line);
+        const p = Entry.parse(line);
         if (!p.isReference && !p.isChild) {
             return {
                 "name": p.name,
