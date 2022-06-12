@@ -1,14 +1,14 @@
 class NombreGroup {
 
     constructor(s) {
-        this.parsed = Nombre.parse(s);
+        this.parsed = new Nombre(s).parse();
     }
 
     order() {
         this.parsed = this.parsed.filter(x => x.display.text).sort((a, b) => a.intValue - b.intValue);
     }
 
-    unique() {
+    unify() {
         const stack = [];
         this.parsed = this.parsed.filter(nombre => {
             if (stack.includes(nombre.display.text)) {
@@ -86,7 +86,7 @@ function nayose (lines, nombreOnLeft = false) {
     map.forEach((nombres, item) => {
         const parsed = new NombreGroup(nombres);
         parsed.order();
-        parsed.unique();
+        parsed.unify();
         parsed.hyphenate();
         ret.push((item + "　　" + parsed.toString()).trim());
     });
@@ -121,7 +121,7 @@ function nayoseByOrder(lines, nombreOnLeft = false) {
     return stack.map(pair => {
         const parsed = new NombreGroup(pair.Nombres);
         parsed.order();
-        parsed.unique();
+        parsed.unify();
         parsed.hyphenate();
         return (pair.item + "　　" + parsed.toString()).trim();
     });

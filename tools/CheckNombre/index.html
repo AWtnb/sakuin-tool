@@ -68,6 +68,9 @@
         }
 
         function needHyphenate(parsedNombres) {
+            if (parsedNombres.length < 3) {
+                return false;
+            }
             for (let i = 0; i < parsedNombres.length - 2; i++) {
                 const current = parsedNombres[i];
                 const next1 = parsedNombres[i + 1];
@@ -85,7 +88,7 @@
             return lines.filter(x => String(x).trim()).map(line => {
                 let s = line;
                 const entry = parseEntry(line);
-                const parsed = Nombre.parse(entry.nombre);
+                const parsed = new Nombre(entry.nombre).parse();
                 if (unSorted(parsed)) {
                     s = s + '<span class="info unsorted">←順番</span>';
                 }

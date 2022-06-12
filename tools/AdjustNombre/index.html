@@ -110,11 +110,6 @@
             return parsed.display.text;
         }
 
-        function differentNombres(originNombres, adjustedNombres) {
-            const barsReg = new RegExp(`\\s*[${Nombre.connectors.join("")}]+\\s*`, "g");
-            return (originNombres.join("").replace(barsReg, "") != adjustedNombres.join("").replace(barsReg, ""))
-        }
-
         function adjustNombresLine(lines, start, end, delta) {
             return lines.map(line => {
                 let nombreInfo = {
@@ -133,9 +128,9 @@
                     nombreInfo.entryName = entry.name;
                     return nombreInfo;
                 }
-                const origin = Nombre.arrayByComma(entry.nombre);
-                const adjustedNombres = origin.map(n => {
-                    const parsed = Nombre.parse(n);
+                const origin = new Nombre(entry.nombre);
+                const adjustedNombres = origin.Elements.map(n => {
+                    const parsed = new Nombre(n).parse();
                     if (parsed.length > 1) {
                         return adjustNombre(parsed[0], start, end, delta)
                             + "\u2013"
@@ -144,17 +139,16 @@
                     return adjustNombre(parsed[0], start, end, delta);
                 });
                 nombreInfo.entryName = entry.name;
-                nombreInfo.nombres.origin = origin;
+                nombreInfo.nombres.origin = origin.Elements;
                 nombreInfo.nombres.adjusted = adjustedNombres;
-                nombreInfo.changed = differentNombres(origin, adjustedNombres);
+                nombreInfo.changed = origin.Elements.join("") != adjustedNombres.join("");
                 return nombreInfo;
             });
         }
 
         function diffNombre(origin, adjusted) {
-            const barsReg = new RegExp(`\\s*[${Nombre.connectors.join("")}]+\\s*`, "g");
             return adjusted.map((adNbr, i) => {
-                if (adNbr.replace(barsReg, "") == origin[i].replace(barsReg, "")) {
+                if (adNbr.replace(/\-/g, "") == origin[i].replace(/\-/g, "")) {
                     return `<span class="same">${adNbr}</span>`;
                 }
                 return `<span class="del">${origin[i]}</span><span class="mod">${adNbr}</span>`;
