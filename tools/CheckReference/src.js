@@ -58,18 +58,18 @@ function markupRequired(item, className = "require-reference") {
 
 function findAdjacentReferenceEntries(lines) {
     const entries = lines.filter(x => String(x).trim()).map(line => Entry.parse(line));
-    return entries.filter((entry, idx) => {
+    return entries.map((entry, idx) => {
         if (!entry.isReference) {
-            return false;
+            return null;
         }
         const previous = entries[idx - 1];
         if (previous && !previous.isReference && previous.referredFrom.includes(entry.basename)) {
-            return true;
+            return entry;
         }
         const next = entries[idx + 1];
         if (next && !next.isReference && next.referredFrom.includes(entry.basename)) {
-            return true;
+            return entry;
         }
-        return false;
-    });
+        return null;
+    }).filter(Boolean);
 }
