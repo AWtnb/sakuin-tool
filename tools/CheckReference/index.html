@@ -35,7 +35,7 @@
             content: " …… ";
         }
 
-        .require-reference {
+        .require-goal {
             color: blue;
         }
 
@@ -85,7 +85,7 @@
             const lines = linesArray(elem.querySelector(".inputLines").value);
             const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "require-goal"));
             elem.querySelector(".result .lostTo .output").innerHTML = (lostTo.length > 0) ? lostTo.join("\n") : "<p>問題ありません！</p>";
-            const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-reference"));
+            const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-info"));
             elem.querySelector(".result .lostFrom .output").innerHTML = (lostFrom.length > 0) ? lostFrom.join("\n") : "<p>問題ありません！</p>";
             const adjacent = findAdjacentReferenceEntries(lines).map(item => `<div class="detail">${item.name}</div>`);
             elem.querySelector(".result .adjacent .output").innerHTML = (adjacent.length > 0) ? adjacent.join("\n") : "<p>問題ありません！</p>";

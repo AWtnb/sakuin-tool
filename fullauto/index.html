@@ -45,6 +45,18 @@
         div.lostFrom div {
             border: 1px solid white;
         }
+
+        .required::before {
+            content: " …… ";
+        }
+
+        .require-goal {
+            color: blue;
+        }
+
+        .require-info {
+            color: red;
+        }
     </style>
 </head>
 
@@ -164,12 +176,12 @@
 
         function checkReferences(lines) {
             const elem = document.querySelector("div.result");
-            const lostTo = findLostReferenceTo(lines).map(item => markupLostReference(item, "red"));
+            const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "require-goal"));
             if (lostTo.length) {
                 elem.querySelector(".lostTo").innerHTML = `<label>見よ項目があるのに参照先に括弧で付記されていないものがあります！</label><div>${lostTo.join("")
                     }</div>`;
             }
-            const lostFrom = findLostReferenceFrom(lines).map(item => markupLostReference(item, "blue"));
+            const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-info"));
             if (lostFrom.length) {
                 elem.querySelector(".lostFrom").innerHTML = `<label>参照元として括弧書きされているのに見よ項目がないものがあります！</label><div>${lostFrom.join("")
                     }</div>`;
@@ -197,7 +209,7 @@
             checkReferences(indexLines);
 
             // check possible childitem
-            const possibles = findPossibleChildItems(indexLines, "both");
+            const possibles = findPossibleChildItems(indexLines, "all");
             if (possibles.length > 0) {
                 document.querySelector(".ui .possibles").style.display = "block";
                 const outputTable = document.querySelector(".ui .possibles table.findResult tbody");

@@ -44,16 +44,16 @@ function findPossibleChildItems(lines, mode = "tail") {
                 markup = markupTail(markup, search);
             }
             return {
-                "markup": markup + entry.subInfo,
-                "changed": entry.basename != markup
+                "Markup": markup + entry.subInfo,
+                "Changed": entry.basename != markup
             }
-        }).filter(x => x.changed);
+        }).filter(x => x.Changed);
         if (possibles.length > 0) {
             return {
-                "found": search,
-                "markup": possibles.map(p => `・${p.markup}`).join("<br>")
+                "Found": search,
+                "Markup": possibles.map(p => `・${p.Markup}`).join("<br>")
             }
         }
         return null;
-    }).filter(Boolean).sort((a, b) => b.found.length - a.found.length);
+    }).filter(Boolean).sort((a, b) => b.Found.length - a.Found.length);
 }
