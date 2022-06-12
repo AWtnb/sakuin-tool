@@ -73,8 +73,7 @@
             </div>
             <ul>
                 <li><code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
-                <li>自動で下記の整形を行って索引を出力します。</li>
-                <li>
+                <li>自動で下記の整形を行って索引を出力します。
                     <ol>
                         <li><a href="../tools/Nayose/index.html">名寄せ</a>
                             <ul>
@@ -120,35 +119,27 @@
                 <tbody></tbody>
             </table>
             <input type="button" value="表をコピー" onclick="click_copy()">
-            <div class="result">
-                <div class="lostTo">
-                </div>
-                <div class="lostFrom">
-                </div>
-            </div>
 
-            <div class="possibles" style="display: none;">
-                <label>子項目候補があります！</label>
-                <table class="findResult" id="src-table">
-                    <thead>
-                        <tr>
-                            <th>項目</th>
-                            <th>子項目候補</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-                <input type="button" value="プリント用ページを開く" onclick="click_print()">
-            </div>
+        </div>
 
+        <div class="caption">
+            <ul>
+                <li><code>項目</code>列を Word に貼り付ければ索引になります。</li>
+                <li><code>読み</code>と<code>配列読み</code>の列は並びのチェックのためにご利用ください。</li>
+                <li>下記のチェックツールもご利用ください。
+                    <ul>
+                        <li><a href="../tools/CheckReference/index.html">見よ項目のチェック</a></li>
+                        <li><a href="../tools/CheckChild/index.html">子項目のチェック</a></li>
+                        <li><a href="../tools/CheckNombre/index.html">ノンブルの並びのチェック</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
 
     </div>
     <!-- ============================== -->
     <script type="text/javascript" src="../tools/util.js" defer></script>
     <script type="text/javascript" src="../tools/nombre.js" defer></script>
-    <script type="text/javascript" src="../tools/CheckChild/src.js" defer></script>
-    <script type="text/javascript" src="../tools/CheckReference/src.js" defer></script>
     <script type="text/javascript" src="../tools/GetReading/kuromoji.js" defer></script>
     <script type="text/javascript" src="../tools/GetReading/src.js" defer></script>
     <script type="text/javascript" src="../tools/Hairetsu/src.js" defer></script>
@@ -174,24 +165,10 @@
             });
         }
 
-        function checkReferences(lines) {
-            const elem = document.querySelector("div.result");
-            const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "require-goal"));
-            if (lostTo.length) {
-                elem.querySelector(".lostTo").innerHTML = `<label>見よ項目があるのに参照先に括弧で付記されていないものがあります！</label><div>${lostTo.join("")
-                    }</div>`;
-            }
-            const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-reference"));
-            if (lostFrom.length) {
-                elem.querySelector(".lostFrom").innerHTML = `<label>参照元として括弧書きされているのに見よ項目がないものがあります！</label><div>${lostFrom.join("")
-                    }</div>`;
-            }
-        }
 
         function main(tokenizer, lines, nombreOnLeft, outputElem) {
             showStatus("");
 
-            // main process
             const grouped = nayose(lines, nombreOnLeft);
             const tokenized = tokenizeLines(tokenizer, grouped).map(t => {
                 const r = Entry.parse(t.Reading).name;
@@ -205,23 +182,6 @@
             updateTable(outputElem, sorted);
             const indexLines = sorted.map(x => x.Item);
 
-            // check cross-reference
-            checkReferences(indexLines);
-
-            // check possible childitem
-            const possibles = findPossibleChildItems(indexLines, "all");
-            if (possibles.length > 0) {
-                document.querySelector(".ui .possibles").style.display = "block";
-                const outputTable = document.querySelector(".ui .possibles table.findResult tbody");
-                resetTable(outputTable);
-                possibles.forEach(r => {
-                    const row = outputTable.insertRow(-1);
-                    const cell1 = row.insertCell(0);
-                    const cell2 = row.insertCell(1);
-                    cell1.innerHTML = r.Found;
-                    cell2.innerHTML = r.Markup;
-                });
-            }
         }
 
         function click_execute() {
@@ -229,10 +189,7 @@
             const outputTable = elem.querySelector("table.formatResult tbody");
             const lines = linesArray(elem.querySelector(".inputLines").value);
             const nombreOnLeft = elem.querySelector(".isLeft").checked;
-            elem.querySelector("div.result .lostTo").innerHTML = "<p></p>";
-            elem.querySelector("div.result .lostFrom").innerHTML = "<p></p>";
             showStatus("（\u{1f914}よみがな計算中…）");
-            elem.querySelector(".possibles").style.display = "none";
             resetTable(outputTable)
             kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
                 if (err) {
