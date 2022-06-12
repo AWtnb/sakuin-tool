@@ -129,8 +129,8 @@
                     return nombreInfo;
                 }
                 const origin = new Nombre(entry.nombre);
-                const adjustedNombres = origin.Elements.map(n => {
-                    const parsed = new Nombre(n).parse();
+                const adjustedNombres = origin.RawElements.map(n => {
+                    const parsed = NombreParser.parse(n);
                     if (parsed.length > 1) {
                         return adjustNombre(parsed[0], start, end, delta)
                             + "\u2013"
@@ -139,18 +139,18 @@
                     return adjustNombre(parsed[0], start, end, delta);
                 });
                 nombreInfo.entryName = entry.name;
-                nombreInfo.nombres.origin = origin.Elements;
+                nombreInfo.nombres.origin = origin.RawElements;
                 nombreInfo.nombres.adjusted = adjustedNombres;
-                nombreInfo.changed = origin.Elements.join("") != adjustedNombres.join("");
+                nombreInfo.changed = origin.RawElements.join("").replace(/[^\d]/g, "") != adjustedNombres.join("").replace(/[^\d]/g, "");
                 return nombreInfo;
             });
         }
 
         function diffNombre(origin, adjusted) {
             return adjusted.map((adNbr, i) => {
-                if (adNbr.replace(/\-/g, "") == origin[i].replace(/\-/g, "")) {
+                if (String(adNbr).replace(/[^\d]/g, "") == String(origin[i]).replace(/[^\d]/g, "")) {
                     return `<span class="same">${adNbr}</span>`;
-                }
+            }
                 return `<span class="del">${origin[i]}</span><span class="mod">${adNbr}</span>`;
             }).join(", ");
         }
