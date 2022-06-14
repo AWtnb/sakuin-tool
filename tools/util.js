@@ -1,7 +1,7 @@
 function linesArray(multiline) {
     /**
      * value of textarea never contains \r(carriage return)
-     * 
+     *
      * - https://html.spec.whatwg.org/multipage/form-elements.html#the-textarea-element
      * - https://zzz.buzz/2017/12/21/javascript-traps-and-pitfalls-three-normalizations-of-textarea-elements-value/
      * - https://knooto.info/html-textarea-newline-character/
@@ -58,6 +58,72 @@ function toHiragana(str){
         const chr = match.charCodeAt(0) - 0x60;
         return String.fromCharCode(chr);
     });
+}
+
+
+class Util {
+
+    static linesArray(multiline) {
+        /**
+         * value of textarea never contains \r(carriage return)
+         *
+         * - https://html.spec.whatwg.org/multipage/form-elements.html#the-textarea-element
+         * - https://zzz.buzz/2017/12/21/javascript-traps-and-pitfalls-three-normalizations-of-textarea-elements-value/
+         * - https://knooto.info/html-textarea-newline-character/
+         */
+        return multiline.split(/\n/).map(line => String(line));
+    }
+
+    static toHalfWidth(str) {
+        return str.replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, function(s) {
+            return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+        });
+    }
+
+    static copyTable(tbody) {
+        const lines = [];
+        const maxRow = tbody.rows.length;
+        for (let i = 0; i < maxRow; i++) {
+            const row = tbody.rows[i];
+            const maxCol = row.cells.length;
+            const cells = [];
+            for (let c = 0; c < maxCol; c++) {
+                const cell = row.cells[c];
+                cells.push(String(cell.innerHTML).replace(/&amp;/g, "&"));
+            }
+            lines.push(cells.join("\t"));
+        }
+        const s = lines.join("\r\n");
+        navigator.clipboard.writeText(s);
+        alert("コピーしました！");
+    }
+
+    static copyValue(elem) {
+        navigator.clipboard.writeText(String(elem.value).replace(/&amp;/g, "&"));
+        alert("コピーしました！");
+    }
+
+    static resetTable(tbody) {
+        const maxRow = tbody.rows.length;
+        for (let r = maxRow - 1; r >= 0; r--) {
+            tbody.deleteRow(r);
+        }
+    }
+
+    static toKatakana(str){
+        return str.replace(/[\u3041-\u3096]/g, function(match) {
+            const chr = match.charCodeAt(0) + 0x60;
+            return String.fromCharCode(chr);
+        });
+    }
+
+    static toHiragana(str){
+        return str.replace(/[\u30a1-\u30f6]/g, function(match) {
+            const chr = match.charCodeAt(0) - 0x60;
+            return String.fromCharCode(chr);
+        });
+    }
+
 }
 
 
