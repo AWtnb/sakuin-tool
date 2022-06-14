@@ -63,7 +63,7 @@
         function click_setReading() {
             showMessage("（\u{1f914}よみがな計算中…）");
             const elem = document.querySelector(".ui");
-            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const removeNombre = elem.querySelector(".removeFlag").checked;
             const outputArea = elem.querySelector(".result")
             kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {
@@ -77,7 +77,7 @@
             });
         }
         function click_copy() {
-            copyValue(document.querySelector(".ui .result"))
+            Util.copyValue(document.querySelector(".ui .result"))
         }
 
         const leftTA = document.getElementById("leftTA");

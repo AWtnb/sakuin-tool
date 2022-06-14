@@ -70,7 +70,7 @@
             const multiLine = elem.querySelector(".inputLines").value;
 
             const outputTable = elem.querySelector("table.result tbody");
-            resetTable(outputTable)
+            Util.resetTable(outputTable)
 
             const parsed = fromTsv(multiLine);
 
@@ -88,7 +88,7 @@
 
         function click_copy() {
             const table = document.querySelector("table.result tbody");
-            copyTable(table);
+            Util.copyTable(table);
         }
 
     </script>

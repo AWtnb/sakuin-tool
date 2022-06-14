@@ -73,12 +73,12 @@
 
         function click_complete() {
             const elem = document.querySelector(".ui");
-            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             elem.querySelector(".result").value = completeChildItem(lines).join("\n");
         }
 
         function click_copy() {
-            copyValue(document.querySelector(".ui .result"));
+            Util.copyValue(document.querySelector(".ui .result"));
         }
 
         const leftTA = document.getElementById("leftTA");

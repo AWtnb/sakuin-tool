@@ -46,9 +46,9 @@
 
         function convertHiraKata(str, toHira = false) {
             if (toHira) {
-                return toHiragana(str)
+                return Util.toHiragana(str)
             }
-            return toKatakana(str)
+            return Util.toKatakana(str)
         }
 
         function click_katahira() {
@@ -58,7 +58,7 @@
         }
 
         function click_copy() {
-            copyValue(document.querySelector(".ui .result"));
+            Util.copyValue(document.querySelector(".ui .result"));
         }
 
         const leftTA = document.getElementById("leftTA");

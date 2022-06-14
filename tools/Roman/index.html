@@ -75,7 +75,7 @@
                 ["ャ", "Lya"], ["ュ", "Lyu"], ["ョ", "Lyo"], ["ッ", "Ltu"]
             ].forEach(x => map.set(...x))
 
-            let converted = toKatakana(s);
+            let converted = Util.toKatakana(s);
             for (let k of map.keys()) {
                 const reg = new RegExp(k, "g");
                 converted = converted.replace(reg, map.get(k));
@@ -92,7 +92,7 @@
         }
 
         function click_copy() {
-            copyValue(document.querySelector(".ui .result"));
+            Util.copyValue(document.querySelector(".ui .result"));
         }
 
         const leftTA = document.getElementById("leftTA");

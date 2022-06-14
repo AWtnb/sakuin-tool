@@ -93,7 +93,7 @@
 
         function click_nayose() {
             const elem = document.querySelector(".ui");
-            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const nayosed = (elem.querySelector(".isOrdered").checked) ?
                 nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
                 nayose(lines, elem.querySelector(".isLeft").checked);
@@ -101,7 +101,7 @@
         }
 
         function click_copy() {
-            copyValue(document.querySelector(".ui .result"));
+            Util.copyValue(document.querySelector(".ui .result"));
         }
 
     </script>

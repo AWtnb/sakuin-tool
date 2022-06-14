@@ -187,10 +187,10 @@
         function click_execute() {
             const elem = document.querySelector(".ui");
             const outputTable = elem.querySelector("table.formatResult tbody");
-            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const lines = Uitil.linesArray(elem.querySelector(".inputLines").value);
             const nombreOnLeft = elem.querySelector(".isLeft").checked;
             showStatus("（\u{1f914}よみがな計算中…）");
-            resetTable(outputTable)
+            Util.resetTable(outputTable)
             kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
                 if (err) {
                     showStatus("解析失敗…\nやり直してみてください！");
@@ -203,7 +203,7 @@
 
         function click_copy() {
             const table = document.querySelector("table.formatResult tbody");
-            copyTable(table);
+            Util.copyTable(table);
         }
 
         function click_print() {

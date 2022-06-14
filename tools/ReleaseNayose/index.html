@@ -86,11 +86,11 @@
         function click_release() {
             const elem = document.querySelector(".ui");
 
-            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const releasedObj = releaseNayoseLines(lines);
 
             const outputTable = elem.querySelector(".result tbody");
-            resetTable(outputTable);
+            Util.resetTable(outputTable);
 
             for (let item in releasedObj) {
                 let row = outputTable.insertRow(-1);
@@ -102,7 +102,7 @@
         }
         function click_copy() {
             const outputTable = document.querySelector(".ui .result tbody");
-            copyTable(outputTable);
+            Util.copyTable(outputTable);
         }
 
     </script>

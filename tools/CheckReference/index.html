@@ -82,7 +82,7 @@
 
         function click_check() {
             const elem = document.querySelector(".ui");
-            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "require-goal"));
             elem.querySelector(".result .lostTo .output").innerHTML = (lostTo.length > 0) ? lostTo.join("\n") : "<p>問題ありません！</p>";
             const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-reference"));

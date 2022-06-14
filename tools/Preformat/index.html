@@ -45,7 +45,7 @@
             <table class="result">
                 <thead>
                     <tr>
-                        <th>項目</td>
+                        <th>項目</th>
                         <th>ノンブル</th>
                     </tr>
                 </thead>
@@ -54,6 +54,7 @@
             <input type="button" value="表をコピー" onclick="click_copy()">
 
         </div>
+    </div>
 
         <!-- ============================== -->
         <script type="text/javascript" src="../util.js" defer></script>
@@ -64,10 +65,10 @@
 
             function click_format() {
                 const elem = document.querySelector(".ui");
-                const lines = linesArray(elem.querySelector(".inputLines").value);
+                const lines = Util.linesArray(elem.querySelector(".inputLines").value);
 
                 const outputTable = elem.querySelector("table.result tbody");
-                resetTable(outputTable);
+                Util.resetTable(outputTable);
 
                 formatTemplare(lines).forEach((line, idx) => {
                     const row = outputTable.insertRow(-1);
@@ -80,7 +81,7 @@
 
             function click_copy() {
                 const table = document.querySelector("table.result tbody");
-                copyTable(table);
+                Util.copyTable(table);
             }
 
         </script>

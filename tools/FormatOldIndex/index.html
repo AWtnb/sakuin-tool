@@ -122,7 +122,7 @@
 
         function click_format() {
             const elem = document.querySelector(".ui");
-            const lines = linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const formatted = formatLines(lines);
             elem.querySelector(".result").value = formatted.join("\n");
             const output = elem.querySelector(".diff");
@@ -136,7 +136,7 @@
         }
 
         function click_copy() {
-            copyValue(document.querySelector(".ui .result"));
+            Util.copyValue(document.querySelector(".ui .result"));
         }
 
         const leftTA = document.getElementById("leftTA");

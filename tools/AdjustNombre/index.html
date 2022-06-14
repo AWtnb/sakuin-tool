@@ -159,7 +159,7 @@
         function clickBtn_adjustNombre() {
             const elem = document.querySelector(".ui");
             const adjustedArray = adjustNombresLine(
-                linesArray(elem.querySelector(".inputLines").value),
+                Util.linesArray(elem.querySelector(".inputLines").value),
                 elem.querySelector(".startNombre").value,
                 elem.querySelector(".endNombre").value,
                 elem.querySelector(".nombreDelta").value
@@ -182,7 +182,7 @@
         }
 
         function click_copy() {
-            copyValue(document.querySelector(".ui textarea.result"));
+            Util.copyValue(document.querySelector(".ui textarea.result"));
         }
 
         function click_print() {
