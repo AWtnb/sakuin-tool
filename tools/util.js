@@ -9,9 +9,6 @@ function linesArray(multiline) {
     return multiline.split(/\n/).map(line => String(line));
 }
 
-function escapeMeta(str) {
-    return str.replace(/[-[\]{}()*+?.,\\^$|]/g, "\\$&");
-}
 
 function toHalfWidth(str) {
     return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
