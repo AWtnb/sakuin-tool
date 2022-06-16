@@ -17,23 +17,19 @@
 
         <h2>カタカナひらがな相互変換</h2>
         <div class="caption">
-            <p>テキストボックスに入力された文字列をカタカナ／ひらがなに変換します。</p>
+            <p>カタカナはひらがなに、ひらがなはカタカナに変換します。</p>
         </div>
 
         <div class="ui">
 
-            <label for="toHiraFlag">
-                <input type="checkbox" class="toHiraFlag" id="toHiraFlag"> ひらがなに変換（チェックしないとカタカナに変換します）
-            </label>
-
             <div class="horizontal">
                 <div class="vertical">
                     <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="変換" onclick="click_katahira()">
+                    <input type="button" value="変換" id="exeButton">
                 </div>
                 <div class="vertical">
                     <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" onclick="click_copy()">
+                    <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
         </div>
@@ -44,25 +40,23 @@
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
-        function convertHiraKata(str, toHira = false) {
-            if (toHira) {
-                return Util.toHiragana(str)
-            }
-            return Util.toKatakana(str)
-        }
-
-        function click_katahira() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const s = elem.querySelector(".inputLines").value;
-            elem.querySelector(".result").value = convertHiraKata(s, elem.querySelector(".toHiraFlag").checked);
-        }
+            elem.querySelector(".result").value = s.replace(/[\u30a1-\u30f4\u3041-\u3093]/g, (m) => {
+                if (m.match(/[\u30a1-\u30f4]/)) {
+                    return Util.toHiragana(m);
+                }
+                return Util.toKatakana(m);
+            });
+        });
 
-        function click_copy() {
+        document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(document.querySelector(".ui .result"));
-        }
+        });
 
-        const leftTA = document.getElementById("leftTA");
-        const rightTA = document.getElementById("rightTA");
+        const leftTA = document.querySelector("#leftTA");
+        const rightTA = document.querySelector("#rightTA");
         leftTA.addEventListener("scroll", () => {
             rightTA.scrollTop = leftTA.scrollTop;
             rightTA.scrollLeft = leftTA.scrollLeft;
