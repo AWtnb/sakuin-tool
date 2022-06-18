@@ -29,7 +29,7 @@
                 <label><input type="radio" name="pos" value="all">両方</label>
             </form>
             <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="チェック" onclick="click_check()">
+            <input type="button" value="チェック" id="exeButton">
 
             <table class="result" id="src-table">
                 <thead>
@@ -40,7 +40,7 @@
                 </thead>
                 <tbody></tbody>
             </table>
-            <input type="button" value="プリント用ページを開く" onclick="click_print()">
+            <input type="button" value="プリント用ページを開く" id="printButton">
         </div>
 
     </div>
@@ -50,7 +50,7 @@
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
-        function click_check() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const outputTable = elem.querySelector("table.result tbody");
@@ -63,11 +63,11 @@
                 cell1.innerHTML = r.Found;
                 cell2.innerHTML = r.Markup;
             });
-        }
+        });
 
-        function click_print() {
+        document.querySelector("#printButton").addEventListener("click", () => {
             window.open('./print.html', 'newwindow', 'width=800,height=890');
-        }
+        });
 
     </script>
 </body>

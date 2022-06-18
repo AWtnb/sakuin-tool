@@ -55,7 +55,7 @@
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="チェック" onclick="click_check()">
+            <input type="button" value="チェック" id="exeButton">
 
             <div class="result">
                 <div class="lostTo">
@@ -80,7 +80,7 @@
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
-        function click_check() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "require-goal"));
@@ -89,7 +89,7 @@
             elem.querySelector(".result .lostFrom .output").innerHTML = (lostFrom.length > 0) ? lostFrom.join("\n") : "<p>問題ありません！</p>";
             const adjacent = findAdjacentReferenceEntries(lines).map(item => `<div class="detail">${item.name}</div>`);
             elem.querySelector(".result .adjacent .output").innerHTML = (adjacent.length > 0) ? adjacent.join("\n") : "<p>問題ありません！</p>";
-        }
+        });
 
     </script>
 </body>

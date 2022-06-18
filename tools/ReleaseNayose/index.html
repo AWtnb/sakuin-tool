@@ -39,7 +39,7 @@
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="名開き" onclick="click_release()">
+            <input type="button" value="名開き" id="exeButton">
             <table class="result">
                 <thead>
                     <tr>
@@ -49,7 +49,7 @@
                 </thead>
                 <tbody></tbody>
             </table>
-            <input type="button" value="表をコピー" onclick="click_copy()">
+            <input type="button" value="表をコピー" id="copyButton">
         </div>
 
     </div>
@@ -83,7 +83,7 @@
             return releasedObj;
         }
 
-        function click_release() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
 
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
@@ -99,11 +99,12 @@
                 cell1.innerHTML = releasedObj[item].name;
                 cell2.innerHTML = releasedObj[item].nombre;
             }
-        }
-        function click_copy() {
+        });
+
+        document.querySelector("#copyButton").addEventListener("click", () => {
             const outputTable = document.querySelector(".ui .result tbody");
             Util.copyTable(outputTable);
-        }
+        });
 
     </script>
 </body>

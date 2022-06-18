@@ -45,7 +45,7 @@
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="チェック" onclick="click_check()">
+            <input type="button" value="チェック" id="exeButton">
 
             <div class="result">
             </div>
@@ -102,7 +102,7 @@
             }).filter(x => x.invalid).map(x => x.line);
         }
 
-        function click_check() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const invalid = grepInvalidNombreLine(lines);
@@ -112,7 +112,7 @@
             else {
                 elem.querySelector(".result").innerHTML = `<p>${invalid.join("<br>")}</p>`;
             }
-        }
+        });
 
     </script>
 </body>

@@ -48,7 +48,7 @@
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="チェック" onclick="click_check()">
+            <input type="button" value="チェック" id="exeButton">
 
             <div class="result"></div>
 
@@ -62,7 +62,7 @@
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
-        function click_check() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const output = elem.querySelector(".result");
             output.innerHTML = "";
@@ -80,7 +80,7 @@
             if (output.innerHTML.length < 1) {
                 output.innerHTML = "<div class=\"msg\">問題ありません！</div>";
             }
-        }
+        });
 
 
     </script>

@@ -30,11 +30,11 @@
             <div class="horizontal">
                 <div class="vertical">
                     <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="変換" onclick="click_hairetsu()">
+                    <input type="button" value="変換" id="exeButton">
                 </div>
                 <div class="vertical">
                     <textarea id="rightTA" class="result" readonly placeholder="ここに結果が表示されます"></textarea>
-                    <input type="button" value="コピー" onclick="click_copy()">
+                    <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
 
@@ -47,17 +47,16 @@
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
-        function click_hairetsu() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const s = elem.querySelector(".inputLines").value;
-
             const converted = toHairetsu(s, elem.querySelector(".removeFlag").checked);
             elem.querySelector(".result").value = converted;
-        }
+        });
 
-        function click_copy() {
+        document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(document.querySelector(".ui .result"));
-        }
+        });
 
         const leftTA = document.getElementById("leftTA");
         const rightTA = document.getElementById("rightTA");

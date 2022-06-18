@@ -36,11 +36,11 @@
             <div class="horizontal">
                 <div class="vertical">
                     <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="復元" onclick="click_complete()">
+                    <input type="button" value="復元" id="exeButton">
                 </div>
                 <div class="vertical">
                     <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" onclick="click_copy()">
+                    <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
         </div>
@@ -71,15 +71,15 @@
             return completed;
         }
 
-        function click_complete() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             elem.querySelector(".result").value = completeChildItem(lines).join("\n");
-        }
+        });
 
-        function click_copy() {
+        document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(document.querySelector(".ui .result"));
-        }
+        });
 
         const leftTA = document.getElementById("leftTA");
         const rightTA = document.getElementById("rightTA");

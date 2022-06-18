@@ -33,11 +33,11 @@
             <div class="horizontal">
                 <div class="vertical">
                     <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="取得" onclick="click_setReading()">
+                    <input type="button" value="取得" id="exeButton">
                 </div>
                 <div class="vertical">
                     <textarea id="rightTA" class="result" placeholder="ここに結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" onclick="click_copy()">
+                    <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
             outputArea.value = t.map(x => x.Reading).join("\n");
         }
 
-        function click_setReading() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             showMessage("（\u{1f914}よみがな計算中…）");
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
@@ -75,10 +75,11 @@
                     main(tokenizer, lines, outputArea, removeNombre);
                 }
             });
-        }
-        function click_copy() {
+        });
+
+        document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(document.querySelector(".ui .result"))
-        }
+        });
 
         const leftTA = document.getElementById("leftTA");
         const rightTA = document.getElementById("rightTA");

@@ -84,14 +84,14 @@
             <div class="horizontal">
                 <div class="vertical">
                     <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="計算" onclick="clickBtn_adjustNombre()">
+                    <input type="button" value="計算" id="exeButton">
                 </div>
                 <div class="vertical">
                     <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" onclick="click_copy()">
+                    <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
-            <input type="button" value="チェックリストを印刷" onclick="click_print()">
+            <input type="button" value="チェックリストを印刷" id="printButton">
             <div id="src-detail" class="result">
             </div>
         </div>
@@ -156,7 +156,7 @@
         }
 
 
-        function clickBtn_adjustNombre() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const adjustedArray = adjustNombresLine(
                 Util.linesArray(elem.querySelector(".inputLines").value),
@@ -179,15 +179,15 @@
                 markup = `<div class="msg">${modified.length}行の変更：</div>${diffs.join("")}`
             }
             elem.querySelector("div.result").innerHTML = markup;
-        }
+        });
 
-        function click_copy() {
+        document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(document.querySelector(".ui textarea.result"));
-        }
+        });
 
-        function click_print() {
+        document.querySelector("#printButton").addEventListener("click", () => {
             window.open('./print.html', 'newwindow', 'width=800,height=890');
-        }
+        });
 
 
         const leftTA = document.getElementById("leftTA");

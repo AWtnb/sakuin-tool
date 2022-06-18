@@ -49,11 +49,11 @@
             <div class="horizontal">
                 <div class="vertical">
                     <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="整形" onclick="click_format()">
+                    <input type="button" value="整形" id="exeButton">
                 </div>
                 <div class="vertical">
                     <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" onclick="click_copy()">
+                    <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
             <div class="diff"></div>
@@ -120,7 +120,7 @@
             return deltas;
         }
 
-        function click_format() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const formatted = formatLines(lines);
@@ -133,11 +133,11 @@
                     return `<div class="pair"><div class="origin">${d.Origin}</div><div class="modified">${d.Modified}</div></div>`;
                 }).join("");
             }
-        }
+        });
 
-        function click_copy() {
+        document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(document.querySelector(".ui .result"));
-        }
+        });
 
         const leftTA = document.getElementById("leftTA");
         const rightTA = document.getElementById("rightTA");

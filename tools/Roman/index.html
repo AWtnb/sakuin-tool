@@ -39,11 +39,11 @@
             <div class="horizontal">
                 <div class="vertical">
                     <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="変換" onclick="click_convert()">
+                    <input type="button" value="変換" id="exeButton">
                 </div>
                 <div class="vertical">
                     <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" onclick="click_copy()">
+                    <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
         </div>
@@ -85,15 +85,15 @@
             return converted.toLowerCase();
         }
 
-        function click_convert() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const targetLines = elem.querySelector(".inputLines").value;
             elem.querySelector(".result").value = toRoman(targetLines);
-        }
+        });
 
-        function click_copy() {
+        document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(document.querySelector(".ui .result"));
-        }
+        });
 
         const leftTA = document.getElementById("leftTA");
         const rightTA = document.getElementById("rightTA");

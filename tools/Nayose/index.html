@@ -74,11 +74,11 @@
             <div class="horizontal">
                 <div class="vertical">
                     <textarea class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="名寄せ" onclick="click_nayose()">
+                    <input type="button" value="名寄せ" id="exeButton">
                 </div>
                 <div class="vertical">
                     <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" onclick="click_copy()">
+                    <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
         </div>
@@ -91,18 +91,18 @@
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
-        function click_nayose() {
+        document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const nayosed = (elem.querySelector(".isOrdered").checked) ?
                 nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
                 nayose(lines, elem.querySelector(".isLeft").checked);
             elem.querySelector(".result").value = nayosed.join("\n");
-        }
+        });
 
-        function click_copy() {
+        document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(document.querySelector(".ui .result"));
-        }
+        });
 
     </script>
 </body>
