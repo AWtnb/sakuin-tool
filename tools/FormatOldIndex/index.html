@@ -65,72 +65,76 @@
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
-        function formatFullWidthSpace(s) {
-            const doubleSpaced = s.replace(/　/g, "　　").replace(/　+/g, "　　");
-            const f = doubleSpaced.replace(/　　→/, "　→").replace(/(?<=.{2,})　　(?!\d)/, "　").replace(/　　(?!\d)/g, "");
-            if (s.startsWith("　")) {
-                return `　${f}`;
+        class IndexLine {
+
+            static barChars = ["\u2010", "\u2011", "\u2012", "\u2013", "\u2014", "\u2015", "\uFF0D", "\u2500", "\u002d"];
+            static barCharsPattern = `[${IndexLine.barChars.join("")}]`;
+
+            constructor(s) {
+                this.text = String(s);
             }
-            return f;
-        }
 
-        const POSSIBLE_BARS = "[\u2010\u2011\u2012\u2013\u2014\u2015\uFF0D\u2500]";
+            FormatSpace() {
+                const origin = this.text;
+                this.text = this.text.replace(/\u3000/g, "\u3000\u3000").replace(/\u3000+/g, "\u3000\u3000"); // 全部2倍アキに
+                this.text = this.text.replace(/\u3000\u3000→/g, "\u3000→"); // 矢印の前は1倍アキに
+                this.text = this.text.replace(/(?<=.{2,})\u3000\u3000(?!\d)/, "\u3000"); // 項目3文字目以降にあるアキは1倍（例：イドラッ　蘇倶　　12）
+                this.text = this.text.replace(/\u3000\u3000(?!\d)/g, ""); // 残っている2倍アキは不要
+                if (origin.startsWith("\u3000")) {
+                    this.text = `\u3000${this.text}`;
+                }
+                else {
+                    this.text = this.text;
+                }
+            }
 
-        function formatNombre(s) {
-            const reg = new RegExp(`${POSSIBLE_BARS}+`, "g")
-            return s.replace(reg, "-");
-        }
+            FormatConnector() {
+                const reg = new RegExp(`${IndexLine.barCharsPattern}+`, "g");
+                this.text = this.text.replace(reg, "\u2013");
+            }
 
-        function formatChild(s) {
-            const reg = new RegExp(`^${POSSIBLE_BARS}+|${POSSIBLE_BARS}+$`);
-            return "　" + s.trim().replace(reg, "――");
-        }
-
-        function formatLines(lines) {
-            const reg = new RegExp(POSSIBLE_BARS);
-            return lines.map(line => line.replace(/\t$/, "").replace(/\t/, "　　")).map(line => formatFullWidthSpace(line)).map(line => {
-                const entry = Entry.parse(line);
+            ExecuteFormat() {
+                this.FormatSpace();
+                this.FormatConnector();
+                const entry = Entry.parse(this.text);
                 if (entry.name && entry.nombre) {
-                    const fmt = (entry.isChild || entry.name.match(reg)) ? formatChild(entry.name) : entry.name.trim();
-                    return `${fmt}　　${formatNombre(entry.nombre)}`;
+                    const reg = new RegExp(IndexLine.barCharsPattern);
+                    if (entry.isChild || entry.name.match(reg)) {
+                        return IndexLine.FormatChild(entry.name) + "\u3000\u3000" + entry.nombre;
+                    }
+                    return entry.name.trim() + "\u3000\u3000" + entry.nombre;
                 }
-                return line;
-            });
+                return this.text;
+            }
+
+            static FormatChild(s) {
+                const reg = new RegExp(`^${IndexLine.barCharsPattern}+|${IndexLine.barCharsPattern}+$`);
+                return "\u3000" + s.trim().replace(reg, "――");
+            }
+
         }
 
-        function getDeltas(origins, news) {
-            const deltas = [];
-            for (let i = 0; i < origins.length; i++) {
-                const orgItem = origins[i];
-                if (i > news.length - 1) {
-                    deltas.push({
-                        "Origin": orgItem,
-                        "Modified": "（行数が変わっています）"
-                    });
-                    continue;
-                }
-                const newItem = news[i];
-                if (orgItem != newItem) {
-                    deltas.push({
-                        "Origin": orgItem,
-                        "Modified": newItem
-                    });
-                }
-            }
-            return deltas;
-        }
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
-            const formatted = formatLines(lines);
-            elem.querySelector(".result").value = formatted.join("\n");
+
+            const formatted = lines.map(line => String(line).trimEnd().replace(/\t/, "　　")).map(line => {
+                const fmt = new IndexLine(line).ExecuteFormat();
+                return {
+                    "Line": fmt,
+                    "Origin": line,
+                    "Modified": (fmt != line)
+                };
+            });
+            elem.querySelector(".result").value = formatted.map(x => x.Line).join("\n");
+
             const output = elem.querySelector(".diff");
             output.innerHTML = "";
-            const diff = getDeltas(lines, formatted);
+            const diff = formatted.filter(x => x.Modified)
             if (diff.length) {
                 output.innerHTML = `<div class="msg">${diff.length}箇所を修正しました：</msg>` + diff.map(d => {
-                    return `<div class="pair"><div class="origin">${d.Origin}</div><div class="modified">${d.Modified}</div></div>`;
+                    return `<div class="pair"><div class="origin">${d.Origin}</div><div class="modified">${d.Line}</div></div>`;
                 }).join("");
             }
         });
