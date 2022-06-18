@@ -67,12 +67,13 @@
             const output = elem.querySelector(".result");
             output.innerHTML = "";
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
-            const ungrouped = GroupingChecker.getUngrouped(lines);
+            const checker = new GroupingChecker(lines);
+            const ungrouped = checker.getUngrouped();
             if (ungrouped.length) {
                 const markup = ungrouped.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
                 output.innerHTML = `<div class="msg">見よ先項目が名寄せされずに残っています！</div><div class="detail">${markup}</div>`;
             }
-            const conflict = GroupingChecker.getConflicting(lines);
+            const conflict = checker.getConflicting();
             if (conflict.length) {
                 const markup = conflict.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
                 output.innerHTML = output.innerHTML + "\n" + `<div class="msg">見よ項目が本項目として残っています！</div><div class="detail">${markup}</div>`;
