@@ -83,11 +83,11 @@
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
-            const lostTo = findReferenceEntriesWithoutGoal(lines).map(item => markupRequired(item, "require-goal"));
+            const lostTo = ReferenceChecker.goalLostReference(lines).map(item => ReferenceChecker.markup(item, "require-goal"));
             elem.querySelector(".result .lostTo .output").innerHTML = (lostTo.length > 0) ? lostTo.join("\n") : "<p>問題ありません！</p>";
-            const lostFrom = findRequiredReferencingEntries(lines).map(item => markupRequired(item, "require-reference"));
+            const lostFrom = ReferenceChecker.requiredFromReference(lines).map(item => ReferenceChecker.markup(item, "require-reference"));
             elem.querySelector(".result .lostFrom .output").innerHTML = (lostFrom.length > 0) ? lostFrom.join("\n") : "<p>問題ありません！</p>";
-            const adjacent = findAdjacentReferenceEntries(lines).map(item => `<div class="detail">${item.name}</div>`);
+            const adjacent = ReferenceChecker.findAdjacent(lines).map(item => `<div class="detail">${item.name}</div>`);
             elem.querySelector(".result .adjacent .output").innerHTML = (adjacent.length > 0) ? adjacent.join("\n") : "<p>問題ありません！</p>";
         });
 
