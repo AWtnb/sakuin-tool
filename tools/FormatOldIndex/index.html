@@ -67,14 +67,14 @@
 
         class IndexLine {
 
-            static Bars = ["\u2010", "\u2011", "\u2012", "\u2013", "\u2014", "\u2015", "\uFF0D", "\u2500", "\u002d"];
-            static BarsPattern = `[${this.Bars.join("")}]`;
+            static bars = ["\u2010", "\u2011", "\u2012", "\u2013", "\u2014", "\u2015", "\uFF0D", "\u2500", "\u002d"];
+            static barsPattern = `[${this.bars.join("")}]`;
 
             constructor(s) {
                 this.text = String(s);
             }
 
-            FormatSpace() {
+            formatSpace() {
                 const origin = this.text;
                 this.text = this.text.replace(/\u3000/g, "\u3000\u3000").replace(/\u3000+/g, "\u3000\u3000"); // 全部2倍アキに
                 this.text = this.text.replace(/\u3000\u3000→/g, "\u3000→"); // 矢印の前は1倍アキに
@@ -88,17 +88,17 @@
                 }
             }
 
-            FormatConnector() {
-                const reg = new RegExp(`${this.constructor.BarsPattern}+`, "g");
+            formatConnector() {
+                const reg = new RegExp(`${this.constructor.barsPattern}+`, "g");
                 this.text = this.text.replace(reg, "\u2013");
             }
 
-            ExecuteFormat() {
-                this.FormatSpace();
-                this.FormatConnector();
+            executeFormat() {
+                this.formatSpace();
+                this.formatConnector();
                 const entry = Entry.parse(this.text);
                 if (entry.name && entry.nombre) {
-                    const reg = new RegExp(this.constructor.BarsPattern);
+                    const reg = new RegExp(this.constructor.barsPattern);
                     if (entry.isChild || entry.name.match(reg)) {
                         return this.constructor.FormatChild(entry.name) + "\u3000\u3000" + entry.nombre;
                     }
@@ -107,8 +107,8 @@
                 return this.text;
             }
 
-            static FormatChild(s) {
-                const reg = new RegExp(`^${this.BarsPattern}+|${this.BarsPattern}+$`);
+            static formatChild(s) {
+                const reg = new RegExp(`^${this.barsPattern}+|${this.barsPattern}+$`);
                 return "\u3000" + s.trim().replace(reg, "――");
             }
 
@@ -120,7 +120,7 @@
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
 
             const formatted = lines.map(line => String(line).trimEnd().replace(/\t/, "　　")).map(line => {
-                const fmt = new IndexLine(line).ExecuteFormat();
+                const fmt = new IndexLine(line).executeFormat();
                 return {
                     "Line": fmt,
                     "Origin": line,
