@@ -1,4 +1,4 @@
-class AdjustNombre {
+class CheckChild {
 
     static getMainEntries(lines) {
         return lines.filter(x => String(x).trim()).map(line => {
@@ -34,16 +34,16 @@ class AdjustNombre {
             "tail": {"markupHead": false, "markupTail": true},
             "all": {"markupHead": true, "markupTail": true}
         }[mode];
-        const mainEntries = this.constructor.getMainEntries(lines);
+        const mainEntries = this.getMainEntries(lines);
         return mainEntries.map(entry => {
             const search = entry.basename;
             const possibles = mainEntries.filter(entry => entry.basename != search).map(entry => {
                 let markup = entry.basename;
                 if (params.markupHead) {
-                    markup = this.constructor.markupHead(markup, search);
+                    markup = this.markupHead(markup, search);
                 }
                 if (params.markupTail) {
-                    markup = this.constructor.markupTail(markup, search);
+                    markup = this.markupTail(markup, search);
                 }
                 return {
                     "Markup": markup + entry.subInfo,
