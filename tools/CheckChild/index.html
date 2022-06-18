@@ -55,7 +55,7 @@
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const outputTable = elem.querySelector("table.result tbody");
             Util.resetTable(outputTable);
-            const markup = findPossibleChildItems(lines, elem.querySelector("form.searchPos").pos.value);
+            const markup = AdjustNombre.findPossibleChildItems(lines, elem.querySelector("form.searchPos").pos.value);
             markup.forEach(r => {
                 const row = outputTable.insertRow(-1);
                 const cell1 = row.insertCell(0);
