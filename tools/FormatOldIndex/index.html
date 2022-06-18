@@ -100,7 +100,7 @@
                 if (entry.name && entry.nombre) {
                     const reg = new RegExp(this.constructor.barsPattern);
                     if (entry.isChild || entry.name.match(reg)) {
-                        return this.constructor.FormatChild(entry.name) + "\u3000\u3000" + entry.nombre;
+                        return this.constructor.formatChild(entry.name) + "\u3000\u3000" + entry.nombre;
                     }
                     return entry.name.trim() + "\u3000\u3000" + entry.nombre;
                 }
