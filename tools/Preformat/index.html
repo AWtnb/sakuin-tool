@@ -70,7 +70,7 @@
                 const outputTable = elem.querySelector("table.result tbody");
                 Util.resetTable(outputTable);
 
-                formatTemplare(lines).forEach((line, idx) => {
+                IndexTemplate.format(lines).forEach((line, idx) => {
                     const row = outputTable.insertRow(-1);
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
