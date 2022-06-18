@@ -169,16 +169,16 @@
         function main(tokenizer, lines, nombreOnLeft, outputElem) {
             showStatus("");
 
-            const grouped = nayose(lines, nombreOnLeft);
-            const tokenized = tokenizeLines(tokenizer, grouped).map(t => {
+            const grouped = Nayose.nayose(lines, nombreOnLeft);
+            const tokenized = Reading.tokenizeLines(tokenizer, grouped).map(t => {
                 const r = Entry.parse(t.Reading).name;
                 return {
                     "Item": t.Item,
                     "Reading": r,
-                    "Norm": toHairetsu(r, true)
+                    "Norm": NormalizedReading.convert(r, true)
                 }
             });
-            const sorted = sortByReading(tokenized);
+            const sorted = SortIndex.sortByReading(tokenized);
             updateTable(outputElem, sorted);
             const indexLines = sorted.map(x => x.Item);
 
@@ -187,7 +187,7 @@
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const outputTable = elem.querySelector("table.formatResult tbody");
-            const lines = Uitil.linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const nombreOnLeft = elem.querySelector(".isLeft").checked;
             showStatus("（\u{1f914}よみがな計算中…）");
             Util.resetTable(outputTable)
