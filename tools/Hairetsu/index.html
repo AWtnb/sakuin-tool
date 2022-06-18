@@ -50,7 +50,7 @@
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const s = elem.querySelector(".inputLines").value;
-            const converted = toHairetsu(s, elem.querySelector(".removeFlag").checked);
+            const converted = NormalizedReading.convert(s, elem.querySelector(".removeFlag").checked);
             elem.querySelector(".result").value = converted;
         });
 
