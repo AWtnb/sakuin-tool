@@ -67,15 +67,15 @@ class Util {
 class Entry {
 
     static parseParen(s) {
-        const inner = s.replace(/^.*[（\(［\[](.+?)[）\)］\]]$/, "$1");
+        const inner = s.replace(/^.*[\uff08\u0028\uff3b\u005b](.+?)[\uff09\u0029\uff3d\u005d]$/, "$1");
         if (inner == s) {
             return [];
         }
-        return inner.replace(/，/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
+        return inner.replace(/\uff0c/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
     }
 
     static trimTrailingParen(s) {
-        return s.replace(/(（.+?）|［.+?］|\(.+?\)|\[.+?\])$/, "");
+        return s.replace(/(\uff08.+?\uff09|\uff3b.+?\uff3d|\u0028.+?\u0029|\u005b.+?\u005d)$/, "");
     }
 
     static isIndented(s) {
