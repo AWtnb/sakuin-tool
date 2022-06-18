@@ -68,7 +68,7 @@
         class IndexLine {
 
             static bars = ["\u2010", "\u2011", "\u2012", "\u2013", "\u2014", "\u2015", "\uFF0D", "\u2500", "\u002d"];
-            static barsPattern = `[${this.bars.join("")}]`;
+            static barsPattern = `[${IndexLine.bars.join("")}]`;
 
             constructor(s) {
                 this.text = String(s);
@@ -89,7 +89,7 @@
             }
 
             formatConnector() {
-                const reg = new RegExp(`${this.constructor.barsPattern}+`, "g");
+                const reg = new RegExp(`${IndexLine.barsPattern}+`, "g");
                 this.text = this.text.replace(reg, "\u2013");
             }
 
@@ -98,9 +98,9 @@
                 this.formatConnector();
                 const entry = Entry.parse(this.text);
                 if (entry.name && entry.nombre) {
-                    const reg = new RegExp(this.constructor.barsPattern);
+                    const reg = new RegExp(IndexLine.barsPattern);
                     if (entry.isChild || entry.name.match(reg)) {
-                        return this.constructor.formatChild(entry.name) + "\u3000\u3000" + entry.nombre;
+                        return IndexLine.formatChild(entry.name) + "\u3000\u3000" + entry.nombre;
                     }
                     return entry.name.trim() + "\u3000\u3000" + entry.nombre;
                 }
@@ -108,7 +108,7 @@
             }
 
             static formatChild(s) {
-                const reg = new RegExp(`^${this.barsPattern}+|${this.barsPattern}+$`);
+                const reg = new RegExp(`^${IndexLine.barsPattern}+|${IndexLine.barsPattern}+$`);
                 return "\u3000" + s.trim().replace(reg, "――");
             }
 

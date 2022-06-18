@@ -99,27 +99,27 @@ class Entry {
         if (elems.length > 2) {
             const nm = elems.slice(0,-1).join(separator);
             info.name = nm;
-            info.basename = this.trimTrailingParen(nm);
+            info.basename = Entry.trimTrailingParen(nm);
             info.nombre = elems.slice(-1)[0];
-            info.referredFrom = this.parseParen(nm);
-            info.isChild = this.isIndented(nm);
+            info.referredFrom = Entry.parseParen(nm);
+            info.isChild = Entry.isIndented(nm);
             return info;
         }
         if (elems.length == 2) {
             const nm = elems[0];
             info.name = nm;
-            info.basename = this.trimTrailingParen(nm);
+            info.basename = Entry.trimTrailingParen(nm);
             info.nombre = elems[1];
-            info.referredFrom = this.parseParen(nm);
-            info.isChild = this.isIndented(nm);
+            info.referredFrom = Entry.parseParen(nm);
+            info.isChild = Entry.isIndented(nm);
             return info;
         }
         if (elems[0]) {
             const nm = elems[0];
             info.name = nm;
-            info.basename = this.trimTrailingParen(nm);
-            info.isChild = this.isIndented(nm);
-            info.referredFrom = this.parseParen(nm);
+            info.basename = Entry.trimTrailingParen(nm);
+            info.isChild = Entry.isIndented(nm);
+            info.referredFrom = Entry.parseParen(nm);
             const refs = nm.split("→").map(x => String(x).trim()).filter(Boolean);
             if (refs.length > 1) {
                 info.referTo = refs.slice(-1)[0];
@@ -137,9 +137,9 @@ class Entry {
 class Address {
 
     constructor(s) {
-        const sanitized = this.constructor.sanitize(s);
+        const sanitized = Address.sanitize(s);
         this.RawElements = sanitized.split(",").map(x => x.trim()).filter(Boolean);
-        this.ParsedNombres = this.constructor.parse(sanitized);
+        this.ParsedNombres = Address.parse(sanitized);
     }
 
 
@@ -149,14 +149,14 @@ class Address {
             const nStr = String(nombre);
             if (nStr.indexOf("-") != -1) {
                 const [start, end, ...rest] = nStr.split("-");
-                this.parseRange(start, end).forEach(x => stack.push(x));
+                Address.parseRange(start, end).forEach(x => stack.push(x));
             }
             else {
                 stack.push({
                     "display": {
                         "text": nStr,
-                        "prefix": this.getNombrePrefix(nStr),
-                        "suffix": this.getNombreSuffix(nStr),
+                        "prefix": Address.getNombrePrefix(nStr),
+                        "suffix": Address.getNombreSuffix(nStr),
                     },
                     "intValue": Number(nStr.replace(/[^\d]/g, "")),
                     "hyphenated": false,
@@ -188,11 +188,11 @@ class Address {
 
     static parseRange(start, end) {
         const range = [];
-        const s = this.parse(String(start))[0];
-        const e = this.parse(String(end))[0];
+        const s = Address.parse(String(start))[0];
+        const e = Address.parse(String(end))[0];
         range.push(s);
         for (let idx = s.intValue + 1; idx < e.intValue; idx++) {
-            const p = this.parse(String(idx))[0];
+            const p = Address.parse(String(idx))[0];
             p.hyphenated = true;
             range.push(p);
         }

@@ -34,16 +34,16 @@ class CheckChild {
             "tail": {"markupHead": false, "markupTail": true},
             "all": {"markupHead": true, "markupTail": true}
         }[mode];
-        const mainEntries = this.getMainEntries(lines);
+        const mainEntries = CheckChild.getMainEntries(lines);
         return mainEntries.map(entry => {
             const search = entry.basename;
             const possibles = mainEntries.filter(entry => entry.basename != search).map(entry => {
                 let markup = entry.basename;
                 if (params.markupHead) {
-                    markup = this.markupHead(markup, search);
+                    markup = CheckChild.markupHead(markup, search);
                 }
                 if (params.markupTail) {
-                    markup = this.markupTail(markup, search);
+                    markup = CheckChild.markupTail(markup, search);
                 }
                 return {
                     "Markup": markup + entry.subInfo,
