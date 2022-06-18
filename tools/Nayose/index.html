@@ -95,8 +95,8 @@
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const nayosed = (elem.querySelector(".isOrdered").checked) ?
-                nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
-                nayose(lines, elem.querySelector(".isLeft").checked);
+                Nayose.nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
+                Nayose.nayose(lines, elem.querySelector(".isLeft").checked);
             elem.querySelector(".result").value = nayosed.join("\n");
         });
 
