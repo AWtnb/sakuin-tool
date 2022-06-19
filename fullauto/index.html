@@ -153,19 +153,6 @@
             elem.innerHTML = s;
         }
 
-        function updateTable(elem, obj) {
-            obj.forEach((item, idx) => {
-                const row = elem.insertRow(-1);
-                const cell1 = row.insertCell(0);
-                const cell2 = row.insertCell(1);
-                const cell3 = row.insertCell(2);
-                cell1.innerHTML = item.Item;
-                cell2.innerHTML = item.Reading;
-                cell3.innerHTML = item.Norm;
-            });
-        }
-
-
         function main(tokenizer, lines, nombreOnLeft, outputElem) {
             showStatus("");
 
@@ -179,8 +166,9 @@
                 }
             });
             const sorted = SortIndex.sortByReading(tokenized);
-            updateTable(outputElem, sorted);
-            const indexLines = sorted.map(x => x.Item);
+            outputElem.innerHTML = sorted.map(x => {
+                return `<tr><td>${x.Item}</td><td style="background:#aaa;">${x.Reading}</td><td style="background:#aaa;">${x.Norm}</td></tr>`;
+            }).join("\n");
 
         }
 
@@ -190,7 +178,7 @@
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const nombreOnLeft = elem.querySelector(".isLeft").checked;
             showStatus("（\u{1f914}よみがな計算中…）");
-            Util.resetTable(outputTable)
+            outputTable.innerHTML = "";
             kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
                 if (err) {
                     showStatus("解析失敗…\nやり直してみてください！");

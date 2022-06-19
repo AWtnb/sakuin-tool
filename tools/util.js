@@ -40,13 +40,6 @@ class Util {
         alert("コピーしました！");
     }
 
-    static resetTable(tbody) {
-        const maxRow = tbody.rows.length;
-        for (let r = maxRow - 1; r >= 0; r--) {
-            tbody.deleteRow(r);
-        }
-    }
-
     static toKatakana(str){
         return str.replace(/[\u3041-\u3096]/g, function(match) {
             const chr = match.charCodeAt(0) + 0x60;
