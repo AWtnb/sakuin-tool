@@ -123,7 +123,7 @@
                 if (line.trim().length < 1) {
                     return nombreInfo;
                 }
-                const entry = new Entry(line).parse();
+                const entry = new Entry(line);
                 if (!entry.nombre) {
                     nombreInfo.entryName = entry.name;
                     return nombreInfo;

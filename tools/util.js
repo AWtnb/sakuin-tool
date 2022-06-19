@@ -61,6 +61,7 @@ class Entry {
 
     constructor(s, separator = "\u3000\u3000") {
         this.rawStr = s;
+        this.separator = separator;
         this.elems = this.rawStr.split(this.separator).filter(Boolean).map(x => String(x));
 
         this.name = ""; // 項目名

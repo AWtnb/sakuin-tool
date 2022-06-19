@@ -62,7 +62,7 @@
         function releaseGrouping(lines) {
             const stack = [];
             lines.filter(line => line.trim()).map(line => line.replace("\t", "\u3000\u3000")).forEach(line => {
-                    const entry = new Entry(line).parse();
+                    const entry = new Entry(line);
                     if (entry.isReference) {
                         stack.push({
                             "Name": entry.name,

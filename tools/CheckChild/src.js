@@ -18,7 +18,7 @@ class CheckChild {
 
     static getMainEntries(lines) {
         return lines.filter(x => String(x).trim()).map(line => {
-            const p = new Entry(line).parse();
+            const p = new Entry(line);
             if (!p.isReference && !p.isChild) {
                 return {
                     "name": p.name,

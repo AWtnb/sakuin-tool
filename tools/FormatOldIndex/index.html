@@ -96,7 +96,7 @@
             executeFormat() {
                 this.formatSpace();
                 this.formatConnector();
-                const entry = new Entry(this.text).parse();
+                const entry = new Entry(this.text);
                 if (entry.name && entry.nombre) {
                     const reg = new RegExp(IndexLine.barsPattern);
                     if (entry.isChild || entry.name.match(reg)) {
