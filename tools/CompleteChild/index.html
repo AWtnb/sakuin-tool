@@ -51,29 +51,29 @@
     <script>
 
 
-        function completeChildItem(lines) {
-            const arr = lines.filter(Boolean);
-            const completed = [];
-            completed.push(arr[0]);
-            let lastParentItem = new Entry(arr[0]).name;
-            for (let i = 1; i < arr.length; i++) {
-                const curLine = String(arr[i]);
-                if (curLine.startsWith("　") && curLine.indexOf("――") != -1) {
-                    const completedItem = curLine.trimStart().replace(/――/, lastParentItem);
-                    completed.push(completedItem);
+        function completeChildEntry(lines) {
+            const stack = [];
+            const parentStack = [];
+            stack.push(lines[0]);
+            parentStack.push(new Entry(lines[0]).name);
+            for (let i = 1; i < lines.length; i++) {
+                const cur = String(lines[i]);
+                if (Entry.isIndented(cur) && cur.indexOf("\u2015\u2015") != -1) {
+                    const completed = cur.trimStart().replace("\u2015\u2015", parentStack.slice(-1)[0]);
+                    stack.push(completed);
                 }
                 else {
-                    completed.push(curLine);
-                    lastParentItem = new Entry(curLine).name;
+                    stack.push(cur);
+                    parentStack.push(new Entry(cur).name);
                 }
             }
-            return completed;
+            return stack;
         }
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.getElemValueLines(".ui .inputLines");
-            elem.querySelector(".result").value = completeChildItem(lines).join("\n");
+            const lines = Util.getElemValueLines(".ui .inputLines").filter(x => String(x).trim());
+            elem.querySelector(".result").value = completeChildEntry(lines).join("\n");
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {
