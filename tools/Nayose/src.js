@@ -1,69 +1,69 @@
 class Nayose {
 
-    static parseLine(s, nombreOnLeft = false) {
-        const arr = s.split("\t").slice(0, 2).map(x => String(x).trim());
-        if (arr.length < 2) {
+    static parseLine(s, addressOnLeft = false) {
+        const elems = s.split("\t").slice(0, 2).map(x => String(x).trim());
+        if (elems.length < 2) {
             return {
-                "Item": String(arr[0]),
-                "Nombre": ""
+                "Item": String(elems[0]),
+                "Address": ""
             };
         }
-        if (nombreOnLeft) {
-            arr.reverse()
+        if (addressOnLeft) {
+            elems.reverse()
         }
         return {
-            "Item": String(arr[0]),
-            "Nombre": String(arr[1])
+            "Item": String(elems[0]),
+            "Address": String(elems[1])
         };
     }
 
-    static nayose (lines, nombreOnLeft = false) {
+    static nayose (lines, addressOnLeft = false) {
         const map = new Map()
         lines.filter(x => x.trim()).forEach(line => {
-            const l = Nayose.parseLine(line, nombreOnLeft);
+            const l = Nayose.parseLine(line, addressOnLeft);
             if (map.has(l.Item)) {
-                const conc = map.get(l.Item) + ", " + l.Nombre;
+                const conc = map.get(l.Item) + ", " + l.Address;
                 map.set(l.Item, conc);
             }
             else {
-                map.set(l.Item, l.Nombre);
+                map.set(l.Item, l.Address);
             }
         });
         const ret = [];
-        map.forEach((nombres, item) => {
-            const parsed = new Address(nombres);
+        map.forEach((addess, item) => {
+            const parsed = new Address(addess);
             ret.push((item + "　　" + parsed.format()).trim());
         });
         return ret;
     }
 
-    static nayoseByOrder(lines, nombreOnLeft = false) {
+    static nayoseByOrder(lines, addressOnLeft = false) {
         const netArr = lines.filter(x => x.trim());
         const stack = [];
         for (let i = 0; i < netArr.length; i++) {
-            const l = Nayose.parseLine(netArr[i], nombreOnLeft);
+            const l = Nayose.parseLine(netArr[i], addressOnLeft);
             if (i == 0) {
                 stack.push({
                     "Item": l.Item,
-                    "Nombres": l.Nombre
+                    "Address": l.Address
                 });
                 continue;
             }
             const lastIdx = stack.length - 1;
             if (l.Item == (stack[lastIdx]).Item) {
-                const conc = (stack[lastIdx]).Nombres + ", " + l.Nombre;
-                (stack[lastIdx]).Nombres = conc;
+                const conc = (stack[lastIdx]).Address + ", " + l.Address;
+                (stack[lastIdx]).Address = conc;
             }
             else {
                 stack.push({
                     "Item": l.Item,
-                    "Nombres": l.Nombre
+                    "Address": l.Address
                 });
             }
         }
 
         return stack.map(pair => {
-            const parsed = new Address(pair.Nombres);
+            const parsed = new Address(pair.Address);
             return (pair.Item + "　　" + parsed.format()).trim();
         });
 

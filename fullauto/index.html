@@ -101,11 +101,6 @@
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <div>
-                <label for="nombreOnLeft">
-                    <input type="checkbox" class="isLeft" id="nombreOnLeft">ノンブルが左列（上図と逆）
-                </label>
-            </div>
             <input type="button" value="整形" id="exeButton">
             <div class="status"></div>
             <table class="formatResult">
@@ -152,10 +147,10 @@
             elem.innerHTML = s;
         }
 
-        function main(tokenizer, lines, nombreOnLeft, outputElem) {
+        function main(tokenizer, lines, outputElem) {
             showStatus("");
 
-            const grouped = Nayose.nayose(lines, nombreOnLeft);
+            const grouped = Nayose.nayose(lines);
             const tokenized = Reading.tokenizeLines(tokenizer, grouped).map(t => {
                 const r = new Entry(t.Reading).name;
                 return {
@@ -175,7 +170,6 @@
             const elem = document.querySelector(".ui");
             const outputTable = elem.querySelector("table.formatResult tbody");
             const lines = Util.getElemValueLines(".ui .inputLines");
-            const nombreOnLeft = elem.querySelector(".isLeft").checked;
             showStatus("（\u{1f914}よみがな計算中…）");
             outputTable.innerHTML = "";
             kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
@@ -183,7 +177,7 @@
                     showStatus("解析失敗…\nやり直してみてください！");
                 }
                 else {
-                    main(tokenizer, lines, nombreOnLeft, outputTable);
+                    main(tokenizer, lines, outputTable);
                 }
             });
         });

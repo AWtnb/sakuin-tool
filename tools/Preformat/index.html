@@ -65,29 +65,29 @@
             function formatIndexTemplate(lines) {
                 const stack = [];
                 lines.filter(x => x.trim()).forEach(line => {
-                    const [nombre, item, referTo, ...rest] = line.split("\t").map(x => x.trim());
+                    const [nombre, name, referTo, ...rest] = line.split("\t").map(x => x.trim());
                     const nStr = String(Util.toHalfWidth(nombre));
                     if (String(referTo).length > 0) {
                         stack.push({
                             "Nombre": "",
-                            "Item": `${item}\u3000→${referTo}`,
+                            "Name": `${name}\u3000→${referTo}`,
                         });
                         stack.push({
                             "Nombre": nStr,
-                            "Item": `${referTo}（${item}）`,
+                            "Name": `${referTo}（${name}）`,
                         });
                     }
                     else {
-                        if (String(item).length > 0) {
+                        if (String(name).length > 0) {
                             stack.push({
                                 "Nombre": nStr,
-                                "Item": item,
+                                "Name": name,
                             });
                         }
                     }
                 });
                 return stack.map(x => {
-                    return `<tr><td>${x.Item}</td><td>${x.Nombre}</td></tr>`;
+                    return `<tr><td>${x.Name}</td><td>${x.Nombre}</td></tr>`;
                 });
             }
 
