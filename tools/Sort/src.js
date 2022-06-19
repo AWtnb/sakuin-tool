@@ -1,8 +1,7 @@
 class SortIndex {
 
-    static fromTsv (tsv) {
-        const lines = Util.linesArray(tsv).filter(line => line);
-        return lines.map(line => {
+    static fromTsv (lines) {
+        return lines.filter(line => line.trim()).map(line => {
             const [item, reading, norm,  ...rest] = line.split("\t"); // 配列読み＝正規化＝normalized
             return {
                "Item": item,

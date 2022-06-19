@@ -104,7 +104,7 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.getElemValueLines(".ui .inputLines");
             const invalid = grepInvalidNombreLine(lines);
             if (invalid.length < 1) {
                 elem.querySelector(".result").innerHTML = "<p>\u{1F389}問題は見当たりません！</p>";

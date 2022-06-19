@@ -1,6 +1,6 @@
 class Util {
 
-    static linesArray(multiline) {
+    static getElemValueLines(selector) {
         /**
          * value of textarea never contains \r(carriage return)
          *
@@ -8,7 +8,7 @@ class Util {
          * - https://zzz.buzz/2017/12/21/javascript-traps-and-pitfalls-three-normalizations-of-textarea-elements-value/
          * - https://knooto.info/html-textarea-newline-character/
          */
-        return multiline.split(/\n/).map(line => String(line));
+        return document.querySelector(selector).value.split(/\n/).map(line => String(line));
     }
 
     static toHalfWidth(str) {

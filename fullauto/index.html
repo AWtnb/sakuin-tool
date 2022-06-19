@@ -175,7 +175,7 @@
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const outputTable = elem.querySelector("table.formatResult tbody");
-            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.getElemValueLines(".ui .inputLines");
             const nombreOnLeft = elem.querySelector(".isLeft").checked;
             showStatus("（\u{1f914}よみがな計算中…）");
             outputTable.innerHTML = "";

@@ -73,7 +73,7 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.getElemValueLines(".ui .inputLines");
             elem.querySelector(".result").value = completeChildItem(lines).join("\n");
         });
 

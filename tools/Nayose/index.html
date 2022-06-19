@@ -93,7 +93,7 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.getElemValueLines(".ui .inputLines");
             const nayosed = (elem.querySelector(".isOrdered").checked) ?
                 Nayose.nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
                 Nayose.nayose(lines, elem.querySelector(".isLeft").checked);

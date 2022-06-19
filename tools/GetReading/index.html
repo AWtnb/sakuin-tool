@@ -63,7 +63,7 @@
         document.querySelector("#exeButton").addEventListener("click", () => {
             showMessage("（\u{1f914}よみがな計算中…）");
             const elem = document.querySelector(".ui");
-            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.getElemValueLines(".ui .inputLines");
             const removeNombre = elem.querySelector(".removeFlag").checked;
             const outputArea = elem.querySelector(".result")
             kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {

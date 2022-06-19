@@ -52,7 +52,7 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.getElemValueLines(".ui .inputLines");
             const outputTable = elem.querySelector("table.result tbody");
             outputTable.innerHTML = "";
             const markup = CheckChild.findPossibles(lines, elem.querySelector("form.searchPos").pos.value);

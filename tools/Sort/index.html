@@ -67,12 +67,10 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const multiLine = elem.querySelector(".inputLines").value;
-
             const outputTable = elem.querySelector("table.result tbody");
             outputTable.innerHTML = "";
 
-            const parsed = SortIndex.fromTsv(multiLine);
+            const parsed = SortIndex.fromTsv(Util.getElemValueLines(".ui .inputLines"));
             outputTable.innerHTML = "";
             outputTable.innerHTML = SortIndex.sortByReading(parsed).map(x => {
                 return `<tr><td>${x.Item}</td><td>${x.Reading}</td><td>${x.Norm}</td></tr>`;

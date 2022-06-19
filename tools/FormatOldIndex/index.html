@@ -117,7 +117,7 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.linesArray(elem.querySelector(".inputLines").value);
+            const lines = Util.getElemValueLines(".ui .inputLines");
 
             const formatted = lines.map(line => String(line).trimEnd().replace(/\t/, "　　")).map(line => {
                 const fmt = new IndexLine(line).executeFormat();
