@@ -59,6 +59,50 @@ class Util {
 
 class Entry {
 
+    constructor(s) {
+        this.rawStr = s;
+        this.name = ""; // 項目名
+        this.basename = ""; // 項目名から括弧を除いた部分（見よ項目の場合は「見よ元」部分）
+        this.nombre = ""; // ノンブルの集合部分
+        this.referredFrom = []; // カッコ内に付記された「見よ元」情報
+        this.referTo = ""; // 見よ先
+        this.isReference = false; // 見よ項目かどうか
+        this.isChild = false; // 子項目かどうか
+    }
+
+    parse(separator = "\u3000\u3000") {
+        const elems = this.rawStr.split(separator).filter(Boolean).map(x => String(x));
+        if (elems.length >= 2) {
+            if (elems.length > 2) {
+                this.name = elems.slice(0,-1).join(separator);
+                this.nombre = elems.slice(-1)[0];
+            }
+            else {
+                this.name = elems[0];
+                this.nombre = elems[1];
+            }
+            this.basename = Entry.trimTrailingParen(this.name);
+            this.referredFrom = Entry.parseParen(this.name);
+            this.isChild = Entry.isIndented(this.name);
+            return this;
+        }
+        if (elems[0]) {
+            this.name = elems[0];
+            this.basename = Entry.trimTrailingParen(this.name);
+            this.referredFrom = Entry.parseParen(this.name);
+            this.isChild = Entry.isIndented(this.name);
+            const refElems = this.name.split("→").map(x => String(x).trim()).filter(Boolean);
+            if (refElems.length > 1) {
+                this.isReference = true;
+                this.referTo = refElems.slice(-1)[0];
+                this.basename = refElems[0];
+            }
+            return this;
+        }
+        return this;
+    }
+
+
     static parseParen(s) {
         const inner = s.replace(/^.*[\uff08\u0028\uff3b\u005b](.+?)[\uff09\u0029\uff3d\u005d]$/, "$1");
         if (inner == s) {
@@ -73,55 +117,6 @@ class Entry {
 
     static isIndented(s) {
         return s.trimStart() != s;
-    }
-
-    static parse(s, separator = "\u3000\u3000") {
-        /**
-         * split index entry to name and nombre
-         */
-        let info = {
-            "name": "",
-            "basename": "",
-            "nombre": "",
-            "referredFrom": [],
-            "referTo": "",
-            "isReference": false,
-            "isChild": false
-        }
-        const elems = s.split(separator).filter(Boolean).map(x => String(x));
-        if (elems.length > 2) {
-            const nm = elems.slice(0,-1).join(separator);
-            info.name = nm;
-            info.basename = Entry.trimTrailingParen(nm);
-            info.nombre = elems.slice(-1)[0];
-            info.referredFrom = Entry.parseParen(nm);
-            info.isChild = Entry.isIndented(nm);
-            return info;
-        }
-        if (elems.length == 2) {
-            const nm = elems[0];
-            info.name = nm;
-            info.basename = Entry.trimTrailingParen(nm);
-            info.nombre = elems[1];
-            info.referredFrom = Entry.parseParen(nm);
-            info.isChild = Entry.isIndented(nm);
-            return info;
-        }
-        if (elems[0]) {
-            const nm = elems[0];
-            info.name = nm;
-            info.basename = Entry.trimTrailingParen(nm);
-            info.isChild = Entry.isIndented(nm);
-            info.referredFrom = Entry.parseParen(nm);
-            const refs = nm.split("→").map(x => String(x).trim()).filter(Boolean);
-            if (refs.length > 1) {
-                info.referTo = refs.slice(-1)[0];
-                info.basename = refs[0];
-                info.isReference = true;
-            }
-            return info;
-        }
-        return info;
     }
 
 }
