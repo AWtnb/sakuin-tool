@@ -75,7 +75,7 @@ class Entry {
         return s.trimStart() != s;
     }
 
-    static parse(s, separator = "　　") {
+    static parse(s, separator = "\u3000\u3000") {
         /**
          * split index entry to name and nombre
          */
