@@ -54,15 +54,9 @@
             const elem = document.querySelector(".ui");
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
             const outputTable = elem.querySelector("table.result tbody");
-            Util.resetTable(outputTable);
-            const markup = CheckChild.findPossibleChildItems(lines, elem.querySelector("form.searchPos").pos.value);
-            markup.forEach(r => {
-                const row = outputTable.insertRow(-1);
-                const cell1 = row.insertCell(0);
-                const cell2 = row.insertCell(1);
-                cell1.innerHTML = r.Found;
-                cell2.innerHTML = r.Markup;
-            });
+            outputTable.innerHTML = "";
+            const markup = CheckChild.findPossibles(lines, elem.querySelector("form.searchPos").pos.value);
+            outputTable.innerHTML = markup.join("\n");
         });
 
         document.querySelector("#printButton").addEventListener("click", () => {

@@ -1,3 +1,19 @@
+class ChildEntry {
+    constructor(s) {
+        this.text = s;
+    }
+    markupHead(target) {
+        if (this.text.startsWith(target)) {
+            this.text = `<span class="match">${target}</span>` + this.text.slice(target.length);
+        }
+    }
+    markupTail(target) {
+        if (this.text.endsWith(target)) {
+            this.text = this.text.slice(0, 0 - target.length) + `<span class="match">${target}</span>`;
+        }
+    }
+}
+
 class CheckChild {
 
     static getMainEntries(lines) {
@@ -14,50 +30,33 @@ class CheckChild {
         }).filter(Boolean);
     }
 
-    static markupHead(line, search) {
-        if (line.startsWith(search)) {
-            return `<span class="match">${search}</span>` + line.slice(search.length);
-        }
-        return line;
-    }
-
-    static markupTail(line, search) {
-        if (line.endsWith(search)) {
-            return line.slice(0, 0 - search.length) + `<span class="match">${search}</span>`;
-        }
-        return line;
-    }
-
-    static findPossibleChildItems(lines, mode = "tail") {
-        const params = {
-            "head": {"markupHead": true, "markupTail": false},
-            "tail": {"markupHead": false, "markupTail": true},
-            "all": {"markupHead": true, "markupTail": true}
-        }[mode];
+    static findPossibles(lines, mode = "tail") {
         const mainEntries = CheckChild.getMainEntries(lines);
         return mainEntries.map(entry => {
             const search = entry.basename;
             const possibles = mainEntries.filter(entry => entry.basename != search).map(entry => {
-                let markup = entry.basename;
-                if (params.markupHead) {
-                    markup = CheckChild.markupHead(markup, search);
+                const markup = new ChildEntry(entry.basename);
+                if (mode == "all" || mode == "head") {
+                    markup.markupHead(search);
                 }
-                if (params.markupTail) {
-                    markup = CheckChild.markupTail(markup, search);
+                if (mode == "all" || mode == "tail") {
+                    markup.markupTail(search);
                 }
                 return {
-                    "Markup": markup + entry.subInfo,
-                    "Changed": entry.basename != markup
+                    "Markup": markup.text + entry.subInfo,
+                    "Changed": entry.basename != markup.text
                 }
             }).filter(x => x.Changed);
-            if (possibles.length > 0) {
-                return {
-                    "Found": search,
-                    "Markup": possibles.map(p => `・${p.Markup}`).join("<br>")
-                }
+            return {
+                "Found": entry.name,
+                "Possibles": possibles
             }
-            return null;
-        }).filter(Boolean).sort((a, b) => b.Found.length - a.Found.length);
+        }).filter(x => {
+            return x.Possibles.length > 0
+        }).sort((a, b) => b.Found.length - a.Found.length).map(x => {
+            const detail = x.Possibles.map(p => "・" + p.Markup).join("<br>");
+            return `<tr><td>${x.Found}</td><td>${detail}</td></tr>`;
+        });
     }
 
 }
