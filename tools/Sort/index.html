@@ -70,19 +70,13 @@
             const multiLine = elem.querySelector(".inputLines").value;
 
             const outputTable = elem.querySelector("table.result tbody");
-            Util.resetTable(outputTable)
+            outputTable.innerHTML = "";
 
             const parsed = SortIndex.fromTsv(multiLine);
-
-            SortIndex.sortByReading(parsed).forEach(obj => {
-                const row = outputTable.insertRow(-1);
-                const cell1 = row.insertCell(0);
-                const cell2 = row.insertCell(1);
-                const cell3 = row.insertCell(2);
-                cell1.innerHTML = obj.Item;
-                cell2.innerHTML = obj.Reading;
-                cell3.innerHTML = obj.Norm;
-            });
+            outputTable.innerHTML = "";
+            outputTable.innerHTML = SortIndex.sortByReading(parsed).map(x => {
+                return `<tr><td>${x.Item}</td><td>${x.Reading}</td><td>${x.Norm}</td></tr>`;
+            }).join("\n");
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {
