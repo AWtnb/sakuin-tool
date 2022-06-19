@@ -78,19 +78,19 @@ class Entry {
     parse() {
         if (this.elems.length >= 2) {
             if (this.elems.length > 2) {
-                this.name = this.elems.slice(0,-1).join(this.separator);
-                this.address = this.elems.slice(-1)[0];
+                this.name = this.elems.slice(0,-1).join(this.separator).trimEnd();
+                this.address = this.elems.slice(-1)[0].trim();
             }
             else {
-                this.name = this.elems[0];
-                this.address = this.elems[1];
+                this.name = this.elems[0].trimEnd();
+                this.address = this.elems[1].trim();
             }
             this.basename = Entry.trimTrailingParen(this.name);
             this.referredFrom = Entry.parseParen(this.name);
             this.isChild = Entry.isIndented(this.name);
         }
         if (this.elems[0]) {
-            this.name = this.elems[0];
+            this.name = this.elems[0].trimEnd();
             this.basename = Entry.trimTrailingParen(this.name);
             this.referredFrom = Entry.parseParen(this.name);
             this.isChild = Entry.isIndented(this.name);
