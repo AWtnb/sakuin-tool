@@ -58,25 +58,46 @@
 
         <!-- ============================== -->
         <script type="text/javascript" src="../util.js" defer></script>
-        <script type="text/javascript" src="./src.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
 
         <script>
+
+            function formatIndexTemplate(lines) {
+                const stack = [];
+                lines.filter(x => x.trim()).forEach(line => {
+                    const [nombre, item, referTo, ...rest] = line.split("\t").map(x => x.trim());
+                    const nStr = String(Util.toHalfWidth(nombre));
+                    if (String(referTo).length > 0) {
+                        stack.push({
+                            "Nombre": "",
+                            "Item": `${item}\u3000→${referTo}`,
+                        });
+                        stack.push({
+                            "Nombre": nStr,
+                            "Item": `${referTo}（${item}）`,
+                        });
+                    }
+                    else {
+                        if (String(item).length > 0) {
+                            stack.push({
+                                "Nombre": nStr,
+                                "Item": item,
+                            });
+                        }
+                    }
+                });
+                return stack.map(x => {
+                    return `<tr><td>${x.Item}</td><td>${x.Nombre}</td></tr>`;
+                });
+            }
 
             document.querySelector("#exeButton").addEventListener("click", () => {
                 const elem = document.querySelector(".ui");
                 const lines = Util.linesArray(elem.querySelector(".inputLines").value);
 
                 const outputTable = elem.querySelector("table.result tbody");
-                Util.resetTable(outputTable);
-
-                IndexTemplate.format(lines).forEach((line, idx) => {
-                    const row = outputTable.insertRow(-1);
-                    const cell1 = row.insertCell(0);
-                    const cell2 = row.insertCell(1);
-                    cell1.innerHTML = line.Item;
-                    cell2.innerHTML = line.Nombre;
-                });
+                outputTable.innerHTML = "";
+                outputTable.innerHTML = formatIndexTemplate(lines).join("\n");
             });
 
             document.querySelector("#copyButton").addEventListener("click", () => {
