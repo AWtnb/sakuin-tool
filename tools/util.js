@@ -59,8 +59,10 @@ class Util {
 
 class Entry {
 
-    constructor(s) {
+    constructor(s, separator = "\u3000\u3000") {
         this.rawStr = s;
+        this.elems = this.rawStr.split(this.separator).filter(Boolean).map(x => String(x));
+
         this.name = ""; // 項目名
         this.basename = ""; // 項目名から括弧を除いた部分（見よ項目の場合は「見よ元」部分）
         this.nombre = ""; // ノンブルの集合部分
@@ -68,26 +70,26 @@ class Entry {
         this.referTo = ""; // 見よ先
         this.isReference = false; // 見よ項目かどうか
         this.isChild = false; // 子項目かどうか
+
+        this.parse();
     }
 
-    parse(separator = "\u3000\u3000") {
-        const elems = this.rawStr.split(separator).filter(Boolean).map(x => String(x));
-        if (elems.length >= 2) {
-            if (elems.length > 2) {
-                this.name = elems.slice(0,-1).join(separator);
-                this.nombre = elems.slice(-1)[0];
+    parse() {
+        if (this.elems.length >= 2) {
+            if (this.elems.length > 2) {
+                this.name = this.elems.slice(0,-1).join(this.separator);
+                this.nombre = this.elems.slice(-1)[0];
             }
             else {
-                this.name = elems[0];
-                this.nombre = elems[1];
+                this.name = this.elems[0];
+                this.nombre = this.elems[1];
             }
             this.basename = Entry.trimTrailingParen(this.name);
             this.referredFrom = Entry.parseParen(this.name);
             this.isChild = Entry.isIndented(this.name);
-            return this;
         }
-        if (elems[0]) {
-            this.name = elems[0];
+        if (this.elems[0]) {
+            this.name = this.elems[0];
             this.basename = Entry.trimTrailingParen(this.name);
             this.referredFrom = Entry.parseParen(this.name);
             this.isChild = Entry.isIndented(this.name);
@@ -97,9 +99,7 @@ class Entry {
                 this.referTo = refElems.slice(-1)[0];
                 this.basename = refElems[0];
             }
-            return this;
         }
-        return this;
     }
 
 
