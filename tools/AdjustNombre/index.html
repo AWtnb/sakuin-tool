@@ -99,7 +99,6 @@
     </div>
     <!-- ============================== -->
     <script type="text/javascript" src="../util.js" defer></script>
-    <script type="text/javascript" src="../nombre.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
@@ -128,9 +127,9 @@
                     nombreInfo.entryName = entry.name;
                     return nombreInfo;
                 }
-                const origin = new Nombre(entry.address);
+                const origin = new Address(entry.address);
                 const adjustedNombres = origin.RawElements.map(n => {
-                    const parsed = Nombre.parse(n);
+                    const parsed = Address.parse(n);
                     if (parsed.length > 1) {
                         return adjustNombre(parsed[0], start, end, delta)
                             + "\u2013"

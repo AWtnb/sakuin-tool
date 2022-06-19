@@ -54,7 +54,6 @@
     </div>
     <!-- ============================== -->
     <script type="text/javascript" src="../util.js" defer></script>
-    <script type="text/javascript" src="../nombre.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
@@ -88,7 +87,7 @@
             return lines.filter(x => String(x).trim()).map(line => {
                 let s = line;
                 const entry = new Entry(line);
-                const parsed = new Nombre(entry.address).Parsed;
+                const parsed = new Address(entry.address).ParsedNombres;
                 if (unSorted(parsed)) {
                     s = s + '<span class="info unsorted">←順番</span>';
                 }

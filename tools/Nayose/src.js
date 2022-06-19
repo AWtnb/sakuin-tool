@@ -31,7 +31,7 @@ class Nayose {
         });
         const ret = [];
         map.forEach((nombres, item) => {
-            const parsed = new Nombre(nombres);
+            const parsed = new Address(nombres);
             ret.push((item + "　　" + parsed.format()).trim());
         });
         return ret;
@@ -63,7 +63,7 @@ class Nayose {
         }
 
         return stack.map(pair => {
-            const parsed = new Nombre(pair.Nombres);
+            const parsed = new Address(pair.Nombres);
             return (pair.Item + "　　" + parsed.format()).trim();
         });
 
