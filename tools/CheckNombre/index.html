@@ -87,7 +87,7 @@
         function grepInvalidNombreLine(lines) {
             return lines.filter(x => String(x).trim()).map(line => {
                 let s = line;
-                const entry = Entry.parse(line);
+                const entry = new Entry(line).parse();
                 const parsed = new Nombre(entry.nombre).Parsed;
                 if (unSorted(parsed)) {
                     s = s + '<span class="info unsorted">←順番</span>';

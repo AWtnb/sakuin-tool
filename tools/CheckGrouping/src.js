@@ -1,7 +1,7 @@
 class GroupingChecker {
 
     constructor(lines) {
-        this.entries = lines.filter(x => String(x).trim()).map(line => Entry.parse(line));
+        this.entries = lines.filter(x => String(x).trim()).map(line => new Entry(line).parse());
         this.refs = this.entries.filter(entry => entry.isReference);
         this.nonRefs = this.entries.filter(entry => !entry.isReference);
         this.nonReferred = this.entries.filter(entry => entry.referredFrom.length < 1);

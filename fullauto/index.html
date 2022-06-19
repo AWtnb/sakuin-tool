@@ -158,7 +158,7 @@
 
             const grouped = Nayose.nayose(lines, nombreOnLeft);
             const tokenized = Reading.tokenizeLines(tokenizer, grouped).map(t => {
-                const r = Entry.parse(t.Reading).name;
+                const r = new Entry(t.Reading).parse().name;
                 return {
                     "Item": t.Item,
                     "Reading": r,
