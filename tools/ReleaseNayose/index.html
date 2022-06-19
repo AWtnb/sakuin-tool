@@ -69,7 +69,7 @@
                         });
                     }
                     else {
-                        new Address(entry.address).ParsedNombres.forEach(nombre => {
+                        new EntryAddress(entry.address).nombres.forEach(nombre => {
                             stack.push({
                                 "Name": entry.name,
                                 "Nombre": nombre.display.text

@@ -127,9 +127,9 @@
                     nombreInfo.entryName = entry.name;
                     return nombreInfo;
                 }
-                const origin = new Address(entry.address);
-                const adjustedNombres = origin.RawElements.map(n => {
-                    const parsed = Address.parse(n);
+                const origin = new EntryAddress(entry.address);
+                const adjustedNombres = origin.rawElements.map(n => {
+                    const parsed = new EntryAddress(n).nombres;
                     if (parsed.length > 1) {
                         return adjustNombre(parsed[0], start, end, delta)
                             + "\u2013"
@@ -138,9 +138,9 @@
                     return adjustNombre(parsed[0], start, end, delta);
                 });
                 nombreInfo.entryName = entry.name;
-                nombreInfo.nombres.origin = origin.RawElements;
+                nombreInfo.nombres.origin = origin.rawElements;
                 nombreInfo.nombres.adjusted = adjustedNombres;
-                nombreInfo.changed = origin.RawElements.join("").replace(/[^\d]/g, "") != adjustedNombres.join("").replace(/[^\d]/g, "");
+                nombreInfo.changed = origin.rawElements.join("").replace(/[^\d]/g, "") != adjustedNombres.join("").replace(/[^\d]/g, "");
                 return nombreInfo;
             });
         }

@@ -57,23 +57,23 @@
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
-        function unSorted(parsedNombres) {
-            for (let i = 0; i < parsedNombres.length - 1; i++) {
-                if (parsedNombres[i].intValue >= parsedNombres[i + 1].intValue) {
+        function unSorted(nombres) {
+            for (let i = 0; i < nombres.length - 1; i++) {
+                if (nombres[i].intValue >= nombres[i + 1].intValue) {
                     return true;
                 }
             }
             return false;
         }
 
-        function needHyphenate(parsedNombres) {
-            if (parsedNombres.length < 3) {
+        function needHyphenate(nombres) {
+            if (nombres.length < 3) {
                 return false;
             }
-            for (let i = 0; i < parsedNombres.length - 2; i++) {
-                const current = parsedNombres[i];
-                const next1 = parsedNombres[i + 1];
-                const next2 = parsedNombres[i + 2];
+            for (let i = 0; i < nombres.length - 2; i++) {
+                const current = nombres[i];
+                const next1 = nombres[i + 1];
+                const next2 = nombres[i + 2];
                 if (current.intValue + 1 == next1.intValue && current.intValue + 2 == next2.intValue) {
                     if (!next1.hyphenated) {
                         return true;
@@ -87,7 +87,7 @@
             return lines.filter(x => String(x).trim()).map(line => {
                 let s = line;
                 const entry = new Entry(line);
-                const parsed = new Address(entry.address).ParsedNombres;
+                const parsed = new EntryAddress(entry.address).nombres;
                 if (unSorted(parsed)) {
                     s = s + '<span class="info unsorted">←順番</span>';
                 }

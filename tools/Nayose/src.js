@@ -1,10 +1,10 @@
 class Nayose {
 
     static parseLine(s, addressOnLeft = false) {
-        const elems = s.split("\t").slice(0, 2).map(x => String(x).trim());
+        const elems = s.split("\t").slice(0, 2);
         if (elems.length < 2) {
             return {
-                "Item": String(elems[0]),
+                "Item": String(elems[0]).trimEnd(),
                 "Address": ""
             };
         }
@@ -12,8 +12,8 @@ class Nayose {
             elems.reverse()
         }
         return {
-            "Item": String(elems[0]),
-            "Address": String(elems[1])
+            "Item": String(elems[0]).trimEnd(),
+            "Address": String(elems[1]).trim()
         };
     }
 
@@ -22,8 +22,8 @@ class Nayose {
         lines.filter(x => x.trim()).forEach(line => {
             const l = Nayose.parseLine(line, addressOnLeft);
             if (map.has(l.Item)) {
-                const conc = map.get(l.Item) + ", " + l.Address;
-                map.set(l.Item, conc);
+                const concAddress = map.get(l.Item) + ", " + l.Address;
+                map.set(l.Item, concAddress);
             }
             else {
                 map.set(l.Item, l.Address);
@@ -31,8 +31,8 @@ class Nayose {
         });
         const ret = [];
         map.forEach((addess, item) => {
-            const parsed = new Address(addess);
-            ret.push((item + "　　" + parsed.format()).trim());
+            const parsed = new EntryAddress(addess);
+            ret.push((item + "\u3000\u3000" + parsed.formatAll()).trimEnd());
         });
         return ret;
     }
@@ -51,8 +51,8 @@ class Nayose {
             }
             const lastIdx = stack.length - 1;
             if (l.Item == (stack[lastIdx]).Item) {
-                const conc = (stack[lastIdx]).Address + ", " + l.Address;
-                (stack[lastIdx]).Address = conc;
+                const concAddress = (stack[lastIdx]).Address + ", " + l.Address;
+                (stack[lastIdx]).Address = concAddress;
             }
             else {
                 stack.push({
@@ -63,8 +63,8 @@ class Nayose {
         }
 
         return stack.map(pair => {
-            const parsed = new Address(pair.Address);
-            return (pair.Item + "　　" + parsed.format()).trim();
+            const parsed = new EntryAddress(pair.Address);
+            return (pair.Item + "\u3000\u3000" + parsed.formatAll()).trimEnd();
         });
 
     }
