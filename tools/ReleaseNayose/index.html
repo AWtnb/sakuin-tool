@@ -59,46 +59,39 @@
     <script src="https://cdn.jsdelivr.net/npm/ie-buster@1.1.0/dist/ie-buster.min.js"></script>
     <script>
 
-        function releaseNayoseLines(lines) {
-            const releasedObj = [];
-            lines.filter(line => line.trim())
-                .map(line => line.replace("\t", "　　"))
-                .forEach(line => {
+        function releaseGrouping(lines) {
+            const stack = [];
+            lines.filter(line => line.trim()).map(line => line.replace("\t", "\u3000\u3000")).forEach(line => {
                     const entry = Entry.parse(line);
                     if (entry.isReference) {
-                        releasedObj.push({
-                            "name": entry.name,
-                            "nombre": ""
+                        stack.push({
+                            "Name": entry.name,
+                            "Nombre": ""
                         });
                     }
                     else {
                         new Nombre(entry.nombre).Parsed.forEach(nombre => {
-                            releasedObj.push({
-                                "name": entry.name,
-                                "nombre": nombre.display.text
+                            stack.push({
+                                "Name": entry.name,
+                                "Nombre": nombre.display.text
                             });
                         });
                     }
                 });
-            return releasedObj;
+            return stack.map(x => {
+                return `<tr><td>${x.Name}</td><td>${x.Nombre}</td></tr>`;
+            });
         }
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
 
             const lines = Util.linesArray(elem.querySelector(".inputLines").value);
-            const releasedObj = releaseNayoseLines(lines);
 
             const outputTable = elem.querySelector(".result tbody");
-            Util.resetTable(outputTable);
+            outputTable.innerHTML = "";
+            outputTable.innerHTML = releaseGrouping(lines).join("\n");
 
-            for (let item in releasedObj) {
-                let row = outputTable.insertRow(-1);
-                let cell1 = row.insertCell(0);
-                let cell2 = row.insertCell(1);
-                cell1.innerHTML = releasedObj[item].name;
-                cell2.innerHTML = releasedObj[item].nombre;
-            }
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {
