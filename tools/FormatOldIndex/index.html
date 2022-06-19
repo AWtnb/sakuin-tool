@@ -97,12 +97,12 @@
                 this.formatSpace();
                 this.formatConnector();
                 const entry = new Entry(this.text);
-                if (entry.name && entry.nombre) {
+                if (entry.name && entry.address) {
                     const reg = new RegExp(IndexLine.barsPattern);
                     if (entry.isChild || entry.name.match(reg)) {
-                        return IndexLine.formatChild(entry.name) + "\u3000\u3000" + entry.nombre;
+                        return IndexLine.formatChild(entry.name) + "\u3000\u3000" + entry.address;
                     }
-                    return entry.name.trim() + "\u3000\u3000" + entry.nombre;
+                    return entry.name.trim() + "\u3000\u3000" + entry.address;
                 }
                 return this.text;
             }

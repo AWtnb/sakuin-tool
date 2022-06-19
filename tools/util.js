@@ -66,7 +66,7 @@ class Entry {
 
         this.name = ""; // 項目名
         this.basename = ""; // 項目名から括弧を除いた部分（見よ項目の場合は「見よ元」部分）
-        this.nombre = ""; // ノンブルの集合部分
+        this.address = ""; // ノンブルの集合部分
         this.referredFrom = []; // カッコ内に付記された「見よ元」情報
         this.referTo = ""; // 見よ先
         this.isReference = false; // 見よ項目かどうか
@@ -79,11 +79,11 @@ class Entry {
         if (this.elems.length >= 2) {
             if (this.elems.length > 2) {
                 this.name = this.elems.slice(0,-1).join(this.separator);
-                this.nombre = this.elems.slice(-1)[0];
+                this.address = this.elems.slice(-1)[0];
             }
             else {
                 this.name = this.elems[0];
-                this.nombre = this.elems[1];
+                this.address = this.elems[1];
             }
             this.basename = Entry.trimTrailingParen(this.name);
             this.referredFrom = Entry.parseParen(this.name);

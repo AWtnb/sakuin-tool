@@ -124,11 +124,11 @@
                     return nombreInfo;
                 }
                 const entry = new Entry(line);
-                if (!entry.nombre) {
+                if (!entry.address) {
                     nombreInfo.entryName = entry.name;
                     return nombreInfo;
                 }
-                const origin = new Nombre(entry.nombre);
+                const origin = new Nombre(entry.address);
                 const adjustedNombres = origin.RawElements.map(n => {
                     const parsed = Nombre.parse(n);
                     if (parsed.length > 1) {

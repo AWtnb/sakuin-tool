@@ -88,7 +88,7 @@
             return lines.filter(x => String(x).trim()).map(line => {
                 let s = line;
                 const entry = new Entry(line);
-                const parsed = new Nombre(entry.nombre).Parsed;
+                const parsed = new Nombre(entry.address).Parsed;
                 if (unSorted(parsed)) {
                     s = s + '<span class="info unsorted">←順番</span>';
                 }
