@@ -17,7 +17,8 @@ class Nayose {
         };
     }
 
-    static nayose (lines, addressOnLeft = false) {
+    static nayose (selector, addressOnLeft = false) {
+        const lines = Util.getElemValueLines(selector);
         const map = new Map()
         lines.filter(x => x.trim()).forEach(line => {
             const l = Nayose.parseLine(line, addressOnLeft);
@@ -37,7 +38,8 @@ class Nayose {
         return ret;
     }
 
-    static nayoseByOrder(lines, addressOnLeft = false) {
+    static nayoseByOrder(selector, addressOnLeft = false) {
+        const lines = Util.getElemValueLines(selector);
         const netArr = lines.filter(x => x.trim());
         const stack = [];
         for (let i = 0; i < netArr.length; i++) {

@@ -1,6 +1,7 @@
 class GroupingChecker {
 
-    constructor(lines) {
+    constructor(selector) {
+        const lines = Util.getElemValueLines(selector);
         this.entries = lines.filter(x => String(x).trim()).map(line => new Entry(line));
         this.refs = this.entries.filter(entry => entry.isReference);
         this.nonRefs = this.entries.filter(entry => !entry.isReference);

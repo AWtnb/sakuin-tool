@@ -113,12 +113,9 @@
 
         }
 
-
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
-            const lines = Util.getElemValueLines(".ui .inputLines");
-
-            const formatted = lines.map(line => String(line).trimEnd().replace(/\t/, "　　")).map(line => {
+        function formatOldIndex(selector) {
+            const lines = Util.getElemValueLines(selector);
+            return lines.map(line => String(line).trimEnd().replace(/\t/, "　　")).map(line => {
                 const fmt = new IndexLine(line).executeFormat();
                 return {
                     "Line": fmt,
@@ -126,6 +123,11 @@
                     "Modified": (fmt != line)
                 };
             });
+        }
+
+        document.querySelector("#exeButton").addEventListener("click", () => {
+            const elem = document.querySelector(".ui");
+            const formatted = formatOldIndex(".ui .inputLines");
             elem.querySelector(".result").value = formatted.map(x => x.Line).join("\n");
 
             const output = elem.querySelector(".diff");

@@ -82,7 +82,8 @@
             return false;
         }
 
-        function grepInvalidNombreLine(lines) {
+        function grepInvalidNombreLine(selector) {
+            const lines = Util.getElemValueLines(selector);
             return lines.filter(x => String(x).trim()).map(line => {
                 let s = line;
                 const entry = new Entry(line);
@@ -102,8 +103,7 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.getElemValueLines(".ui .inputLines");
-            const invalid = grepInvalidNombreLine(lines);
+            const invalid = grepInvalidNombreLine(".ui .inputLines");
             if (invalid.length < 1) {
                 elem.querySelector(".result").innerHTML = "<p>\u{1F389}問題は見当たりません！</p>";
             }

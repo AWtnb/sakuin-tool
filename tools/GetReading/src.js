@@ -24,3 +24,10 @@ class Reading {
         });
 }
 }
+
+function setReading(tokenizer, selector, outputArea, removeNombre) {
+    const lines = Util.getElemValueLines(selector);
+    const target = (removeNombre) ? lines.map(line => new Entry(line).name) : lines;
+    const t = Reading.tokenizeLines(tokenizer, target);
+    outputArea.value = t.map(x => x.Reading).join("\n");
+}

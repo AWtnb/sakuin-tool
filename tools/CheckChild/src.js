@@ -30,7 +30,8 @@ class CheckChild {
         }).filter(Boolean);
     }
 
-    static findPossibles(lines, mode = "tail") {
+    static findPossibles(selector, mode = "tail") {
+        const lines = Util.getElemValueLines(selector);
         const mainEntries = CheckChild.getMainEntries(lines);
         return mainEntries.map(entry => {
             const search = entry.basename;

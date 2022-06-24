@@ -71,7 +71,8 @@
     <script type="text/javascript" src="../common.js" defer></script>
     <script>
 
-        function generateTemplare(lines) {
+        function generateTemplare(selector) {
+            const lines = Util.getElemValueLines(selector);
             const templateArray = [];
             let idx = 0;
             lines.filter(line => line).forEach(line => {
@@ -91,10 +92,9 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.getElemValueLines(".ui .inputLines");
             const outputTable = elem.querySelector("table.result tbody");
             outputTable.innerHTML = "";
-            outputTable.innerHTML = generateTemplare(lines).join("\n")
+            outputTable.innerHTML = generateTemplare(".ui .inputLines").join("\n")
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

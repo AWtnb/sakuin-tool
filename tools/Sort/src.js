@@ -1,6 +1,7 @@
 class SortIndex {
 
-    static fromTsv (lines) {
+    static fromTsv (selector) {
+        const lines = Util.getElemValueLines(selector);
         return lines.filter(line => line.trim()).map(line => {
             const [item, reading, norm,  ...rest] = line.split("\t"); // 配列読み＝正規化＝normalized
             return {

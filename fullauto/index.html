@@ -146,10 +146,10 @@
             elem.innerHTML = s;
         }
 
-        function main(tokenizer, lines, outputElem) {
+        function main(tokenizer, selector, outputElem) {
             showStatus("");
 
-            const grouped = Nayose.nayose(lines);
+            const grouped = Nayose.nayose(selector);
             const tokenized = Reading.tokenizeLines(tokenizer, grouped).map(t => {
                 const r = new Entry(t.Reading).name;
                 return {
@@ -168,7 +168,6 @@
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const outputTable = elem.querySelector("table.formatResult tbody");
-            const lines = Util.getElemValueLines(".ui .inputLines");
             showStatus("（\u{1f914}よみがな計算中…）");
             outputTable.innerHTML = "";
             kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
@@ -176,7 +175,7 @@
                     showStatus("解析失敗…\nやり直してみてください！");
                 }
                 else {
-                    main(tokenizer, lines, outputTable);
+                    main(tokenizer, ".ui .inputLines", outputTable);
                 }
             });
         });

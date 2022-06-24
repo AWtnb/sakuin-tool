@@ -51,7 +51,8 @@
     <script>
 
 
-        function completeChildEntry(lines) {
+        function completeChildEntry(selector) {
+            const lines = Util.getElemValueLines(selector).filter(x => String(x).trim());
             const stack = [];
             const parentStack = [];
             stack.push(lines[0]);
@@ -72,8 +73,7 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.getElemValueLines(".ui .inputLines").filter(x => String(x).trim());
-            elem.querySelector(".result").value = completeChildEntry(lines).join("\n");
+            elem.querySelector(".result").value = completeChildEntry(".ui .inputLines").join("\n");
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

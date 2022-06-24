@@ -91,11 +91,10 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.getElemValueLines(".ui .inputLines");
-            const nayosed = (elem.querySelector(".isOrdered").checked) ?
-                Nayose.nayoseByOrder(lines, elem.querySelector(".isLeft").checked) :
-                Nayose.nayose(lines, elem.querySelector(".isLeft").checked);
-            elem.querySelector(".result").value = nayosed.join("\n");
+            const grouped = (elem.querySelector(".isOrdered").checked) ?
+                Nayose.nayoseByOrder(".ui .inputLines", elem.querySelector(".isLeft").checked) :
+                Nayose.nayose(".ui .inputLines", elem.querySelector(".isLeft").checked);
+            elem.querySelector(".result").value = grouped.join("\n");
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

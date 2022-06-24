@@ -61,7 +61,8 @@
 
         <script>
 
-            function formatIndexTemplate(lines) {
+            function formatIndexTemplate(selector) {
+                const lines = Util.getElemValueLines(selector);
                 const stack = [];
                 lines.filter(x => x.trim()).forEach(line => {
                     const [nombre, name, referTo, ...rest] = line.split("\t").map(x => x.trim());
@@ -73,7 +74,7 @@
                         });
                         stack.push({
                             "Nombre": nStr,
-                            "Name": `${referTo}（${name}）`,
+                            "Name": `${referTo}\uff08${name}\uff09`,
                         });
                     }
                     else {
@@ -92,11 +93,9 @@
 
             document.querySelector("#exeButton").addEventListener("click", () => {
                 const elem = document.querySelector(".ui");
-                const lines = Util.getElemValueLines(".ui .inputLines");
-
                 const outputTable = elem.querySelector("table.result tbody");
                 outputTable.innerHTML = "";
-                outputTable.innerHTML = formatIndexTemplate(lines).join("\n");
+                outputTable.innerHTML = formatIndexTemplate(".ui .inputLines").join("\n");
             });
 
             document.querySelector("#copyButton").addEventListener("click", () => {

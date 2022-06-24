@@ -1,6 +1,7 @@
 class ReferenceChecker {
 
-    constructor(lines) {
+    constructor(selector) {
+        const lines = Util.getElemValueLines(selector);
         this.entries = lines.filter(x => String(x).trim()).map(line => new Entry(line));
     }
 

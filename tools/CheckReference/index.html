@@ -81,8 +81,7 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const lines = Util.getElemValueLines(".ui .inputLines");
-            const checker = new ReferenceChecker(lines);
+            const checker = new ReferenceChecker(".ui .inputLines");
             const lostTo = checker.goalLostReference().map(item => ReferenceChecker.markup(item, "require-goal"));
             elem.querySelector(".result .lostTo .output").innerHTML = (lostTo.length > 0) ? lostTo.join("\n") : "<p>問題ありません！</p>";
             const lostFrom = checker.requiredFromReference().map(item => ReferenceChecker.markup(item, "require-reference"));

@@ -108,7 +108,8 @@
             return parsed.display.text;
         }
 
-        function adjustNombresLine(lines, start, end, delta) {
+        function adjustNombresLine(selector, start, end, delta) {
+            const lines = Util.getElemValueLines(selector);
             return lines.map(line => {
                 let nombreInfo = {
                     "entryName": "",
@@ -157,7 +158,7 @@
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const adjustedArray = adjustNombresLine(
-                Util.getElemValueLines(".ui .inputLines"),
+                ".ui .inputLines",
                 elem.querySelector(".startNombre").value,
                 elem.querySelector(".endNombre").value,
                 elem.querySelector(".nombreDelta").value
