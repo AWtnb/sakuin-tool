@@ -1,74 +1,70 @@
-class Nayose {
+class Grouper {
 
-    static parseLine(s, addressOnLeft = false) {
-        const elems = s.split("\t").slice(0, 2);
-        if (elems.length < 2) {
+    constructor(selector, addressOnLeft = false) {
+        this.linesParsed = Util.getElemValueLines(selector).filter(line => line.trim()).map(line => {
+            const elems = line.trim().split("\t").slice(0, 2);
+            if (elems.length < 2) {
+                return {
+                    "Item": String(elems[0]).trimEnd(),
+                    "Address": ""
+                };
+            }
+            if (addressOnLeft) {
+                elems.reverse()
+            }
             return {
                 "Item": String(elems[0]).trimEnd(),
-                "Address": ""
+                "Address": String(elems[1]).trim()
             };
-        }
-        if (addressOnLeft) {
-            elems.reverse()
-        }
-        return {
-            "Item": String(elems[0]).trimEnd(),
-            "Address": String(elems[1]).trim()
-        };
+        });
+        this.groupedLines = [];
     }
 
-    static nayose (selector, addressOnLeft = false) {
-        const lines = Util.getElemValueLines(selector);
+    group() {
         const map = new Map()
-        lines.filter(x => x.trim()).forEach(line => {
-            const l = Nayose.parseLine(line, addressOnLeft);
-            if (map.has(l.Item)) {
-                const concAddress = map.get(l.Item) + ", " + l.Address;
-                map.set(l.Item, concAddress);
+        this.linesParsed.forEach(lp => {
+            if (map.has(lp.Item)) {
+                const concAddress = map.get(lp.Item) + ", " + lp.Address;
+                map.set(lp.Item, concAddress);
             }
             else {
-                map.set(l.Item, l.Address);
+                map.set(lp.Item, lp.Address);
             }
         });
-        const ret = [];
         map.forEach((addess, item) => {
             const parsed = new EntryAddress(addess);
-            ret.push((item + "\u3000\u3000" + parsed.formatAll()).trimEnd());
+            this.groupedLines.push((item + "\u3000\u3000" + parsed.formatAll()).trimEnd());
         });
-        return ret;
     }
 
-    static nayoseByOrder(selector, addressOnLeft = false) {
-        const lines = Util.getElemValueLines(selector);
-        const netArr = lines.filter(x => x.trim());
+    groupByOrder() {
         const stack = [];
-        for (let i = 0; i < netArr.length; i++) {
-            const l = Nayose.parseLine(netArr[i], addressOnLeft);
+        for (let i = 0; i < this.linesParsed.length; i++) {
+            const lp = this.linesParsed[i];
             if (i == 0) {
                 stack.push({
-                    "Item": l.Item,
-                    "Address": l.Address
+                    "Item": lp.Item,
+                    "Address": lp.Address
                 });
                 continue;
             }
             const lastIdx = stack.length - 1;
-            if (l.Item == (stack[lastIdx]).Item) {
-                const concAddress = (stack[lastIdx]).Address + ", " + l.Address;
+            if (lp.Item == (stack[lastIdx]).Item) {
+                const concAddress = (stack[lastIdx]).Address + ", " + lp.Address;
                 (stack[lastIdx]).Address = concAddress;
             }
             else {
                 stack.push({
-                    "Item": l.Item,
-                    "Address": l.Address
+                    "Item": lp.Item,
+                    "Address": lp.Address
                 });
             }
         }
-
-        return stack.map(pair => {
+        this.groupedLines = stack.map(pair => {
             const parsed = new EntryAddress(pair.Address);
             return (pair.Item + "\u3000\u3000" + parsed.formatAll()).trimEnd();
         });
-
     }
+
 
 }
