@@ -149,8 +149,9 @@
         function main(tokenizer, selector, outputElem) {
             showStatus("");
 
-            const grouped = Nayose.nayose(selector);
-            const tokenized = Reading.tokenizeLines(tokenizer, grouped).map(t => {
+            const grouper = new Grouper(selector, false);
+            grouper.group();
+            const tokenized = Reading.tokenizeLines(tokenizer, grouper.groupedLines).map(t => {
                 const r = new Entry(t.Reading).name;
                 return {
                     "Item": t.Item,
