@@ -35,8 +35,8 @@ export class Util {
         alert("コピーしました！");
     }
 
-    static copyValue(elem) {
-        navigator.clipboard.writeText(String(elem.value).replace(/&amp;/g, "&"));
+    static copyValue(selector) {
+        navigator.clipboard.writeText(String(document.querySelector(selector).value).replace(/&amp;/g, "&"));
         alert("コピーしました！");
     }
 
