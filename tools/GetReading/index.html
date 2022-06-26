@@ -46,8 +46,14 @@
     <!-- ============================== -->
     <script src="./kuromoji.js"></script>
     <script type="module">
-        import {Util} from "../common.js";
-        import {Reading, setReading} from "./src.js";
+        import {Util, Entry} from "../common.js";
+        import {Reading} from "./src.js";
+
+        function setReading(tokenizer, inputSelector, outputSelector, removeNombre) {
+            const lines = Util.getElemValueLines(inputSelector);
+            const target = (removeNombre) ? lines.map(line => new Entry(line).name) : lines;
+            document.querySelector(outputSelector).value = new Reading(tokenizer).parseLines(target).map(x => x.reading).join("\n");
+        }
 
         function showMessage(s) {
             document.querySelector(".ui .result").value = s;
@@ -55,16 +61,13 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             showMessage("（\u{1f914}よみがな計算中…）");
-            const elem = document.querySelector(".ui");
-            const removeNombre = elem.querySelector(".removeFlag").checked;
-            const outputArea = elem.querySelector(".result")
             kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {
                 if (err) {
                     console.log(err);
                     showMessage("解析失敗…\nやり直してみてください！");
                 }
                 else {
-                    setReading(tokenizer, ".ui .inputLines", outputArea, removeNombre);
+                    setReading(tokenizer, ".ui .inputLines", ".ui .result", document.querySelector(".ui .removeFlag").checked);
                 }
             });
         });

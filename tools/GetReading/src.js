@@ -1,36 +1,32 @@
-import {Util, Entry} from "../common.js";
 
-export class Reading {
-    static getReading(token) {
+function getReading(tokens) {
+    return tokens.reduce((accum, token) => {
         console.log(token.surface_form, token.word_type, token.pos, token.reading);
         const surface = token.surface_form;
-        if (surface.match(/([a-zA-Z]|[ァ-ヴー・])+/g)) {
-            return surface;
+        if (surface.replace(/[a-zA-Zァ-ヴー・]/g, "").length < 1) {
+            return accum + surface;
         }
         if (token.pos == "記号") {
-            return surface;
+            return accum + surface;
         }
         if (token.word_type != "KNOWN") {
-            return token.surface_form;
+            return accum + token.surface_form;
         }
-        return token.reading;
-    }
+        return accum + token.reading;
+    }, "");
+}
 
-    static tokenizeLines(tokenizer, lines) {
+export class Reading {
+    constructor(tokenizer) {
+        this.tokenizer = tokenizer;
+    }
+    parseLines(lines) {
         return lines.map(line => {
-            const reading = tokenizer.tokenize(line).map( Reading.getReading ).join("");
+            const tokens = this.tokenizer.tokenize(line);
             return {
-                "Item": line,
-                "Reading": reading
+                "item": line,
+                "reading": getReading(tokens)
             }
         });
     }
-
-}
-
-export function setReading(tokenizer, selector, outputArea, removeNombre) {
-    const lines = Util.getElemValueLines(selector);
-    const target = (removeNombre) ? lines.map(line => new Entry(line).name) : lines;
-    const t = Reading.tokenizeLines(tokenizer, target);
-    outputArea.value = t.map(x => x.Reading).join("\n");
 }

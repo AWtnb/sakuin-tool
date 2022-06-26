@@ -150,16 +150,15 @@
             showStatus("");
 
             const grouper = new Grouper(selector, false);
-            const tokenized = Reading.tokenizeLines(tokenizer, grouper.getGroupedLines()).map(t => {
-                const r = new Entry(t.Reading).name;
+            const parsed = new Reading(tokenizer).parseLines(grouper.getGroupedLines()).map(parsed => {
+                const r = new Entry(parsed.reading).name;
                 return {
-                    "Item": t.Item,
+                    "Item": parsed.item,
                     "Reading": r,
                     "Norm": NormalizedReading.convert(r, true)
                 }
             });
-            const sorted = SortIndex.sortByReading(tokenized);
-            outputElem.innerHTML = sorted.map(x => {
+            outputElem.innerHTML = SortIndex.sortByReading(parsed).map(x => {
                 return `<tr><td>${x.Item}</td><td style="background:#aaa;">${x.Reading}</td><td style="background:#aaa;">${x.Norm}</td></tr>`;
             }).join("\n");
 
