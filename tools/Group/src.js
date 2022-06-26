@@ -1,4 +1,6 @@
-class Grouper {
+import {Util, EntryAddress} from "../common.js"
+
+export class Grouper {
 
     constructor(selector, addressOnLeft = false) {
         this.linesParsed = Util.getElemValueLines(selector).filter(line => line.trim()).map(line => {

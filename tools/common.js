@@ -1,4 +1,4 @@
-class Util {
+export class Util {
 
     static getElemValueLines(selector) {
         /**
@@ -57,7 +57,7 @@ class Util {
 }
 
 
-class Entry {
+export class Entry {
 
     constructor(s, separator = "\u3000\u3000") {
         this.rawStr = s;
@@ -123,7 +123,7 @@ class Entry {
 }
 
 
-class EntryAddress {
+export class EntryAddress {
 
     constructor(s) {
         const sanitized = EntryAddress.sanitize(s);
