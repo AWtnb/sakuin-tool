@@ -133,13 +133,13 @@
 
     </div>
     <!-- ============================== -->
-    <script type="text/javascript" src="../tools/common.js" defer></script>
     <script type="text/javascript" src="../tools/GetReading/kuromoji.js" defer></script>
-    <script type="text/javascript" src="../tools/GetReading/src.js" defer></script>
-    <script type="text/javascript" src="../tools/Hairetsu/src.js" defer></script>
-    <script type="text/javascript" src="../tools/Group/src.js" defer></script>
-    <script type="text/javascript" src="../tools/Sort/src.js" defer></script>
-    <script>
+    <script type="module">
+        import {Util, Entry} from "../tools/common.js";
+        import {Reading} from "../tools/GetReading/src.js";
+        import {NormalizedReading} from "../tools/Hairetsu/src.js";
+        import {Grouper} from "../tools/Group/src.js";
+        import {SortIndex} from "../tools/Sort/src.js";
 
         function showStatus(s) {
             const elem = document.querySelector(".status");
