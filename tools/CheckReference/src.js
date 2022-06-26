@@ -1,4 +1,6 @@
-class ReferenceChecker {
+import {Util, Entry} from "../common.js";
+
+export class ReferenceChecker {
 
     constructor(selector) {
         const lines = Util.getElemValueLines(selector);

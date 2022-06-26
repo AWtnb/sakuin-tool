@@ -1,3 +1,5 @@
+import {Util, Entry} from "../common.js";
+
 class ChildEntry {
     constructor(s) {
         this.text = s;
@@ -14,7 +16,7 @@ class ChildEntry {
     }
 }
 
-class CheckChild {
+export class CheckChild {
 
     static getMainEntries(lines) {
         return lines.filter(x => String(x).trim()).map(line => {

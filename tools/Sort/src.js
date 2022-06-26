@@ -1,4 +1,6 @@
-class SortIndex {
+import {Util} from "../common.js";
+
+export class SortIndex {
 
     static fromTsv (selector) {
         const lines = Util.getElemValueLines(selector);

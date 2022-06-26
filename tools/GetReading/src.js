@@ -1,4 +1,6 @@
-class Reading {
+import {Util, Entry} from "../common.js";
+
+export class Reading {
     static getReading(token) {
         console.log(token.surface_form, token.word_type, token.pos, token.reading);
         const surface = token.surface_form;
@@ -22,10 +24,11 @@ class Reading {
                 "Reading": reading
             }
         });
-}
+    }
+
 }
 
-function setReading(tokenizer, selector, outputArea, removeNombre) {
+export function setReading(tokenizer, selector, outputArea, removeNombre) {
     const lines = Util.getElemValueLines(selector);
     const target = (removeNombre) ? lines.map(line => new Entry(line).name) : lines;
     const t = Reading.tokenizeLines(tokenizer, target);

@@ -98,8 +98,8 @@
 
     </div>
     <!-- ============================== -->
-    <script type="text/javascript" src="../common.js" defer></script>
-    <script>
+    <script type="module">
+        import {Util, Entry, EntryAddress} from "../common.js";
 
         function adjustNombre(parsed, start, end, delta) {
             if (Number(start) <= parsed.intValue && parsed.intValue <= Number(end)) {
@@ -181,7 +181,7 @@
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyValue(document.querySelector(".ui textarea.result"));
+            Util.copyValue(".ui textarea.result");
         });
 
         document.querySelector("#printButton").addEventListener("click", () => {

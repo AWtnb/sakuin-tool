@@ -1,4 +1,6 @@
-class NormalizedReading {
+import {Util} from "../common.js";
+
+export class NormalizedReading {
     static convert (s, removeNoise) {
         const map = new Map();
         [
@@ -17,6 +19,6 @@ class NormalizedReading {
             const reg = new RegExp(k, "g");
             katakana = katakana.replace(reg, map.get(k));
         }
-        return (removeNoise)? katakana.replace(/[^ァ-ヴa-zA-Zａ-ｚＡ-Ｚ0-9０-９\r\n]/g, "") : katakana;
+        return (removeNoise)? katakana.replace(/[^ァ-ヴa-zA-Z\uff41-\uff5a\uff21-\uff3a0-9\uff10-\uff19\r\n]/g, "") : katakana;
 }
 }

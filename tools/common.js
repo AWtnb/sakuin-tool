@@ -17,7 +17,12 @@ export class Util {
         });
     }
 
-    static copyTable(tbody) {
+    static copyTable(selector) {
+        const tbody = document.querySelector(selector);
+        if (tbody.tagName != "TBODY") {
+            console.log("tbody is not selected!");
+            return;
+        }
         const lines = [];
         const maxRow = tbody.rows.length;
         for (let i = 0; i < maxRow; i++) {

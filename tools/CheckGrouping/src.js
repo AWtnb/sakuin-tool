@@ -1,4 +1,6 @@
-class GroupingChecker {
+import {Util, Entry} from "../common.js";
+
+export class GroupingChecker {
 
     constructor(selector) {
         const lines = Util.getElemValueLines(selector);

@@ -34,8 +34,8 @@
 <body>
     <div id="detail"></div>
     <script>
-        const SOURCE = window.opener.document.querySelector("#src-detail");
         window.onload = function () {
+            const SOURCE = window.opener.document.querySelector("#src-detail");
             const markup = Array.from(SOURCE.querySelectorAll(".wrap")).map(elm => {
                 return `<div class="wrap-check"><input type="checkbox"><div class="wrap-pair">${elm.innerHTML}</div></div>`;
             })

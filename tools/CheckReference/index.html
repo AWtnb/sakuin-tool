@@ -75,9 +75,8 @@
 
     </div>
     <!-- ============================== -->
-    <script type="text/javascript" src="../common.js" defer></script>
-    <script type="text/javascript" src="./src.js" defer></script>
-    <script>
+    <script type="module">
+        import {ReferenceChecker} from "./src.js";
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");

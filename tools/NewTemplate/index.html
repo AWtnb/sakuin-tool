@@ -68,8 +68,8 @@
 
     </div>
     <!-- ============================== -->
-    <script type="text/javascript" src="../common.js" defer></script>
-    <script>
+    <script type="module">
+        import {Util} from "../common.js";
 
         function generateTemplare(selector) {
             const lines = Util.getElemValueLines(selector);
@@ -98,8 +98,7 @@
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {
-            const table = document.querySelector("table.result tbody");
-            Util.copyTable(table);
+            Util.copyTable("table.result tbody");
         });
 
     </script>
