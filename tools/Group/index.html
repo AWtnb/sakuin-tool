@@ -92,13 +92,7 @@
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
             const grouper = new Grouper(".ui .inputLines", elem.querySelector(".isLeft").checked);
-            if (elem.querySelector(".isOrdered").checked) {
-                grouper.groupByOrder()
-            }
-             else {
-                grouper.group();
-            }
-            elem.querySelector(".result").value = grouper.groupedLines.join("\n");
+            elem.querySelector(".result").value = grouper.getGroupedLines(elem.querySelector(".isOrdered").checked).join("\n");
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

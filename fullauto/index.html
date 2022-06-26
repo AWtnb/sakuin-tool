@@ -150,8 +150,7 @@
             showStatus("");
 
             const grouper = new Grouper(selector, false);
-            grouper.group();
-            const tokenized = Reading.tokenizeLines(tokenizer, grouper.groupedLines).map(t => {
+            const tokenized = Reading.tokenizeLines(tokenizer, grouper.getGroupedLines()).map(t => {
                 const r = new Entry(t.Reading).name;
                 return {
                     "Item": t.Item,

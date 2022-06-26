@@ -66,5 +66,14 @@ class Grouper {
         });
     }
 
+    getGroupedLines(byOrder=false) {
+        if (byOrder) {
+            this.groupByOrder();
+        }
+        else {
+            this.group();
+        }
+        return this.groupedLines;
+    }
 
 }
