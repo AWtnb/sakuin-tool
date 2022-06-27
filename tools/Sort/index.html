@@ -6,7 +6,8 @@
     <title>並べ替え</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
 </head>
 
 <body>
@@ -15,30 +16,26 @@
 
         <h2>並べ替え</h2>
 
-        <div class="caption">
-            <div class="imagebox">
-                <div class="boxtitle">SAMPLE</div>
-                <img src="./image/img_sort.png">
-            </div>
-            <ul>
-                <li>上図のように<code>項目</code><code>読み</code><code>配列読み</code>の3列を Excel から貼り付けてください。</li>
-                <li>ソート基準：</li>
-                <li>
-                    <ul>
-                        <li>最優先は<code>配列読み</code>の情報。</li>
-                        <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
-                        <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
         <div class="ui">
-
             <textarea class="inputLines" placeholder="paste here!"></textarea>
             <input type="button" value="ソート" id="exeButton">
+        </div>
 
-            <table class="result">
+        <ul>
+            <li>下図のように<code>項目</code><code>読み</code><code>配列読み</code>の3列を Excel から貼り付けてください。</li>
+            <li>以下の基準で行をソートします。
+                <ul>
+                    <li>最優先は<code>配列読み</code>の情報。</li>
+                    <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+                    <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+                </ul>
+            </li>
+        </ul>
+
+
+
+        <div class="result-markup">
+            <table>
                 <thead>
                     <tr>
                         <th>項目</th>
@@ -46,11 +43,12 @@
                         <th>配列読み</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody><td></td><td></td><td></td></tbody>
             </table>
-            <input type="button" value="表をコピー" id="copyButton">
-
         </div>
+        <input type="button" value="表をコピー" id="copyButton">
+
+        <img src="./image/img_sort.png">
 
     </div>
     <!-- ============================== -->
@@ -61,8 +59,7 @@
         import {SortIndex} from "./src.js";
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
-            const outputTable = elem.querySelector("table.result tbody");
+            const outputTable = document.querySelector(".result-markup tbody");
             outputTable.innerHTML = "";
             const parsed = SortIndex.fromTsv(".ui .inputLines");
             outputTable.innerHTML = "";
@@ -72,7 +69,7 @@
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyTable("table.result tbody");
+            Util.copyTable(".result-markup tbody");
         });
 
     </script>

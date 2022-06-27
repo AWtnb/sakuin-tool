@@ -1,0 +1,40 @@
+body {
+    margin-bottom: 50vh;
+}
+
+img {
+    box-shadow: 1px 1px 5px 1px #ccc;
+    margin: 2rem auto;
+    display: block;
+    max-width: 90%;
+}
+
+img ~ em {
+    font-style: normal;
+    display: block;
+    line-height: 1.25;
+    text-align: center;
+    margin-top: -1em;
+    color: #333;
+}
+
+th, td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.ui {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.result-markup {
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.ui textarea {
+    min-width: 40%;
+    height: 180px;
+}

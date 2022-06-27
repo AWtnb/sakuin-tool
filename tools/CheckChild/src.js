@@ -6,12 +6,12 @@ class ChildEntry {
     }
     markupHead(target) {
         if (this.text.startsWith(target)) {
-            this.text = `<span class="match">${target}</span>` + this.text.slice(target.length);
+            this.text = `<mark>${target}</mark>` + this.text.slice(target.length);
         }
     }
     markupTail(target) {
         if (this.text.endsWith(target)) {
-            this.text = this.text.slice(0, 0 - target.length) + `<span class="match">${target}</span>`;
+            this.text = this.text.slice(0, 0 - target.length) + `<mark>${target}</mark>`;
         }
     }
 }

@@ -6,21 +6,8 @@
     <title>ノンブル並びの確認</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
-    <style>
-        .info {
-            font-weight: bold;
-            margin: 0 4px;
-        }
-
-        .unsorted {
-            color: red;
-        }
-
-        .needhyphen {
-            color: blue;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
 </head>
 
 <body>
@@ -28,27 +15,24 @@
     <div class="container">
 
         <h2>ノンブル並びの確認</h2>
-        <div class="caption">
-            <ul>
-                <li>チェック内容：</li>
-                <li>
-                    <ul>
-                        <li>ノンブルが正しく並んでいないもの</li>
-                        <li>3つ連続しているもの</li>
-                    </ul>
-                </li>
-                <li>カンマの全角半角は区別しません。</li>
-                <li>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</li>
-            </ul>
-        </div>
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
             <input type="button" value="チェック" id="exeButton">
-
-            <div class="result">
-            </div>
         </div>
+
+        <ul>
+            <li>チェック内容：
+                <ul>
+                    <li>ノンブルが正しく並んでいないもの</li>
+                    <li>3つ連続しているもの</li>
+                </ul>
+            </li>
+            <li>カンマの全角半角は区別しません。</li>
+            <li>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</li>
+        </ul>
+
+        <div class="result-markup"></div>
 
     </div>
     <!-- ============================== -->
@@ -56,59 +40,65 @@
         import {Util, Entry, EntryAddress, setNavi} from "../common.js";
         setNavi();
 
-        function unSorted(nombres) {
-            for (let i = 0; i < nombres.length - 1; i++) {
-                if (nombres[i].intValue >= nombres[i + 1].intValue) {
-                    return true;
-                }
+        class AddressChecker {
+            constructor(s) {
+                const entry = new Entry(s);
+                this.nombres = new EntryAddress(entry.address).nombres;
+                this.problems = [];
             }
-            return false;
-        }
 
-        function needHyphenate(nombres) {
-            if (nombres.length < 3) {
-                return false;
-            }
-            for (let i = 0; i < nombres.length - 2; i++) {
-                const current = nombres[i];
-                const next1 = nombres[i + 1];
-                const next2 = nombres[i + 2];
-                if (current.intValue + 1 == next1.intValue && current.intValue + 2 == next2.intValue) {
-                    if (!next1.hyphenated) {
-                        return true;
+            checkSort() {
+                if (this.nombres.length < 2) {
+                    return;
+                }
+                for (let i = 0; i < this.nombres.length - 1; i++) {
+                    if (this.nombres[i].intValue >= this.nombres[i + 1].intValue) {
+                        this.problems.push('<span style="color:red;"> 順番！</span>');
                     }
                 }
             }
-            return false;
+
+            checkHyphen() {
+                if (this.nombres.length < 3) {
+                    return;
+                }
+                for (let i = 0; i < this.nombres.length - 2; i++) {
+                    const current = this.nombres[i];
+                    const next1 = this.nombres[i + 1];
+                    const next2 = this.nombres[i + 2];
+                    if (current.intValue + 1 == next1.intValue && current.intValue + 2 == next2.intValue) {
+                        if (!next1.hyphenated) {
+                            this.problems.push('<span style="color:blue;"> 連続！</span>');
+                        }
+                    }
+                }
+            }
+
+            getProblems() {
+                return this.problems.join("");
+            }
         }
 
         function grepInvalidNombreLine(selector) {
             const lines = Util.getElemValueLines(selector);
             return lines.filter(x => String(x).trim()).map(line => {
-                let s = line;
-                const entry = new Entry(line);
-                const parsed = new EntryAddress(entry.address).nombres;
-                if (unSorted(parsed)) {
-                    s = s + '<span class="info unsorted">←順番</span>';
+                const checker = new AddressChecker(line);
+                checker.checkSort();
+                checker.checkHyphen();
+                if (checker.problems.length > 0) {
+                    return `<li><mark>${line}</mark>${checker.getProblems()}</li>`;
                 }
-                if (needHyphenate(parsed)) {
-                    s = s + '<span class="info needhyphen">←連続</span>';
-                }
-                return {
-                    "line": s,
-                    "invalid": (line != s)
-                }
-            }).filter(x => x.invalid).map(x => x.line);
+                return null;
+            }).filter(Boolean);
         }
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
             const invalid = grepInvalidNombreLine(".ui .inputLines");
             if (invalid.length < 1) {
-                elem.querySelector(".result").innerHTML = "<p>\u{1F389}問題は見当たりません！</p>";
+                document.querySelector(".result-markup").innerHTML = "<div>\u{1F389}問題は見当たりません！</div>";
             }
             else {
-                elem.querySelector(".result").innerHTML = `<p>${invalid.join("<br>")}</p>`;
+                document.querySelector(".result-markup").innerHTML = `<h3>修正の必要があります！</h3><ul>${invalid.join("")}</ul>`;
             }
         });
 

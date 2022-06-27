@@ -6,19 +6,9 @@
     <title>ノンブル加算減算</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
     <style>
-        table.adjuster {
-            margin: 0 10px;
-        }
-
-        table.adjuster {
-            overflow: unset;
-        }
-
-        table.adjuster td {
-            border: none;
-        }
 
         div.msg {
             font-size: .9rem;
@@ -57,43 +47,38 @@
     <div class="container">
 
         <h2>ノンブル加算減算</h2>
-        <div class="caption">
-            <ul>
-                <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
-                <li>ノンブル間のカンマは必ず半角になります。</li>
-            </ul>
-        </div>
 
         <div class="ui">
-            <table class="adjuster">
-                <tr>
-                    <td>開始ノンブル</td>
-                    <td><input type="number" value="1" min="1" class="startNombre"></td>
-                </tr>
-                <tr>
-                    <td>終了ノンブル</td>
-                    <td><input type="number" value="999" min="1" class="endNombre"></td>
-                </tr>
-                <tr>
-                    <td>増分</td>
-                    <td><input type="number" value="1" class="nombreDelta"></td>
-                </tr>
-            </table>
-
-            <div class="horizontal">
-                <div class="vertical">
-                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="計算" id="exeButton">
-                </div>
-                <div class="vertical">
-                    <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" id="copyButton">
-                </div>
-            </div>
-            <input type="button" value="チェックリストを印刷" id="printButton">
-            <div id="src-detail" class="result">
-            </div>
+            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="計算" id="exeButton">
         </div>
+
+        <ul class="config">
+            <li>
+                開始
+                <input type="number" value="1" min="1" class="startNombre">
+            </li>
+            <li>
+                終了
+                <input type="number" value="999" min="1" class="endNombre">
+            </li>
+            <li>
+                増分
+                <input type="number" value="1" class="nombreDelta">
+            </li>
+        </ul>
+
+        <div class="ui">
+            <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" id="copyButton">
+        </div>
+
+        <ul>
+            <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
+            <li>ノンブル間のカンマは必ず半角になります。</li>
+        </ul>
+        <input type="button" value="チェックリストを印刷" id="printButton">
+        <div id="src-detail" class="result-markup"></div>
 
     </div>
     <!-- ============================== -->
@@ -157,16 +142,15 @@
 
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
             const adjustedArray = adjustNombresLine(
                 ".ui .inputLines",
-                elem.querySelector(".startNombre").value,
-                elem.querySelector(".endNombre").value,
-                elem.querySelector(".nombreDelta").value
+                document.querySelector(".config .startNombre").value,
+                document.querySelector(".config .endNombre").value,
+                document.querySelector(".config .nombreDelta").value
             );
-            elem.querySelector("textarea.result").value = adjustedArray.map(l => {
+            document.querySelector(".ui textarea.result").value = adjustedArray.map(l => {
                 if (l.entryName) {
-                    return `${l.entryName}　　${l.nombres.adjusted.join(", ")}`.trimEnd();
+                    return `${l.entryName}\u3000\u3000${l.nombres.adjusted.join(", ")}`.trimEnd();
                 }
                 return "";
             }).join("\r\n");
@@ -178,7 +162,7 @@
                 });
                 markup = `<div class="msg">${modified.length}行の変更：</div>${diffs.join("")}`
             }
-            elem.querySelector("div.result").innerHTML = markup;
+            document.querySelector(".result-markup").innerHTML = markup;
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

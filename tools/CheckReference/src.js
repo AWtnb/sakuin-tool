@@ -8,10 +8,7 @@ export class ReferenceChecker {
     }
 
     goalLostReference() {
-        /**
-         * The reference item must be appended to the end of the referenced item in parentheses.
-         * Look for reference items where this relationship is not established correctly.
-         */
+        // 見よ項目があるのに参照先に括弧で付記されていないものを探す
         return this.entries.filter(entry => entry.isReference).map(entry => {
             return {
                 "text": entry.name,
@@ -25,18 +22,13 @@ export class ReferenceChecker {
             if (grep.length > 0) {
                 return null;
             }
-            return {
-                "text": line.text,
-                "require": `${line.referTo}（${line.refEntryName}）`
-            }
+            const require = `${line.referTo}\uff08${line.refEntryName}\uff09`;
+            return `<li><u>${line.text}</u><ul><li><mark>${require}</mark></li></ul></lii>`
         }).filter(Boolean);
     }
 
     requiredFromReference() {
-        /**
-         * In the parentheses of the referenced entry, there is information about the entry that refers to it.
-         * Find the referenced entry whose relationship is not properly established.
-         */
+        // 参照元として括弧書きされているのに見よ項目がないものを探す
         const refs = this.entries.filter(entry => entry.isReference);
         return this.entries.filter(entry => entry.referredFrom.length > 0).map(entry => {
             return {
@@ -52,18 +44,13 @@ export class ReferenceChecker {
             if (required.length < 1) {
                 return null;
             }
-            return {
-                "text": line.text,
-                "require": required.map(s => `${s}　→${line.basename}`).join("<br>")
-            };
+            const require = required.map(s => `<li><mark>${s}\u3000→${line.basename}</mark></li>`).join("");
+            return `<li><u>${line.text}</u><ul>${require}</ul></li>`
         }).filter(Boolean);
     }
 
-    static markup(item, className = "require-reference") {
-        return `<div class="detail"><span>${item.text}</span><span class="required ${className}">${item.require}</span></div>`
-    }
-
     findAdjacent() {
+        // 見よ項目と見よ先項目が隣接しているものを探す
         return this.entries.map((entry, idx) => {
             if (!entry.isReference) {
                 return null;
@@ -77,6 +64,14 @@ export class ReferenceChecker {
                 return entry;
             }
             return null;
-        }).filter(Boolean);
+        }).filter(Boolean).map(entry => `<u>${entry.name}</u>`);
     }
+
+    static showResult(arr) {
+        if (arr.length > 0) {
+            return arr.join("");
+        }
+        return "<li>問題ありません！</li>";
+    }
+
 }

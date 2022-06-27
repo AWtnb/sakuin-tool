@@ -6,7 +6,8 @@
     <title>読みがなの取得</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
 </head>
 
 <body>
@@ -15,30 +16,19 @@
 
         <h2>読みがなの取得</h2>
 
-        <div class="caption">
-            <ul>
-                <li>解析辞書を読み込むため少し時間がかかります。</li>
-                <li><code>心　理</code>のように項目内にスペースが含まれていると正しくよみがなを取得できません。</li>
-                <li>正しく読み情報が取得できているか必ず後から確認してください。</li>
-            </ul>
+        <div class="ui">
+            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="取得" id="exeButton">
+            <div>
+                <label for="removeFlag">
+                    <input type="checkbox" id="removeFlag">ノンブル部分の読みをスキップする
+                </label>
+            </div>
         </div>
 
         <div class="ui">
-            <div>
-                <label for="removeFlag">
-                    <input type="checkbox" class="removeFlag" id="removeFlag">ノンブル部分の読みをスキップする
-                </label>
-            </div>
-            <div class="horizontal">
-                <div class="vertical">
-                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="取得" id="exeButton">
-                </div>
-                <div class="vertical">
-                    <textarea id="scrollB" class="result" placeholder="ここに結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" id="copyButton">
-                </div>
-            </div>
+            <textarea id="scrollB" class="result" placeholder="ここに結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" id="copyButton">
         </div>
 
     </div>
@@ -69,7 +59,7 @@
                     showMessage("解析失敗…\nやり直してみてください！");
                 }
                 else {
-                    setReading(tokenizer, ".ui .inputLines", ".ui .result", document.querySelector(".ui .removeFlag").checked);
+                    setReading(tokenizer, ".ui .inputLines", ".ui .result", document.querySelector("#removeFlag").checked);
                 }
             });
         });

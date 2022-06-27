@@ -6,7 +6,8 @@
     <title>ローマ字に変換</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
 </head>
 
 <body>
@@ -14,36 +15,28 @@
     <div class="container">
 
         <h2>ローマ字に変換</h2>
-        <div class="caption">
-            <p>テキストボックスに入力された文字列（カタカナ／ひらがな）をローマ字に変換します。</p>
-            <ul>
-                <li>ヘボン式ローマ字に従っています。</li>
-                <li>
-                    <ul>
-                        <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
-                    </ul>
-                </li>
-                <li>変換できなかった文字はそのまま表示します。</li>
-                <li>
-                    <ul>
-                        <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
-                        <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
-                    </ul>
-                </li>
-            </ul>
+        <div class="ui">
+            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="変換" id="exeButton">
         </div>
 
+        <ul>
+            <li>ヘボン式ローマ字に従っています。
+                <ul>
+                    <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
+                </ul>
+            </li>
+            <li>変換できなかった文字はそのまま表示します。
+                <ul>
+                    <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
+                    <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
+                </ul>
+            </li>
+        </ul>
+
         <div class="ui">
-            <div class="horizontal">
-                <div class="vertical">
-                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="変換" id="exeButton">
-                </div>
-                <div class="vertical">
-                    <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" id="copyButton">
-                </div>
-            </div>
+            <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" id="copyButton">
         </div>
 
     </div>
@@ -85,9 +78,7 @@
         }
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
-            const targetLines = elem.querySelector(".inputLines").value;
-            elem.querySelector(".result").value = toRoman(targetLines);
+            document.querySelector(".ui .result").value = toRoman(document.querySelector(".ui .inputLines").value);
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

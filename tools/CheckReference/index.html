@@ -6,43 +6,8 @@
     <title>見よ項目のチェック</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
-    <style>
-        .result {
-            font-size: .8em;
-        }
-
-        .lostTo,
-        .lostFrom,
-        .adjacent {
-            margin-top: 1em;
-        }
-
-        .lostTo>label,
-        .lostFrom>label,
-        .adjacent>label {
-            font-size: .9em;
-            font-weight: bold;
-        }
-
-        .output div.detail {
-            display: list-item;
-            margin-left: 1em;
-            font-weight: normal;
-        }
-
-        .required::before {
-            content: " …… ";
-        }
-
-        .require-goal {
-            color: blue;
-        }
-
-        .require-reference {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
 </head>
 
 <body>
@@ -55,21 +20,19 @@
             <textarea class="inputLines" placeholder="paste here!"></textarea>
             <input type="button" value="チェック" id="exeButton">
 
-            <div class="result">
-                <div class="lostTo">
-                    <label>見よ項目があるのに参照先に括弧で付記されていないもの：</label>
-                    <div class="output"></div>
-                </div>
-                <div class="lostFrom">
-                    <label>参照元として括弧書きされているのに見よ項目がないもの：</label>
-                    <div class="output"></div>
-                </div>
-                <div class="adjacent">
-                    <label>見よ項目と見よ先項目が隣接しているもの：</label>
-                    <div class="output"></div>
-                </div>
-            </div>
         </div>
+
+        <ul class="result-markup">
+            <li class="lostTo">見よ項目があるのに参照先に括弧で付記されていないもの：
+                <ul></ul>
+            </li>
+            <li class="lostFrom">参照元として括弧書きされているのに見よ項目がないもの：
+                <ul></ul>
+            </li>
+            <li class="adjacent">見よ項目と見よ先項目が隣接しているもの：
+                <ul></ul>
+            </li>
+        </ul>
 
     </div>
     <!-- ============================== -->
@@ -80,14 +43,17 @@
         import {ReferenceChecker} from "./src.js";
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
             const checker = new ReferenceChecker(".ui .inputLines");
-            const lostTo = checker.goalLostReference().map(item => ReferenceChecker.markup(item, "require-goal"));
-            elem.querySelector(".result .lostTo .output").innerHTML = (lostTo.length > 0) ? lostTo.join("\n") : "<p>問題ありません！</p>";
-            const lostFrom = checker.requiredFromReference().map(item => ReferenceChecker.markup(item, "require-reference"));
-            elem.querySelector(".result .lostFrom .output").innerHTML = (lostFrom.length > 0) ? lostFrom.join("\n") : "<p>問題ありません！</p>";
-            const adjacent = checker.findAdjacent().map(item => `<div class="detail">${item.name}</div>`);
-            elem.querySelector(".result .adjacent .output").innerHTML = (adjacent.length > 0) ? adjacent.join("\n") : "<p>問題ありません！</p>";
+
+            const lostTo = checker.goalLostReference();
+            document.querySelector(".result-markup li.lostTo ul").innerHTML = ReferenceChecker.showResult(lostTo);
+
+            const lostFrom = checker.requiredFromReference();
+            document.querySelector(".result-markup li.lostFrom ul").innerHTML = ReferenceChecker.showResult(lostFrom);
+
+            const adjacent = checker.findAdjacent();
+            document.querySelector(".result-markup li.adjacent ul").innerHTML = ReferenceChecker.showResult(adjacent);
+
         });
 
     </script>

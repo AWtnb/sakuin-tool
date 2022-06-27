@@ -6,7 +6,8 @@
     <title>名寄せ</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
     <style>
         ul div.notation {
             font-size: .9em;
@@ -27,55 +28,38 @@
     <div class="container">
 
         <h2>名寄せ</h2>
-        <div class="caption">
-            <div class="imagebox">
-                <div class="boxtitle">SAMPLE</div>
-                <img src="./image/img_grouping.png">
-                <p>ノンブルの<span style="color: red;">並び</span>、<span style="color: blue;">重複</span>、<span
-                        style="color: green;">連続</span>を整理。記号での装飾にも対応。</p>
+
+        <div class="ui">
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="名寄せ" id="exeButton">
+            <div>
+                <label for="isLeft">
+                    <input type="checkbox" id="isLeft">ノンブルが左列
+                </label>
             </div>
+            <div>
+                <label for="isOrdered">
+                    <input type="checkbox" id="isOrdered">連続している項目のみ名寄せする
+                </label>
+            </div>
+        </div>
+
+        <div class="caption">
             <ul>
-                <li><code>項目</code>列の情報で名寄せします。</li>
-                <li><code>ノンブル</code>列の情報に対して、下記の微調整を行います。</li>
-                <li>
-                    <ul>
-                        <li>ノンブル部分のソート・重複整理</li>
-                        <li>3以上連続するノンブル部分のハイフネーション
-                            <div class="notation">連続するノンブルは<code>&ndash;</code>（enダーシ<code>U+2013</code>）でつなぎます。</div>
-                            <div class="notation">カンマは半角に統一されます。</div>
-                        </li>
-                    </ul>
-                </li>
                 <li>このツールはソートを行いません。</li>
-                <li>見よ項目など、ノンブルが記入されていない場合はそのまま表示します。</li>
                 <li>名寄せ後に重複が残っていないか<a href="../CheckGrouping/index.html">こちら</a>でチェックしておくと安全です。</li>
             </ul>
         </div>
 
         <div class="ui">
-
-            <div>
-                <label for="isLeft">
-                    <input type="checkbox" class="isLeft" id="isLeft">ノンブルが左列（上図と逆）
-                </label>
-            </div>
-            <div>
-                <label for="isOrdered">
-                    <input type="checkbox" class="isOrdered" id="isOrdered">連続している項目のみ名寄せする
-                </label>
-            </div>
-
-            <div class="horizontal">
-                <div class="vertical">
-                    <textarea class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="名寄せ" id="exeButton">
-                </div>
-                <div class="vertical">
-                    <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" id="copyButton">
-                </div>
-            </div>
+            <textarea class="result" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" id="copyButton">
         </div>
+
+
+        <img src="./image/img_grouping.png">
+        <em>ノンブルの<span style="color: red;">並び</span>、<span style="color: blue;">重複</span>、<span
+            style="color: green;">連続</span>を整理。記号での装飾にも対応。</em>
 
     </div>
     <!-- ============================== -->
@@ -86,9 +70,8 @@
         import {Grouper} from "./src.js";
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
-            const grouper = new Grouper(".ui .inputLines", elem.querySelector(".isLeft").checked);
-            elem.querySelector(".result").value = grouper.getGroupedLines(elem.querySelector(".isOrdered").checked).join("\n");
+            const grouper = new Grouper(".ui .inputLines", document.querySelector("#isLeft").checked);
+            document.querySelector(".ui .result").value = grouper.getGroupedLines(document.querySelector("#isOrdered").checked).join("\n");
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

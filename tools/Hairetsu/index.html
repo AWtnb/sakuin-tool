@@ -6,7 +6,8 @@
     <title>配列よみに変換</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
 </head>
 
 <body>
@@ -15,28 +16,22 @@
 
         <h2>配列読みに変換</h2>
 
-        <div class="caption">
-            <p>テキストボックスに入力された文字列を配列読みに変換します。</p>
+
+        <div class="ui">
+            <div>
+                <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
+                <input type="button" value="変換" id="exeButton">
+            </div>
+            <label for="removeFlag">
+                <input type="checkbox" checked id="removeFlag">カタカナ・数字・アルファベット以外を削除する
+            </label>
         </div>
 
         <div class="ui">
-
-            <label for="removeFlag">
-                <input type="checkbox" checked class="removeFlag" id="removeFlag">カタカナ・数字・アルファベット以外を削除する
-            </label>
-
-            <div class="horizontal">
-                <div class="vertical">
-                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="変換" id="exeButton">
-                </div>
-                <div class="vertical">
-                    <textarea id="scrollB" class="result" readonly placeholder="ここに結果が表示されます"></textarea>
-                    <input type="button" value="コピー" id="copyButton">
-                </div>
-            </div>
-
+            <textarea id="scrollB" class="result" readonly placeholder="ここに結果が表示されます"></textarea>
+            <input type="button" value="コピー" id="copyButton">
         </div>
+
 
     </div>
     <!-- ============================== -->
@@ -48,10 +43,9 @@
         import {NormalizedReading} from "./src.js";
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
-            const s = elem.querySelector(".inputLines").value;
-            const converted = NormalizedReading.convert(s, elem.querySelector(".removeFlag").checked);
-            elem.querySelector(".result").value = converted;
+            const s = document.querySelector(".ui .inputLines").value;
+            const converted = NormalizedReading.convert(s, document.querySelector("#removeFlag").checked);
+            document.querySelector(".ui .result").value = converted;
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

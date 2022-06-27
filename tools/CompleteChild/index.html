@@ -6,7 +6,8 @@
     <title>子項目の復元</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
 </head>
 
 <body>
@@ -15,34 +16,23 @@
 
         <h2>子項目の復元</h2>
 
-        <div class="caption">
-            <div class="imagebox">
-                <div class="boxtitle">SAMPLE</div>
-                <div class="diff">
-                    <div class="before"><img src="./image/img_complete_before.png"></div>
-                    <div class="arrow"></div>
-                    <div class="after"><img src="./image/img_complete_after.png"></div>
-                </div>
-            </div>
-            <ul>
-                <li>索引項目中の子項目を復元します（上図）。</li>
-                <li>並びは変化しません。</li>
-                <li>ノンブルが入っていても動作しますが、事前に<a href="../FormatOldIndex/index.html">こちら</a>で整形しておくと動作が安定します。</li>
-            </ul>
+        <div class="ui">
+            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="復元" id="exeButton">
         </div>
 
+        <ul>
+            <li>索引項目中の子項目を復元します。</li>
+            <li>並びは変化しません。</li>
+            <li>ノンブルが入っていても動作しますが、事前に<a href="../FormatOldIndex/index.html">こちら</a>で整形しておくと動作が安定します。</li>
+        </ul>
+
         <div class="ui">
-            <div class="horizontal">
-                <div class="vertical">
-                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="復元" id="exeButton">
-                </div>
-                <div class="vertical">
-                    <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" id="copyButton">
-                </div>
-            </div>
+            <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" id="copyButton">
         </div>
+
+        <img src="./image/img_complete.png">
 
     </div>
     <!-- ============================== -->
@@ -72,8 +62,7 @@
         }
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
-            elem.querySelector(".result").value = completeChildEntry(".ui .inputLines").join("\n");
+            document.querySelector(".ui .result").value = completeChildEntry(".ui .inputLines").join("\n");
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

@@ -6,22 +6,8 @@
     <title>見よ項目の名寄せをチェック</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
-    <style>
-        .result .msg {
-            font-size: .9rem;
-            font-weight: bold;
-        }
-
-        .result .detail {
-            font-size: .9rem;
-            line-height: 1.2;
-        }
-
-        .result .detail p {
-            margin: 1em 0;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
 </head>
 
 <body>
@@ -30,27 +16,24 @@
 
         <h2>見よ項目の名寄せをチェック</h2>
 
-        <div class="caption">
+        <div class="ui">
+            <textarea class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="チェック" id="exeButton">
+
             <ul>
-                <li>下記のチェックを行います。</li>
-                <li>
+                <li>下記のチェックを行います。
                     <ul>
-                        <li>見よ<u>先</u>項目も正しく名寄せされているか</li>
+                        <li>見よ<b>先</b>項目も正しく名寄せされているか</li>
                         <li>見よ項目が本項目として残っていないか</li>
                     </ul>
                 </li>
                 <li>名寄せを修正したら<a href="../CheckNombre/index.html">こちら</a>でノンブルなど再チェックしておくと安全です。</li>
             </ul>
-        </div>
 
-
-        <div class="ui">
-            <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="チェック" id="exeButton">
-
-            <div class="result"></div>
+            <div class="result-markup"></div>
 
         </div>
+
 
 
     </div>
@@ -63,21 +46,19 @@
 
         document.querySelector("#exeButton").addEventListener("click", () => {
             const elem = document.querySelector(".ui");
-            const output = elem.querySelector(".result");
+            const output = elem.querySelector(".result-markup");
             output.innerHTML = "";
             const checker = new GroupingChecker(".ui .inputLines");
             const ungrouped = checker.getUngrouped();
             if (ungrouped.length) {
-                const markup = ungrouped.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
-                output.innerHTML = `<div class="msg">見よ先項目が名寄せされずに残っています！</div><div class="detail">${markup}</div>`;
+                output.innerHTML = output.innerHTML + `<div>見よ先項目が名寄せされずに残っています！<ul>${ungrouped.join("")}</ul></div>`;
             }
             const conflict = checker.getConflicting();
             if (conflict.length) {
-                const markup = conflict.map(arr => `<p>${arr.join("<br>")}</p>`).join("");
-                output.innerHTML = output.innerHTML + "\n" + `<div class="msg">見よ項目が本項目として残っています！</div><div class="detail">${markup}</div>`;
+                output.innerHTML = output.innerHTML + `<div>見よ項目が本項目として残っています！<ul>${conflict.join("")}</ul></div>`;
             }
             if (output.innerHTML.length < 1) {
-                output.innerHTML = "<div class=\"msg\">問題ありません！</div>";
+                output.innerHTML = '<div class="msg">問題ありません！</div>';
             }
         });
 

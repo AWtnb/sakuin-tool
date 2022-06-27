@@ -6,28 +6,17 @@
     <title>旧版索引の事前整形</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
     <style>
-        .pair {
-            word-break: break-all;
-            font-size: .8em;
-            margin: .5em 0;
-            line-height: 1;
-            border-left: 2px solid #ccc;
-            padding: 2px;
-        }
 
-        .origin {
+        .diff li:nth-child(1) {
             color: gray;
         }
-
-        .modified {
+        .diff li:nth-child(2) {
             color: red;
         }
 
-        .msg {
-            font-weight: bold;
-        }
     </style>
 </head>
 
@@ -36,27 +25,23 @@
     <div class="container">
 
         <h2>旧版索引の事前整形</h2>
-        <div class="caption">
-            <ul>
-                <li>項目とノンブルの間を2倍アキに統一します。</li>
-                <li>連続するノンブルを示すダーシの種類を統一します。</li>
-                <li>子項目のダーシの種類を統一します。</li>
-            </ul>
+        <div class="ui">
+            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="整形" id="exeButton">
         </div>
 
+        <ul>
+            <li>項目とノンブルの間を2倍アキに統一します。</li>
+            <li>連続するノンブルを示すダーシの種類を統一します。</li>
+            <li>子項目のダーシの種類を統一します。</li>
+        </ul>
+
         <div class="ui">
-            <div class="horizontal">
-                <div class="vertical">
-                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-                    <input type="button" value="整形" id="exeButton">
-                </div>
-                <div class="vertical">
-                    <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
-                    <input type="button" value="コピー" id="copyButton">
-                </div>
-            </div>
-            <div class="diff"></div>
+            <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
+            <input type="button" value="コピー" id="copyButton">
         </div>
+
+        <div class="result-markup"></div>
 
     </div>
     <!-- ============================== -->
@@ -116,7 +101,7 @@
 
         function formatOldIndex(selector) {
             const lines = Util.getElemValueLines(selector);
-            return lines.map(line => String(line).trimEnd().replace(/\t/, "　　")).map(line => {
+            return lines.map(line => String(line).trimEnd().replace(/\t/, "\u3000\u3000")).map(line => {
                 const fmt = new IndexLine(line).executeFormat();
                 return {
                     "Line": fmt,
@@ -127,17 +112,16 @@
         }
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
             const formatted = formatOldIndex(".ui .inputLines");
-            elem.querySelector(".result").value = formatted.map(x => x.Line).join("\n");
+            document.querySelector(".ui .result").value = formatted.map(x => x.Line).join("\n");
 
-            const output = elem.querySelector(".diff");
+            const output = document.querySelector(".result-markup");
             output.innerHTML = "";
-            const diff = formatted.filter(x => x.Modified)
-            if (diff.length) {
-                output.innerHTML = `<div class="msg">${diff.length}箇所を修正しました：</msg>` + diff.map(d => {
-                    return `<div class="pair"><div class="origin">${d.Origin}</div><div class="modified">${d.Line}</div></div>`;
-                }).join("");
+            const modified = formatted.filter(x => x.Modified)
+            if (modified.length) {
+                output.innerHTML = `<h3>${modified.length}箇所を修正しました：</h3><ol>${modified.map(d => {
+                    return `<li><ul class="diff"><li>${d.Origin}</li><li>${d.Line}</li></ul></li>`
+                }).join("")}</ol>`;
             }
         });
 
