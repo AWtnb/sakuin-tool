@@ -48,11 +48,11 @@
         <div class="ui">
             <div class="horizontal">
                 <div class="vertical">
-                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
                     <input type="button" value="整形" id="exeButton">
                 </div>
                 <div class="vertical">
-                    <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
+                    <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
                     <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
@@ -62,7 +62,9 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util, Entry} from "../common.js";
+        import {Util, Entry, setScroller} from "../common.js";
+
+        setScroller();
 
         class IndexLine {
 
@@ -142,17 +144,6 @@
 
         document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(".ui .result");
-        });
-
-        const leftTA = document.getElementById("leftTA");
-        const rightTA = document.getElementById("rightTA");
-        leftTA.addEventListener("scroll", () => {
-            rightTA.scrollTop = leftTA.scrollTop;
-            rightTA.scrollLeft = leftTA.scrollLeft;
-        });
-        rightTA.addEventListener("scroll", () => {
-            leftTA.scrollTop = rightTA.scrollTop;
-            leftTA.scrollLeft = rightTA.scrollLeft;
         });
 
     </script>

@@ -83,11 +83,11 @@
 
             <div class="horizontal">
                 <div class="vertical">
-                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
                     <input type="button" value="計算" id="exeButton">
                 </div>
                 <div class="vertical">
-                    <textarea id="rightTA" class="result" placeholder="結果が表示されます" readonly></textarea>
+                    <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
                     <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
@@ -99,7 +99,8 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util, Entry, EntryAddress} from "../common.js";
+        import {Util, Entry, EntryAddress, setScroller} from "../common.js";
+        setScroller();
 
         function adjustNombre(parsed, start, end, delta) {
             if (Number(start) <= parsed.intValue && parsed.intValue <= Number(end)) {
@@ -186,18 +187,6 @@
 
         document.querySelector("#printButton").addEventListener("click", () => {
             window.open('./print.html', 'newwindow', 'width=800,height=890');
-        });
-
-
-        const leftTA = document.getElementById("leftTA");
-        const rightTA = document.getElementById("rightTA");
-        leftTA.addEventListener("scroll", () => {
-            rightTA.scrollTop = leftTA.scrollTop;
-            rightTA.scrollLeft = leftTA.scrollLeft;
-        });
-        rightTA.addEventListener("scroll", () => {
-            leftTA.scrollTop = rightTA.scrollTop;
-            leftTA.scrollLeft = rightTA.scrollLeft;
         });
 
     </script>

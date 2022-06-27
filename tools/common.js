@@ -258,3 +258,18 @@ export class EntryAddress {
     }
 
 }
+
+export const setScroller = () => {
+    const areaA = document.querySelector("#scrollA");
+    const areaB = document.querySelector("#scrollB");
+    if (areaA && areaB) {
+        areaA.addEventListener("scroll", () => {
+            areaB.scrollTop = areaA.scrollTop;
+            areaB.scrollLeft = areaA.scrollLeft;
+        });
+        areaB.addEventListener("scroll", () => {
+            areaA.scrollTop = areaB.scrollTop;
+            areaA.scrollLeft = areaB.scrollLeft;
+        });
+    }
+};

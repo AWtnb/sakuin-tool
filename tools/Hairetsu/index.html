@@ -29,11 +29,11 @@
 
             <div class="horizontal">
                 <div class="vertical">
-                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
                     <input type="button" value="変換" id="exeButton">
                 </div>
                 <div class="vertical">
-                    <textarea id="rightTA" class="result" readonly placeholder="ここに結果が表示されます"></textarea>
+                    <textarea id="scrollB" class="result" readonly placeholder="ここに結果が表示されます"></textarea>
                     <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
@@ -43,7 +43,8 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util} from "../common.js";
+        import {Util, setScroller} from "../common.js";
+        setScroller();
         import {NormalizedReading} from "./src.js";
 
         document.querySelector("#exeButton").addEventListener("click", () => {
@@ -55,17 +56,6 @@
 
         document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(".ui .result");
-        });
-
-        const leftTA = document.getElementById("leftTA");
-        const rightTA = document.getElementById("rightTA");
-        leftTA.addEventListener("scroll", () => {
-            rightTA.scrollTop = leftTA.scrollTop;
-            rightTA.scrollLeft = leftTA.scrollLeft;
-        });
-        rightTA.addEventListener("scroll", () => {
-            leftTA.scrollTop = rightTA.scrollTop;
-            leftTA.scrollLeft = rightTA.scrollLeft;
         });
 
     </script>

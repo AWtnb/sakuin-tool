@@ -32,11 +32,11 @@
             </div>
             <div class="horizontal">
                 <div class="vertical">
-                    <textarea id="leftTA" class="inputLines" placeholder="paste here!"></textarea>
+                    <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
                     <input type="button" value="取得" id="exeButton">
                 </div>
                 <div class="vertical">
-                    <textarea id="rightTA" class="result" placeholder="ここに結果が表示されます" readonly></textarea>
+                    <textarea id="scrollB" class="result" placeholder="ここに結果が表示されます" readonly></textarea>
                     <input type="button" value="コピー" id="copyButton">
                 </div>
             </div>
@@ -46,7 +46,9 @@
     <!-- ============================== -->
     <script src="./kuromoji.js"></script>
     <script type="module">
-        import {Util, Entry} from "../common.js";
+        import {Util, Entry, setScroller} from "../common.js";
+        setScroller();
+
         import {Reading} from "./src.js";
 
         function setReading(tokenizer, inputSelector, outputSelector, removeNombre) {
@@ -74,17 +76,6 @@
 
         document.querySelector("#copyButton").addEventListener("click", () => {
             Util.copyValue(".ui .result");
-        });
-
-        const leftTA = document.getElementById("leftTA");
-        const rightTA = document.getElementById("rightTA");
-        leftTA.addEventListener("scroll", () => {
-            rightTA.scrollTop = leftTA.scrollTop;
-            rightTA.scrollLeft = leftTA.scrollLeft;
-        });
-        rightTA.addEventListener("scroll", () => {
-            leftTA.scrollTop = rightTA.scrollTop;
-            leftTA.scrollLeft = rightTA.scrollLeft;
         });
 
     </script>
