@@ -1,5 +1,13 @@
+html {
+    font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
+}
+
 body {
     margin-bottom: 50vh;
+}
+
+h1,h2,h3,h4,h5 {
+    font-weight: bold;
 }
 
 img {

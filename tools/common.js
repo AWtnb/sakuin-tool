@@ -31,7 +31,7 @@ export class Util {
             const cells = [];
             for (let c = 0; c < maxCol; c++) {
                 const cell = row.cells[c];
-                cells.push(String(cell.innerHTML).replace(/&amp;/g, "&"));
+                cells.push(String(cell.innerText).replace(/&amp;/g, "&"));
             }
             lines.push(cells.join("\t"));
         }
