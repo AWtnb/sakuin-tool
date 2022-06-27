@@ -15,13 +15,10 @@ export class GroupingChecker {
             const refTo = entry.referTo;
             const found = this.nonReferred.filter(entry => entry.basename == refTo);
             if (found.length > 0) {
-                return {
-                    "item": entry.name,
-                    "found": found.map(entry => `<li><mark>${entry.name}</mark></li>`)
-                };
+                return `<li><mark>${ entry.name }</mark><ul>${ found.map(entry => `<li><u>${ entry.rawStr }</u></li>`).join("") }</ul></li>`;
             }
             return null;
-        }).filter(Boolean).map(x => `<li>${x.item}<ul>${x.found.join("")}</ul></li>`);
+        }).filter(Boolean);
     }
 
     getConflicting() {
@@ -29,13 +26,10 @@ export class GroupingChecker {
             const refFrom = entry.basename;
             const found = this.nonRefs.filter(entry => entry.basename == refFrom);
             if (found.length > 0) {
-                return {
-                    "item": entry.name,
-                    "found": found.map(entry => `<li><mark>${entry.name}</mark></li>`)
-                };
+                return `<li><mark>${ entry.name }</mark><ul>${ found.map(entry => `<li><u>${ entry.rawStr }</u></li>`).join("") }</ul></li>`;
             }
             return null;
-        }).filter(Boolean).map(x => `<li>${x.item}<ul>${x.found.join("")}</ul></li>`);
+        }).filter(Boolean);
     }
 
 }

@@ -18,47 +18,49 @@ class ChildEntry {
 
 export class CheckChild {
 
-    static getMainEntries(lines) {
-        return lines.filter(x => String(x).trim()).map(line => {
-            const p = new Entry(line);
-            if (!p.isReference && !p.isChild) {
+    constructor(selector, mode = "tail") {
+        this.lines = Util.getElemValueLines(selector);
+        this.mode = mode;
+        this.mainEntries = this.lines.filter(x => String(x).trim()).map(line => {
+            const entry = new Entry(line);
+            if (!entry.isReference && !entry.isChild) {
                 return {
-                    "name": p.name,
-                    "basename": p.basename,
-                    "subInfo": p.name.slice(p.basename.length)
+                    "name": entry.name,
+                    "basename": entry.basename,
+                    "subInfo": entry.name.slice(entry.basename.length)
                 };
             }
             return null;
         }).filter(Boolean);
     }
 
-    static findPossibles(selector, mode = "tail") {
-        const lines = Util.getElemValueLines(selector);
-        const mainEntries = CheckChild.getMainEntries(lines);
-        return mainEntries.map(entry => {
+    findPossibles() {
+        return this.mainEntries.map(entry => {
             const search = entry.basename;
-            const possibles = mainEntries.filter(entry => entry.basename != search).map(entry => {
+            const possibles = this.mainEntries.filter(entry => entry.basename != search).map(entry => {
                 const markup = new ChildEntry(entry.basename);
-                if (mode == "all" || mode == "head") {
+                if (this.mode == "all" || this.mode == "head") {
                     markup.markupHead(search);
                 }
-                if (mode == "all" || mode == "tail") {
+                if (this.mode == "all" || this.mode == "tail") {
                     markup.markupTail(search);
                 }
-                return {
-                    "Markup": markup.text + entry.subInfo,
-                    "Changed": entry.basename != markup.text
+                if (entry.basename != markup.text) {
+                    return markup.text + entry.subInfo;
                 }
-            }).filter(x => x.Changed);
+                return null;
+            }).filter(Boolean);
             return {
-                "Found": entry.name,
-                "Possibles": possibles
-            }
-        }).filter(x => {
-            return x.Possibles.length > 0
-        }).sort((a, b) => b.Found.length - a.Found.length).map(x => {
-            const detail = x.Possibles.map(p => "・" + p.Markup).join("<br>");
-            return `<tr><td>${x.Found}</td><td>${detail}</td></tr>`;
+                "parent": entry.name,
+                "children": possibles
+            };
+        });
+    }
+
+    markup() {
+        return this.findPossibles().filter(x => x.children.length > 0).sort((a, b) => b.parent.length - a.parent.length).map(x => {
+            const detail = x.children.map(p => `<li>${p}</li>`).join("");
+            return `<tr><td>${x.parent}</td><td><ul style="margin:0;padding-left:1em;">${detail}</ul></td></tr>`;
         });
     }
 

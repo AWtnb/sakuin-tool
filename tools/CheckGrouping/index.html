@@ -14,7 +14,7 @@
     <!-- ============================== -->
     <div class="container">
 
-        <h2>見よ項目の名寄せをチェック</h2>
+        <h1>見よ項目の名寄せをチェック</h1>
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
@@ -51,11 +51,11 @@
             const checker = new GroupingChecker(".ui .inputLines");
             const ungrouped = checker.getUngrouped();
             if (ungrouped.length) {
-                output.innerHTML = output.innerHTML + `<div>見よ先項目が名寄せされずに残っています！<ul>${ungrouped.join("")}</ul></div>`;
+                output.innerHTML = output.innerHTML + `<div><h4>見よ先項目が名寄せされずに残っています！</h4><ul>${ungrouped.join("")}</ul></div>`;
             }
             const conflict = checker.getConflicting();
             if (conflict.length) {
-                output.innerHTML = output.innerHTML + `<div>見よ項目が本項目として残っています！<ul>${conflict.join("")}</ul></div>`;
+                output.innerHTML = output.innerHTML + `<div><h4>見よ項目が本項目として残っています！</h4><ul>${conflict.join("")}</ul></div>`;
             }
             if (output.innerHTML.length < 1) {
                 output.innerHTML = '<div class="msg">問題ありません！</div>';

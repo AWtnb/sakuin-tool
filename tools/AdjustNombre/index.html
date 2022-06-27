@@ -39,6 +39,11 @@
             letter-spacing: -1px;
             margin: 0;
         }
+
+        ul.config li input {
+            max-width: 20%;
+        }
+
     </style>
 </head>
 
@@ -46,12 +51,7 @@
     <!-- ============================== -->
     <div class="container">
 
-        <h2>ノンブル加算減算</h2>
-
-        <div class="ui">
-            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="計算" id="exeButton">
-        </div>
+        <h1>ノンブル加算減算</h1>
 
         <ul class="config">
             <li>
@@ -67,6 +67,11 @@
                 <input type="number" value="1" class="nombreDelta">
             </li>
         </ul>
+
+        <div class="ui">
+            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
+            <input type="button" value="計算" id="exeButton">
+        </div>
 
         <div class="ui">
             <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
@@ -87,82 +92,90 @@
         setScroller();
         setNavi();
 
-        function adjustNombre(parsed, start, end, delta) {
-            if (Number(start) <= parsed.intValue && parsed.intValue <= Number(end)) {
-                return (parsed.display.prefix + (parsed.intValue + Number(delta)) + parsed.display.suffix);
+        class Adjuster {
+            constructor(start, end, delta) {
+                this.start = start;
+                this.end = end;
+                this.delta = delta;
             }
-            return parsed.display.text;
+            exec(target) {
+                if (Number(this.start) <= target.intValue && target.intValue <= Number(this.end)) {
+                    return (target.display.prefix + (target.intValue + Number(this.delta)) + target.display.suffix);
+                }
+                return target.display.text;
+            }
+        }
+
+        function isDifferentNombres(a, b) {
+            return a.join("").replace(/[^\d]/g, "") != b.join("").replace(/[^\d]/g, "");
+        }
+
+        class EntryLine {
+            constructor(line, adjuster) {
+                const entry = new Entry(line);
+                this.name = entry.name;
+                this.originalNombres = [];
+                this.adjustedNombres = [];
+                if (!entry.address) {
+                    return
+                }
+                const parsedAddress = new EntryAddress(entry.address);
+                this.originalNombres =parsedAddress.rawElements;
+                this.adjustedNombres = this.originalNombres.map(nbr => {
+                    const parsed = new EntryAddress(nbr).nombres;
+                    if (parsed.length > 1) {
+                        return adjuster.exec(parsed[0]) + "\u2013" + adjuster.exec(parsed.slice(-1)[0]);
+                    }
+                    return adjuster.exec(parsed[0]);
+                });
+                this.changed = isDifferentNombres(this.originalNombres, this.adjustedNombres);
+            }
         }
 
         function adjustNombresLine(selector, start, end, delta) {
             const lines = Util.getElemValueLines(selector);
-            return lines.map(line => {
-                let nombreInfo = {
-                    "entryName": "",
-                    "nombres": {
-                        "origin": [],
-                        "adjusted": [],
-                    },
-                    "changed": false
-                };
-                if (line.trim().length < 1) {
-                    return nombreInfo;
-                }
-                const entry = new Entry(line);
-                if (!entry.address) {
-                    nombreInfo.entryName = entry.name;
-                    return nombreInfo;
-                }
-                const origin = new EntryAddress(entry.address);
-                const adjustedNombres = origin.rawElements.map(n => {
-                    const parsed = new EntryAddress(n).nombres;
-                    if (parsed.length > 1) {
-                        return adjustNombre(parsed[0], start, end, delta)
-                            + "\u2013"
-                            + adjustNombre(parsed.slice(-1)[0], start, end, delta);
-                    }
-                    return adjustNombre(parsed[0], start, end, delta);
-                });
-                nombreInfo.entryName = entry.name;
-                nombreInfo.nombres.origin = origin.rawElements;
-                nombreInfo.nombres.adjusted = adjustedNombres;
-                nombreInfo.changed = origin.rawElements.join("").replace(/[^\d]/g, "") != adjustedNombres.join("").replace(/[^\d]/g, "");
-                return nombreInfo;
-            });
+            const adjuster = new Adjuster(start, end, delta);
+            return lines.map(line => new EntryLine(line, adjuster) );
         }
 
         function diffNombre(origin, adjusted) {
-            return adjusted.map((adNbr, i) => {
-                if (String(adNbr).replace(/[^\d]/g, "") == String(origin[i]).replace(/[^\d]/g, "")) {
-                    return `<span class="same">${adNbr}</span>`;
-            }
-                return `<span class="del">${origin[i]}</span><span class="mod">${adNbr}</span>`;
+            return adjusted.map((adj, i) => {
+                if (isDifferentNombres([adj], [origin[i]])) {
+                    return `<span class="del">${origin[i]}</span><span class="mod">${adj}</span>`;
+                }
+                return `<span class="same">${adj}</span>`;
             }).join(", ");
         }
 
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const adjustedArray = adjustNombresLine(
+            const adjustedLines = adjustNombresLine(
                 ".ui .inputLines",
                 document.querySelector(".config .startNombre").value,
                 document.querySelector(".config .endNombre").value,
                 document.querySelector(".config .nombreDelta").value
             );
-            document.querySelector(".ui textarea.result").value = adjustedArray.map(l => {
-                if (l.entryName) {
-                    return `${l.entryName}\u3000\u3000${l.nombres.adjusted.join(", ")}`.trimEnd();
+
+            document.querySelector(".ui textarea.result").value = adjustedLines.map(l => {
+                if (l.name) {
+                    return `${l.name}\u3000\u3000${l.adjustedNombres.join(", ")}`.trimEnd();
                 }
                 return "";
-            }).join("\r\n");
-            const modified = adjustedArray.filter(line => line.changed);
-            let markup = "<p>（変更箇所はありません）</p>";
+            }).join("\n");
+
+            const modified = adjustedLines.filter(line => line.changed);
+            const markup = [];
             if (modified.length) {
+                markup.push(`<h4>${modified.length}行の変更</h4>`);
                 const diffs = modified.map(item => {
-                    return `<div class="wrap"><div class="adjusted">${item.entryName}　　${diffNombre(item.nombres.origin, item.nombres.adjusted)}</div></div>`;
+                    return `<li><div class="adjusted">${item.name}\u3000\u3000${diffNombre(item.originalNombres, item.adjustedNombres)}</div></li>`;
                 });
-                markup = `<div class="msg">${modified.length}行の変更：</div>${diffs.join("")}`
+                markup.push(`<ul>${diffs.join("")}</ul>`);
             }
-            document.querySelector(".result-markup").innerHTML = markup;
+            else {
+                markup.push("<div>（変更箇所はありません）</div>");
+            }
+            document.querySelector(".result-markup").innerHTML = markup.join("");
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {

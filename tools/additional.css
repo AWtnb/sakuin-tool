@@ -6,8 +6,16 @@ body {
     margin-bottom: 50vh;
 }
 
-h1,h2,h3,h4,h5 {
+h1, h2, h3, h4, h5 {
     font-weight: bold;
+}
+
+h2 {
+    border-bottom: 2px solid;
+}
+
+h3, h4 {
+    color: #333;
 }
 
 img {
@@ -37,9 +45,10 @@ th, td {
 }
 
 .result-markup {
+    margin: 1rem;
     padding: 1rem;
     max-height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .ui textarea {

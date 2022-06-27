@@ -23,7 +23,7 @@ export class ReferenceChecker {
                 return null;
             }
             const require = `${line.referTo}\uff08${line.refEntryName}\uff09`;
-            return `<li><u>${line.text}</u><ul><li><mark>${require}</mark></li></ul></lii>`
+            return `<u>${line.text}</u><ul><li><mark>${require}</mark></li></ul>`;
         }).filter(Boolean);
     }
 
@@ -45,7 +45,7 @@ export class ReferenceChecker {
                 return null;
             }
             const require = required.map(s => `<li><mark>${s}\u3000→${line.basename}</mark></li>`).join("");
-            return `<li><u>${line.text}</u><ul>${require}</ul></li>`
+            return `<u>${line.text}</u><ul>${require}</ul>`;
         }).filter(Boolean);
     }
 
@@ -67,11 +67,8 @@ export class ReferenceChecker {
         }).filter(Boolean).map(entry => `<u>${entry.name}</u>`);
     }
 
-    static showResult(arr) {
-        if (arr.length > 0) {
-            return arr.join("");
-        }
-        return "<li>問題ありません！</li>";
+    static showResult(arr, heading) {
+        return `<h4>${heading}</h4><ul>${arr.map(x => `<li>${x}</li>`).join("")}</ul>`;
     }
 
 }

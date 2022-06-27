@@ -8,29 +8,20 @@
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" type="text/css" href="../almond.lite.css">
     <link rel="stylesheet" type="text/css" href="../additional.css">
-    <style>
-        table tr td:nth-child(1) {
-            color: #888;
-        }
-
-        table tr td:nth-child(2) {
-            color: #888;
-        }
-    </style>
 </head>
 
 <body>
     <!-- ============================== -->
     <div class="container">
 
-        <h2>索引拾いのテンプレート生成</h2>
+        <h1>索引拾いのテンプレート生成</h1>
 
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
             <input type="button" value="生成" id="exeButton">
         </div>
-        
+
         <div class="result-markup">
             <table>
                 <thead>
@@ -79,7 +70,7 @@
                 }
             });
             return templateArray.map((x, i) => {
-                return `<tr><td>${i+1}</td><td>${x.Index}</td><td>${x.Page}</td><td></td><td></td></tr>`;
+                return `<tr><td style="color:gray;">${i+1}</td><td style="color:gray;">${x.Index}</td><td>${x.Page}</td><td></td><td></td></tr>`;
             });
         }
 

@@ -14,7 +14,7 @@
     <!-- ============================== -->
     <div class="container">
 
-        <h2>子項目候補の確認</h2>
+        <h1>子項目候補の確認</h1>
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
@@ -55,8 +55,8 @@
         document.querySelector("#exeButton").addEventListener("click", () => {
             const outputTable = document.querySelector(".result-markup table tbody");
             outputTable.innerHTML = "";
-            const markup = CheckChild.findPossibles(".ui .inputLines", document.querySelector(".ui form").pos.value);
-            outputTable.innerHTML = markup.join("\n");
+            const checker = new CheckChild(".ui .inputLines", document.querySelector(".ui form").pos.value);
+            outputTable.innerHTML = checker.markup().join("");
         });
 
         document.querySelector("#printButton").addEventListener("click", () => {

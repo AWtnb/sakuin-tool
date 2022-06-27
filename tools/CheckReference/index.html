@@ -14,7 +14,7 @@
     <!-- ============================== -->
     <div class="container">
 
-        <h2>見よ項目のチェック</h2>
+        <h1>見よ項目のチェック</h1>
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
@@ -22,17 +22,11 @@
 
         </div>
 
-        <ul class="result-markup">
-            <li class="lostTo">見よ項目があるのに参照先に括弧で付記されていないもの：
-                <ul></ul>
-            </li>
-            <li class="lostFrom">参照元として括弧書きされているのに見よ項目がないもの：
-                <ul></ul>
-            </li>
-            <li class="adjacent">見よ項目と見よ先項目が隣接しているもの：
-                <ul></ul>
-            </li>
-        </ul>
+        <div class="result-markup">
+            <div class="lostTo"></div>
+            <div class="lostFrom"></div>
+            <div class="adjacent"></div>
+        </div>
 
     </div>
     <!-- ============================== -->
@@ -46,13 +40,19 @@
             const checker = new ReferenceChecker(".ui .inputLines");
 
             const lostTo = checker.goalLostReference();
-            document.querySelector(".result-markup li.lostTo ul").innerHTML = ReferenceChecker.showResult(lostTo);
+            if (lostTo.length > 0) {
+                document.querySelector(".result-markup div.lostTo").innerHTML = ReferenceChecker.showResult(lostTo, "見よ項目があるのに参照先に括弧で付記されていないもの");
+            }
 
             const lostFrom = checker.requiredFromReference();
-            document.querySelector(".result-markup li.lostFrom ul").innerHTML = ReferenceChecker.showResult(lostFrom);
+            if (lostFrom.length > 0) {
+                document.querySelector(".result-markup div.lostFrom").innerHTML = ReferenceChecker.showResult(lostFrom, "参照元として括弧書きされているのに見よ項目がないもの");
+            }
 
             const adjacent = checker.findAdjacent();
-            document.querySelector(".result-markup li.adjacent ul").innerHTML = ReferenceChecker.showResult(adjacent);
+            if (adjacent.length > 0) {
+                document.querySelector(".result-markup div.adjacent").innerHTML = ReferenceChecker.showResult(adjacent, "見よ項目と見よ先項目が隣接しているもの");
+            }
 
         });
 
