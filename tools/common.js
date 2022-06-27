@@ -273,3 +273,14 @@ export const setScroller = () => {
         });
     }
 };
+
+export const setNavi = (href = "../../index.html") => {
+    const a = document.createElement("a");
+    a.href = href;
+    a.text = "TOP";
+    const nav = document.createElement("div");
+    nav.classList.add("navi");
+    nav.append(a);
+    document.querySelector(".container").insertAdjacentElement("afterbegin", nav);
+
+};
