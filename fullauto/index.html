@@ -6,58 +6,8 @@
     <title>おまかせモード</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../tools/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../tools/style.css">
-    <style>
-        ol li::marker {
-            font-weight: bold;
-        }
-
-        div.notation {
-            font-size: .9em;
-            color: #586e75;
-            text-indent: -1em;
-            margin-left: 1em;
-        }
-
-        div.notation::before {
-            content: "\203b";
-            font-weight: bold;
-        }
-
-        .lostTo,
-        .lostFrom,
-        .possibles label {
-            font-weight: bold;
-            font-size: .8em;
-            margin-top: 1em;
-        }
-
-        .possibles label {
-            margin-top: 2em;
-            display: block;
-        }
-
-        .possibles table .match {
-            color: red;
-        }
-
-        div.lostTo div,
-        div.lostFrom div {
-            border: 1px solid white;
-        }
-
-        .required::before {
-            content: " …… ";
-        }
-
-        .require-goal {
-            color: blue;
-        }
-
-        .require-reference {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../tools/almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../tools/additional.css">
 </head>
 
 <body>
@@ -65,44 +15,22 @@
     <div class="container">
 
         <h2>おまかせモード</h2>
-        <div class="caption">
-            <div class="imagebox">
-                <div class="boxtitle">SAMPLE</div>
-                <img src="./image/img_auto.png">
-            </div>
-            <ul>
-                <li><code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
-                <li>自動で下記の整形を行って索引を出力します。
-                    <ol>
-                        <li><a href="../tools/Group/index.html">名寄せ</a>
-                            <ul>
-                                <li>ノンブル部分のソート・重複整理</li>
-                                <li>3以上連続するノンブル部分のハイフネーション<div class="notation">カンマは半角に統一されます。</div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="../tools/GetReading/index.html">よみがな取得</a></li>
-                        <li><a href="../tools/Hairetsu/index.html">配列読みに変換</a>
-                            <div class="notation">カタカナ・数字・アルファベット以外の記号は削除されます。</div>
-                        </li>
-                        <li><a href="../tools/Sort/index.html">並べ替え</a>
-                            <ul>
-                                <li>最優先は<code>配列読み</code>の情報。</li>
-                                <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
-                                <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
-                            </ul>
-                        </li>
-                    </ol>
-                </li>
-                <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
-            </ul>
-        </div>
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
             <input type="button" value="整形" id="exeButton">
-            <div class="status"></div>
-            <table class="formatResult">
+        </div>
+
+        <ul>
+            <li>下図のように<code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
+            <li>自動で一連の整形を行って索引を出力します。</li>
+            <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
+        </ul>
+
+        <div class="status"></div>
+
+        <div class="result-markup">
+            <table>
                 <thead>
                     <tr>
                         <th>項目</th>
@@ -110,25 +38,25 @@
                         <th>配列読み</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody><td></td><td></td><td></td></tbody>
             </table>
-            <input type="button" value="表をコピー" id="copyButton">
-
         </div>
+        <input type="button" value="表をコピー" id="copyButton">
 
-        <div class="caption">
-            <ul>
-                <li><code>項目</code>列を Word に貼り付ければ索引になります。</li>
-                <li><code>読み</code>と<code>配列読み</code>の列は並びのチェックのためにご利用ください。</li>
-                <li>下記のチェックツールもご利用ください。
-                    <ul>
-                        <li><a href="../tools/CheckReference/index.html">見よ項目のチェック</a></li>
-                        <li><a href="../tools/CheckChild/index.html">子項目のチェック</a></li>
-                        <li><a href="../tools/CheckNombre/index.html">ノンブルの並びのチェック</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+
+        <img src="./image/img_auto.png">
+
+        <ul>
+            <li><code>項目</code>列を Word に貼り付ければ索引になります。</li>
+            <li><code>読み</code>と<code>配列読み</code>の列は並びのチェックのためにご利用ください。</li>
+            <li>下記のチェックツールもご利用ください。
+                <ul>
+                    <li><a href="../tools/CheckReference/index.html">見よ項目のチェック</a></li>
+                    <li><a href="../tools/CheckChild/index.html">子項目のチェック</a></li>
+                    <li><a href="../tools/CheckNombre/index.html">ノンブルの並びのチェック</a></li>
+                </ul>
+            </li>
+        </ul>
 
     </div>
     <!-- ============================== -->
@@ -147,7 +75,7 @@
             elem.innerHTML = s;
         }
 
-        function main(tokenizer, selector, outputElem) {
+        function main(tokenizer, selector, outputSelector) {
             showStatus("");
 
             const grouper = new Grouper(selector, false);
@@ -159,29 +87,27 @@
                     "Norm": NormalizedReading.convert(r, true)
                 }
             });
-            outputElem.innerHTML = SortIndex.sortByReading(parsed).map(x => {
-                return `<tr><td>${x.Item}</td><td style="background:#aaa;">${x.Reading}</td><td style="background:#aaa;">${x.Norm}</td></tr>`;
+            document.querySelector(outputSelector).innerHTML = SortIndex.sortByReading(parsed).map(x => {
+                return `<tr><td><mark>${x.Item}</mark></td><td>${x.Reading}</td><td>${x.Norm}</td></tr>`;
             }).join("\n");
 
         }
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
-            const outputTable = elem.querySelector("table.formatResult tbody");
             showStatus("（\u{1f914}よみがな計算中…）");
-            outputTable.innerHTML = "";
+            document.querySelector(".result-markup tbody").innerHTML = "";
             kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
                 if (err) {
                     showStatus("解析失敗…\nやり直してみてください！");
                 }
                 else {
-                    main(tokenizer, ".ui .inputLines", outputTable);
+                    main(tokenizer, ".ui .inputLines", ".result-markup tbody");
                 }
             });
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyTable("table.formatResult tbody");
+            Util.copyTable(".result-markup tbody");
         });
 
     </script>

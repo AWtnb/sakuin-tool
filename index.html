@@ -12,25 +12,21 @@
     <title>sakuin-tool</title>
     <base target="_blank">
     <link rel="shortcut icon" href="./tools/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="./tools/style.css">
-    <style>
-        .fullauto {
-            font-weight: bold;
-            font-size: .9em;
-            text-indent: 1em;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="./tools/almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="./tools/additional.css">
 </head>
 
 <body>
     <!-- ============================== -->
     <div class="container">
+        <div style="text-align: right;"><a href="https://github.com/AWtnb/sakuin-tool">repo.</a></div>
 
         <h1>sakuin-tool</h1>
-
-        <div class="promotion">
-            <p><a href="https://github.com/AWtnb/sakuin-tool"><img src="./github-mark.png"></a></p>
-        </div>
+        <ul>
+            <li>本ツールでの索引整形は一定の法則にしたがって機械的に一括処理しています。</li>
+            <li>例外的なデータには対応できません。精度にも限界がありますので<strong>必ず目でも校正してください。</strong></li>
+            <li>本ツールが外部にデータを送信することは一切ありません。</li>
+        </ul>
 
         <div class="outline">
 
@@ -41,24 +37,25 @@
                 <li><a href="./tools/Preformat/index.html">事前整形</a></li>
             </ol>
             <h4>データ整形</h4>
-            <div class="fullauto">
-                忙しい人向け：<a href="./fullauto/index.html">おまかせモード</a>
-            </div>
-            <ol>
-                <li><a href="./tools/Group/index.html">名寄せ</a>
-                    <ul>
-                        <li><a href="./tools/CheckGrouping/index.html">見よ項目の名寄せをチェック</a></li>
-                    </ul>
-                </li>
-                <li><a href="./tools/GetReading/index.html">読みがなの取得</a></li>
-                <li><a href="./tools/Hairetsu/index.html">配列読みに変換</a></li>
-                <li><a href="./tools/Sort/index.html">並べ替え</a></li>
-            </ol>
-            <h4>微調整用・その他</h4>
+            <ul>
+                <li><a href="./fullauto/index.html">おまかせモード</a></li>
+                <li>マニュアルモード<ol>
+                    <li><a href="./tools/Group/index.html">名寄せ</a>
+                    <li><a href="./tools/CheckGrouping/index.html">見よ項目の名寄せをチェック</a></li>
+                    </li>
+                    <li><a href="./tools/GetReading/index.html">読みがなの取得</a></li>
+                    <li><a href="./tools/Hairetsu/index.html">配列読みに変換</a></li>
+                    <li><a href="./tools/Sort/index.html">並べ替え</a></li>
+                </ol></li>
+            </ul>
+            <h5>各種チェック</h5>
             <ul>
                 <li><a href="./tools/CheckReference/index.html">見よ項目のチェック</a></li>
                 <li><a href="./tools/CheckChild/index.html">子項目候補のチェック</a></li>
                 <li><a href="./tools/CheckNombre/index.html">ノンブル並びの確認</a></li>
+            </ul>
+            <h5>微調整用・その他</h5>
+            <ul>
                 <li><a href="./tools/Katahira/index.html">カタカナひらがな相互変換</a></li>
                 <li><a href="./tools/Roman/index.html">ローマ字に変換</a></li>
                 <li><a href="./tools/AdjustNombre/index.html">ノンブル加算減算</a></li>
@@ -71,14 +68,6 @@
             </ul>
         </div>
 
-        <div class="warning">
-            <hr>
-            <ul>
-                <li>本ツールでの索引整形は一定の法則にしたがって機械的に一括処理しています。</li>
-                <li>例外的なデータには対応できません。精度にも限界がありますので<strong>必ず目でも校正してください。</strong></li>
-                <li>本ツールが外部にデータを送信することは一切ありません。</li>
-            </ul>
-        </div>
     </div>
 
 
