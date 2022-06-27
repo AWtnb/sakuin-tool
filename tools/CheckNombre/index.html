@@ -26,7 +26,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
 
         <h2>ノンブル並びの確認</h2>
         <div class="caption">
@@ -54,7 +53,8 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util, Entry, EntryAddress} from "../common.js";
+        import {Util, Entry, EntryAddress, setNavi} from "../common.js";
+        setNavi();
 
         function unSorted(nombres) {
             for (let i = 0; i < nombres.length - 1; i++) {

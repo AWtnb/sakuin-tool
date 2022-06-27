@@ -12,7 +12,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
 
         <h2>入力テンプレートの事前整形</h2>
 
@@ -54,7 +53,8 @@
 
         <!-- ============================== -->
         <script type="module">
-            import {Util} from "../common.js";
+            import {Util, setNavi} from "../common.js";
+            setNavi();
 
             function formatIndexTemplate(selector) {
                 const lines = Util.getElemValueLines(selector);

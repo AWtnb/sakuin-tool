@@ -27,8 +27,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
-
 
         <h2>見よ項目の名寄せをチェック</h2>
 
@@ -58,6 +56,9 @@
     </div>
     <!-- ============================== -->
     <script type="module">
+        import {setNavi} from "../common.js"
+        setNavi();
+
         import {GroupingChecker} from "./src.js";
 
         document.querySelector("#exeButton").addEventListener("click", () => {

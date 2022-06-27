@@ -12,7 +12,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
 
         <h2>子項目の復元</h2>
 
@@ -48,8 +47,9 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util, Entry, setScroller} from "../common.js";
+        import {Util, Entry, setScroller, setNavi} from "../common.js";
         setScroller();
+        setNavi();
 
         function completeChildEntry(selector) {
             const lines = Util.getElemValueLines(selector).filter(x => String(x).trim());

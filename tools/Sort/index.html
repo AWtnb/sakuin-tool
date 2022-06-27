@@ -12,8 +12,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
-
 
         <h2>並べ替え</h2>
 
@@ -57,7 +55,9 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util} from "../common.js";
+        import {Util, setNavi} from "../common.js";
+        setNavi();
+
         import {SortIndex} from "./src.js";
 
         document.querySelector("#exeButton").addEventListener("click", () => {

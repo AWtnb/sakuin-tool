@@ -63,7 +63,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../index.html">TOP</a></div>
 
         <h2>おまかせモード</h2>
         <div class="caption">
@@ -135,7 +134,9 @@
     <!-- ============================== -->
     <script type="text/javascript" src="../tools/GetReading/kuromoji.js" defer></script>
     <script type="module">
-        import {Util, Entry} from "../tools/common.js";
+        import {Util, Entry, setNavi} from "../tools/common.js";
+        setNavi();
+
         import {Reading} from "../tools/GetReading/src.js";
         import {NormalizedReading} from "../tools/Hairetsu/src.js";
         import {Grouper} from "../tools/Group/src.js";

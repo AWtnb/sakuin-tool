@@ -12,8 +12,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
-
 
         <h2>名開き</h2>
 
@@ -51,7 +49,8 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util, Entry, EntryAddress} from "../common.js";
+        import {Util, Entry, EntryAddress, setNavi} from "../common.js";
+        setNavi();
 
         function releaseGrouping(selector) {
             const lines = Util.getElemValueLines(selector);

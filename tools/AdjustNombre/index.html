@@ -55,7 +55,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
 
         <h2>ノンブル加算減算</h2>
         <div class="caption">
@@ -99,8 +98,9 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util, Entry, EntryAddress, setScroller} from "../common.js";
+        import {Util, Entry, EntryAddress, setScroller, setNavi} from "../common.js";
         setScroller();
+        setNavi();
 
         function adjustNombre(parsed, start, end, delta) {
             if (Number(start) <= parsed.intValue && parsed.intValue <= Number(end)) {

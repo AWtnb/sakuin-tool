@@ -12,7 +12,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
 
         <h2>読みがなの取得</h2>
 
@@ -46,7 +45,8 @@
     <!-- ============================== -->
     <script src="./kuromoji.js"></script>
     <script type="module">
-        import {Util, Entry, setScroller} from "../common.js";
+        import {Util, Entry, setScroller, setNavi} from "../common.js";
+        setNavi();
         setScroller();
 
         import {Reading} from "./src.js";

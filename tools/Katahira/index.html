@@ -12,8 +12,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
-
 
         <h2>カタカナひらがな相互変換</h2>
         <div class="caption">
@@ -37,7 +35,8 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util, setScroller} from "../common.js";
+        import {Util, setScroller, setNavi} from "../common.js";
+        setNavi();
         setScroller();
 
         document.querySelector("#exeButton").addEventListener("click", () => {

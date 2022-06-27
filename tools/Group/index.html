@@ -25,8 +25,6 @@
 <body>
     <!-- ============================== -->
     <div class="container">
-        <div class="navi"><a href="../../index.html">TOP</a></div>
-
 
         <h2>名寄せ</h2>
         <div class="caption">
@@ -82,7 +80,9 @@
     </div>
     <!-- ============================== -->
     <script type="module">
-        import {Util} from "../common.js"
+        import {Util, setNavi} from "../common.js"
+        setNavi();
+
         import {Grouper} from "./src.js";
 
         document.querySelector("#exeButton").addEventListener("click", () => {
