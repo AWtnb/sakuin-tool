@@ -6,7 +6,8 @@
     <title>入力テンプレートの作成</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../adittional.css">
     <style>
         table tr td:nth-child(1) {
             color: #888;
@@ -22,50 +23,47 @@
     <!-- ============================== -->
     <div class="container">
 
-        <div class="navi"><a href="../../index.html">TOP</a></div>
-
         <h2>索引拾いのテンプレート生成</h2>
 
-        <div class="caption">
-            <div class="imagebox">
-                <div class="boxtitle">SAMPLE1</div>
-                <img src="./image/img_newtemplate.png">
-            </div>
-            <div class="imagebox">
-                <div class="boxtitle">SAMPLE2</div>
-                <img src="./image/img_generate-index.png">
-                <img src="./image/img_generate-index-rule.png">
-            </div>
-            <ul>
-                <li>索引拾いのための Excel テンプレートを作成します。</li>
-                <li>各ページの項目数を SAMPLE1 のように Excel に整理して下記ボックスに貼り付けてください。</li>
-                <li>SAMPLE2 のように<code>index</code>列に条件付き書式で<code>偶数の場合に背景色変更</code>という設定をするとページの変わり目が見やすくなり便利です。</li>
-            </ul>
-        </div>
 
         <div class="ui">
             <textarea class="inputLines" placeholder="paste here!"></textarea>
             <input type="button" value="生成" id="exeButton">
-            <table class="result">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>index</th>
-                        <th>ページ</th>
-                        <th>項目</th>
-                        <th>見よ先</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="result">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>index</th>
+                            <th>ページ</th>
+                            <th>項目</th>
+                            <th>見よ先</th>
+                        </tr>
+                    </thead>
+                    <tbody><td></td><td></td><td></td><td></td><td></td></tbody>
+                </table>
+            </div>
             <input type="button" value="表をコピー" id="copyButton">
+        </div>
 
+        <div>
+            <ul>
+                <li>索引拾いのための Excel テンプレートを作成します。</li>
+                <li>各ページの項目数を下図のように Excel に整理して下記ボックスに貼り付けてください。</li>
+            </ul>
+            <img src="./image/img_newtemplate.png">
+            <ul>
+                <li>下図のように<code>index</code>列に条件付き書式で<code>偶数の場合に背景色変更</code>という設定をするとページの変わり目が見やすくなり便利です。</li>
+            </ul>
+            <img src="./image/img_generate-index.png">
+            <img src="./image/img_generate-index-rule.png">
         </div>
 
     </div>
-    <!-- ============================== -->
+
     <script type="module">
-        import {Util} from "../common.js";
+        import {Util, setNavi} from "../common.js";
+        setNavi();
 
         function generateTemplare(selector) {
             const lines = Util.getElemValueLines(selector);
@@ -87,8 +85,7 @@
         }
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const elem = document.querySelector(".ui");
-            const outputTable = elem.querySelector("table.result tbody");
+            const outputTable = document.querySelector(".ui .result tbody");
             outputTable.innerHTML = "";
             outputTable.innerHTML = generateTemplare(".ui .inputLines").join("\n")
         });
