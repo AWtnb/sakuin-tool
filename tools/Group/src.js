@@ -4,7 +4,7 @@ export class Grouper {
 
     constructor(selector, addressOnLeft = false) {
         this.linesParsed = Util.getElemValueLines(selector).filter(line => line.trim()).map(line => {
-            const elems = line.trim().split("\t").slice(0, 2);
+            const elems = line.split("\t").slice(0, 2);
             if (elems.length < 2) {
                 return {
                     "Item": String(elems[0]).trimEnd(),
