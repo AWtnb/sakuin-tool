@@ -59,6 +59,9 @@ export class Util {
         });
     }
 
+    static stripNAN(s) {
+        return s.replace(/[^\d]/g, "");
+    }
 }
 
 

@@ -94,7 +94,7 @@
                 const stack = [];
                 let modified = false;
                 this.originalNombres.forEach((nombre, idx) => {
-                    if (nombre != this.adjustedNombres[idx]) {
+                    if (Util.stripNAN(nombre) != Util.stripNAN(this.adjustedNombres[idx])) {
                         stack.push(`<span style="text-decoration: line-through;color: #35618a;">${nombre}</span><span style="color:red;">${this.adjustedNombres[idx]}</span>`);
                         modified = true;
                     }
