@@ -10,36 +10,6 @@
     <link rel="stylesheet" type="text/css" href="../additional.css">
     <style>
 
-        div.msg {
-            font-size: .9rem;
-            font-weight: bold;
-        }
-
-        div.wrap {
-            margin: .5em 0;
-            line-height: 1;
-            font-size: 1rem;
-        }
-
-        div.adjusted {
-            color: #333;
-        }
-
-        div.adjusted .same {
-            color: gray;
-        }
-
-        div.adjusted .mod {
-            color: red;
-        }
-
-        div.adjusted .del {
-            text-decoration: line-through;
-            color: #35618a;
-            letter-spacing: -1px;
-            margin: 0;
-        }
-
         ul.config li input {
             max-width: 20%;
         }
@@ -92,7 +62,7 @@
         setScroller();
         setNavi();
 
-        class Adjuster {
+        class NombreAdjuster {
             constructor(start, end, delta) {
                 this.start = start;
                 this.end = end;
@@ -106,76 +76,64 @@
             }
         }
 
-        function isDifferentNombres(a, b) {
-            return a.join("").replace(/[^\d]/g, "") != b.join("").replace(/[^\d]/g, "");
-        }
-
         class EntryLine {
             constructor(line, adjuster) {
-                const entry = new Entry(line);
-                this.name = entry.name;
-                this.originalNombres = [];
-                this.adjustedNombres = [];
-                if (!entry.address) {
-                    return
-                }
-                const parsedAddress = new EntryAddress(entry.address);
-                this.originalNombres =parsedAddress.rawElements;
-                this.adjustedNombres = this.originalNombres.map(nbr => {
-                    const parsed = new EntryAddress(nbr).nombres;
+                this.entry = new Entry(line);
+                this.originalNombres = EntryAddress.sanitize(this.entry.address).split(",").map(x => x.trim()).filter(Boolean);
+                this.adjustedNombres = this.originalNombres.map(nombre => {
+                    const parsed = new EntryAddress(nombre).nombres;
                     if (parsed.length > 1) {
-                        return adjuster.exec(parsed[0]) + "\u2013" + adjuster.exec(parsed.slice(-1)[0]);
+                        // 範囲指定のノンブルだった場合
+                        return adjuster.exec(parsed[0]) + "\u2013" + adjuster.exec(parsed.at(-1));
                     }
                     return adjuster.exec(parsed[0]);
                 });
-                this.changed = isDifferentNombres(this.originalNombres, this.adjustedNombres);
             }
-        }
 
-        function adjustNombresLine(selector, start, end, delta) {
-            const lines = Util.getElemValueLines(selector);
-            const adjuster = new Adjuster(start, end, delta);
-            return lines.map(line => new EntryLine(line, adjuster) );
-        }
+            compareAddress() {
+                const stack = [];
+                let modified = false;
+                this.originalNombres.forEach((nombre, idx) => {
+                    if (nombre != this.adjustedNombres[idx]) {
+                        stack.push(`<span style="text-decoration: line-through;color: #35618a;">${nombre}</span><span style="color:red;">${this.adjustedNombres[idx]}</span>`);
+                        modified = true;
+                    }
+                    else {
+                        stack.push(`<span style="scolor:gray;">${nombre}</span>`);
+                    }
+                });
+                return {
+                    "modified": modified,
+                    "markup": stack.join(", ")
+                };
+            }
 
-        function diffNombre(origin, adjusted) {
-            return adjusted.map((adj, i) => {
-                if (isDifferentNombres([adj], [origin[i]])) {
-                    return `<span class="del">${origin[i]}</span><span class="mod">${adj}</span>`;
-                }
-                return `<span class="same">${adj}</span>`;
-            }).join(", ");
         }
 
 
         document.querySelector("#exeButton").addEventListener("click", () => {
-            const adjustedLines = adjustNombresLine(
-                ".ui .inputLines",
+            const adjuster = new NombreAdjuster(
                 document.querySelector(".config .startNombre").value,
                 document.querySelector(".config .endNombre").value,
                 document.querySelector(".config .nombreDelta").value
             );
-
-            document.querySelector(".ui textarea.result").value = adjustedLines.map(l => {
-                if (l.name) {
-                    return `${l.name}\u3000\u3000${l.adjustedNombres.join(", ")}`.trimEnd();
+            const lines = Util.getElemValueLines(".ui .inputLines");
+            const output = [];
+            const markups = [];
+            lines.forEach(line => {
+                const el = new EntryLine(line, adjuster);
+                const leftSide = el.entry.name + "\u3000\u3000";
+                output.push( `${leftSide}${el.adjustedNombres.join(", ")}`.trimEnd() );
+                const diff = el.compareAddress();
+                if (diff.modified) {
+                    markups.push( "<div>" + `${leftSide}${diff.markup}`.trimEnd() + "</div>");
                 }
-                return "";
-            }).join("\n");
-
-            const modified = adjustedLines.filter(line => line.changed);
-            const markup = [];
-            if (modified.length) {
-                markup.push(`<h4>${modified.length}行の変更</h4>`);
-                const diffs = modified.map(item => {
-                    return `<li><div class="adjusted">${item.name}\u3000\u3000${diffNombre(item.originalNombres, item.adjustedNombres)}</div></li>`;
-                });
-                markup.push(`<ul>${diffs.join("")}</ul>`);
+            })
+            document.querySelector(".ui textarea.result").value = output.join("\n");
+            if (markups.length < 1) {
+                markups.push("<div>（変更箇所はありません）</div>");
             }
-            else {
-                markup.push("<div>（変更箇所はありません）</div>");
-            }
-            document.querySelector(".result-markup").innerHTML = markup.join("");
+            document.querySelector(".result-markup").innerHTML = markups.join("");
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {
