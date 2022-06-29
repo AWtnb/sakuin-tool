@@ -1,9 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Noto+Sans+JP:wght@400;700&display=swap');
+
 html {
-    font-family: 'Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
+    font-family: 'Noto Sans JP', sans-serif;;
 }
 
 body {
     margin-bottom: 50vh;
+}
+
+h1, h2 {
+    font-family: 'Dela Gothic One', cursive;;
 }
 
 h1, h2, h3, h4, h5 {

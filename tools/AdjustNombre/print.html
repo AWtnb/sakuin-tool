@@ -3,44 +3,17 @@
 
 <head>
     <title>print</title>
-    <style>
-        .wrap-pair, input {
-            display: block;
-        }
-        .wrap-check {
-            display: flex;
-            font-size: 16px;
-            margin: .75em 0;
-            line-height: 1;
-            align-items: center;
-        }
-        .adjusted {
-            color: #333;
-        }
-        .adjusted .same {
-            color: gray;
-        }
-        .adjusted .mod {
-            color: red;
-        }
-        .adjusted .del {
-            text-decoration: line-through;
-            color: #35618a;
-            letter-spacing: -1px;
-            margin: 0;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../additional.css">
 </head>
 
 <body>
-    <div id="detail"></div>
+    <div><ul id="detail"></ul></div>
     <script>
         window.onload = function () {
-            const SOURCE = window.opener.document.querySelector("#src-detail");
-            const markup = Array.from(SOURCE.querySelectorAll(".wrap")).map(elm => {
-                return `<div class="wrap-check"><input type="checkbox"><div class="wrap-pair">${elm.innerHTML}</div></div>`;
-            })
-            document.querySelector("#detail").innerHTML = markup.join("");
+            document.querySelector("#detail").innerHTML = Array.from(window.opener.document.querySelectorAll("#src-detail li")).map(elem => {
+                return `<li><input type="checkbox" style="vertical-align:middle;"><span>${elem.innerHTML}</span></li>`;
+            }).join("");
         }
     </script>
 </body>

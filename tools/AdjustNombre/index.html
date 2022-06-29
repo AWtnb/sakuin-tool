@@ -126,14 +126,14 @@
                 output.push( `${leftSide}${el.adjustedNombres.join(", ")}`.trimEnd() );
                 const diff = el.compareAddress();
                 if (diff.modified) {
-                    markups.push( "<div>" + `${leftSide}${diff.markup}`.trimEnd() + "</div>");
+                    markups.push( "<li>" + `${leftSide}${diff.markup}`.trimEnd() + "</li>");
                 }
             })
             document.querySelector(".ui textarea.result").value = output.join("\n");
             if (markups.length < 1) {
-                markups.push("<div>（変更箇所はありません）</div>");
+                markups.push("<div>変更箇所はありません！</div>");
             }
-            document.querySelector(".result-markup").innerHTML = markups.join("");
+            document.querySelector(".result-markup").innerHTML = "<ul>" + markups.join("") + "</ul>";
         });
 
         document.querySelector("#copyButton").addEventListener("click", () => {
