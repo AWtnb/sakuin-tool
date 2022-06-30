@@ -49,7 +49,7 @@
             parentStack.push(new Entry(lines[0]).name);
             for (let i = 1; i < lines.length; i++) {
                 const cur = String(lines[i]);
-                if (Entry.isIndented(cur) && cur.indexOf("\u2015\u2015") != -1) {
+                if (Util.isIndented(cur) && cur.indexOf("\u2015\u2015") != -1) {
                     const completed = cur.trimStart().replace("\u2015\u2015", parentStack.slice(-1)[0]);
                     stack.push(completed);
                 }

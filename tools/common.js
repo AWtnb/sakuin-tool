@@ -62,6 +62,11 @@ export class Util {
     static stripNAN(s) {
         return s.replace(/[^\d]/g, "");
     }
+
+    static isIndented(s) {
+        return s.trimStart() != s;
+    }
+
 }
 
 
@@ -85,47 +90,51 @@ export class Entry {
 
     parse() {
         if (this.elems.length >= 2) {
-            if (this.elems.length > 2) {
-                this.name = this.elems.slice(0,-1).join(this.separator).trimEnd();
-                this.address = this.elems.slice(-1)[0].trim();
-            }
-            else {
-                this.name = this.elems[0].trimEnd();
-                this.address = this.elems[1].trim();
-            }
-            this.basename = Entry.trimTrailingParen(this.name);
-            this.referredFrom = Entry.parseParen(this.name);
-            this.isChild = Entry.isIndented(this.name);
+            const sides = (() => {
+                if (this.elems.length > 2) {
+                    return {
+                        "left": this.elems.slice(0,-1).join(this.separator),
+                        "right": this.elems.at(-1)
+                    };
+                }
+                return {
+                    "left": this.elems[0],
+                    "right": this.elems[1]
+                };
+            })();
+            this.isChild = Util.isIndented(sides.left);
+            this.name = ((this.isChild)? "\u3000" : "") + sides.left.trim();
+            this.address = sides.right.trim();
+            this.basename = this.trimAppendix();
+            this.referredFrom = this.getSource();
+            return;
         }
         if (this.elems[0]) {
-            this.name = this.elems[0].trimEnd();
-            this.basename = Entry.trimTrailingParen(this.name);
-            this.referredFrom = Entry.parseParen(this.name);
-            this.isChild = Entry.isIndented(this.name);
+            const s = this.elems[0];
+            this.isChild = Util.isIndented(s);
+            this.name = ((this.isChild)? "\u3000" : "") + s.trim();
+            this.basename = this.trimAppendix();
+            this.referredFrom = this.getSource();
             const refElems = this.name.split("→").map(x => String(x).trim()).filter(Boolean);
             if (refElems.length > 1) {
                 this.isReference = true;
-                this.referTo = refElems.slice(-1)[0];
+                this.referTo = refElems.at(-1);
                 this.basename = refElems[0];
             }
         }
     }
 
-
-    static parseParen(s) {
-        const inner = s.replace(/^.*[\uff08\u0028\uff3b\u005b](.+?)[\uff09\u0029\uff3d\u005d]$/, "$1");
-        if (inner == s) {
-            return [];
+    getSource() {
+        const m = this.name.match(/[\uff08\u0028\uff3b\u005b](.+?)[\uff09\u0029\uff3d\u005d]$/);
+        if (m) {
+            const inner = m[1];
+            return inner.replace(/\uff0c/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
         }
-        return inner.replace(/\uff0c/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
+        return [];
     }
 
-    static trimTrailingParen(s) {
-        return s.replace(/(\uff08.+?\uff09|\uff3b.+?\uff3d|\u0028.+?\u0029|\u005b.+?\u005d)$/, "");
-    }
-
-    static isIndented(s) {
-        return s.trimStart() != s;
+    trimAppendix() {
+        return this.name.replace(/(\uff08.+?\uff09|\uff3b.+?\uff3d|\u0028.+?\u0029|\u005b.+?\u005d)$/, "");
     }
 
 }
