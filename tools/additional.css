@@ -68,4 +68,5 @@ th, td {
 .ui textarea {
     min-width: 40%;
     height: 180px;
+    white-space: pre;
 }
