@@ -58,6 +58,9 @@ th, td {
 .result-markup {
     margin: 1rem;
     padding: 1rem;
+}
+
+.limit-height {
     max-height: 300px;
     overflow-y: auto;
 }
