@@ -16,87 +16,109 @@
         <h1>入力テンプレートの事前整形</h1>
 
 
-        <div class="ui">
-            <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="整形" id="exeButton">
-        </div>
+        <div id="app">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="format">実行</button>
+            </div>
 
-        <div class="caption">
-            <ul>
-                <li>入力した<a href="../NewTemplate/index.html">テンプレート</a>について、項目を左列に、ページを右列に配置します</li>
-                <li><code>見よ先</code>が入力されている場合：
-                    <ul>
-                        <li><code>　→</code>でつないで見よ項目を作成します</li>
-                        <li>ノンブルを削除します</li>
-                        <li>代わりに同じノンブルで見よ先項目を作成します</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+            <div class="caption">
+                <ul>
+                    <li>入力した<a href="../NewTemplate/index.html">テンプレート</a>について、項目を左列に、ページを右列に配置します</li>
+                    <li><code>見よ先</code>が入力されている場合：
+                        <ul>
+                            <li><code>　→</code>でつないで見よ項目を作成します</li>
+                            <li>ノンブルを削除します</li>
+                            <li>代わりに同じノンブルで見よ先項目を作成します</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
 
-        <div class="result-markup">
-            <table>
-                <thead>
-                    <tr>
-                        <th>項目</th>
-                        <th>ノンブル</th>
-                    </tr>
-                </thead>
-                <tbody><td></td><td></td></tbody>
-            </table>
+            <div class="result-markup limit-height">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>ノンブル</th>
+                        </tr>
+                    </thead>
+                    <tbody><tr v-for="(item, idx) in lines" :key="idx">
+                        <td>{{item.name}}</td>
+                        <td>{{item.nombre}}</td>
+                    </tr></tbody>
+                </table>
+            </div>
+            <button @click="copy">表をコピー</button>
         </div>
-        <input type="button" value="表をコピー" id="copyButton">
 
         <img src="./image/img_preformat.png">
 
     </div>
 
-        <!-- ============================== -->
-        <script type="module">
-            import {Util, setNavi} from "../common.js";
-            setNavi();
+    <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script type="module">
+        import {Util, setNavi} from "../common.js";
+        setNavi();
 
-            function formatIndexTemplate(selector) {
-                const lines = Util.getElemValueLines(selector);
-                const stack = [];
-                lines.filter(x => x.trim()).forEach(line => {
-                    const [nombre, name, referTo, ...rest] = line.split("\t").map(x => x.trim());
-                    const nStr = String(Util.toHalfWidth(nombre));
-                    if (String(referTo).length > 0) {
+        function formatIndexTemplate(lines) {
+            const stack = [];
+            lines.filter(x => x.trim()).forEach(line => {
+                const [nombre, name, referTo, ...rest] = line.split("\t").map(x => x.trim());
+                const nStr = String(Util.toHalfWidth(nombre));
+                if (String(referTo).length > 0) {
+                    stack.push({
+                        "nombre": "",
+                        "name": `${name}\u3000→${referTo}`,
+                    });
+                    stack.push({
+                        "nombre": nStr,
+                        "name": `${referTo}\uff08${name}\uff09`,
+                    });
+                }
+                else {
+                    if (String(name).length > 0) {
                         stack.push({
-                            "Nombre": "",
-                            "Name": `${name}\u3000→${referTo}`,
-                        });
-                        stack.push({
-                            "Nombre": nStr,
-                            "Name": `${referTo}\uff08${name}\uff09`,
+                            "nombre": nStr,
+                            "name": name,
                         });
                     }
-                    else {
-                        if (String(name).length > 0) {
-                            stack.push({
-                                "Nombre": nStr,
-                                "Name": name,
-                            });
-                        }
-                    }
-                });
-                return stack.map(x => {
-                    return `<tr><td>${x.Name}</td><td>${x.Nombre}</td></tr>`;
-                });
+                }
+            });
+            return stack;
+        }
+
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+                lines: [],
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+            },
+            methods: {
+                reset: function(){
+                    this.lines = [];
+                },
+                format: function() {
+                    this.reset();
+                    formatIndexTemplate(this.contentLines).forEach(x => {
+                        this.lines.push(x);
+                    });
+                },
+                copy: function() {
+                    const joined = this.lines.map(x => `${x.name}\t${x.nombre}`).join("\n");
+                    Util.copyToClipboard(joined);
+                }
             }
+        });
 
-            document.querySelector("#exeButton").addEventListener("click", () => {
-                const outputTable = document.querySelector(".result-markup tbody");
-                outputTable.innerHTML = "";
-                outputTable.innerHTML = formatIndexTemplate(".ui .inputLines").join("\n");
-            });
 
-            document.querySelector("#copyButton").addEventListener("click", () => {
-                Util.copyTable(".result-markup tbody");
-            });
-
-        </script>
+    </script>
 </body>
 
 </html>
