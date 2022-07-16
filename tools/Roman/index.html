@@ -11,13 +11,17 @@
 </head>
 
 <body>
-    <!-- ============================== -->
     <div class="container">
-
         <h1>ローマ字に変換</h1>
-        <div class="ui">
-            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="変換" id="exeButton">
+
+        <div id="app">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+            </div>
+            <div class="ui">
+                <textarea placeholder="result" readonly v-model="converted"></textarea>
+                <button @click="copy">コピー</button>
+            </div>
         </div>
 
         <ul>
@@ -34,17 +38,12 @@
             </li>
         </ul>
 
-        <div class="ui">
-            <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" id="copyButton">
-        </div>
-
     </div>
     <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script type="module">
-        import {Util, setScroller, setNavi} from "../common.js";
+        import {Util, setNavi} from "../common.js";
         setNavi();
-        setScroller();
 
         function toRoman(s) {
             const map = new Map();
@@ -77,12 +76,21 @@
             return converted.toLowerCase();
         }
 
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            document.querySelector(".ui .result").value = toRoman(document.querySelector(".ui .inputLines").value);
-        });
-
-        document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyValue(".ui .result");
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+            },
+            computed: {
+                converted: function() {
+                    return toRoman(this.content);
+                }
+            },
+            methods: {
+                copy: function() {
+                    Util.copyToClipboard(this.converted);
+                },
+            }
         });
 
     </script>

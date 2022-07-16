@@ -50,9 +50,8 @@
             },
             methods: {
                 copy: function() {
-                    navigator.clipboard.writeText(String(this.converted).replace(/&amp;/g, "&"));
-                    alert("コピーしました！");
-                },
+                    Util.copyToClipboard(this.converted);
+                }
             }
         });
 
