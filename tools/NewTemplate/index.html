@@ -17,26 +17,36 @@
         <h1>索引拾いのテンプレート生成</h1>
 
 
-        <div class="ui">
-            <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="生成" id="exeButton">
-        </div>
+        <div id="app">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="generate">実行</button>
+            </div>
 
-        <div class="result-markup limit-height">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>index</th>
-                        <th>ページ</th>
-                        <th>項目</th>
-                        <th>見よ先</th>
-                    </tr>
-                </thead>
-                <tbody><td></td><td></td><td></td><td></td><td></td></tbody>
-            </table>
+            <div class="result-markup limit-height">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>index</th>
+                            <th>ページ</th>
+                            <th>項目</th>
+                            <th>見よ先</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(line, idx) in lines" :key="idx">
+                            <td>{{ line.index }}</td>
+                            <td>{{ line.page }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button @click="copy">コピー</button>
         </div>
-        <input type="button" value="表をコピー" id="copyButton">
 
         <ul>
             <li>索引拾いのための Excel テンプレートを作成します。</li>
@@ -50,14 +60,13 @@
         <img src="./image/img_generate-index-rule.png">
 
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script type="module">
         import {Util, setNavi} from "../common.js";
         setNavi();
 
-        function generateTemplare(selector) {
-            const lines = Util.getElemValueLines(selector);
-            const templateArray = [];
+        function generateTemplare(lines) {
+            const stack = [];
             let idx = 0;
             lines.filter(line => line).forEach(line => {
                 const [page, counter, ...rest] = line.split("\t");
@@ -65,23 +74,40 @@
                 if (Number(nItem) > 0) {
                     idx += 1;
                     for (let i = 0; i < Number(nItem); i++) {
-                        templateArray.push({ "Index": idx, "Page": page });
+                        stack.push({ "index": String(idx), "page": String(page) });
                     }
                 }
             });
-            return templateArray.map((x, i) => {
-                return `<tr><td style="color:gray;">${i+1}</td><td style="color:gray;">${x.Index}</td><td>${x.Page}</td><td></td><td></td></tr>`;
-            });
+            return stack;
         }
 
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            const outputTable = document.querySelector(".result-markup tbody");
-            outputTable.innerHTML = "";
-            outputTable.innerHTML = generateTemplare(".ui .inputLines").join("\n")
-        });
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+                lines: [],
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+            },
+            methods: {
+                reset: function(){
+                    this.lines = [];
+                },
+                generate: function() {
+                    this.reset();
+                    generateTemplare(this.contentLines).forEach(x => {
+                        this.lines.push(x);
+                    });
 
-        document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyTable(".result-markup tbody");
+                },
+                copy: function() {
+                    const joined = this.lines.map(x => `${x.index}\t${x.page}\t\t\t`).join("\n");
+                    Util.copyToClipboard(joined);
+                }
+            }
         });
 
     </script>
