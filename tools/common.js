@@ -45,6 +45,11 @@ export class Util {
         alert("コピーしました！");
     }
 
+    static copyToClipboard(s) {
+        navigator.clipboard.writeText(String(s).replace(/&amp;/g, "&"));
+        alert("コピーしました！");
+    }
+
     static toKatakana(str){
         return str.replace(/[\u3041-\u3096]/g, function(match) {
             const chr = match.charCodeAt(0) + 0x60;
