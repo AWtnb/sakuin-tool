@@ -16,35 +16,44 @@
 
         <h1>カタカナひらがな相互変換</h1>
 
-        <div class="ui">
-            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="変換" id="exeButton">
-        </div>
-
-        <div class="ui">
-            <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" id="copyButton">
+        <div id="app">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+            </div>
+            <div class="ui">
+                <textarea placeholder="result" readonly v-model="converted"></textarea>
+                <button @click="copy">コピー</button>
+            </div>
         </div>
 
     </div>
     <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script type="module">
-        import {Util, setScroller, setNavi} from "../common.js";
+        import {Util, setNavi} from "../common.js";
         setNavi();
-        setScroller();
 
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            const s = document.querySelector(".ui .inputLines").value;
-            document.querySelector(".ui .result").value = s.replace(/[\u30a1-\u30f4\u3041-\u3093]/g, (m) => {
-                if (m.match(/[\u30a1-\u30f4]/)) {
-                    return Util.toHiragana(m);
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+            },
+            computed: {
+                converted: function() {
+                    return this.content.replace(/[\u30a1-\u30f4\u3041-\u3093]/g, (m) => {
+                        if (m.match(/[\u30a1-\u30f4]/)) {
+                            return Util.toHiragana(m);
+                        }
+                        return Util.toKatakana(m);
+                    });
                 }
-                return Util.toKatakana(m);
-            });
-        });
-
-        document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyValue(".ui .result");
+            },
+            methods: {
+                copy: function() {
+                    navigator.clipboard.writeText(String(this.converted).replace(/&amp;/g, "&"));
+                    alert("コピーしました！");
+                },
+            }
         });
 
     </script>
