@@ -1,9 +1,6 @@
-import {Util} from "../common.js";
-
 export class SortIndex {
 
-    static fromTsv (selector) {
-        const lines = Util.getElemValueLines(selector);
+    static fromTsv (lines) {
         return lines.filter(line => line.trim()).map(line => {
             const [item, reading, norm,  ...rest] = line.split("\t"); // 配列読み＝正規化＝normalized
             return {

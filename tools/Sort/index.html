@@ -16,60 +16,78 @@
 
         <h1>並べ替え</h1>
 
-        <div class="ui">
-            <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="ソート" id="exeButton">
+        <div id="app">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="sortLines">実行</button>
+            </div>
+
+            <ul>
+                <li>下図のように<code>項目</code><code>読み</code><code>配列読み</code>の3列を Excel から貼り付けてください。</li>
+                <li>以下の基準で行をソートします。
+                    <ul>
+                        <li>最優先は<code>配列読み</code>の情報。</li>
+                        <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+                        <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="result-markup limit-height">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>読み</th>
+                            <th>配列読み</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(line, idx) in lines" :key="idx">
+                            <td>{{line.Item}}</td>
+                            <td>{{line.Reading}}</td>
+                            <td>{{line.Norm}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button @click="copy">表をコピー</button>
         </div>
-
-        <ul>
-            <li>下図のように<code>項目</code><code>読み</code><code>配列読み</code>の3列を Excel から貼り付けてください。</li>
-            <li>以下の基準で行をソートします。
-                <ul>
-                    <li>最優先は<code>配列読み</code>の情報。</li>
-                    <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
-                    <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
-                </ul>
-            </li>
-        </ul>
-
-
-
-        <div class="result-markup limit-height">
-            <table>
-                <thead>
-                    <tr>
-                        <th>項目</th>
-                        <th>読み</th>
-                        <th>配列読み</th>
-                    </tr>
-                </thead>
-                <tbody><td></td><td></td><td></td></tbody>
-            </table>
-        </div>
-        <input type="button" value="表をコピー" id="copyButton">
 
         <img src="./image/img_sort.png">
 
     </div>
     <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script type="module">
         import {Util, setNavi} from "../common.js";
         setNavi();
 
         import {SortIndex} from "./src.js";
 
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            const outputTable = document.querySelector(".result-markup tbody");
-            outputTable.innerHTML = "";
-            const parsed = SortIndex.fromTsv(".ui .inputLines");
-            outputTable.innerHTML = "";
-            outputTable.innerHTML = SortIndex.sortByReading(parsed).map(x => {
-                return `<tr><td>${x.Item}</td><td>${x.Reading}</td><td>${x.Norm}</td></tr>`;
-            }).join("\n");
-        });
-
-        document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyTable(".result-markup tbody");
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+                lines: []
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+            },
+            methods: {
+                sortLines: function() {
+                    const parsed = SortIndex.fromTsv(this.contentLines);
+                    SortIndex.sortByReading(parsed).forEach(x => {
+                        this.lines.push(x);
+                    });
+                },
+                copy: function() {
+                    const joined = this.lines.map(x => `${x.Item}\t${x.Reading}\t${x.Norm}`).join("\n");
+                    Util.copyToClipboard(joined);
+                }
+            }
         });
 
     </script>
