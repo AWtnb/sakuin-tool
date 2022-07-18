@@ -33,7 +33,7 @@
                 <button @click="copy">コピー</button>
             </div>
             <div class="result-markup">
-                <div v-if="this.modified.length">
+                <div v-if="modified.length">
                     <h4>{{message}}</h4>
                     <ol><li v-for="(fmt, idx) in modified" :key="idx">
                         <ul>
