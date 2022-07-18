@@ -23,43 +23,47 @@
 
         <h1>ノンブル加算減算</h1>
 
-        <ul class="config">
-            <li>
-                開始
-                <input type="number" value="1" min="1" class="startNombre">
-            </li>
-            <li>
-                終了
-                <input type="number" value="999" min="1" class="endNombre">
-            </li>
-            <li>
-                増分
-                <input type="number" value="1" class="nombreDelta">
-            </li>
-        </ul>
+        <div id="app">
+            <ul class="config">
+                <li>開始 <input type="number" min="1" v-model="start"></li>
+                <li>終了 <input type="number" min="1" v-model="end"></li>
+                <li>増分 <input type="number" v-model="delta"></li>
+            </ul>
 
-        <div class="ui">
-            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="計算" id="exeButton">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="adjust">実行</button>
+            </div>
+            <div class="ui">
+                <textarea placeholder="result" readonly v-model="adjusted"></textarea>
+                <button @click="copy">コピー</button>
+            </div>
+
+            <div id="src-detail" class="result-markup">
+
+                <div v-if="diffArr.length">
+                    <h4>{{message}}</h4>
+                    <ul>
+                        <li v-for="(diff, idx) in diffArr" :key="idx">
+                            <span>{{diff.name}}&#12288;&#12288;</span><span
+                                v-for="(elem, idx) in diff.detail"
+                                :key="idx"><span
+                                    style="color:#bbb; text-decoration: line-through;">{{ elem.before }}</span><span
+                                    :style="{color: elem.color}">{{ elem.text }}</span><span
+                                        v-if="idx < diff.detail.length - 1">, </span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div v-else>{{message}}</div>
+            </div>
         </div>
-
-        <div class="ui">
-            <textarea id="scrollB" class="result" placeholder="結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" id="copyButton">
-        </div>
-
-        <ul>
-            <li>名寄せされた索引に対して、指定範囲でノンブルを増やしたり減らしたりします。</li>
-            <li>ノンブル間のカンマは必ず半角になります。</li>
-        </ul>
-        <input type="button" value="チェックリストを印刷" id="printButton">
-        <div id="src-detail" class="result-markup"></div>
 
     </div>
     <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script type="module">
-        import {Util, Entry, EntryAddress, setScroller, setNavi} from "../common.js";
-        setScroller();
+        import {Util, Entry, EntryAddress, setNavi} from "../common.js";
         setNavi();
 
         class NombreAdjuster {
@@ -78,8 +82,9 @@
 
         class EntryLine {
             constructor(line, adjuster) {
-                this.entry = new Entry(line);
-                this.originalNombres = EntryAddress.sanitize(this.entry.address).split(",").map(x => x.trim()).filter(Boolean);
+                const entry = new Entry(line);
+                this.name = entry.name;
+                this.originalNombres = EntryAddress.sanitize(entry.address).split(",").map(x => x.trim()).filter(Boolean);
                 this.adjustedNombres = this.originalNombres.map(nombre => {
                     const parsed = new EntryAddress(nombre).nombres;
                     if (parsed.length > 1) {
@@ -95,53 +100,84 @@
                 let modified = false;
                 this.originalNombres.forEach((nombre, idx) => {
                     if (Util.stripNAN(nombre) != Util.stripNAN(this.adjustedNombres[idx])) {
-                        stack.push(`<span style="text-decoration: line-through;color: #35618a;">${nombre}</span><span style="color:red;">${this.adjustedNombres[idx]}</span>`);
                         modified = true;
+                        stack.push({
+                            "text": this.adjustedNombres[idx],
+                            "before": nombre,
+                            "color": "#ff0080"
+                        });
                     }
                     else {
-                        stack.push(`<span style="scolor:gray;">${nombre}</span>`);
+                        stack.push({
+                            "text": nombre,
+                            "before": "",
+                            "color": "#333"
+                        });
                     }
                 });
                 return {
                     "modified": modified,
-                    "markup": stack.join(", ")
+                    "detail": stack
                 };
             }
 
         }
 
-
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            const adjuster = new NombreAdjuster(
-                document.querySelector(".config .startNombre").value,
-                document.querySelector(".config .endNombre").value,
-                document.querySelector(".config .nombreDelta").value
-            );
-            const lines = Util.getElemValueLines(".ui .inputLines");
-            const output = [];
-            const markups = [];
-            lines.forEach(line => {
-                const el = new EntryLine(line, adjuster);
-                const leftSide = el.entry.name + "\u3000\u3000";
-                output.push( `${leftSide}${el.adjustedNombres.join(", ")}`.trimEnd() );
-                const diff = el.compareAddress();
-                if (diff.modified) {
-                    markups.push( "<li>" + `${leftSide}${diff.markup}`.trimEnd() + "</li>");
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+                start: 1,
+                end: 999,
+                delta: 1,
+                adjustedArr: [],
+                diffArr: [],
+                message: ""
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+                adjusted: function() {
+                    return this.adjustedArr.map(x => {
+                        return `${x.name}\u3000\u3000${x.nombres.join(", ")}`.trimEnd();
+                    }).join("\n");
+                },
+            },
+            methods: {
+                reset: function() {
+                    this.message = "";
+                    this.adjustedArr = [];
+                    this.diffArr = [];
+                },
+                adjust: function() {
+                    this.reset();
+                    const adjuster = new NombreAdjuster(this.start, this.end, this.delta);
+                    this.contentLines.forEach(line => {
+                        const entryLine = new EntryLine(line, adjuster);
+                        this.adjustedArr.push({
+                            "name": entryLine.name,
+                            "nombres": entryLine.adjustedNombres
+                        });
+                        const comparison = entryLine.compareAddress();
+                        if (comparison.modified) {
+                            this.diffArr.push({
+                                "name": entryLine.name,
+                                "detail": comparison.detail
+                            });
+                        }
+                    });
+                    if (this.diffArr.length) {
+                        this.message = this.diffArr.length + "件の変更があります。"
+                    }
+                    else {
+                        this.message = "修正箇所はありません。";
+                    }
+                },
+                copy: function() {
+                    Util.copyToClipboard(this.adjusted);
                 }
-            })
-            document.querySelector(".ui textarea.result").value = output.join("\n");
-            if (markups.length < 1) {
-                markups.push("<div>変更箇所はありません！</div>");
             }
-            document.querySelector(".result-markup").innerHTML = "<ul>" + markups.join("") + "</ul>";
-        });
-
-        document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyValue(".ui textarea.result");
-        });
-
-        document.querySelector("#printButton").addEventListener("click", () => {
-            window.open('./print.html', 'newwindow', 'width=800,height=890');
         });
 
     </script>
