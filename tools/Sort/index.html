@@ -44,9 +44,9 @@
                     </thead>
                     <tbody>
                         <tr v-for="(line, idx) in lines" :key="idx">
-                            <td>{{line.Item}}</td>
-                            <td>{{line.Reading}}</td>
-                            <td>{{line.Norm}}</td>
+                            <td>{{line.item}}</td>
+                            <td>{{line.reading}}</td>
+                            <td>{{line.normalized}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -63,7 +63,7 @@
         import {Util, setNavi} from "../common.js";
         setNavi();
 
-        import {SortIndex} from "./src.js";
+        import {Sorter} from "./src.js";
 
         const vm = new Vue({
             el: "#app",
@@ -77,9 +77,14 @@
                 },
             },
             methods: {
+                reset: function() {
+                    this.lines = [];
+                },
                 sortLines: function() {
-                    const parsed = SortIndex.fromTsv(this.contentLines);
-                    SortIndex.sortByReading(parsed).forEach(x => {
+                    this.reset();
+                    const sorter = new Sorter();
+                    sorter.fromTsvLines(this.contentLines);
+                    sorter.execute().forEach(x => {
                         this.lines.push(x);
                     });
                 },

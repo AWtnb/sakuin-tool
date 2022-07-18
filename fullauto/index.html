@@ -68,7 +68,7 @@
         import {Reading} from "../tools/GetReading/src.js";
         import {NormalizedReading} from "../tools/Hairetsu/src.js";
         import {Grouper} from "../tools/Group/src.js";
-        import {SortIndex} from "../tools/Sort/src.js";
+        import {Sorter} from "../tools/Sort/src.js";
 
         function showStatus(s) {
             const elem = document.querySelector(".status");
@@ -79,16 +79,18 @@
             showStatus("");
 
             const grouper = new Grouper(selector, false);
-            const parsed = new Reading(tokenizer).parseLines(grouper.getGroupedLines()).map(parsed => {
+            const sorter = new Sorter();
+
+            new Reading(tokenizer).parseLines(grouper.getGroupedLines()).forEach(parsed => {
                 const r = new Entry(parsed.reading).name;
-                return {
-                    "Item": parsed.item,
-                    "Reading": r,
-                    "Norm": NormalizedReading.convert(r, true)
-                }
+                sorter.addData(
+                    parsed.item,
+                    r,
+                    NormalizedReading.convert(r, true)
+                );
             });
-            document.querySelector(outputSelector).innerHTML = SortIndex.sortByReading(parsed).map(x => {
-                return `<tr><td><mark>${x.Item}</mark></td><td>${x.Reading}</td><td>${x.Norm}</td></tr>`;
+            document.querySelector(outputSelector).innerHTML = sorter.execute().map(x => {
+                return `<tr><td><mark>${x.item}</mark></td><td>${x.reading}</td><td>${x.normalized}</td></tr>`;
             }).join("\n");
 
         }

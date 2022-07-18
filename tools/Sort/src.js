@@ -1,31 +1,43 @@
-export class SortIndex {
+const comparer = (a, b) => {
+    const aLower = String(a).toLowerCase();
+    const bLower = String(b).toLowerCase();
+    if (aLower > bLower) return 1;
+    if (aLower < bLower) return -1;
+    return 0;
+}
 
-    static fromTsv (lines) {
-        return lines.filter(line => line.trim()).map(line => {
-            const [item, reading, norm,  ...rest] = line.split("\t"); // 配列読み＝正規化＝normalized
+export class Sorter {
+
+    constructor() {
+        this.parsedLines = [];
+    }
+
+    fromTsvLines(lines) {
+        this.parsedLines = lines.filter(line => line.trim()).map(line => {
+            const [item, reading, normalized, ...rest] = line.split("\t"); // 配列読み＝正規化＝normalized
             return {
-               "Item": item,
-               "Reading": reading,
-               "Norm": norm
-            }
+               "item": item,
+               "reading": reading,
+               "normalized": normalized
+            };
         });
     }
 
-    static comparer (a, b) {
-        const aLower = String(a).toLowerCase();
-        const bLower = String(b).toLowerCase();
-        if (aLower > bLower) return 1;
-        if (aLower < bLower) return -1;
-        return 0;
+    addData(item, reading, normalized) {
+        this.parsedLines.push({
+            "item": item,
+            "reading": reading,
+            "normalized": normalized
+         });
     }
 
-    static sortByReading (obj) {
-        return obj.sort((a,b) => {
-            return SortIndex.comparer(a.Item, b.Item);
+    execute() {
+        return this.parsedLines.sort((a,b) => {
+            return comparer(a.item, b.item);
         }).sort((a,b) => {
-            return SortIndex.comparer(a.Reading, b.Reading);
+            return comparer(a.reading, b.reading);
         }).sort((a,b) => {
-            return SortIndex.comparer(a.Norm, b.Norm);
+            return comparer(a.normalized, b.normalized);
         });
     }
 
