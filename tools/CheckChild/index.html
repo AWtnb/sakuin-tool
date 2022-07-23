@@ -16,51 +16,75 @@
 
         <h1>子項目候補の確認</h1>
 
-        <div class="ui">
-            <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="チェック" id="exeButton">
-            <form>
-                <label><input type="radio" name="pos" value="tail" checked>末尾一致</label>
-                <label><input type="radio" name="pos" value="head">先頭一致</label>
-                <label><input type="radio" name="pos" value="all">両方</label>
-            </form>
-        </div>
+        <div id="app">
+            <div class="ui">
+                <textarea class="inputLines" placeholder="paste here!" v-model="content"></textarea>
+                <button @click="check">実行</button>
 
-        <ul>
-            <li>名寄せ済みの索引に対して子項目の候補を探します。</li>
-        </ul>
+                <div>
+                    <input type="radio" id="search-tail" value="tail" v-model="picked"><label for="search-tail">末尾一致</label>
+                    <input type="radio" id="search-head" value="head" v-model="picked"><label for="search-head">先頭一致</label>
+                    <input type="radio" id="search-all" value="all" v-model="picked"><label for="search-all">両方</label>
+                </div>
 
-        <input type="button" value="プリント用ページを開く" id="printButton">
-
-        <div class="result-markup">
-            <table id="src-table">
-                <thead>
-                    <tr>
-                        <th>項目</th>
-                        <th>子項目候補</th>
-                    </tr>
-                </thead>
-                <tbody><td></td><td></td></tbody>
-            </table>
+            </div>
+            <!-- <input type="button" value="プリント用ページを開く" id="printButton"> -->
+            <div class="result-markup">
+                <table id="src-table">
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>子項目候補</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(fd, idx) in found" :key="idx">
+                            <td>{{ fd.parent }}</td>
+                            <td><ul>
+                                <li v-for="(c, idx) in fd.children" :key="idx">
+                                    <span><mark v-if="c.pre.length">{{c.pre}}</mark>{{c.rest}}<mark v-if="c.post.length">{{c.post}}</mark></span>
+                                </li>
+                            </ul></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </div>
     <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script type="module">
         import {setNavi} from "../common.js"
         setNavi();
 
         import {CheckChild} from "./src.js"
 
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            const outputTable = document.querySelector(".result-markup table tbody");
-            outputTable.innerHTML = "";
-            const checker = new CheckChild(".ui .inputLines", document.querySelector(".ui form").pos.value);
-            outputTable.innerHTML = checker.markup().join("");
-        });
 
-        document.querySelector("#printButton").addEventListener("click", () => {
-            window.open('./print.html', 'newwindow', 'width=800,height=890');
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+                picked: "all",
+                found: []
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+            },
+            methods: {
+                reset: function() {
+                    this.found = [];
+                },
+                check: function() {
+                    this.reset();
+                    const checker = new CheckChild(this.contentLines, this.picked);
+                    checker.findPossibles().forEach(x => {
+                        this.found.push(x);
+                    });
+                }
+            }
         });
 
     </script>

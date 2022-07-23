@@ -1,33 +1,44 @@
-import {Util, Entry} from "../common.js";
+import {Entry} from "../common.js";
 
 class ChildEntry {
-    constructor(s) {
-        this.text = s;
+    constructor(s, mode) {
+        this.name = s;
+        this.mode = mode;
+        this.modified = false;
+
+        this.pre = "";
+        this.post = "";
+        this.rest = "";
+
     }
-    markupHead(target) {
-        if (this.text.startsWith(target)) {
-            this.text = `<mark>${target}</mark>` + this.text.slice(target.length);
+    search(target){
+        if (this.mode == "all" || this.mode == "head") {
+            if (this.name.startsWith(target)) {
+                this.pre = target;
+                this.modified = true;
+            }
         }
-    }
-    markupTail(target) {
-        if (this.text.endsWith(target)) {
-            this.text = this.text.slice(0, 0 - target.length) + `<mark>${target}</mark>`;
+        this.rest = this.name.substring(this.pre.length);
+        if (this.mode == "all" || this.mode == "tail") {
+            if (this.name.endsWith(target)) {
+                this.post = target;
+                this.modified = true;
+            }
         }
+        this.rest = this.rest.substring(0, this.rest.length - this.post.length);
     }
 }
 
 export class CheckChild {
 
-    constructor(selector, mode = "tail") {
-        this.lines = Util.getElemValueLines(selector);
+    constructor(lines, mode = "tail") {
         this.mode = mode;
-        this.mainEntries = this.lines.filter(x => String(x).trim()).map(line => {
+        this.mainEntries = lines.filter(x => String(x).trim()).map(line => {
             const entry = new Entry(line);
             if (!entry.isReference && !entry.isChild) {
                 return {
                     "name": entry.name,
-                    "basename": entry.basename,
-                    "subInfo": entry.name.slice(entry.basename.length)
+                    "basename": entry.basename
                 };
             }
             return null;
@@ -36,17 +47,12 @@ export class CheckChild {
 
     findPossibles() {
         return this.mainEntries.map(entry => {
-            const search = entry.basename;
-            const possibles = this.mainEntries.filter(entry => entry.basename != search).map(entry => {
-                const markup = new ChildEntry(entry.basename);
-                if (this.mode == "all" || this.mode == "head") {
-                    markup.markupHead(search);
-                }
-                if (this.mode == "all" || this.mode == "tail") {
-                    markup.markupTail(search);
-                }
-                if (entry.basename != markup.text) {
-                    return markup.text + entry.subInfo;
+            const target = entry.basename;
+            const possibles = this.mainEntries.filter(entry => entry.basename != target).map(entry => {
+                const c = new ChildEntry(entry.basename, this.mode);
+                c.search(target);
+                if (c.modified) {
+                    return c;
                 }
                 return null;
             }).filter(Boolean);
@@ -54,13 +60,10 @@ export class CheckChild {
                 "parent": entry.name,
                 "children": possibles
             };
-        });
-    }
-
-    markup() {
-        return this.findPossibles().filter(x => x.children.length > 0).sort((a, b) => b.parent.length - a.parent.length).map(x => {
-            const detail = x.children.map(p => `<li>${p}</li>`).join("");
-            return `<tr><td>${x.parent}</td><td><ul style="margin:0;padding-left:1em;">${detail}</ul></td></tr>`;
+        }).filter(x => {
+            return x.children.length > 0;
+        }).sort((a, b) => {
+            return b.parent.length - a.parent.length
         });
     }
 
