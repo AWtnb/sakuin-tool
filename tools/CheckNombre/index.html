@@ -16,28 +16,43 @@
 
         <h1>ノンブル並びの確認</h1>
 
-        <div class="ui">
-            <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="チェック" id="exeButton">
+        <div id="app">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="check">実行</button>
+            </div>
+
+            <ul>
+                <li>チェック内容：
+                    <ul>
+                        <li>ノンブルが正しく並んでいないもの</li>
+                        <li>3つ連続しているもの</li>
+                    </ul>
+                </li>
+                <li>カンマの全角半角は区別しません。</li>
+                <li>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</li>
+            </ul>
+
+            <div class="result-markup">
+                <div v-if="problems.length">
+                    <h3>修正の必要があります！</h3>
+                    <ul>
+                        <li v-for="(problem, idx) in problems" :key="idx">
+                            <span>{{ problem.line }}</span><span v-for="(p, idx) in problem.detail" :key="idx">
+                                <span :style="{color: p.color}">←{{ p.text }}</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="message">{{message}}</div>
+            </div>
         </div>
-
-        <ul>
-            <li>チェック内容：
-                <ul>
-                    <li>ノンブルが正しく並んでいないもの</li>
-                    <li>3つ連続しているもの</li>
-                </ul>
-            </li>
-            <li>カンマの全角半角は区別しません。</li>
-            <li>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</li>
-        </ul>
-
-        <div class="result-markup"></div>
 
     </div>
     <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script type="module">
-        import {Util, Entry, EntryAddress, setNavi} from "../common.js";
+        import {Entry, EntryAddress, setNavi} from "../common.js";
         setNavi();
 
         class AddressChecker {
@@ -53,7 +68,10 @@
                 }
                 for (let i = 0; i < this.nombres.length - 1; i++) {
                     if (this.nombres[i].intValue >= this.nombres[i + 1].intValue) {
-                        this.problems.push('<span style="color:red;"> 順番！</span>');
+                        this.problems.push({
+                            "color": "red",
+                            "text": "順番！"
+                        });
                     }
                 }
             }
@@ -68,37 +86,58 @@
                     const next2 = this.nombres[i + 2];
                     if (current.intValue + 1 == next1.intValue && current.intValue + 2 == next2.intValue) {
                         if (!next1.hyphenated) {
-                            this.problems.push('<span style="color:blue;"> 連続！</span>');
+                            this.problems.push({
+                                "color": "blue",
+                                "text": "連続！"
+                            });
                         }
                     }
                 }
             }
 
-            getProblems() {
-                return this.problems.join("");
-            }
         }
 
-        function grepInvalidNombreLine(selector) {
-            const lines = Util.getElemValueLines(selector);
+        function grepInvalidNombreLine(lines) {
             return lines.filter(x => String(x).trim()).map(line => {
                 const checker = new AddressChecker(line);
                 checker.checkSort();
                 checker.checkHyphen();
                 if (checker.problems.length > 0) {
-                    return `<li><mark>${line}</mark>${checker.getProblems()}</li>`;
+                    return {
+                        "line": line,
+                        "detail": checker.problems
+                    };
                 }
                 return null;
             }).filter(Boolean);
         }
 
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            const invalid = grepInvalidNombreLine(".ui .inputLines");
-            if (invalid.length < 1) {
-                document.querySelector(".result-markup").innerHTML = "<div>\u{1F389}問題は見当たりません！</div>";
-            }
-            else {
-                document.querySelector(".result-markup").innerHTML = `<h3>修正の必要があります！</h3><ul>${invalid.join("")}</ul>`;
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+                message: "",
+                problems: [],
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+            },
+            methods: {
+                reset: function() {
+                    this.message = "";
+                    this.problems = [];
+                },
+                check: function(){
+                    this.reset();
+                    grepInvalidNombreLine(this.contentLines).forEach(x => {
+                        this.problems.push(x);
+                    });
+                    if(!this.problems.length) {
+                        this.message = "問題は見当たりません！";
+                    }
+                }
             }
         });
 
