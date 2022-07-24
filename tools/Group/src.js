@@ -1,9 +1,9 @@
-import {Util, EntryAddress} from "../common.js"
+import {EntryAddress} from "../common.js"
 
 export class Grouper {
 
-    constructor(selector, addressOnLeft = false) {
-        this.linesParsed = Util.getElemValueLines(selector).filter(line => line.trim()).map(line => {
+    constructor(lines, addressOnLeft = false) {
+        this.linesParsed = lines.filter(line => line.trim()).map(line => {
             const elems = line.split("\t").slice(0, 2);
             if (elems.length < 2) {
                 return {
