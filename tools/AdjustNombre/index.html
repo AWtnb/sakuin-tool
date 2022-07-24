@@ -48,9 +48,9 @@
                             <span>{{diff.name}}&#12288;&#12288;</span><span
                                 v-for="(elem, idx) in diff.detail"
                                 :key="idx"><span
-                                    style="color:#bbb; text-decoration: line-through;">{{ elem.before }}</span><span
+                                    style="color:#bbb">{{ elem.before }}</span><span
                                     :style="{color: elem.color}">{{ elem.text }}</span><span
-                                        v-if="idx < diff.detail.length - 1">, </span>
+                                        v-if="diff.detail.length - 1 > idx">, </span>
                             </span>
                         </li>
                     </ul>
@@ -61,8 +61,10 @@
 
     </div>
     <!-- ============================== -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script type="module">
+
+        import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.7.4/dist/vue.esm.browser.js'
+
         import {Util, Entry, EntryAddress, setNavi} from "../common.js";
         setNavi();
 
