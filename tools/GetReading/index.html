@@ -16,56 +16,71 @@
 
         <h1>読みがなの取得</h1>
 
-        <div class="ui">
-            <textarea id="scrollA" class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="取得" id="exeButton">
-            <div>
-                <label for="removeFlag">
-                    <input type="checkbox" id="removeFlag">ノンブル部分の読みをスキップする
-                </label>
+        <div id="app">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="execute">実行</button>
+                <div>
+                    <label for="removeFlag">ノンブル部分の読みをスキップする</label>
+                    <input type="checkbox" id="removeFlag" v-model="removeNombre">
+                </div>
             </div>
-        </div>
-
-        <div class="ui">
-            <textarea id="scrollB" class="result" placeholder="ここに結果が表示されます" readonly></textarea>
-            <input type="button" value="コピー" id="copyButton">
+            <div class="ui">
+                <textarea placeholder="result" readonly v-model="parsed"></textarea>
+                <button @click="copy">コピー</button>
+            </div>
         </div>
 
     </div>
     <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="./kuromoji.js"></script>
     <script type="module">
-        import {Util, Entry, setScroller, setNavi} from "../common.js";
+        import {Util, Entry, setNavi} from "../common.js";
         setNavi();
-        setScroller();
 
         import {Reading} from "./src.js";
 
-        function setReading(tokenizer, inputSelector, outputSelector, removeNombre) {
-            const lines = Util.getElemValueLines(inputSelector);
-            const target = (removeNombre) ? lines.map(line => new Entry(line).name) : lines;
-            document.querySelector(outputSelector).value = new Reading(tokenizer).parseLines(target).map(x => x.reading).join("\n");
-        }
-
-        function showMessage(s) {
-            document.querySelector(".ui .result").value = s;
-        }
-
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            showMessage("（\u{1f914}よみがな計算中…）");
-            kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {
-                if (err) {
-                    console.log(err);
-                    showMessage("解析失敗…\nやり直してみてください！");
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+                removeNombre: true,
+                readings: [],
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+                parsed: function() {
+                    return this.readings.join("\n");
+                },
+            },
+            methods: {
+                reset: function(){
+                    this.readings = [];
+                },
+                execute: function(){
+                    this.reset();
+                    this.readings.push("よみがな計算中…");
+                    kuromoji.builder({ dicPath: "./dict" }).build((err, tokenizer) => {
+                        this.readings.pop();
+                        if (err) {
+                            console.log(err);
+                            this.readings.push("解析失敗…やり直してみてください！");
+                        }
+                        else {
+                            const targetLines = (this.removeNombre)? this.contentLines.map(line => new Entry(line).name) : this.contentLines;
+                            new Reading(tokenizer).parseLines(targetLines).forEach(x => {
+                                this.readings.push(x.reading);
+                            });
+                        }
+                    });
+                },
+                copy: function(){
+                    Util.copyToClipboard(this.result);
                 }
-                else {
-                    setReading(tokenizer, ".ui .inputLines", ".ui .result", document.querySelector("#removeFlag").checked);
-                }
-            });
-        });
-
-        document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyValue(".ui .result");
+            }
         });
 
     </script>
