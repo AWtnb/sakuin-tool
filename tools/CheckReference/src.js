@@ -1,9 +1,8 @@
-import {Util, Entry} from "../common.js";
+import {Entry} from "../common.js";
 
 export class ReferenceChecker {
 
-    constructor(selector) {
-        const lines = Util.getElemValueLines(selector);
+    constructor(lines) {
         this.entries = lines.filter(x => String(x).trim()).map(line => new Entry(line));
     }
 
@@ -12,18 +11,20 @@ export class ReferenceChecker {
         return this.entries.filter(entry => entry.isReference).map(entry => {
             return {
                 "text": entry.name,
-                "refEntryName": entry.basename,
-                "referTo": entry.referTo
+                "refFrom": entry.basename,
+                "refTo": entry.referTo
             };
-        }).map(line => {
+        }).map(ref => {
             const grep = this.entries.filter(entry => {
-                return (!entry.isReference && entry.basename == line.referTo && entry.referredFrom.includes(line.refEntryName));
+                return (!entry.isReference && entry.basename == ref.refTo && entry.referredFrom.includes(ref.refFrom));
             });
             if (grep.length > 0) {
                 return null;
             }
-            const require = `${line.referTo}\uff08${line.refEntryName}\uff09`;
-            return `<u>${line.text}</u><ul><li><mark>${require}</mark></li></ul>`;
+            return {
+                "problem": ref.text,
+                "require": `${ref.refTo}\uff08${ref.refFrom}\uff09`
+            };
         }).filter(Boolean);
     }
 
@@ -44,31 +45,33 @@ export class ReferenceChecker {
             if (required.length < 1) {
                 return null;
             }
-            const require = required.map(s => `<li><mark>${s}\u3000→${line.basename}</mark></li>`).join("");
-            return `<u>${line.text}</u><ul>${require}</ul>`;
+            return {
+                "problem": line.text,
+                "require": required.map(s => {
+                    return { "from": s, "to":line.text };
+                })
+            };
         }).filter(Boolean);
     }
 
     findAdjacent() {
         // 見よ項目と見よ先項目が隣接しているものを探す
-        return this.entries.map((entry, idx) => {
-            if (!entry.isReference) {
-                return null;
+        const stack = [];
+        this.entries.forEach((entry, idx) => {
+            // filter で要素数を減らしてしまうとインデックスで参照できなくなるので注意
+            if (entry.isReference) {
+                const previous = this.entries[idx - 1];
+                if (previous && !previous.isReference && previous.referredFrom.includes(entry.basename)) {
+                    stack.push(entry);
+                }
+                const next = this.entries[idx + 1];
+                if (next && !next.isReference && next.referredFrom.includes(entry.basename)) {
+                    stack.push(entry);
+                }
             }
-            const previous = this.entries[idx - 1];
-            if (previous && !previous.isReference && previous.referredFrom.includes(entry.basename)) {
-                return entry;
-            }
-            const next = this.entries[idx + 1];
-            if (next && !next.isReference && next.referredFrom.includes(entry.basename)) {
-                return entry;
-            }
-            return null;
-        }).filter(Boolean).map(entry => `<u>${entry.name}</u>`);
+        });
+        return stack.map(entry => entry.name);
     }
 
-    static showResult(arr, heading) {
-        return `<h4>${heading}</h4><ul>${arr.map(x => `<li>${x}</li>`).join("")}</ul>`;
-    }
 
 }

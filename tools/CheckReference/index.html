@@ -16,44 +16,87 @@
 
         <h1>見よ項目のチェック</h1>
 
-        <div class="ui">
-            <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="チェック" id="exeButton">
-
-        </div>
-
-        <div class="result-markup">
-            <div class="lostTo"></div>
-            <div class="lostFrom"></div>
-            <div class="adjacent"></div>
+        <div id="app">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="check">実行</button>
+            </div>
+            <div class="result-markup">
+                <div v-if="lostTo.length">
+                    <p>見よ項目があるのに参照先に括弧で付記されていないもの</p>
+                    <ul>
+                        <li v-for="(item, idx) in lostTo" :key="idx">
+                            <u>{{ item.problem }}</u>
+                            <ul><li>{{ item.require }}</li></ul>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="lostFrom.length">
+                    <p>参照元として括弧書きされているのに見よ項目がないもの</p>
+                    <ul>
+                        <li v-for="(item, idx) in lostFrom" :key="idx">
+                            <u>{{ item.problem }}</u>
+                            <ul>
+                                <li v-for="(rq, idx) in item.require" :key="idx">
+                                    {{ rq.from }}&#12288;&srarr;{{ rq.to }}
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="adjacent.length">
+                    <p>見よ項目と見よ先項目が隣接しているもの</p>
+                    <ul>
+                        <li v-for="(item, idx) in adjacent" :key="idx">
+                            {{ item }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
     </div>
     <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script type="module">
         import {setNavi} from "../common.js"
         setNavi();
 
         import {ReferenceChecker} from "./src.js";
 
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            const checker = new ReferenceChecker(".ui .inputLines");
-
-            const lostTo = checker.goalLostReference();
-            if (lostTo.length > 0) {
-                document.querySelector(".result-markup div.lostTo").innerHTML = ReferenceChecker.showResult(lostTo, "見よ項目があるのに参照先に括弧で付記されていないもの");
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+                lostTo: [],
+                lostFrom: [],
+                adjacent: [],
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+            },
+            methods: {
+                reset: function() {
+                    this.lostTo = [];
+                    this.lostFrom = [];
+                    this.adjacent = [];
+                },
+                check: function() {
+                    this.reset();
+                    const checker = new ReferenceChecker(this.contentLines);
+                    checker.goalLostReference().forEach(x => {
+                        this.lostTo.push(x);
+                    });
+                    checker.requiredFromReference().forEach(x => {
+                        this.lostFrom.push(x);
+                    });
+                    checker.findAdjacent().forEach(x => {
+                        this.adjacent.push(x);
+                    });
+                }
             }
-
-            const lostFrom = checker.requiredFromReference();
-            if (lostFrom.length > 0) {
-                document.querySelector(".result-markup div.lostFrom").innerHTML = ReferenceChecker.showResult(lostFrom, "参照元として括弧書きされているのに見よ項目がないもの");
-            }
-
-            const adjacent = checker.findAdjacent();
-            if (adjacent.length > 0) {
-                document.querySelector(".result-markup div.adjacent").innerHTML = ReferenceChecker.showResult(adjacent, "見よ項目と見よ先項目が隣接しているもの");
-            }
-
         });
 
     </script>
