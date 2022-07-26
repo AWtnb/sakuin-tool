@@ -82,6 +82,7 @@ export class GroupingChecker {
         this.entries = lines.filter(x => String(x).trim()).map(line => new Entry(line));
         this.refs = this.entries.filter(entry => entry.isReference);
         this.nonRefs = this.entries.filter(entry => !entry.isReference);
+        this.referred = this.entries.filter(entry => entry.referredFrom.length > 0);
         this.nonReferred = this.entries.filter(entry => entry.referredFrom.length < 1);
     }
 
@@ -89,7 +90,7 @@ export class GroupingChecker {
         return this.refs.map(entry => {
             const refTo = entry.referTo;
             const found = this.nonReferred.filter(entry => entry.basename == refTo);
-            if (found.length > 0) {
+            if (found.length > 0 && this.referred.filter(entry => entry.basename == refTo).length > 0) {
                 return {
                     "name": entry.name,
                     "detail": found.map(entry => entry.rawStr)
