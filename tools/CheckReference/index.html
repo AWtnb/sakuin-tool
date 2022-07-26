@@ -23,7 +23,7 @@
             </div>
             <div class="result-markup">
                 <div v-if="lostTo.length">
-                    <p>見よ項目があるのに参照先に括弧で付記されていないもの</p>
+                    <p>見よ項目があるのに参照先に括弧で付記されていないものがあります！</p>
                     <ul>
                         <li v-for="(item, idx) in lostTo" :key="idx">
                             <u>{{ item.problem }}</u>
@@ -32,7 +32,7 @@
                     </ul>
                 </div>
                 <div v-if="lostFrom.length">
-                    <p>参照元として括弧書きされているのに見よ項目がないもの</p>
+                    <p>参照元として括弧書きされているのに見よ項目がないものがあります！</p>
                     <ul>
                         <li v-for="(item, idx) in lostFrom" :key="idx">
                             <u>{{ item.problem }}</u>
@@ -45,13 +45,40 @@
                     </ul>
                 </div>
                 <div v-if="adjacent.length">
-                    <p>見よ項目と見よ先項目が隣接しているもの</p>
+                    <p>見よ項目と見よ先項目が隣接しているものがあります！</p>
                     <ul>
                         <li v-for="(item, idx) in adjacent" :key="idx">
                             {{ item }}
                         </li>
                     </ul>
                 </div>
+                <div v-if="ungrouped.length">
+                    <p>見よ先項目が名寄せされずに残っています！</p>
+                    <ul>
+                        <li v-for="(ug, idx) in ungrouped" :key="idx">
+                            <mark>{{ ug.name }}</mark>
+                            <ul>
+                                <li v-for="(d, idx) in ug.detail" :key="idx">
+                                    <u>{{ d }}</u>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="conflicts.length">
+                    <p>見よ項目が本項目として残っています！</p>
+                    <ul>
+                        <li v-for="(cf, idx) in conflicts" :key="idx">
+                            <mark>{{ cf.name }}</mark>
+                            <ul>
+                                <li v-for="(d, idx) in cf.detail" :key="idx">
+                                    <u>{{ d }}</u>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="isPerfect">{{message}}</div>
             </div>
         </div>
 
@@ -64,7 +91,7 @@
         import {setNavi} from "../common.js"
         setNavi();
 
-        import {ReferenceChecker} from "./src.js";
+        import {ReferenceChecker, GroupingChecker} from "./src.js";
 
         const vm = new Vue({
             el: "#app",
@@ -73,30 +100,49 @@
                 lostTo: [],
                 lostFrom: [],
                 adjacent: [],
+                ungrouped: [],
+                conflicts: [],
+                message: ""
             },
             computed: {
                 contentLines: function() {
                     return this.content.split(/\n/).map(line => String(line));
                 },
+                isPerfect: function() {
+                    return (this.lostTo.length + this.lostFrom.length + this.adjacent.length + this.ungrouped.length + this.conflicts.length) == 0;
+                }
             },
             methods: {
                 reset: function() {
                     this.lostTo = [];
                     this.lostFrom = [];
                     this.adjacent = [];
+                    this.ungrouped = [];
+                    this.conflicts = [];
+                    this.message = "";
                 },
                 check: function() {
                     this.reset();
-                    const checker = new ReferenceChecker(this.contentLines);
-                    checker.goalLostReference().forEach(x => {
+                    const refChecker = new ReferenceChecker(this.contentLines);
+                    refChecker.goalLostReference().forEach(x => {
                         this.lostTo.push(x);
                     });
-                    checker.requiredFromReference().forEach(x => {
+                    refChecker.requiredFromReference().forEach(x => {
                         this.lostFrom.push(x);
                     });
-                    checker.findAdjacent().forEach(x => {
+                    refChecker.findAdjacent().forEach(x => {
                         this.adjacent.push(x);
                     });
+                    const groupChecker = new GroupingChecker(this.contentLines);
+                    groupChecker.getUngrouped().forEach(x => {
+                        this.ungrouped.push(x);
+                    });
+                    groupChecker.getConflicting().forEach(x => {
+                        this.conflicts.push(x);
+                    });
+                    if (this.isPerfect) {
+                        this.message = "問題は見当たりません！ 完璧かもしれません！";
+                    }
                 }
             }
         });
