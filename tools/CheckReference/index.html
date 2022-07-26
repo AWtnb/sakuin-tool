@@ -23,7 +23,7 @@
             </div>
             <div class="result-markup">
                 <div v-if="lostTo.length">
-                    <p>見よ項目があるのに参照先に括弧で付記されていないものがあります！</p>
+                    <strong>見よ項目があるのに参照先に括弧で付記されていないものがあります！</strong>
                     <ul>
                         <li v-for="(item, idx) in lostTo" :key="idx">
                             <u>{{ item.problem }}</u>
@@ -32,7 +32,7 @@
                     </ul>
                 </div>
                 <div v-if="lostFrom.length">
-                    <p>参照元として括弧書きされているのに見よ項目がないものがあります！</p>
+                    <strong>参照元として括弧書きされているのに見よ項目がないものがあります！</strong>
                     <ul>
                         <li v-for="(item, idx) in lostFrom" :key="idx">
                             <u>{{ item.problem }}</u>
@@ -45,7 +45,7 @@
                     </ul>
                 </div>
                 <div v-if="adjacent.length">
-                    <p>見よ項目と見よ先項目が隣接しているものがあります！</p>
+                    <strong>見よ項目と見よ先項目が隣接しているものがあります！</strong>
                     <ul>
                         <li v-for="(item, idx) in adjacent" :key="idx">
                             {{ item }}
@@ -53,7 +53,7 @@
                     </ul>
                 </div>
                 <div v-if="ungrouped.length">
-                    <p>見よ先項目が名寄せされずに残っています！</p>
+                    <strong>見よ先項目が名寄せされずに残っています！</strong>
                     <ul>
                         <li v-for="(ug, idx) in ungrouped" :key="idx">
                             <mark>{{ ug.name }}</mark>
@@ -66,7 +66,7 @@
                     </ul>
                 </div>
                 <div v-if="conflicts.length">
-                    <p>見よ項目が本項目として残っています！</p>
+                    <strong>見よ項目が本項目として残っています！</strong>
                     <ul>
                         <li v-for="(cf, idx) in conflicts" :key="idx">
                             <mark>{{ cf.name }}</mark>
