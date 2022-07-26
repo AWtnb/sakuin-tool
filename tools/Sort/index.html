@@ -91,7 +91,7 @@
                     });
                 },
                 copy: function() {
-                    const joined = this.lines.map(x => `${x.Item}\t${x.Reading}\t${x.Norm}`).join("\n");
+                    const joined = this.lines.map(x => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
                     Util.copyToClipboard(joined);
                 }
             }
