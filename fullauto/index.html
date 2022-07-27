@@ -16,32 +16,37 @@
 
         <h2>おまかせモード</h2>
 
-        <div class="ui">
-            <textarea class="inputLines" placeholder="paste here!"></textarea>
-            <input type="button" value="整形" id="exeButton">
+        <div id="app">
+            <div class="ui">
+                <textarea class="inputLines" placeholder="paste here!" v-model="content"></textarea>
+                <button @click="execute">実行</button>
+            </div>
+            <ul>
+                <li>下図のように<code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
+                <li>自動で一連の整形を行って索引を出力します。</li>
+                <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
+            </ul>
+            <div>{{message}}</div>
+            <div class="result-markup limit-height">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>読み</th>
+                            <th>配列読み</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(p, idx) in parsedArr" :key="idx">
+                            <td>{{ p.item }}</td>
+                            <td>{{ p.reading }}</td>
+                            <td>{{ p.normalized }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button @click="copy">コピー</button>
         </div>
-
-        <ul>
-            <li>下図のように<code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
-            <li>自動で一連の整形を行って索引を出力します。</li>
-            <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
-        </ul>
-
-        <div class="status"></div>
-
-        <div class="result-markup limit-height">
-            <table>
-                <thead>
-                    <tr>
-                        <th>項目</th>
-                        <th>読み</th>
-                        <th>配列読み</th>
-                    </tr>
-                </thead>
-                <tbody><td></td><td></td><td></td></tbody>
-            </table>
-        </div>
-        <input type="button" value="表をコピー" id="copyButton">
 
 
         <img src="./image/img_auto.png">
@@ -66,51 +71,63 @@
         setNavi();
 
         import {Reading} from "../tools/GetReading/src.js";
-        import {NormalizedReading} from "../tools/Hairetsu/src.js";
         import {Grouper} from "../tools/Group/src.js";
         import {Sorter} from "../tools/Sort/src.js";
 
-        function showStatus(s) {
-            const elem = document.querySelector(".status");
-            elem.innerHTML = s;
-        }
+        import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.7.4/dist/vue.esm.browser.js'
 
-        function main(tokenizer, selector, outputSelector) {
-            showStatus("");
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "",
+                message: "",
+                parsedArr: [],
 
-            const grouper = new Grouper(selector, false);
-            const sorter = new Sorter();
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+            },
+            methods: {
+                resetMsg: function(){
+                    this.message = "";
+                },
+                reset: function(){
+                    this.parsedArr = [];
+                    this.resetMsg();
+                },
+                execute: function(){
+                    this.reset();
+                    this.message ="よみがな計算中…";
+                    const grouper = new Grouper(this.contentLines);
+                    const sorter = new Sorter();
+                    kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
+                        if (err) {
+                            console.log(err);
+                            this.message = "解析失敗…やり直してみてください！";
+                        }
+                        else {
+                            new Reading(tokenizer).parseLines(grouper.getGroupedLines()).forEach(parsed => {
+                                sorter.addData(
+                                    parsed.item,
+                                    parsed.reading,
+                                    parsed.normalized
+                                );
+                            });
+                            sorter.execute().forEach(x => this.parsedArr.push(x));
+                            this.resetMsg();
+                        }
+                    });
 
-            new Reading(tokenizer).parseLines(grouper.getGroupedLines()).forEach(parsed => {
-                const r = new Entry(parsed.reading).name;
-                sorter.addData(
-                    parsed.item,
-                    r,
-                    NormalizedReading.convert(r, true)
-                );
-            });
-            document.querySelector(outputSelector).innerHTML = sorter.execute().map(x => {
-                return `<tr><td><mark>${x.item}</mark></td><td>${x.reading}</td><td>${x.normalized}</td></tr>`;
-            }).join("\n");
-
-        }
-
-        document.querySelector("#exeButton").addEventListener("click", () => {
-            showStatus("（\u{1f914}よみがな計算中…）");
-            document.querySelector(".result-markup tbody").innerHTML = "";
-            kuromoji.builder({ dicPath: "../tools/GetReading/dict" }).build((err, tokenizer) => {
-                if (err) {
-                    showStatus("解析失敗…\nやり直してみてください！");
+                },
+                copy: function(){
+                    const joined = this.parsedArr.map(x => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
+                    Util.copyToClipboard(joined);
                 }
-                else {
-                    main(tokenizer, ".ui .inputLines", ".result-markup tbody");
-                }
-            });
+            }
         });
 
-        document.querySelector("#copyButton").addEventListener("click", () => {
-            Util.copyTable(".result-markup tbody");
-        });
 
     </script>
 </body>
