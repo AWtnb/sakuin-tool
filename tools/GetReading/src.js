@@ -46,7 +46,7 @@ export class Reading {
     }
     parseLines(lines) {
         return lines.map(line => {
-            const target = new Entry(line).name;
+            const target = new Entry(line).basename;
             const tokens = this.tokenizer.tokenize(target);
             const r = getReading(tokens);
             return {
