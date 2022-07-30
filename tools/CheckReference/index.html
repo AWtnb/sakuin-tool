@@ -120,8 +120,8 @@
             <h6>見よ項目があるのに参照先に括弧で付記されていないものがあります！</h6>
             <table>
                 <thead><tr>
-                    <td>見よ項目</td>
-                    <td>ヌケ</td>
+                    <th>見よ項目</th>
+                    <th>ヌケ</th>
                 </tr></thead>
                 <tbody>
                     <tr v-for="(lt, idx) in lostTo" :key="idx">
@@ -145,14 +145,68 @@
             <h6>参照元として括弧書きされているのに見よ項目がないものがあります！</h6>
             <table>
                 <thead><tr>
-                    <td>項目</td>
-                    <td>ヌケ</td>
+                    <th>項目</th>
+                    <th>ヌケ</th>
                 </tr></thead>
                 <tbody>
                     <tr v-for="(lf, idx) in lostFrom" :key="idx">
                         <td>{{ lf.problem }}</td>
                         <td><ul>
                             <li v-for="(rq, idx) in lf.require" :key="idx">{{ rq.from }}&#12288;&srarr;{{ rq.to }}</li>
+                        </ul></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>`
+        })
+
+        Vue.component("ref-ungrouped", {
+            props: {
+                ungroupedRefs: {
+                    type: Array,
+                    require: true
+                }
+            },
+            template: `
+            <div>
+            <h6>見よ先項目が名寄せされずに残っています！</h6>
+            <table>
+                <thead><tr>
+                    <th>見よ項目</th>
+                    <th>モレ</th>
+                </tr></thead>
+                <tbody>
+                    <tr v-for="(ug, idx) in ungroupedRefs" :key="idx">
+                        <td>{{ ug.name }}</td>
+                        <td><ul>
+                            <li v-for="(d, idx) in ug.detail" :key="idx">{{ d }}</li>
+                        </ul></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>`
+        })
+
+        Vue.component("ref-conflict", {
+            props: {
+                conflictRefs: {
+                    type: Array,
+                    require: true
+                }
+            },
+            template: `
+            <div>
+            <h6>見よ項目が本項目として残っています！</h6>
+            <table>
+                <thead><tr>
+                    <th>見よ項目</th>
+                    <th>モレ</th>
+                </tr></thead>
+                <tbody>
+                    <tr v-for="(cf, idx) in conflictRefs" :key="idx">
+                        <td>{{ cf.name }}</td>
+                        <td><ul>
+                            <li v-for="(d, idx) in cf.detail" :key="idx">{{ d }}</li>
                         </ul></td>
                     </tr>
                 </tbody>
@@ -172,52 +226,6 @@
             <h6>見よ項目と見よ先項目が隣接しているものがあります！</h6>
             <ul>
                 <li v-for="(ar, idx) in adjacentRefs" :key="idx">{{ ar }}</li>
-            </ul>
-            </div>`
-        })
-
-        Vue.component("ref-ungrouped", {
-            props: {
-                ungroupedRefs: {
-                    type: Array,
-                    require: true
-                }
-            },
-            template: `
-            <div>
-            <h6>見よ先項目が名寄せされずに残っています！</h6>
-            <ul>
-                <li v-for="(ug, idx) in ungroupedRefs" :key="idx">
-                    <mark>{{ ug.name }}</mark>
-                    <ul>
-                        <li v-for="(d, idx) in ug.detail" :key="idx">
-                            <u>{{ d }}</u>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            </div>`
-        })
-
-        Vue.component("ref-conflict", {
-            props: {
-                conflictRefs: {
-                    type: Array,
-                    require: true
-                }
-            },
-            template: `
-            <div>
-            <h6>見よ項目が本項目として残っています！</h6>
-            <ul>
-                <li v-for="(cf, idx) in conflictRefs" :key="idx">
-                    <mark>{{ cf.name }}</mark>
-                    <ul>
-                        <li v-for="(d, idx) in cf.detail" :key="idx">
-                            <u>{{ d }}</u>
-                        </li>
-                    </ul>
-                </li>
             </ul>
             </div>`
         })
