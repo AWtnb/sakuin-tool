@@ -1,4 +1,4 @@
-import {Util, Entry} from "../common.js";
+import {Util, Entry} from "../../assets/common.js";
 
 function normalize(s, removeNoise) {
     const map = new Map();

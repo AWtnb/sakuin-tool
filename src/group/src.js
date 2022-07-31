@@ -1,4 +1,4 @@
-import {EntryAddress} from "../common.js"
+import {EntryAddress} from "../../assets/common.js";
 
 export class Grouper {
 
