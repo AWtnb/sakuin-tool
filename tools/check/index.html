@@ -128,6 +128,145 @@
         import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.7.4/dist/vue.esm.browser.js'
         import {ReferenceChecker, GroupingChecker} from "./src/reference/src.js";
 
+        const refLostTo = Vue.extend({
+            props: {
+                lostTo: {
+                    type: Array,
+                    require: true
+                }
+            },
+            template: `
+            <div>
+            <h6>見よ項目があるのに参照先に括弧で付記されていないものがあります！</h6>
+            <table>
+                <thead><tr>
+                    <th>見よ項目</th>
+                    <th>ヌケ</th>
+                </tr></thead>
+                <tbody>
+                    <tr v-for="(lt, idx) in lostTo" :key="idx">
+                        <td>{{ lt.problem }}</td>
+                        <td>{{ lt.require }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>`
+        })
+
+        const detailList = Vue.extend({
+            props: {
+                details: {
+                    type: Array,
+                    require: true
+                }
+            },
+            template: `
+            <ul>
+                <li v-for="(d, idx) in details" :key="idx">{{ d }}</li>
+            </ul>`
+        })
+
+        const refLostFrom = Vue.extend({
+            props: {
+                lostFrom: {
+                    type: Array,
+                    require: true
+                }
+            },
+            components: {
+                "detail-list": detailList,
+            },
+            template: `
+            <div>
+            <h6>参照元として括弧書きされているのに見よ項目がないものがあります！</h6>
+            <table>
+                <thead><tr>
+                    <th>項目</th>
+                    <th>ヌケ</th>
+                </tr></thead>
+                <tbody>
+                    <tr v-for="(lf, idx) in lostFrom" :key="idx">
+                        <td>{{ lf.problem }}</td>
+                        <td><detail-list :details="lf.require"></detail-list></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>`
+        })
+
+        const refUngrouped = Vue.extend({
+            props: {
+                ungroupedRefs: {
+                    type: Array,
+                    require: true
+                }
+            },
+            components: {
+                "detail-list": detailList,
+            },
+            template: `
+            <div>
+            <h6>見よ先項目が名寄せされずに残っています！</h6>
+            <table>
+                <thead><tr>
+                    <th>見よ項目</th>
+                    <th>モレ</th>
+                </tr></thead>
+                <tbody>
+                    <tr v-for="(ug, idx) in ungroupedRefs" :key="idx">
+                        <td>{{ ug.name }}</td>
+                        <td><detail-list :details="ug.detail"></detail-list></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>`
+        })
+
+        const refConflict = Vue.extend({
+            props: {
+                conflictRefs: {
+                    type: Array,
+                    require: true
+                }
+            },
+            components: {
+                "detail-list": detailList,
+            },
+            template: `
+            <div>
+            <h6>見よ項目が本項目として残っています！</h6>
+            <table>
+                <thead><tr>
+                    <th>見よ項目</th>
+                    <th>モレ</th>
+                </tr></thead>
+                <tbody>
+                    <tr v-for="(cf, idx) in conflictRefs" :key="idx">
+                        <td>{{ cf.name }}</td>
+                        <td><detail-list :details="cf.detail"></detail-list></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>`
+        })
+
+        const refAdjacent = Vue.extend({
+            props: {
+                adjacentRefs: {
+                    type: Array,
+                    require: true
+                }
+            },
+            components: {
+                "detail-list": detailList,
+            },
+            template: `
+            <div>
+            <h6>見よ項目と見よ先項目が隣接しているものがあります！</h6>
+            <detail-list :details="adjacentRefs"></detail-list>
+            </div>`
+        })
+
         const vmCheckRefs = new Vue({
             el: "#checkRefs",
             data: {
@@ -179,130 +318,15 @@
                         this.message = "問題は見当たりません！ 完璧かもしれません！";
                     }
                 }
+            },
+            components: {
+                "ref-lost-to": refLostTo,
+                "ref-lost-from": refLostFrom,
+                "ref-ungrouped": refUngrouped,
+                "ref-conflict": refConflict,
+                "ref-adjacent": refAdjacent,
             }
         });
-
-        Vue.component("ref-lost-to", {
-            props: {
-                lostTo: {
-                    type: Array,
-                    require: true
-                }
-            },
-            template: `
-            <div>
-            <h6>見よ項目があるのに参照先に括弧で付記されていないものがあります！</h6>
-            <table>
-                <thead><tr>
-                    <th>見よ項目</th>
-                    <th>ヌケ</th>
-                </tr></thead>
-                <tbody>
-                    <tr v-for="(lt, idx) in lostTo" :key="idx">
-                        <td>{{ lt.problem }}</td>
-                        <td>{{ lt.require }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>`
-        })
-
-        Vue.component("ref-lost-from", {
-            props: {
-                lostFrom: {
-                    type: Array,
-                    require: true
-                }
-            },
-            template: `
-            <div>
-            <h6>参照元として括弧書きされているのに見よ項目がないものがあります！</h6>
-            <table>
-                <thead><tr>
-                    <th>項目</th>
-                    <th>ヌケ</th>
-                </tr></thead>
-                <tbody>
-                    <tr v-for="(lf, idx) in lostFrom" :key="idx">
-                        <td>{{ lf.problem }}</td>
-                        <td><ul>
-                            <li v-for="(rq, idx) in lf.require" :key="idx">{{ rq.from }}&#12288;&srarr;{{ rq.to }}</li>
-                        </ul></td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>`
-        })
-
-        Vue.component("ref-ungrouped", {
-            props: {
-                ungroupedRefs: {
-                    type: Array,
-                    require: true
-                }
-            },
-            template: `
-            <div>
-            <h6>見よ先項目が名寄せされずに残っています！</h6>
-            <table>
-                <thead><tr>
-                    <th>見よ項目</th>
-                    <th>モレ</th>
-                </tr></thead>
-                <tbody>
-                    <tr v-for="(ug, idx) in ungroupedRefs" :key="idx">
-                        <td>{{ ug.name }}</td>
-                        <td><ul>
-                            <li v-for="(d, idx) in ug.detail" :key="idx">{{ d }}</li>
-                        </ul></td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>`
-        })
-
-        Vue.component("ref-conflict", {
-            props: {
-                conflictRefs: {
-                    type: Array,
-                    require: true
-                }
-            },
-            template: `
-            <div>
-            <h6>見よ項目が本項目として残っています！</h6>
-            <table>
-                <thead><tr>
-                    <th>見よ項目</th>
-                    <th>モレ</th>
-                </tr></thead>
-                <tbody>
-                    <tr v-for="(cf, idx) in conflictRefs" :key="idx">
-                        <td>{{ cf.name }}</td>
-                        <td><ul>
-                            <li v-for="(d, idx) in cf.detail" :key="idx">{{ d }}</li>
-                        </ul></td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>`
-        })
-
-        Vue.component("ref-adjacent", {
-            props: {
-                adjacentRefs: {
-                    type: Array,
-                    require: true
-                }
-            },
-            template: `
-            <div>
-            <h6>見よ項目と見よ先項目が隣接しているものがあります！</h6>
-            <ul>
-                <li v-for="(ar, idx) in adjacentRefs" :key="idx">{{ ar }}</li>
-            </ul>
-            </div>`
-        })
 
         import {CheckChild} from "./src/child/src.js"
 

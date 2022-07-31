@@ -47,9 +47,7 @@ export class ReferenceChecker {
             }
             return {
                 "problem": line.text,
-                "require": required.map(s => {
-                    return { "from": s, "to":line.basename };
-                })
+                "require": required.map(s => `${s}\u3000\u2192${line.basename}`)
             };
         }).filter(Boolean);
     }
