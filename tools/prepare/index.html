@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>入力テンプレートの作成</title>
+    <title>事前準備</title>
     <base target="_blank">
     <link rel="shortcut icon" href="../../assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../../assets/almond.lite.css">
@@ -11,7 +11,6 @@
 </head>
 
 <body>
-    <!-- ============================== -->
     <div class="container">
 
         <h1>事前準備ツール</h1>
@@ -33,9 +32,9 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(line, idx) in lines" :key="idx">
+                                    <td>{{ idx+1 }}</td>
                                     <td>{{ line.index }}</td>
                                     <td>{{ line.page }}</td>
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
