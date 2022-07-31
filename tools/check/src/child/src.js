@@ -1,4 +1,4 @@
-import {Entry} from "../common.js";
+import {Entry} from "../../../../assets/common.js";
 
 class ChildEntry {
     constructor(s, mode) {
