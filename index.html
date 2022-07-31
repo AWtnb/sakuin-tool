@@ -106,11 +106,11 @@
                     </div>
                     <p>{{message}}</p>
                 </div>
-                <div class="result-markup">
-                    <div v-if="parsedArr.length">
+                <div v-if="parsedArr.length">
+                    <div class="result-markup limit-height">
                         <table-for-reading :parsed-arr="parsedArr"></table-for-reading>
-                        <button @click="copy">結果をコピー</button>
                     </div>
+                    <button @click="copy">結果をコピー</button>
                 </div>
             </div>
         </section>
@@ -133,11 +133,11 @@
                     <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
                 </ul>
 
-                <div class="result-markup limit-height">
-                    <div v-if="sortedlines.length">
+                <div v-if="sortedlines.length">
+                    <div class="result-markup limit-height">
                         <table-for-reading :parsed-arr="sortedlines"></table-for-reading>
-                        <button @click="copy">結果をコピー</button>
                     </div>
+                    <button @click="copy">結果をコピー</button>
                 </div>
             </div>
             <img src="./image/img_sort.png">
