@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>索引微調整</title>
+    <base target="_blank">
+    <link rel="shortcut icon" href="../../assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../assets/almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../../assets/additional.css">
+    <style>
+
+        ul.config li input {
+            max-width: 20%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>索引微調整</h1>
+        <!-- ///////////////////////////////////////////////////////////////
+
+            ノンブル加算減算
+
+        /////////////////////////////////////////////////////////////// -->
+        <section>
+            <h2>ノンブル加算減算</h2>
+            <div id="adjuster">
+                <ul class="config">
+                    <li>開始 <input type="number" min="1" v-model="start"></li>
+                    <li>終了 <input type="number" min="1" v-model="end"></li>
+                    <li>増分 <input type="number" v-model="delta"></li>
+                </ul>
+                <div class="ui">
+                    <textarea placeholder="paste here!" v-model="content"></textarea>
+                    <button @click="adjust">実行</button>
+                </div>
+                <div class="ui">
+                    <textarea placeholder="result" readonly v-model="adjusted"></textarea>
+                    <button @click="copy">コピー</button>
+                </div>
+                <div class="result-markup">
+                    <div v-if="diffArr.length">
+                        <h4>{{message}}</h4>
+                        <ul>
+                            <li v-for="(diff, idx) in diffArr" :key="idx">
+                                <span>{{diff.name}}&#12288;&#12288;</span><span
+                                    v-for="(elem, idx) in diff.detail"
+                                    :key="idx"><span
+                                        style="color:#bbb">{{ elem.before }}</span><span
+                                        :style="{color: elem.color}">{{ elem.text }}</span><span
+                                            v-if="diff.detail.length - 1 > idx">, </span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-else>{{message}}</div>
+                </div>
+            </div>
+        </section>
+        <!-- ///////////////////////////////////////////////////////////////
+
+            カタカナひらがな
+
+        /////////////////////////////////////////////////////////////// -->
+        <section>
+            <h2>カタカナひらがな相互変換</h2>
+            <div id="katahira">
+                <div class="ui">
+                    <textarea placeholder="paste here!" v-model="content"></textarea>
+                </div>
+                <div class="ui">
+                    <textarea placeholder="result" readonly v-model="converted"></textarea>
+                    <button @click="copy">コピー</button>
+                </div>
+            </div>
+        </section>
+        <!-- ///////////////////////////////////////////////////////////////
+
+            ローマ字変換
+
+        /////////////////////////////////////////////////////////////// -->
+        <section>
+            <h2>ローマ字に変換</h2>
+            <div id="roman">
+                <div class="ui">
+                    <textarea placeholder="paste here!" v-model="content"></textarea>
+                </div>
+                <div class="ui">
+                    <textarea placeholder="result" readonly v-model="converted"></textarea>
+                    <button @click="copy">コピー</button>
+                </div>
+            </div>
+
+            <ul>
+                <li>ヘボン式ローマ字に従っています。
+                    <ul>
+                        <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
+                    </ul>
+                </li>
+                <li>変換できなかった文字はそのまま表示します。
+                    <ul>
+                        <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
+                        <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <!-- ============================== -->
+    <script type="module">
+
+        import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.7.4/dist/vue.esm.browser.js'
+
+        import {NombreAdjuster, EntryLine} from "./src.js";
+
+        import {Util} from "../../assets/common.js";
+
+        const vmAdjuster = new Vue({
+            el: "#adjuster",
+            data: {
+                content: "",
+                start: 1,
+                end: 999,
+                delta: 1,
+                adjustedArr: [],
+                diffArr: [],
+                message: ""
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+                adjusted: function() {
+                    return this.adjustedArr.map(x => {
+                        return `${x.name}\u3000\u3000${x.nombres.join(", ")}`.trimEnd();
+                    }).join("\n");
+                },
+            },
+            methods: {
+                reset: function() {
+                    this.message = "";
+                    this.adjustedArr = [];
+                    this.diffArr = [];
+                },
+                adjust: function() {
+                    this.reset();
+                    const adjuster = new NombreAdjuster(this.start, this.end, this.delta);
+                    this.contentLines.forEach(line => {
+                        const entryLine = new EntryLine(line, adjuster);
+                        this.adjustedArr.push({
+                            "name": entryLine.name,
+                            "nombres": entryLine.adjustedNombres
+                        });
+                        const comparison = entryLine.compareAddress();
+                        if (comparison.modified) {
+                            this.diffArr.push({
+                                "name": entryLine.name,
+                                "detail": comparison.detail
+                            });
+                        }
+                    });
+                    if (this.diffArr.length) {
+                        this.message = this.diffArr.length + "件の変更があります。"
+                    }
+                    else {
+                        this.message = "修正箇所はありません。";
+                    }
+                },
+                copy: function() {
+                    Util.copyToClipboard(this.adjusted);
+                }
+            }
+        });
+
+        const vmKatahira = new Vue({
+            el: "#katahira",
+            data: {
+                content: "",
+            },
+            computed: {
+                converted: function() {
+                    return this.content.replace(/[\u30a1-\u30f4\u3041-\u3093]/g, (m) => {
+                        if (m.match(/[\u30a1-\u30f4]/)) {
+                            return Util.toHiragana(m);
+                        }
+                        return Util.toKatakana(m);
+                    });
+                }
+            },
+            methods: {
+                copy: function() {
+                    Util.copyToClipboard(this.converted);
+                }
+            }
+        });
+
+        function toRoman(s) {
+            const map = new Map();
+            [
+                ["ア", "A"], ["イ", "I"], ["ウ", "U"], ["エ", "E"], ["オ", "O"],
+                ["カ", "Ka"], ["キ", "Ki"], ["ク", "Ku"], ["ケ", "Ke"], ["コ", "Ko"],
+                ["サ", "Sa"], ["シ", "Shi"], ["ス", "Su"], ["セ", "Se"], ["ソ", "So"],
+                ["タ", "Ta"], ["チ", "Chi"], ["ツ", "Tsu"], ["テ", "Te"], ["ト", "To"],
+                ["ナ", "Na"], ["ニ", "Ni"], ["ヌ", "Nu"], ["ネ", "Ne"], ["ノ", "No"],
+                ["ハ", "Ha"], ["ヒ", "Hi"], ["フ", "Fu"], ["ヘ", "He"], ["ホ", "Ho"],
+                ["マ", "Ma"], ["ミ", "Mi"], ["ム", "Mu"], ["メ", "Me"], ["モ", "Mo"],
+                ["ヤ", "Ya"], ["ユ", "Yu"], ["ヨ", "Yo"],
+                ["ラ", "Ra"], ["リ", "Ri"], ["ル", "Ru"], ["レ", "Re"], ["ロ", "Ro"],
+                ["ワ", "Wa"], ["ヲ", "Wo"], ["ン", "N"],
+                ["ガ", "Ga"], ["ギ", "Gi"], ["グ", "Gu"], ["ゲ", "Ge"], ["ゴ", "Go"],
+                ["ザ", "Za"], ["ジ", "Ji"], ["ズ", "Zu"], ["ゼ", "Ze"], ["ゾ", "Zo"],
+                ["ダ", "Da"], ["ヂ", "Di"], ["ヅ", "Zu"], ["デ", "De"], ["ド", "Do"],
+                ["バ", "Ba"], ["ビ", "Bi"], ["ブ", "Bu"], ["ベ", "Be"], ["ボ", "Bo"],
+                ["パ", "Pa"], ["ピ", "Pi"], ["プ", "Pu"], ["ペ", "Pe"], ["ポ", "Po"],
+                ["ャ", "Lya"], ["ュ", "Lyu"], ["ョ", "Lyo"], ["ッ", "Ltu"]
+            ].forEach(x => map.set(...x))
+
+            let converted = Util.toKatakana(s);
+            for (let k of map.keys()) {
+                const reg = new RegExp(k, "g");
+                converted = converted.replace(reg, map.get(k));
+            }
+            // サ行タ行の拗音処理 → 拗音処理 → 促音処理
+            converted = converted.replace(/([CS]h|J)iLy(.)/g, '$1$2').replace(/([A-Z])iL(y.)/g, '$1$2').replace(/Ltu(.)/g, '$1$1')
+            return converted.toLowerCase();
+        }
+
+        const vmRoman = new Vue({
+            el: "#roman",
+            data: {
+                content: "",
+            },
+            computed: {
+                converted: function() {
+                    return toRoman(this.content);
+                }
+            },
+            methods: {
+                copy: function() {
+                    Util.copyToClipboard(this.converted);
+                },
+            }
+        });
+
+    </script>
+</body>
+
+</html>
