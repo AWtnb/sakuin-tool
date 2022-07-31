@@ -14,119 +14,156 @@
     <link rel="shortcut icon" href="./assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="./assets/almond.lite.css">
     <link rel="stylesheet" type="text/css" href="./assets/additional.css">
+    <style>
+        .navi {
+            position: relative;
+            height: 2vh;
+        }
+        .navi > .menu {
+            position: absolute;
+            display: flex;
+        }
+        .navi > .repo-link {
+            position: absolute;
+            right: 1em;
+            background: #369;
+            font-size: .8em;
+            padding: 0 2px;
+            border-radius: 4px;
+        }
+        .repo-link > a {
+            color: #eee;
+            text-decoration: none;
+        }
+        .menu > div {
+            display: inline-block;
+            margin: 0 1em;
+        }
+        section.fullauto {
+            min-height: 98vh; /* 100vh - .navi  */
+        }
+        .scroll-navi {
+            position: absolute;
+            top: 95vh;
+            right: 1em;
+            color: gray;
+        }
+        .scroll-navi::after {
+            color: tomato;
+            content: "▼";
+        }
+    </style>
 </head>
 
 <body>
 
     <div class="navi">
-        <ul>
-            <li><a href="./tools/prepare/index.html">事前準備</a></li>
-            <li><a href="./tools/check/index.html">チェック</a></li>
-            <li><a href="./tools/adjuster/index.html">微調整</a></li>
-            <li><a href="./tools/reuse/index.html">再利用</a></li>
-        </ul>
+        <div class="menu">
+            <div><a href="./tools/prepare/index.html">事前準備</a></div>
+            <div><a href="./tools/check/index.html">チェック</a></div>
+            <div><a href="./tools/adjuster/index.html">微調整</a></div>
+            <div><a href="./tools/reuse/index.html">再利用</a></div>
+        </div>
+        <div class="repo-link"><a href="https://github.com/AWtnb/sakuin-tool">Github repo.</a></div>
     </div>
 
-    <div class="container">
-        <div style="text-align: right;"><a href="https://github.com/AWtnb/sakuin-tool">repo.</a></div>
+    <section class="fullauto">
 
         <h1>sakuin-tool</h1>
-        <ul>
-            <li>本ツールでの索引整形は一定の法則にしたがって機械的に一括処理しています。</li>
-            <li>例外的なデータには対応できません。精度にも限界がありますので<strong>必ず目でも校正してください。</strong></li>
-            <li>本ツールが外部にデータを送信することは一切ありません。</li>
-        </ul>
-
-        <section class="fullauto">
-            <div id="fullauto">
-                <div class="ui">
-                    <textarea placeholder="paste here!" v-model="content"></textarea>
-                    <button @click="execute">実行</button>
-                </div>
-                <ul>
-                    <li>下図のように<code>項目</code>と<code>ノンブル</code>の2列を Excel から貼り付けてください。</li>
-                    <li>自動で一連の整形を行って索引を出力します。</li>
-                    <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
-                </ul>
-                <div>{{message}}</div>
-                <result :parsed-arr="parsedArr" :copy-func="copy"></result>
-            </div>
-
+        <details>
+            <summary>注意事項</summary>
+            <ul>
+                <li>本ツールでの索引整形は一定の法則にしたがって機械的に一括処理しています。</li>
+                <li>例外的なデータには対応できません。精度にも限界がありますので<strong>必ず目でも校正してください。</strong></li>
+                <li>本ツールが外部にデータを送信することは一切ありません。</li>
+            </ul>
+        </details>
+        <div id="fullauto">
             <img src="./image/img_auto.png">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="execute">実行</button>
+            </div>
+            <ul>
+                <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
+            </ul>
+            <div>{{message}}</div>
+            <result :parsed-arr="parsedArr" :copy-func="copy"></result>
+        </div>
 
-            <p>個別に調整したい人はスクロール↓</p>
-        </section>
-        <!-- ///////////////////////////////////////////////////////////////
+        <div class="scroll-navi">マニュアルモードはスクロール</div>
 
-            名寄せ
+    </section>
+    <!-- ///////////////////////////////////////////////////////////////
 
-        /////////////////////////////////////////////////////////////// -->
-        <section class="individual">
-            <h2>名寄せ</h2>
-            <div id="grouping">
-                <div class="ui">
-                    <textarea placeholder="paste here!" v-model="content"></textarea>
-                    <button @click="execute">実行</button>
-                    <div>
-                        <input type="checkbox" id="isLeft" v-model="isLeft">
-                        <label for="isLeft">ノンブルが左列</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="isOrdered" v-model="isOrdered">
-                        <label for="isOrdered">連続している項目のみ名寄せする</label>
-                    </div>
+        名寄せ
+
+    /////////////////////////////////////////////////////////////// -->
+    <section class="individual">
+        <h2>名寄せ</h2>
+        <div id="grouping">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="execute">実行</button>
+                <div>
+                    <input type="checkbox" id="isLeft" v-model="isLeft">
+                    <label for="isLeft">ノンブルが左列</label>
                 </div>
-                <div class="ui">
-                    <textarea placeholder="result" readonly v-model="grouped"></textarea>
-                    <button @click="copy">結果をコピー</button>
+                <div>
+                    <input type="checkbox" id="isOrdered" v-model="isOrdered">
+                    <label for="isOrdered">連続している項目のみ名寄せする</label>
                 </div>
             </div>
-            <img src="./image/img_grouping.png">
-            <em>ノンブルの<span style="color: red;">並び</span>、<span style="color: blue;">重複</span>、<span style="color: green;">連続</span>を整理。記号での装飾にも対応。</em>
-        </section>
-        <!-- ///////////////////////////////////////////////////////////////
-
-            よみがな
-
-        /////////////////////////////////////////////////////////////// -->
-        <section class="individual">
-            <h2>よみがな取得</h2>
-            <div id="getReading">
-                <div class="ui">
-                    <textarea placeholder="paste here!" v-model="content"></textarea>
-                    <button @click="execute">実行</button>
-                    <div>
-                        <input type="checkbox" id="removeNoise" v-model="removeNoise">
-                        <label for="removeNoise"><code>配列読み</code>からカタカナ・数字・アルファベット以外を削除する</label>
-                    </div>
-                    <p>{{message}}</p>
-                </div>
-                <result :parsed-arr="parsedArr" :copy-func="copy"></result>
+            <div class="ui">
+                <textarea placeholder="result" readonly v-model="grouped"></textarea>
+                <button @click="copy">結果をコピー</button>
             </div>
-        </section>
-        <!-- ///////////////////////////////////////////////////////////////
+        </div>
+        <img src="./image/img_grouping.png">
+        <em>ノンブルの<span style="color: red;">並び</span>、<span style="color: blue;">重複</span>、<span style="color: green;">連続</span>を整理。記号での装飾にも対応。</em>
+    </section>
+    <!-- ///////////////////////////////////////////////////////////////
 
-            並べ替え
+        よみがな
 
-        /////////////////////////////////////////////////////////////// -->
-        <section class="individual">
-            <h2>並べ替え</h2>
-            <div id="sort">
-                <div class="ui">
-                    <textarea placeholder="paste here!" v-model="content"></textarea>
-                    <button @click="sortLines">実行</button>
+    /////////////////////////////////////////////////////////////// -->
+    <section class="individual">
+        <h2>よみがな取得</h2>
+        <div id="getReading">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="execute">実行</button>
+                <div>
+                    <input type="checkbox" id="removeNoise" v-model="removeNoise">
+                    <label for="removeNoise"><code>配列読み</code>からカタカナ・数字・アルファベット以外を削除する</label>
                 </div>
-
-                <ul>
-                    <li>最優先は<code>配列読み</code>の情報。</li>
-                    <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
-                    <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
-                </ul>
-                <result :parsed-arr="sortedlines" :copy-func="copy"></result>
+                <p>{{message}}</p>
             </div>
-            <img src="./image/img_sort.png">
-        </section>
-    </div>
+            <result :parsed-arr="parsedArr" :copy-func="copy"></result>
+        </div>
+    </section>
+    <!-- ///////////////////////////////////////////////////////////////
+
+        並べ替え
+
+    /////////////////////////////////////////////////////////////// -->
+    <section class="individual">
+        <h2>並べ替え</h2>
+        <div id="sort">
+            <div class="ui">
+                <textarea placeholder="paste here!" v-model="content"></textarea>
+                <button @click="sortLines">実行</button>
+            </div>
+
+            <ul>
+                <li>最優先は<code>配列読み</code>の情報。</li>
+                <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+                <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+            </ul>
+            <result :parsed-arr="sortedlines" :copy-func="copy"></result>
+        </div>
+        <img src="./image/img_sort.png">
+    </section>
     <!-- ///////////////////////////////////////////////////////////////
 
         JavaScript

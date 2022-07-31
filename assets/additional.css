@@ -9,7 +9,7 @@ body {
     margin-bottom: 50vh;
 }
 
-h1, h2 {
+h1 {
     font-family: 'Dela Gothic One', cursive;;
 }
 
@@ -18,10 +18,11 @@ h1 {
 }
 
 h2 {
+    margin-top: 4rem;
     border-bottom: 2px solid;
 }
 
-h3, h4, h5 {
+h2, h3, h4, h5 {
     font-weight: bold;
 }
 
@@ -31,17 +32,17 @@ h3, h4 {
 
 img {
     box-shadow: 1px 1px 5px 1px #ccc;
-    margin: 2rem auto;
+    margin: 2rem 0;
     display: block;
-    max-width: 90%;
+    max-width: 60%;
 }
 
 img ~ em {
     font-style: normal;
     display: block;
     line-height: 1.25;
-    text-align: center;
-    margin-top: -1em;
+    margin-top: -1rem;
+    margin-left: 1rem;
     color: #333;
 }
 
