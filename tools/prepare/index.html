@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>入力テンプレートの作成</title>
+    <base target="_blank">
+    <link rel="shortcut icon" href="../../assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../assets/almond.lite.css">
+    <link rel="stylesheet" type="text/css" href="../../assets/additional.css">
+</head>
+
+<body>
+    <!-- ============================== -->
+    <div class="container">
+
+        <h1>事前準備ツール</h1>
+
+        <section>
+            <h2>索引拾いのテンプレート生成</h2>
+            <div id="newTemplate">
+                <div class="ui">
+                    <textarea placeholder="paste here!" v-model="content"></textarea>
+                    <button @click="generate">実行</button>
+                </div>
+                <div v-if="lines.length">
+                    <div class="result-markup limit-height">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th><th>index</th><th>ページ</th><th>項目</th><th>見よ先</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(line, idx) in lines" :key="idx">
+                                    <td>{{ line.index }}</td>
+                                    <td>{{ line.page }}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button @click="copy">コピー</button>
+                </div>
+            </div>
+            <img src="./image/img_newtemplate.png">
+            <details>
+                <summary>条件付き書式の設定</summary>
+                <img src="./image/img_generate-index.png">
+                <em><code>index</code>列に条件付き書式で<code>偶数の場合に背景色変更</code>という設定をするとページの変わり目が見やすくなり便利です。</em>
+                <img src="./image/img_generate-index-rule.png">
+            </details>
+        </section>
+        <section>
+            <h2>入力テンプレートの事前整形</h2>
+            <div id="preFormat">
+                <div class="ui">
+                    <textarea placeholder="paste here!" v-model="content"></textarea>
+                    <button @click="format">実行</button>
+                </div>
+
+                <div class="caption">
+                    <ul>
+                        <li>項目を左列に、ページを右列に配置</li>
+                        <li><code>見よ先</code>が入力されている場合：
+                            <ul>
+                                <li><code>　→</code>でつないで見よ項目を作成</li>
+                                <li>ノンブルを削除</li>
+                                <li>代わりに同じノンブルで見よ先項目を作成</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div v-if="lines.length">
+                    <div class="result-markup limit-height">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>項目</th><th>ノンブル</th>
+                                </tr>
+                            </thead>
+                            <tbody><tr v-for="(item, idx) in lines" :key="idx">
+                                <td>{{item.name}}</td>
+                                <td>{{item.nombre}}</td>
+                            </tr></tbody>
+                        </table>
+                    </div>
+                    <button @click="copy">表をコピー</button>
+                </div>
+            </div>
+
+            <img src="./image/img_preformat.png">
+        </section>
+    </div>
+    <!-- ///////////////////////////////////////////////////////////////
+
+        JavaScript
+
+    /////////////////////////////////////////////////////////////// -->
+    <script type="module">
+
+        import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.7.4/dist/vue.esm.browser.js'
+
+        import {Util} from "../../assets/common.js";
+
+        function generateTemplare(lines) {
+            const stack = [];
+            let idx = 0;
+            lines.filter(line => line).forEach(line => {
+                const [page, counter, ...rest] = line.split("\t");
+                const nItem = Util.toHalfWidth(counter);
+                if (Number(nItem) > 0) {
+                    idx += 1;
+                    for (let i = 0; i < Number(nItem); i++) {
+                        stack.push({ "index": String(idx), "page": String(page) });
+                    }
+                }
+            });
+            return stack;
+        }
+
+        const vmNewTemplate = new Vue({
+            el: "#newTemplate",
+            data: {
+                content: "",
+                lines: [],
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+            },
+            methods: {
+                reset: function(){
+                    this.lines = [];
+                },
+                generate: function() {
+                    this.reset();
+                    generateTemplare(this.contentLines).forEach(x => {
+                        this.lines.push(x);
+                    });
+
+                },
+                copy: function() {
+                    const joined = this.lines.map(x => `${x.index}\t${x.page}\t\t\t`).join("\n");
+                    Util.copyToClipboard(joined);
+                }
+            }
+        });
+
+        function formatIndexTemplate(lines) {
+            const stack = [];
+            lines.filter(x => x.trim()).forEach(line => {
+                const [nombre, name, referTo, ...rest] = line.split("\t").map(x => x.trim());
+                const nStr = String(Util.toHalfWidth(nombre));
+                if (String(referTo).length > 0) {
+                    stack.push({
+                        "nombre": "",
+                        "name": `${name}\u3000→${referTo}`,
+                    });
+                    stack.push({
+                        "nombre": nStr,
+                        "name": `${referTo}\uff08${name}\uff09`,
+                    });
+                }
+                else {
+                    if (String(name).length > 0) {
+                        stack.push({
+                            "nombre": nStr,
+                            "name": name,
+                        });
+                    }
+                }
+            });
+            return stack;
+        }
+
+        const vmPreformat = new Vue({
+            el: "#preFormat",
+            data: {
+                content: "",
+                lines: [],
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+            },
+            methods: {
+                reset: function(){
+                    this.lines = [];
+                },
+                format: function() {
+                    this.reset();
+                    formatIndexTemplate(this.contentLines).forEach(x => {
+                        this.lines.push(x);
+                    });
+                },
+                copy: function() {
+                    const joined = this.lines.map(x => `${x.name}\t${x.nombre}`).join("\n");
+                    Util.copyToClipboard(joined);
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
