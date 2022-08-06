@@ -269,14 +269,16 @@
 
         const vmCheckRefs = new Vue({
             el: "#checkRefs",
-            data: {
-                content: "",
-                lostTo: [],
-                lostFrom: [],
-                adjacent: [],
-                ungrouped: [],
-                conflicts: [],
-                message: ""
+            data: function () {
+                return {
+                    content: "",
+                    lostTo: [],
+                    lostFrom: [],
+                    adjacent: [],
+                    ungrouped: [],
+                    conflicts: [],
+                    message: ""
+                }
             },
             computed: {
                 contentLines: function() {
@@ -332,10 +334,12 @@
 
         const vmCheckChild = new Vue({
             el: "#checkChild",
-            data: {
-                content: "",
-                picked: "all",
-                found: []
+            data: function () {
+                return {
+                    content: "",
+                    picked: "all",
+                    found: []
+                }
             },
             computed: {
                 contentLines: function() {
@@ -415,10 +419,12 @@
 
         const vmCheckNombre = new Vue({
             el: "#checkNombre",
-            data: {
-                content: "",
-                message: "",
-                problems: [],
+            data: function () {
+                return {
+                    content: "",
+                    message: "",
+                    problems: [],
+                }
             },
             computed: {
                 contentLines: function() {

@@ -121,14 +121,16 @@
 
         const vmAdjuster = new Vue({
             el: "#adjuster",
-            data: {
-                content: "",
-                start: 1,
-                end: 999,
-                delta: 1,
-                adjustedArr: [],
-                diffArr: [],
-                message: ""
+            data: function() {
+                return {
+                    content: "",
+                    start: 1,
+                    end: 999,
+                    delta: 1,
+                    adjustedArr: [],
+                    diffArr: [],
+                    message: ""
+                }
             },
             computed: {
                 contentLines: function() {
@@ -178,8 +180,10 @@
 
         const vmKatahira = new Vue({
             el: "#katahira",
-            data: {
-                content: "",
+            data: function () {
+                return {
+                    content: "",
+                }
             },
             computed: {
                 converted: function() {
@@ -231,8 +235,10 @@
 
         const vmRoman = new Vue({
             el: "#roman",
-            data: {
-                content: "",
+            data: function(){
+                return {
+                    content: "",
+                }
             },
             computed: {
                 converted: function() {

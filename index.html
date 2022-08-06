@@ -228,11 +228,12 @@
 
         const vmFullauto = new Vue({
             el: "#fullauto",
-            data: {
-                content: "",
-                message: "",
-                parsedArr: [],
-
+            data: function() {
+                return {
+                    content: "",
+                    message: "",
+                    parsedArr: []
+                }
             },
             computed: {
                 contentLines: function() {
@@ -280,11 +281,13 @@
 
         const vmGrouping = new Vue({
             el: "#grouping",
-            data: {
-                content: "",
-                lines: [],
-                isLeft: false,
-                isOrdered: false,
+            data: function () {
+                return {
+                    content: "",
+                    lines: [],
+                    isLeft: false,
+                    isOrdered: false,
+                }
             },
             computed: {
                 contentLines: function() {
@@ -313,11 +316,13 @@
 
         const vmGetReading = new Vue({
             el: "#getReading",
-            data: {
-                content: "",
-                removeNoise: true,
-                parsedArr: [],
-                message: ""
+            data: function () {
+                return {
+                    content: "",
+                    removeNoise: true,
+                    parsedArr: [],
+                    message: ""
+                }
             },
             computed: {
                 contentLines: function() {
@@ -357,9 +362,11 @@
 
         const vmSort = new Vue({
             el: "#sort",
-            data: {
-                content: "",
-                sortedlines: []
+            data: function () {
+                return {
+                    content: "",
+                    sortedlines: []
+                }
             },
             computed: {
                 contentLines: function() {

@@ -123,9 +123,11 @@
 
         const vmNewTemplate = new Vue({
             el: "#newTemplate",
-            data: {
-                content: "",
-                lines: [],
+            data: function () {
+                return {
+                    content: "",
+                    lines: [],
+                }
             },
             computed: {
                 contentLines: function() {
@@ -179,9 +181,11 @@
 
         const vmPreformat = new Vue({
             el: "#preFormat",
-            data: {
-                content: "",
-                lines: [],
+            data: function () {
+                return {
+                    content: "",
+                    lines: [],
+                }
             },
             computed: {
                 contentLines: function() {

@@ -126,10 +126,12 @@
 
         const vmPreformat = new Vue({
             el: "#preformat",
-            data: {
-                content: "",
-                fmtArr: [],
-                message: ""
+            data: function () {
+                return {
+                    content: "",
+                    fmtArr: [],
+                    message: ""
+                }
             },
             computed: {
                 contentLines: function() {
@@ -186,9 +188,11 @@
 
         const vmComplete = new Vue({
             el: "#completeChild",
-            data: {
-                content: "",
-                fmtArr: [],
+            data: function () {
+                return {
+                    content: "",
+                    fmtArr: [],
+                }
             },
             computed: {
                 contentLines: function() {
@@ -238,9 +242,11 @@
 
         const vmRelease = new Vue({
             el: "#release",
-            data: {
-                content: "",
-                released: [],
+            data: function () {
+                return {
+                    content: "",
+                    released: [],
+                }
             },
             computed: {
                 contentLines: function() {
