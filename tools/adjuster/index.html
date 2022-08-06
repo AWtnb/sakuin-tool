@@ -47,13 +47,8 @@
                         <h4>{{message}}</h4>
                         <ul>
                             <li v-for="(diff, idx) in diffArr" :key="idx">
-                                <span>{{diff.name}}&#12288;&#12288;</span><span
-                                    v-for="(elem, idx) in diff.detail"
-                                    :key="idx"><span
-                                        style="color:#bbb">{{ elem.before }}</span><span
-                                        :style="{color: elem.color}">{{ elem.text }}</span><span
-                                            v-if="diff.detail.length - 1 > idx">, </span>
-                                </span>
+                                <span>{{diff.name}}&#12288;&#12288;</span>
+                                <address-diff :diff-details="diff.detail"></address-diff>
                             </li>
                         </ul>
                     </div>
@@ -111,16 +106,42 @@
         </section>
     </div>
     <!-- ============================== -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.js"></script>
     <script type="module">
-
-        import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.7.4/dist/vue.esm.browser.js'
 
         import {NombreAdjuster, EntryLine} from "./src.js";
 
         import {Util} from "../../assets/common.js";
 
-        const vmAdjuster = new Vue({
-            el: "#adjuster",
+        const modifiedAddress = {
+            props: {
+                address: {
+                    type: Object,
+                    require: true
+                }
+            },
+            template: `<span :style="{color: address.color}">{{ address.text }}</span>`
+        };
+        const addressDiff = {
+            props: {
+                diffDetails: {
+                    type: Array,
+                    require: true
+                }
+            },
+            components: {
+                "modified-address": modifiedAddress
+            },
+            template: `
+            <span v-for="(adr, idx) in diffDetails" :key="idx">
+                <del style="color:#bbb;">{{ adr.before }}</del>
+                <modified-address :address="adr"></modified-address>
+                <span v-if="diffDetails.length - 1 > idx">, </span>
+            </span>
+            `
+        };
+
+        const vmAdjuster = Vue.createApp({
             data: function() {
                 return {
                     content: "",
@@ -141,6 +162,9 @@
                         return `${x.name}\u3000\u3000${x.nombres.join(", ")}`.trimEnd();
                     }).join("\n");
                 },
+            },
+            components: {
+                "address-diff": addressDiff
             },
             methods: {
                 reset: function() {
@@ -176,10 +200,9 @@
                     Util.copyToClipboard(this.adjusted);
                 }
             }
-        });
+        }).mount("#adjuster");
 
-        const vmKatahira = new Vue({
-            el: "#katahira",
+        const vmKatahira = Vue.createApp({
             data: function () {
                 return {
                     content: "",
@@ -200,7 +223,7 @@
                     Util.copyToClipboard(this.converted);
                 }
             }
-        });
+        }).mount("#katahira");
 
         function toRoman(s) {
             const map = new Map();
@@ -233,8 +256,7 @@
             return converted.toLowerCase();
         }
 
-        const vmRoman = new Vue({
-            el: "#roman",
+        const vmRoman = Vue.createApp({
             data: function(){
                 return {
                     content: "",
@@ -250,7 +272,7 @@
                     Util.copyToClipboard(this.converted);
                 },
             }
-        });
+        }).mount("#roman");
 
     </script>
 </body>
