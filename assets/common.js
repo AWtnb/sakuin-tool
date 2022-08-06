@@ -1,48 +1,9 @@
 export class Util {
 
-    static getElemValueLines(selector) {
-        /**
-         * value of textarea never contains \r(carriage return)
-         *
-         * - https://html.spec.whatwg.org/multipage/form-elements.html#the-textarea-element
-         * - https://zzz.buzz/2017/12/21/javascript-traps-and-pitfalls-three-normalizations-of-textarea-elements-value/
-         * - https://knooto.info/html-textarea-newline-character/
-         */
-        return document.querySelector(selector).value.split(/\n/).map(line => String(line));
-    }
-
     static toHalfWidth(str) {
         return str.replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, function(s) {
             return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
         });
-    }
-
-    static copyTable(selector) {
-        const tbody = document.querySelector(selector);
-        if (tbody.tagName != "TBODY") {
-            console.log("tbody is not selected!");
-            return;
-        }
-        const lines = [];
-        const maxRow = tbody.rows.length;
-        for (let i = 0; i < maxRow; i++) {
-            const row = tbody.rows[i];
-            const maxCol = row.cells.length;
-            const cells = [];
-            for (let c = 0; c < maxCol; c++) {
-                const cell = row.cells[c];
-                cells.push(String(cell.innerText).replace(/&amp;/g, "&"));
-            }
-            lines.push(cells.join("\t"));
-        }
-        const s = lines.join("\r\n");
-        navigator.clipboard.writeText(s);
-        alert("コピーしました！");
-    }
-
-    static copyValue(selector) {
-        navigator.clipboard.writeText(String(document.querySelector(selector).value).replace(/&amp;/g, "&"));
-        alert("コピーしました！");
     }
 
     static copyToClipboard(s) {
@@ -275,29 +236,3 @@ export class EntryAddress {
     }
 
 }
-
-export const setScroller = () => {
-    const areaA = document.querySelector("#scrollA");
-    const areaB = document.querySelector("#scrollB");
-    if (areaA && areaB) {
-        areaA.addEventListener("scroll", () => {
-            areaB.scrollTop = areaA.scrollTop;
-            areaB.scrollLeft = areaA.scrollLeft;
-        });
-        areaB.addEventListener("scroll", () => {
-            areaA.scrollTop = areaB.scrollTop;
-            areaA.scrollLeft = areaB.scrollLeft;
-        });
-    }
-};
-
-export const setNavi = (href = "../../index.html") => {
-    const a = document.createElement("a");
-    a.href = href;
-    a.text = "TOP";
-    const nav = document.createElement("div");
-    nav.classList.add("navi");
-    nav.append(a);
-    document.querySelector(".container").insertAdjacentElement("afterbegin", nav);
-
-};
