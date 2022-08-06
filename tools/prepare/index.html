@@ -99,9 +99,8 @@
         JavaScript
 
     /////////////////////////////////////////////////////////////// -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.js"></script>
     <script type="module">
-
-        import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.7.4/dist/vue.esm.browser.js'
 
         import {Util} from "../../assets/common.js";
 
@@ -121,8 +120,7 @@
             return stack;
         }
 
-        const vmNewTemplate = new Vue({
-            el: "#newTemplate",
+        const vmNewTemplate = Vue.createApp({
             data: function () {
                 return {
                     content: "",
@@ -150,7 +148,7 @@
                     Util.copyToClipboard(joined);
                 }
             }
-        });
+        }).mount("#newTemplate");
 
         function formatIndexTemplate(lines) {
             const stack = [];
@@ -179,8 +177,7 @@
             return stack;
         }
 
-        const vmPreformat = new Vue({
-            el: "#preFormat",
+        const vmPreformat = Vue.createApp({
             data: function () {
                 return {
                     content: "",
@@ -207,7 +204,7 @@
                     Util.copyToClipboard(joined);
                 }
             }
-        });
+        }).mount("#preFormat");
 
     </script>
 </body>
