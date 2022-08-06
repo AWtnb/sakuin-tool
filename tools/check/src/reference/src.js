@@ -8,13 +8,11 @@ export class ReferenceChecker {
 
     goalLostReference() {
         // 見よ項目があるのに参照先に括弧で付記されていないものを探す
-        return this.entries.filter(entry => entry.isReference).map(entry => {
-            return {
-                "text": entry.name,
-                "refFrom": entry.basename,
-                "refTo": entry.referTo
-            };
-        }).map(ref => {
+        return this.entries.filter(entry => entry.isReference).map(entry => ({
+            "text": entry.name,
+            "refFrom": entry.basename,
+            "refTo": entry.referTo
+        })).map(ref => {
             const grep = this.entries.filter(entry => {
                 return (!entry.isReference && entry.basename == ref.refTo && entry.referredFrom.includes(ref.refFrom));
             });
@@ -31,13 +29,11 @@ export class ReferenceChecker {
     requiredFromReference() {
         // 参照元として括弧書きされているのに見よ項目がないものを探す
         const refs = this.entries.filter(entry => entry.isReference);
-        return this.entries.filter(entry => entry.referredFrom.length > 0).map(entry => {
-            return {
-                "text": entry.name,
-                "referredFrom": entry.referredFrom,
-                "basename": entry.basename
-            };
-        }).map(line => {
+        return this.entries.filter(entry => entry.referredFrom.length > 0).map(entry => ({
+            "text": entry.name,
+            "referredFrom": entry.referredFrom,
+            "basename": entry.basename
+        })).map(line => {
             const required = line.referredFrom.filter(s => {
                 const correctRefs = refs.filter(entry => entry.basename == s && entry.referTo == line.basename);
                 return (correctRefs.length < 1);
