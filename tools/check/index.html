@@ -121,14 +121,13 @@
         JavaScript
 
     /////////////////////////////////////////////////////////////// -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.js"></script>
     <script type="module">
 
         import {Entry, EntryAddress} from "../../assets/common.js";
-
-        import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.7.4/dist/vue.esm.browser.js'
         import {ReferenceChecker, GroupingChecker} from "./src/reference/src.js";
 
-        const refLostTo = Vue.extend({
+        const refLostTo = {
             props: {
                 lostTo: {
                     type: Array,
@@ -151,9 +150,9 @@
                 </tbody>
             </table>
             </div>`
-        })
+        };
 
-        const detailList = Vue.extend({
+        const detailList = {
             props: {
                 details: {
                     type: Array,
@@ -164,9 +163,9 @@
             <ul>
                 <li v-for="(d, idx) in details" :key="idx">{{ d }}</li>
             </ul>`
-        })
+        };
 
-        const refLostFrom = Vue.extend({
+        const refLostFrom = {
             props: {
                 lostFrom: {
                     type: Array,
@@ -192,9 +191,9 @@
                 </tbody>
             </table>
             </div>`
-        })
+        };
 
-        const refUngrouped = Vue.extend({
+        const refUngrouped = {
             props: {
                 ungroupedRefs: {
                     type: Array,
@@ -220,9 +219,9 @@
                 </tbody>
             </table>
             </div>`
-        })
+        };
 
-        const refConflict = Vue.extend({
+        const refConflict = {
             props: {
                 conflictRefs: {
                     type: Array,
@@ -248,9 +247,9 @@
                 </tbody>
             </table>
             </div>`
-        })
+        };
 
-        const refAdjacent = Vue.extend({
+        const refAdjacent = {
             props: {
                 adjacentRefs: {
                     type: Array,
@@ -265,10 +264,9 @@
             <h6>見よ項目と見よ先項目が隣接しているものがあります！</h6>
             <detail-list :details="adjacentRefs"></detail-list>
             </div>`
-        })
+        };
 
-        const vmCheckRefs = new Vue({
-            el: "#checkRefs",
+        const vmCheckRefs = Vue.createApp({
             data: function () {
                 return {
                     content: "",
@@ -328,12 +326,11 @@
                 "ref-conflict": refConflict,
                 "ref-adjacent": refAdjacent,
             }
-        });
+        }).mount("#checkRefs");
 
         import {CheckChild} from "./src/child/src.js"
 
-        const vmCheckChild = new Vue({
-            el: "#checkChild",
+        const vmCheckChild = Vue.createApp({
             data: function () {
                 return {
                     content: "",
@@ -358,7 +355,7 @@
                     });
                 }
             }
-        });
+        }).mount("#checkChild");
 
         class AddressChecker {
             constructor(s) {
@@ -417,8 +414,7 @@
             }).filter(Boolean);
         }
 
-        const vmCheckNombre = new Vue({
-            el: "#checkNombre",
+        const vmCheckNombre = Vue.createApp({
             data: function () {
                 return {
                     content: "",
@@ -446,7 +442,7 @@
                     }
                 }
             }
-        });
+        }).mount("#checkNombre");
 
     </script>
 </body>
