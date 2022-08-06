@@ -135,7 +135,6 @@
                 }
             },
             template: `
-            <div>
             <h6>見よ項目があるのに参照先に括弧で付記されていないものがあります！</h6>
             <table>
                 <thead><tr>
@@ -148,8 +147,7 @@
                         <td>{{ lt.require }}</td>
                     </tr>
                 </tbody>
-            </table>
-            </div>`
+            </table>`
         };
 
         const detailList = {
@@ -176,7 +174,6 @@
                 "detail-list": detailList,
             },
             template: `
-            <div>
             <h6>参照元として括弧書きされているのに見よ項目がないものがあります！</h6>
             <table>
                 <thead><tr>
@@ -189,8 +186,7 @@
                         <td><detail-list :details="lf.require"></detail-list></td>
                     </tr>
                 </tbody>
-            </table>
-            </div>`
+            </table>`
         };
 
         const refUngrouped = {
@@ -204,7 +200,6 @@
                 "detail-list": detailList,
             },
             template: `
-            <div>
             <h6>見よ先項目が名寄せされずに残っています！</h6>
             <table>
                 <thead><tr>
@@ -217,8 +212,7 @@
                         <td><detail-list :details="ug.detail"></detail-list></td>
                     </tr>
                 </tbody>
-            </table>
-            </div>`
+            </table>`
         };
 
         const refConflict = {
@@ -232,7 +226,6 @@
                 "detail-list": detailList,
             },
             template: `
-            <div>
             <h6>見よ項目が本項目として残っています！</h6>
             <table>
                 <thead><tr>
@@ -245,8 +238,7 @@
                         <td><detail-list :details="cf.detail"></detail-list></td>
                     </tr>
                 </tbody>
-            </table>
-            </div>`
+            </table>`
         };
 
         const refAdjacent = {
@@ -260,10 +252,8 @@
                 "detail-list": detailList,
             },
             template: `
-            <div>
             <h6>見よ項目と見よ先項目が隣接しているものがあります！</h6>
-            <detail-list :details="adjacentRefs"></detail-list>
-            </div>`
+            <detail-list :details="adjacentRefs"></detail-list>`
         };
 
         const vmCheckRefs = Vue.createApp({
