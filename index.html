@@ -142,6 +142,22 @@
             </div>
             <result-markup :parsed-arr="parsedArr" :copy-func="copy"></result-markup>
         </div>
+        <details>
+            <summary>配列よみ変換だけ必要な場合はこちら</summary>
+            <div id="normalize">
+                <div>
+                    <input type="checkbox" id="removeNoiseSimple" v-model="removeNoise">
+                    <label for="removeNoiseSimple">カタカナ・数字・アルファベット以外を削除する</label>
+                </div>
+                <div class="ui">
+                    <textarea placeholder="paste here!" v-model="content"></textarea>
+                </div>
+                <div class="ui">
+                    <textarea placeholder="result" readonly v-model="converted"></textarea>
+                    <button @click="copy">コピー</button>
+                </div>
+            </div>
+        </details>
     </section>
     <!-- ///////////////////////////////////////////////////////////////
 
@@ -229,7 +245,9 @@
             `
         };
 
-
+        ///////////////////////////////////////////////////////////////
+        // 全自動
+        ///////////////////////////////////////////////////////////////
 
         const vmFullauto = Vue.createApp({
             data: function() {
@@ -285,6 +303,10 @@
             }
         }).mount("#fullauto")
 
+        ///////////////////////////////////////////////////////////////
+        // 名寄せ
+        ///////////////////////////////////////////////////////////////
+
         const vmGrouping = Vue.createApp({
             data: function () {
                 return {
@@ -321,6 +343,10 @@
                 }
             }
         }).mount("#grouping");
+
+        ///////////////////////////////////////////////////////////////
+        // 読み取得
+        ///////////////////////////////////////////////////////////////
 
         const vmGetReading = Vue.createApp({
             data: function () {
@@ -369,6 +395,31 @@
                 }
             }
         }).mount("#getReading");
+
+        // 配列よみ変換
+        const vmNormalize = Vue.createApp({
+            data: function () {
+                return {
+                    content: "",
+                    removeNoise: true
+                }
+            },
+            computed: {
+                converted: function() {
+                    return Reading.normalize(this.content, this.removeNoise);
+                }
+            },
+            methods: {
+                copy: function() {
+                    Util.copyToClipboard(this.converted);
+                }
+            }
+        }).mount("#normalize");
+
+
+        ///////////////////////////////////////////////////////////////
+        // 並べ替え
+        ///////////////////////////////////////////////////////////////
 
         const vmSort = Vue.createApp({
             data: function () {

@@ -56,4 +56,7 @@ export class Reading {
             }
         });
     }
+    static normalize(s, removeNoise=true) {
+        return normalize(s, removeNoise);
+    }
 }
