@@ -33,6 +33,18 @@ export class Util {
         return s.trimStart() != s;
     }
 
+    static trimAppendix(s) {
+        return s.replace(/(\uff08.+?\uff09|\uff3b.+?\uff3d|\u0028.+?\u0029|\u005b.+?\u005d)$/, "");
+    }
+
+    static getSource(s) {
+        const m = s.match(/[\uff08\u0028\uff3b\u005b](.+?)[\uff09\u0029\uff3d\u005d]$/);
+        if (m) {
+            const inner = m[1];
+            return inner.replace(/\uff0c/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
+        }
+        return [];
+    }
 }
 
 
@@ -71,16 +83,16 @@ export class Entry {
             this.isChild = Util.isIndented(sides.left);
             this.name = ((this.isChild)? "\u3000" : "") + sides.left.trim();
             this.address = sides.right.trim();
-            this.basename = this.trimAppendix();
-            this.referredFrom = this.getSource();
+            this.basename = Util.trimAppendix(this.name).trim();
+            this.referredFrom = Util.getSource(this.name);
             return;
         }
         if (this.elems[0]) {
             const s = this.elems[0];
             this.isChild = Util.isIndented(s);
             this.name = ((this.isChild)? "\u3000" : "") + s.trim();
-            this.basename = this.trimAppendix();
-            this.referredFrom = this.getSource();
+            this.basename = Util.trimAppendix(this.name).trim();
+            this.referredFrom = Util.getSource(this.name);
             const refElems = this.name.split("→").map(x => String(x).trim()).filter(Boolean);
             if (refElems.length > 1) {
                 this.isReference = true;
@@ -88,19 +100,6 @@ export class Entry {
                 this.basename = refElems[0];
             }
         }
-    }
-
-    getSource() {
-        const m = this.name.match(/[\uff08\u0028\uff3b\u005b](.+?)[\uff09\u0029\uff3d\u005d]$/);
-        if (m) {
-            const inner = m[1];
-            return inner.replace(/\uff0c/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
-        }
-        return [];
-    }
-
-    trimAppendix() {
-        return this.name.replace(/(\uff08.+?\uff09|\uff3b.+?\uff3d|\u0028.+?\u0029|\u005b.+?\u005d)$/, "");
     }
 
 }
