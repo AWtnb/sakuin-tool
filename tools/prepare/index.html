@@ -32,8 +32,8 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(line, idx) in lines" :key="idx">
-                                    <td>{{ idx+1 }}</td>
-                                    <td>{{ line.index }}</td>
+                                    <td>{{ line.id }}</td>
+                                    <td>{{ line.pageIdx }}</td>
                                     <td>{{ line.page }}</td>
                                     <td></td>
                                     <td></td>
@@ -109,14 +109,18 @@
 
         function generateTemplare(lines) {
             const stack = [];
-            let idx = 0;
+            let pageIdx = 0;
             lines.filter(line => line).forEach(line => {
                 const [page, counter, ...rest] = line.split("\t");
                 const nItem = Util.toHalfWidth(counter);
                 if (Number(nItem) > 0) {
-                    idx += 1;
+                    pageIdx += 1;
                     for (let i = 0; i < Number(nItem); i++) {
-                        stack.push({ "index": String(idx), "page": String(page) });
+                        stack.push({
+                            "id": String(stack.length + 1),
+                            "pageIdx": String(pageIdx),
+                            "page": String(page)
+                        });
                     }
                 }
             });
@@ -147,7 +151,8 @@
 
                 },
                 copy: function() {
-                    const joined = this.lines.map(x => `${x.index}\t${x.page}\t\t\t`).join("\n");
+                    const conc = ["ID\tindex\tページ\t項目\t見よ先"].concat(this.lines.map(x => `${x.id}\t${x.pageIdx}\t${x.page}\t\t`))
+                    const joined = conc.join("\n");
                     Util.copyToClipboard(joined);
                 }
             }
