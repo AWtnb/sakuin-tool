@@ -72,3 +72,11 @@ th, td {
     height: 180px;
     white-space: pre;
 }
+
+span.copy-status::before {
+    content: "\2714";
+    color: tomato;
+    font-size: 2rem;
+    font-style: italic;
+    margin-left: .25em;
+}
