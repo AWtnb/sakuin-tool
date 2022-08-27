@@ -25,26 +25,28 @@ export class Util {
         });
     }
 
-    static stripNAN(s) {
-        return s.replace(/[^\d]/g, "");
+}
+
+class EntryName {
+
+    constructor(s) {
+        this.reg = new RegExp("(\uff08.+?\uff09|\uff3b.+?\uff3d|\\(.+?\\)|\\[.+?\\])$");
+        this.name = s;
     }
 
-    static isIndented(s) {
-        return s.trimStart() != s;
+    getBasename() {
+        return this.name.replace(this.reg, "").trim();
     }
 
-    static trimAppendix(s) {
-        return s.replace(/(\uff08.+?\uff09|\uff3b.+?\uff3d|\u0028.+?\u0029|\u005b.+?\u005d)$/, "");
-    }
-
-    static getSource(s) {
-        const m = s.match(/[\uff08\u0028\uff3b\u005b](.+?)[\uff09\u0029\uff3d\u005d]$/);
+    getSource() {
+        const m = this.name.match(this.reg);
         if (m) {
-            const inner = m[1];
+            const inner = m[0].slice(1, -1).trim();
             return inner.replace(/\uff0c/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
         }
         return [];
     }
+
 }
 
 
@@ -52,6 +54,8 @@ export class Entry {
 
     constructor(s, separator = "\u3000\u3000") {
         this.rawStr = s;
+        this.isChild = s.trimStart() != s; // 子項目かどうか
+
         this.separator = separator;
         this.elems = this.rawStr.split(this.separator).filter(Boolean).map(x => String(x));
 
@@ -61,7 +65,6 @@ export class Entry {
         this.referredFrom = []; // カッコ内に付記された「見よ元」情報
         this.referTo = ""; // 見よ先
         this.isReference = false; // 見よ項目かどうか
-        this.isChild = false; // 子項目かどうか
 
         this.parse();
     }
@@ -80,25 +83,31 @@ export class Entry {
                     "right": this.elems[1]
                 };
             })();
-            this.isChild = Util.isIndented(sides.left);
             this.name = ((this.isChild)? "\u3000" : "") + sides.left.trim();
             this.address = sides.right.trim();
-            this.basename = Util.trimAppendix(this.name).trim();
-            this.referredFrom = Util.getSource(this.name);
+            const nm = new EntryName(this.name);
+            this.basename = nm.getBasename();
+            this.referredFrom = nm.getSource();
             return;
         }
-        if (this.elems[0]) {
-            const s = this.elems[0];
-            this.isChild = Util.isIndented(s);
-            this.name = ((this.isChild)? "\u3000" : "") + s.trim();
-            this.basename = Util.trimAppendix(this.name).trim();
-            this.referredFrom = Util.getSource(this.name);
-            const refElems = this.name.split("→").map(x => String(x).trim()).filter(Boolean);
-            if (refElems.length > 1) {
-                this.isReference = true;
-                this.referTo = refElems.at(-1);
-                this.basename = refElems[0];
-            }
+
+        if (this.elems.length < 1) {
+            return
+        }
+
+        const s = this.elems[0];
+        if (s.trim().length < 1) {
+            return
+        }
+        this.name = ((this.isChild)? "\u3000" : "") + s.trim();
+        const nm = new EntryName(this.name);
+        this.basename = nm.getBasename();
+        this.referredFrom = nm.getSource();
+        const refElems = this.name.split("→").map(x => String(x).trim()).filter(Boolean);
+        if (refElems.length > 1) {
+            this.isReference = true;
+            this.referTo = refElems.at(-1);
+            this.basename = refElems[0];
         }
     }
 
