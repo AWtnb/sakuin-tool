@@ -113,46 +113,46 @@ export class Entry {
 
 }
 
+class EntryAddress {
+
+    constructor(s, hyphenated=false) {
+        this.hyphenated = hyphenated;
+        this.display = {
+            "text": s.trim(),
+            "prefix": "",
+            "suffix": "",
+        };
+        this.setPrefix();
+        this.setSuffix();
+        this.intValue = Number(this.display.text.replace(/[^\d]/g, ""));
+    }
+
+    setPrefix() {
+        const s = this.display.text;
+        if (isNaN(s[0])) {
+            this.display.prefix = s.split(/\d+/)[0];
+        }
+    }
+
+    setSuffix() {
+        const s = this.display.text;
+        if (isNaN(s.at(-1))) {
+            this.display.suffix = s.split(/\d+/).at(-1);
+        }
+    }
+
+}
+
 
 export class AddressHandler {
 
     constructor(s) {
-        const sanitized = AddressHandler.sanitize(s);
+        const sanitized = s.replace(/\s/g, "").replace(/\uff0c/g, ",").replace(/[\u002d\u2010\u2011\u2012\u2013\u2014\uFF0D]+/g, "-").replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, function(m) {
+            return String.fromCharCode(m.charCodeAt(0) - 0xFEE0);
+        });
         this.rawElements = sanitized.split(",").map(x => x.trim()).filter(Boolean);
         this.nombres = [];
         this.parse();
-    }
-
-    static sanitize(s) {
-        return s.replace(/\s/g, "").replace(/\uff0c/g, ",").replace(/[\u002d\u2010\u2011\u2012\u2013\u2014\uFF0D]+/g, "-").replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, function(m) {
-            return String.fromCharCode(m.charCodeAt(0) - 0xFEE0);
-        });
-    }
-
-    static getPrefix(s) {
-        if (isNaN(s[0])) {
-            return s.split(/\d+/)[0];
-        }
-        return "";
-    }
-
-    static getSuffix(s) {
-        if (isNaN(s.at(-1))) {
-            return s.split(/\d+/).at(-1);
-        }
-        return "";
-    }
-
-    static toNombre(s, hyphenated) {
-        return {
-            "display": {
-                "text": s,
-                "prefix": AddressHandler.getPrefix(s),
-                "suffix": AddressHandler.getSuffix(s),
-            },
-            "intValue": Number(s.replace(/[^\d]/g, "")),
-            "hyphenated": hyphenated
-        };
     }
 
     parse() {
@@ -160,17 +160,17 @@ export class AddressHandler {
             const nbr = String(elem);
             if (nbr.indexOf("-") != -1) {
                 const [start, end, ...rest] = nbr.split("-");
-                const s = AddressHandler.toNombre(start, false);
-                const e = AddressHandler.toNombre(end, false);
+                const s = new EntryAddress(start, false);
+                const e = new EntryAddress(end, false);
                 this.nombres.push(s);
                 for (let i = s.intValue + 1; i < e.intValue; i++) {
-                    const n = AddressHandler.toNombre(String(i), true);
+                    const n = new EntryAddress(String(i), true);
                     this.nombres.push(n);
                 }
                 this.nombres.push(e);
             }
             else {
-                this.nombres.push(AddressHandler.toNombre(nbr, false));
+                this.nombres.push(new EntryAddress(nbr, false));
             }
         });
     }

@@ -22,7 +22,7 @@ export class EntryLine {
     constructor(line, adjuster) {
         const entry = new Entry(line);
         this.name = entry.name;
-        this.originalNombres = AddressHandler.sanitize(entry.address).split(",").map(x => x.trim()).filter(Boolean);
+        this.originalNombres = new AddressHandler(entry.address).rawElements;
         this.adjustedNombres = this.originalNombres.map(nombre => {
             const parsed = new AddressHandler(nombre).nombres;
             if (parsed.length > 1) {
