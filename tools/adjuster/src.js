@@ -1,4 +1,4 @@
-import {Util, Entry, EntryAddress} from "../../assets/common.js";
+import {Util, Entry, AddressHandler} from "../../assets/common.js";
 
 export class NombreAdjuster {
     constructor(start, end, delta) {
@@ -22,9 +22,9 @@ export class EntryLine {
     constructor(line, adjuster) {
         const entry = new Entry(line);
         this.name = entry.name;
-        this.originalNombres = EntryAddress.sanitize(entry.address).split(",").map(x => x.trim()).filter(Boolean);
+        this.originalNombres = AddressHandler.sanitize(entry.address).split(",").map(x => x.trim()).filter(Boolean);
         this.adjustedNombres = this.originalNombres.map(nombre => {
-            const parsed = new EntryAddress(nombre).nombres;
+            const parsed = new AddressHandler(nombre).nombres;
             if (parsed.length > 1) {
                 // 範囲指定のノンブルだった場合
                 return adjuster.exec(parsed[0]) + "\u2013" + adjuster.exec(parsed.at(-1));

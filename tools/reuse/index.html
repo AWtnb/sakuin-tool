@@ -108,7 +108,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.js"></script>
     <script type="module">
 
-        import {Util, Entry, EntryAddress} from "../../assets/common.js";
+        import {Util, Entry, AddressHandler} from "../../assets/common.js";
 
         import {IndexLine} from "./src/preformat/src.js";
 
@@ -230,7 +230,7 @@
                         });
                     }
                     else {
-                        new EntryAddress(entry.address).nombres.forEach(nombre => {
+                        new AddressHandler(entry.address).nombres.forEach(nombre => {
                             stack.push({
                                 "name": entry.name,
                                 "nombre": nombre.display.text

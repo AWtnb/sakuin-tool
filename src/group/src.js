@@ -1,4 +1,4 @@
-import {EntryAddress} from "../../assets/common.js";
+import {AddressHandler} from "../../assets/common.js";
 
 export class Grouper {
 
@@ -34,7 +34,7 @@ export class Grouper {
             }
         });
         map.forEach((addess, item) => {
-            const parsed = new EntryAddress(addess);
+            const parsed = new AddressHandler(addess);
             this.groupedLines.push((item + "\u3000\u3000" + parsed.formatAll()).trimEnd());
         });
     }
@@ -63,7 +63,7 @@ export class Grouper {
             }
         }
         this.groupedLines = stack.map(pair => {
-            const parsed = new EntryAddress(pair.Address);
+            const parsed = new AddressHandler(pair.Address);
             return (pair.Item + "\u3000\u3000" + parsed.formatAll()).trimEnd();
         });
     }

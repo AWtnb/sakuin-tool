@@ -114,10 +114,10 @@ export class Entry {
 }
 
 
-export class EntryAddress {
+export class AddressHandler {
 
     constructor(s) {
-        const sanitized = EntryAddress.sanitize(s);
+        const sanitized = AddressHandler.sanitize(s);
         this.rawElements = sanitized.split(",").map(x => x.trim()).filter(Boolean);
         this.nombres = [];
         this.parse();
@@ -130,25 +130,25 @@ export class EntryAddress {
     }
 
     static getPrefix(s) {
-        if (s.match(/^[0-9]/)) {
-            return "";
+        if (isNaN(s[0])) {
+            return s.split(/\d+/)[0];
         }
-        return s.split(/\d+/)[0];
+        return "";
     }
 
     static getSuffix(s) {
-        if (s.match(/[0-9]$/)) {
-            return "";
+        if (isNaN(s.at(-1))) {
+            return s.split(/\d+/).at(-1);
         }
-        return s.split(/\d+/).slice(-1)[0];
+        return "";
     }
 
     static toNombre(s, hyphenated) {
         return {
             "display": {
                 "text": s,
-                "prefix": EntryAddress.getPrefix(s),
-                "suffix": EntryAddress.getSuffix(s),
+                "prefix": AddressHandler.getPrefix(s),
+                "suffix": AddressHandler.getSuffix(s),
             },
             "intValue": Number(s.replace(/[^\d]/g, "")),
             "hyphenated": hyphenated
@@ -160,17 +160,17 @@ export class EntryAddress {
             const nbr = String(elem);
             if (nbr.indexOf("-") != -1) {
                 const [start, end, ...rest] = nbr.split("-");
-                const s = EntryAddress.toNombre(start, false);
-                const e = EntryAddress.toNombre(end, false);
+                const s = AddressHandler.toNombre(start, false);
+                const e = AddressHandler.toNombre(end, false);
                 this.nombres.push(s);
                 for (let i = s.intValue + 1; i < e.intValue; i++) {
-                    const n = EntryAddress.toNombre(String(i), true);
+                    const n = AddressHandler.toNombre(String(i), true);
                     this.nombres.push(n);
                 }
                 this.nombres.push(e);
             }
             else {
-                this.nombres.push(EntryAddress.toNombre(nbr, false));
+                this.nombres.push(AddressHandler.toNombre(nbr, false));
             }
         });
     }
