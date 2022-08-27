@@ -14,6 +14,10 @@ export class NombreAdjuster {
     }
 }
 
+const stripNAN = (s) =>  {
+    return s.replace(/[^\d]/g, "");
+}
+
 export class EntryLine {
     constructor(line, adjuster) {
         const entry = new Entry(line);
@@ -33,7 +37,7 @@ export class EntryLine {
         const stack = [];
         let modified = false;
         this.originalNombres.forEach((nombre, idx) => {
-            if (Util.stripNAN(nombre) != Util.stripNAN(this.adjustedNombres[idx])) {
+            if (stripNAN(nombre) != stripNAN(this.adjustedNombres[idx])) {
                 modified = true;
                 stack.push({
                     "text": this.adjustedNombres[idx],
