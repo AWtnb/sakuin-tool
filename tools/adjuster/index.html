@@ -41,6 +41,7 @@
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="adjusted"></textarea>
                     <button @click="copy">コピー</button>
+                    <span class="copy-status" v-if="copied"></span>
                 </div>
                 <div class="result-markup">
                     <div v-if="diffArr.length">
@@ -70,6 +71,7 @@
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="converted"></textarea>
                     <button @click="copy">コピー</button>
+                    <span class="copy-status" v-if="copied"></span>
                 </div>
             </div>
         </section>
@@ -87,6 +89,7 @@
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="converted"></textarea>
                     <button @click="copy">コピー</button>
+                    <span class="copy-status" v-if="copied"></span>
                 </div>
             </div>
 
@@ -150,7 +153,8 @@
                     delta: 1,
                     adjustedArr: [],
                     diffArr: [],
-                    message: ""
+                    message: "",
+                    copied: false,
                 }
             },
             computed: {
@@ -171,6 +175,7 @@
                     this.message = "";
                     this.adjustedArr = [];
                     this.diffArr = [];
+                    this.copied = false;
                 },
                 adjust: function() {
                     this.reset();
@@ -198,6 +203,7 @@
                 },
                 copy: function() {
                     Util.copyToClipboard(this.adjusted);
+                    this.copied = true;
                 }
             }
         }).mount("#adjuster");
@@ -206,6 +212,7 @@
             data: function () {
                 return {
                     content: "",
+                    copied: false,
                 }
             },
             computed: {
@@ -221,6 +228,12 @@
             methods: {
                 copy: function() {
                     Util.copyToClipboard(this.converted);
+                    this.copied = true;
+                }
+            },
+            watch: {
+                content: function() {
+                    this.copied = false;
                 }
             }
         }).mount("#katahira");
@@ -260,6 +273,7 @@
             data: function(){
                 return {
                     content: "",
+                    copied: false,
                 }
             },
             computed: {
@@ -270,7 +284,13 @@
             methods: {
                 copy: function() {
                     Util.copyToClipboard(this.converted);
+                    this.copied = true;
                 },
+            },
+            watch: {
+                content: function() {
+                    this.copied = false;
+                }
             }
         }).mount("#roman");
 

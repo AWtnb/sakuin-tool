@@ -8,7 +8,7 @@ export class Util {
 
     static copyToClipboard(s) {
         navigator.clipboard.writeText(String(s).replace(/&amp;/g, "&"));
-        alert("コピーしました！");
+        // alert("コピーしました！");
     }
 
     static toKatakana(str){

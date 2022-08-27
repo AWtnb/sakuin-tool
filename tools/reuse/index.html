@@ -34,6 +34,7 @@
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="formatted"></textarea>
                     <button @click="copy">コピー</button>
+                    <span class="copy-status" v-if="copied"></span>
                 </div>
                 <div class="result-markup">
                     <div v-if="modified.length">
@@ -64,6 +65,7 @@
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="formatted"></textarea>
                     <button @click="copy">コピー</button>
+                    <span class="copy-status" v-if="copied"></span>
                 </div>
             </div>
             <img src="./image/img_complete.png">
@@ -95,6 +97,7 @@
                         </table>
                     </div>
                     <button @click="copy">表をコピー</button>
+                    <span class="copy-status" v-if="copied"></span>
                 </div>
             </div>
             <img src="./image/img_releasegroup.png">
@@ -128,7 +131,8 @@
                 return {
                     content: "",
                     fmtArr: [],
-                    message: ""
+                    message: "",
+                    copied: false,
                 }
             },
             computed: {
@@ -145,6 +149,7 @@
             methods: {
                 reset: function(){
                     this.fmtArr = [];
+                    this.copied = false;
                 },
                 format: function() {
                     this.reset();
@@ -160,6 +165,7 @@
                 },
                 copy: function() {
                     Util.copyToClipboard(this.formatted);
+                    this.copied = true;
                 }
             }
         }).mount("#preformat");
@@ -193,6 +199,7 @@
                 return {
                     content: "",
                     fmtArr: [],
+                    copied: false,
                 }
             },
             computed: {
@@ -206,6 +213,7 @@
             methods: {
                 reset: function(){
                     this.fmtArr = [];
+                    this.copied = false;
                 },
                 format: function() {
                     this.reset();
@@ -215,6 +223,7 @@
                 },
                 copy: function() {
                     Util.copyToClipboard(this.formatted);
+                    this.copied = true;
                 }
             }
         }).mount("#completeChild");
@@ -246,6 +255,7 @@
                 return {
                     content: "",
                     released: [],
+                    copied: false,
                 }
             },
             computed: {
@@ -256,6 +266,7 @@
             methods: {
                 reset: function(){
                     this.released = [];
+                    this.copied = false;
                 },
                 release: function(){
                     this.reset();
@@ -266,6 +277,7 @@
                 copy: function() {
                     const joined = this.released.map(x => `${x.name}\t${x.nombre}`.trimEnd()).join("\n");
                     Util.copyToClipboard(joined);
+                    this.copied = true;
                 },
             }
         }).mount("#release");

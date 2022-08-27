@@ -42,6 +42,7 @@
                         </table>
                     </div>
                     <button @click="copy">コピー</button>
+                    <span class="copy-status" v-if="copied"></span>
                 </div>
             </div>
             <img src="./image/img_newtemplate.png">
@@ -91,6 +92,7 @@
                         </table>
                     </div>
                     <button @click="copy">表をコピー</button>
+                    <span class="copy-status" v-if="copied"></span>
                 </div>
             </div>
 
@@ -132,6 +134,7 @@
                 return {
                     content: "",
                     lines: [],
+                    copied: false,
                 }
             },
             computed: {
@@ -142,6 +145,7 @@
             methods: {
                 reset: function(){
                     this.lines = [];
+                    this.copied = false;
                 },
                 generate: function() {
                     this.reset();
@@ -154,6 +158,7 @@
                     const conc = ["ID\tindex\tページ\t項目\t見よ先"].concat(this.lines.map(x => `${x.id}\t${x.pageIdx}\t${x.page}\t\t`))
                     const joined = conc.join("\n");
                     Util.copyToClipboard(joined);
+                    this.copied = true;
                 }
             }
         }).mount("#newTemplate");
@@ -190,6 +195,7 @@
                 return {
                     content: "",
                     lines: [],
+                    copied: false,
                 }
             },
             computed: {
@@ -200,6 +206,7 @@
             methods: {
                 reset: function(){
                     this.lines = [];
+                    this.copied = false;
                 },
                 format: function() {
                     this.reset();
@@ -210,6 +217,7 @@
                 copy: function() {
                     const joined = this.lines.map(x => `${x.name}\t${x.nombre}`).join("\n");
                     Util.copyToClipboard(joined);
+                    this.copied = true;
                 }
             }
         }).mount("#preFormat");

@@ -89,7 +89,7 @@
                 <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
             </ul>
             <div>{{message}}</div>
-            <result-markup :parsed-arr="parsedArr" :copy-func="copy"></result-markup>
+            <result-markup :parsed-arr="parsedArr" :copy-func="copy" :copied="copied"></result-markup>
         </div>
 
         <div class="scroll-navi">マニュアルモードはスクロール</div>
@@ -118,6 +118,7 @@
             <div class="ui">
                 <textarea placeholder="result" readonly v-model="grouped"></textarea>
                 <button @click="copy">結果をコピー</button>
+                <span class="copy-status" v-if="copied"></span>
             </div>
         </div>
         <img src="./image/img_grouping.png">
@@ -140,7 +141,7 @@
                 </div>
                 <p>{{message}}</p>
             </div>
-            <result-markup :parsed-arr="parsedArr" :copy-func="copy"></result-markup>
+            <result-markup :parsed-arr="parsedArr" :copy-func="copy" :copied="copied"></result-markup>
         </div>
         <details>
             <summary>配列よみ変換だけ必要な場合はこちら</summary>
@@ -155,6 +156,7 @@
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="converted"></textarea>
                     <button @click="copy">コピー</button>
+                    <span class="copy-status" v-if="copied"></span>
                 </div>
             </div>
         </details>
@@ -177,7 +179,7 @@
                 <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
                 <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
             </ul>
-            <result-markup :parsed-arr="sortedlines" :copy-func="copy"></result-markup>
+            <result-markup :parsed-arr="sortedlines" :copy-func="copy" :copied="copied"></result-markup>
         </div>
         <img src="./image/img_sort.png">
     </section>
@@ -231,6 +233,9 @@
                     type: Function,
                     require: true
                 },
+                copied: {
+                    type: Boolean
+                }
             },
             components: {
                 "table-for-reading": tableForReading
@@ -241,6 +246,7 @@
                     <table-for-reading :parsed-arr="parsedArr"></table-for-reading>
                 </div>
                 <button @click="copyFunc">結果をコピー</button>
+                <span class="copy-status" v-if="copied"></span>
             </div>
             `
         };
@@ -254,7 +260,8 @@
                 return {
                     content: "",
                     message: "",
-                    parsedArr: []
+                    parsedArr: [],
+                    copied: false
                 }
             },
             computed: {
@@ -272,6 +279,7 @@
                 reset: function(){
                     this.parsedArr = [];
                     this.resetMsg();
+                    this.copied = false;
                 },
                 execute: function(){
                     this.reset();
@@ -299,6 +307,7 @@
                 copy: function(){
                     const joined = this.parsedArr.map(x => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
                     Util.copyToClipboard(joined);
+                    this.copied = true;
                 }
             }
         }).mount("#fullauto")
@@ -314,6 +323,7 @@
                     lines: [],
                     isLeft: false,
                     isOrdered: false,
+                    copied: false,
                 }
             },
             computed: {
@@ -330,6 +340,7 @@
             methods: {
                 reset: function(){
                     this.lines = [];
+                    this.copied = false;
                 },
                 execute: function(){
                     this.reset();
@@ -340,6 +351,7 @@
                 },
                 copy: function(){
                     Util.copyToClipboard(this.grouped);
+                    this.copied = true;
                 }
             }
         }).mount("#grouping");
@@ -354,7 +366,8 @@
                     content: "",
                     removeNoise: true,
                     parsedArr: [],
-                    message: ""
+                    message: "",
+                    copied: false,
                 }
             },
             computed: {
@@ -372,6 +385,7 @@
                 reset: function(){
                     this.parsedArr = [];
                     this.resetMsg();
+                    this.copied = false;
                 },
                 execute: function(){
                     this.reset();
@@ -392,6 +406,7 @@
                 copy: function(){
                     const joined = this.parsedArr.map(x => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
                     Util.copyToClipboard(joined);
+                    this.copied = true;
                 }
             }
         }).mount("#getReading");
@@ -401,7 +416,8 @@
             data: function () {
                 return {
                     content: "",
-                    removeNoise: true
+                    removeNoise: true,
+                    copied: false,
                 }
             },
             computed: {
@@ -412,6 +428,12 @@
             methods: {
                 copy: function() {
                     Util.copyToClipboard(this.converted);
+                    this.copied = true;
+                }
+            },
+            watch: {
+                content: function() {
+                    this.copied = false;
                 }
             }
         }).mount("#normalize");
@@ -425,7 +447,8 @@
             data: function () {
                 return {
                     content: "",
-                    sortedlines: []
+                    sortedlines: [],
+                    copied: false,
                 }
             },
             computed: {
@@ -439,6 +462,7 @@
             methods: {
                 reset: function() {
                     this.sortedlines = [];
+                    this.copied = false;
                 },
                 sortLines: function() {
                     this.reset();
@@ -451,6 +475,7 @@
                 copy: function() {
                     const joined = this.sortedlines.map(x => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
                     Util.copyToClipboard(joined);
+                    this.copied = true;
                 }
             }
         }).mount("#sort");
