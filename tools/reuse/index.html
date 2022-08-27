@@ -164,6 +164,10 @@
             }
         }).mount("#preformat");
 
+        function isIndented(s) {
+           return s.trimStart() != s;
+        }
+
         function completeChildEntry(lines) {
             const trimmedLines = lines.filter(x => String(x).trim());
             const stack = [];
@@ -172,7 +176,7 @@
             parentStack.push(new Entry(trimmedLines[0]).name);
             for (let i = 1; i < trimmedLines.length; i++) {
                 const cur = String(trimmedLines[i]);
-                if (Util.isIndented(cur) && cur.indexOf("\u2015\u2015") != -1) {
+                if (isIndented(cur) && cur.indexOf("\u2015\u2015") != -1) {
                     const completed = cur.trimStart().replace("\u2015\u2015", parentStack.at(-1));
                     stack.push(completed);
                 }
