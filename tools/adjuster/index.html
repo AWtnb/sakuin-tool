@@ -40,8 +40,7 @@
                 </div>
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="adjusted"></textarea>
-                    <button @click="copy">コピー</button>
-                    <span class="copy-status" v-if="copied"></span>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
                 <div class="result-markup">
                     <div v-if="diffArr.length">
@@ -70,8 +69,7 @@
                 </div>
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="converted"></textarea>
-                    <button @click="copy">コピー</button>
-                    <span class="copy-status" v-if="copied"></span>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
             </div>
         </section>
@@ -88,8 +86,7 @@
                 </div>
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="converted"></textarea>
-                    <button @click="copy">コピー</button>
-                    <span class="copy-status" v-if="copied"></span>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
             </div>
 
@@ -115,6 +112,27 @@
         import {NombreAdjuster, EntryLine} from "./src.js";
 
         import {Util} from "../../assets/common.js";
+
+        const copyButton = {
+            props: {
+                copyFunc: {
+                    type: Function,
+                    require: true
+                },
+                copied: {
+                    type: Boolean,
+                    require: true
+                }
+            },
+            template: `
+            <button @click="copyFunc">コピー</button>
+            <span class="copy-status" v-if="copied"></span>
+            `
+        };
+
+        ////////////////////////////////////////////////////
+        // ノンブル加算減算
+        ////////////////////////////////////////////////////
 
         const modifiedAddress = {
             props: {
@@ -168,7 +186,8 @@
                 },
             },
             components: {
-                "address-diff": addressDiff
+                "address-diff": addressDiff,
+                "copy-button": copyButton
             },
             methods: {
                 reset: function() {
@@ -208,6 +227,10 @@
             }
         }).mount("#adjuster");
 
+        ////////////////////////////////////////////////////
+        // カタカナひらがな
+        ////////////////////////////////////////////////////
+
         const vmKatahira = Vue.createApp({
             data: function () {
                 return {
@@ -224,6 +247,9 @@
                         return Util.toKatakana(m);
                     });
                 }
+            },
+            components: {
+                "copy-button": copyButton
             },
             methods: {
                 copy: function() {
@@ -269,6 +295,10 @@
             return converted.toLowerCase();
         }
 
+        ////////////////////////////////////////////////////
+        // ローマ字変換
+        ////////////////////////////////////////////////////
+
         const vmRoman = Vue.createApp({
             data: function(){
                 return {
@@ -280,6 +310,9 @@
                 converted: function() {
                     return toRoman(this.content);
                 }
+            },
+            components: {
+                "copy-button": copyButton
             },
             methods: {
                 copy: function() {
