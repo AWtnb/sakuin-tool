@@ -73,10 +73,12 @@ th, td {
     white-space: pre;
 }
 
-span.copy-status::before {
+button {
+    min-width: 6rem;
+}
+
+button.done::after {
     content: "\2714";
-    color: tomato;
-    font-size: 2rem;
-    font-style: italic;
-    margin-left: .25em;
+    color: yellow;
+    margin-left: 1em;
 }
