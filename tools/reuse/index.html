@@ -124,8 +124,7 @@
                 }
             },
             template: `
-            <button @click="copyFunc">コピー</button>
-            <span class="copy-status" v-if="copied"></span>
+            <button @click="copyFunc" :class="{done:copied}">コピー</button>
             `
         };
 
