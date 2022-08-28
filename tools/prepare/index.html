@@ -41,8 +41,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <button @click="copy">コピー</button>
-                    <span class="copy-status" v-if="copied"></span>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
             </div>
             <img src="./image/img_newtemplate.png">
@@ -91,8 +90,7 @@
                             </tr></tbody>
                         </table>
                     </div>
-                    <button @click="copy">表をコピー</button>
-                    <span class="copy-status" v-if="copied"></span>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
             </div>
 
@@ -108,6 +106,23 @@
     <script type="module">
 
         import {Util} from "../../assets/common.js";
+
+        const copyButton = {
+            props: {
+                copyFunc: {
+                    type: Function,
+                    require: true
+                },
+                copied: {
+                    type: Boolean,
+                    require: true
+                }
+            },
+            template: `
+            <button @click="copyFunc">コピー</button>
+            <span class="copy-status" v-if="copied"></span>
+            `
+        };
 
         function generateTemplare(lines) {
             const stack = [];
@@ -129,6 +144,10 @@
             return stack;
         }
 
+        ////////////////////////////////////////////////////
+        // テンプレート生成
+        ////////////////////////////////////////////////////
+
         const vmNewTemplate = Vue.createApp({
             data: function () {
                 return {
@@ -141,6 +160,9 @@
                 contentLines: function() {
                     return this.content.split(/\n/).map(line => String(line));
                 },
+            },
+            components: {
+                "copy-button": copyButton
             },
             methods: {
                 reset: function(){
@@ -190,6 +212,10 @@
             return stack;
         }
 
+        ////////////////////////////////////////////////////
+        // テンプレートの事前整形
+        ////////////////////////////////////////////////////
+
         const vmPreformat = Vue.createApp({
             data: function () {
                 return {
@@ -202,6 +228,9 @@
                 contentLines: function() {
                     return this.content.split(/\n/).map(line => String(line));
                 },
+            },
+            components: {
+                "copy-button": copyButton
             },
             methods: {
                 reset: function(){
