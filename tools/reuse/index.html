@@ -33,8 +33,7 @@
                 </ul>
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="formatted"></textarea>
-                    <button @click="copy">コピー</button>
-                    <span class="copy-status" v-if="copied"></span>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
                 <div class="result-markup">
                     <div v-if="modified.length">
@@ -64,8 +63,7 @@
                 </div>
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="formatted"></textarea>
-                    <button @click="copy">コピー</button>
-                    <span class="copy-status" v-if="copied"></span>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
             </div>
             <img src="./image/img_complete.png">
@@ -96,8 +94,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <button @click="copy">表をコピー</button>
-                    <span class="copy-status" v-if="copied"></span>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
             </div>
             <img src="./image/img_releasegroup.png">
@@ -114,6 +111,23 @@
         import {Util, Entry, AddressHandler} from "../../assets/common.js";
 
         import {IndexLine} from "./src/preformat/src.js";
+
+        const copyButton = {
+            props: {
+                copyFunc: {
+                    type: Function,
+                    require: true
+                },
+                copied: {
+                    type: Boolean,
+                    require: true
+                }
+            },
+            template: `
+            <button @click="copyFunc">コピー</button>
+            <span class="copy-status" v-if="copied"></span>
+            `
+        };
 
         function formatOldIndex(lines) {
             return lines.map(line => String(line).trimEnd().replace(/\t/, "\u3000\u3000")).map(line => {
@@ -145,6 +159,9 @@
                 modified: function() {
                     return this.fmtArr.filter(x => x.formatted != x.original);
                 },
+            },
+            components: {
+                "copy-button": copyButton
             },
             methods: {
                 reset: function(){
@@ -210,6 +227,9 @@
                     return this.fmtArr.join("\n");
                 },
             },
+            components: {
+                "copy-button": copyButton
+            },
             methods: {
                 reset: function(){
                     this.fmtArr = [];
@@ -262,6 +282,9 @@
                 contentLines: function() {
                     return this.content.split(/\n/).map(line => String(line));
                 },
+            },
+            components: {
+                "copy-button": copyButton
             },
             methods: {
                 reset: function(){
