@@ -117,8 +117,7 @@
             </div>
             <div class="ui">
                 <textarea placeholder="result" readonly v-model="grouped"></textarea>
-                <button @click="copy">結果をコピー</button>
-                <span class="copy-status" v-if="copied"></span>
+                <copy-button :copy-func="copy" :copied="copied"></copy-button>
             </div>
         </div>
         <img src="./image/img_grouping.png">
@@ -155,8 +154,7 @@
                 </div>
                 <div class="ui">
                     <textarea placeholder="result" readonly v-model="converted"></textarea>
-                    <button @click="copy">コピー</button>
-                    <span class="copy-status" v-if="copied"></span>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
             </div>
         </details>
@@ -223,6 +221,23 @@
             `
         };
 
+        const copyButton = {
+            props: {
+                copyFunc: {
+                    type: Function,
+                    require: true
+                },
+                copied: {
+                    type: Boolean,
+                    require: true
+                }
+            },
+            template: `
+            <button @click="copyFunc">コピー</button>
+            <span class="copy-status" v-if="copied"></span>
+            `
+        };
+
         const resultMarkup = {
             props: {
                 parsedArr: {
@@ -238,15 +253,15 @@
                 }
             },
             components: {
-                "table-for-reading": tableForReading
+                "table-for-reading": tableForReading,
+                "copy-button": copyButton
             },
             template: `
             <div v-if="parsedArr.length">
                 <div class="result-markup limit-height">
                     <table-for-reading :parsed-arr="parsedArr"></table-for-reading>
                 </div>
-                <button @click="copyFunc">結果をコピー</button>
-                <span class="copy-status" v-if="copied"></span>
+                <copy-button :copy-func="copyFunc" :copied="copied"></copy-button>
             </div>
             `
         };
@@ -335,7 +350,7 @@
                 },
             },
             components: {
-                "result-markup": resultMarkup
+                "copy-button": copyButton
             },
             methods: {
                 reset: function(){
@@ -430,6 +445,9 @@
                     Util.copyToClipboard(this.converted);
                     this.copied = true;
                 }
+            },
+            components: {
+                "copy-button": copyButton
             },
             watch: {
                 content: function() {
