@@ -30,10 +30,6 @@ h3, h4 {
     color: #333;
 }
 
-h6 {
-    margin-top: 4em;
-}
-
 img {
     box-shadow: 1px 1px 5px 1px #ccc;
     margin: 2rem 0;
@@ -85,4 +81,8 @@ button.done::after {
     content: "\2714";
     color: yellow;
     margin-left: 1em;
+}
+
+table {
+    margin-bottom: 4rem;
 }
