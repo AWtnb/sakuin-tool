@@ -4,46 +4,40 @@ export class ReferenceChecker {
 
     constructor(lines) {
         this.entries = lines.filter(x => String(x).trim()).map(line => new Entry(line));
+        this.refs = this.entries.filter(entry => entry.isReference);
+        this.nonRefs = this.entries.filter(entry => !entry.isReference);
+        this.referred = this.entries.filter(entry => entry.referredFrom.length > 0);
     }
 
     goalLostReference() {
         // 見よ項目があるのに参照先に括弧で付記されていないものを探す
-        return this.entries.filter(entry => entry.isReference).map(entry => ({
-            "text": entry.name,
-            "refFrom": entry.basename,
-            "refTo": entry.referTo
-        })).map(ref => {
-            const grep = this.entries.filter(entry => {
-                return (!entry.isReference && entry.basename == ref.refTo && entry.referredFrom.includes(ref.refFrom));
+        return this.refs.map(ref => {
+            const grep = this.nonRefs.filter(entry => {
+                return (entry.basename == ref.referTo && entry.referredFrom.includes(ref.basename));
             });
             if (grep.length > 0) {
                 return null;
             }
             return {
-                "problem": ref.text,
-                "require": `${ref.refTo}\uff08${ref.refFrom}\uff09`
+                "problem": ref.name,
+                "require": `${ref.referTo}\uff08${ref.basename}\uff09`
             };
         }).filter(Boolean);
     }
 
     requiredFromReference() {
         // 参照元として括弧書きされているのに見よ項目がないものを探す
-        const refs = this.entries.filter(entry => entry.isReference);
-        return this.entries.filter(entry => entry.referredFrom.length > 0).map(entry => ({
-            "text": entry.name,
-            "referredFrom": entry.referredFrom,
-            "basename": entry.basename
-        })).map(line => {
-            const required = line.referredFrom.filter(s => {
-                const correctRefs = refs.filter(entry => entry.basename == s && entry.referTo == line.basename);
+        return this.referred.map(refed => {
+            const required = refed.referredFrom.filter(s => {
+                const correctRefs = this.refs.filter(entry => entry.basename == s && entry.referTo == refed.basename);
                 return (correctRefs.length < 1);
             });
             if (required.length < 1) {
                 return null;
             }
             return {
-                "problem": line.text,
-                "require": required.map(s => `${s}\u3000\u2192${line.basename}`)
+                "problem": refed.name,
+                "require": required.map(s => `${s}\u3000\u2192${refed.basename}`)
             };
         }).filter(Boolean);
     }
