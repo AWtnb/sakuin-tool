@@ -189,9 +189,9 @@
             </table>`
         };
 
-        const refUngrouped = {
+        const singleColTable = {
             props: {
-                ungroupedRefs: {
+                detailsArr: {
                     type: Array,
                     require: true
                 }
@@ -200,17 +200,32 @@
                 "detail-list": detailList,
             },
             template: `
-            <h6>見よ項目から参照されている項目の名寄せが不十分です！</h6>
             <table>
                 <thead><tr>
                     <th>重複項目</th>
                 </tr></thead>
                 <tbody>
-                    <tr v-for="(ug, idx) in ungroupedRefs" :key="idx">
-                        <td><detail-list :details="ug"></detail-list></td>
+                    <tr v-for="(details, idx) in detailsArr" :key="idx">
+                        <td><detail-list :details="details"></detail-list></td>
                     </tr>
                 </tbody>
             </table>`
+        };
+
+        const refUngrouped = {
+            props: {
+                ungroupedRefs: {
+                    type: Array,
+                    require: true
+                }
+            },
+            components: {
+                "single-col-table": singleColTable,
+            },
+            template: `
+            <h6>見よ項目から参照されている項目の名寄せが不十分です！</h6>
+            <single-col-table :details-arr="ungroupedRefs"></single-col-table>
+            `
         };
 
         const refConflict = {
@@ -221,20 +236,12 @@
                 }
             },
             components: {
-                "detail-list": detailList,
+                "single-col-table": singleColTable,
             },
             template: `
             <h6>見よ項目が本項目として残っています！</h6>
-            <table>
-                <thead><tr>
-                    <th>重複項目</th>
-                </tr></thead>
-                <tbody>
-                    <tr v-for="(cf, idx) in conflictRefs" :key="idx">
-                        <td><detail-list :details="cf"></detail-list></td>
-                    </tr>
-                </tbody>
-            </table>`
+            <single-col-table :details-arr="conflictRefs"></single-col-table>
+            `
         };
 
         const refAdjacent = {
