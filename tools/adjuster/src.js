@@ -1,4 +1,4 @@
-import {Util, Entry, AddressHandler} from "../../assets/common.js";
+import {Entry, AddressHandler} from "../../assets/common.js";
 
 export class NombreAdjuster {
     constructor(start, end, delta) {
