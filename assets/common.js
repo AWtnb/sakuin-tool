@@ -54,7 +54,7 @@ export class Entry {
 
     constructor(s, separator = "\u3000\u3000") {
         this.rawStr = s;
-        this.isChild = s.trimStart() != s; // 子項目かどうか
+        this.isChild = s.trim().length > 0 && s.trimStart() != s; // 子項目かどうか
 
         this.separator = separator;
         this.elems = this.rawStr.split(this.separator).filter(Boolean).map(x => String(x));
@@ -92,23 +92,27 @@ export class Entry {
         }
 
         if (this.elems.length < 1) {
-            return
+            return;
         }
 
         const s = this.elems[0];
         if (s.trim().length < 1) {
-            return
+            return;
         }
+
         this.name = ((this.isChild)? "\u3000" : "") + s.trim();
-        const nm = new EntryName(this.name);
-        this.basename = nm.getBasename();
-        this.referredFrom = nm.getSource();
         const refElems = this.name.split("→").map(x => String(x).trim()).filter(Boolean);
-        if (refElems.length > 1) {
+        if (refElems.length == 2) {
             this.isReference = true;
             this.referTo = refElems.at(-1);
             this.basename = refElems[0];
+            return;
         }
+
+        const nm = new EntryName(this.name);
+        this.basename = nm.getBasename();
+        this.referredFrom = nm.getSource();
+
     }
 
 }
