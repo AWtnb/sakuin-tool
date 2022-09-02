@@ -40,7 +40,7 @@ function getReading(tokens) {
 }
 
 export class Reading {
-    constructor(tokenizer, removeNoise=true) {
+    constructor(tokenizer) {
         this.tokenizer = tokenizer;
         this.removeNoise = removeNoise;
     }
@@ -52,7 +52,6 @@ export class Reading {
             return {
                 "item": line,
                 "reading": r,
-                "normalized": normalize(r, this.removeNoise)
             }
         });
     }

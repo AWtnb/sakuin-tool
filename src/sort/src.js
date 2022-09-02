@@ -12,17 +12,6 @@ export class Sorter {
         this.parsedLines = [];
     }
 
-    fromTsvLines(lines) {
-        this.parsedLines = lines.filter(line => line.trim()).map(line => {
-            const [item, reading, normalized, ...rest] = line.split("\t"); // 配列読み＝正規化＝normalized
-            return {
-               "item": item,
-               "reading": reading,
-               "normalized": normalized
-            };
-        });
-    }
-
     addData(item, reading, normalized) {
         this.parsedLines.push({
             "item": item,

@@ -89,7 +89,7 @@
                 <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
             </ul>
             <div>{{message}}</div>
-            <result-markup :parsed-arr="parsedArr" :copy-func="copy" :copied="copied"></result-markup>
+            <result-markup :parsed-arr="parsedArr" :copy-func="copy" :show-normalized="true" :copied="copied"></result-markup>
         </div>
 
         <div class="scroll-navi">マニュアルモードはスクロール</div>
@@ -134,30 +134,10 @@
             <div class="ui">
                 <textarea placeholder="paste here!" v-model="content"></textarea>
                 <button @click="execute">実行</button>
-                <div>
-                    <input type="checkbox" id="removeNoise" v-model="removeNoise">
-                    <label for="removeNoise"><code>配列読み</code>からカタカナ・数字・アルファベット以外を削除する</label>
-                </div>
                 <p>{{message}}</p>
             </div>
             <result-markup :parsed-arr="parsedArr" :copy-func="copy" :copied="copied"></result-markup>
         </div>
-        <details>
-            <summary>配列よみ変換だけ必要な場合はこちら</summary>
-            <div id="normalize">
-                <div>
-                    <input type="checkbox" id="removeNoiseSimple" v-model="removeNoise">
-                    <label for="removeNoiseSimple">カタカナ・数字・アルファベット以外を削除する</label>
-                </div>
-                <div class="ui">
-                    <textarea placeholder="paste here!" v-model="content"></textarea>
-                </div>
-                <div class="ui">
-                    <textarea placeholder="result" readonly v-model="converted"></textarea>
-                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
-                </div>
-            </div>
-        </details>
     </section>
     <!-- ///////////////////////////////////////////////////////////////
 
@@ -173,12 +153,34 @@
             </div>
 
             <ul>
-                <li>最優先は<code>配列読み</code>の情報。</li>
-                <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
-                <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+                <li>内部で<code>読み</code>の情報を<code>配列読み</code>に変換して並べ替えます。
+                    <ul>
+                        <li>最優先は<code>配列読み</code>の情報。</li>
+                        <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+                        <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+                    </ul>
+                </li>
             </ul>
-            <result-markup :parsed-arr="sortedlines" :copy-func="copy" :copied="copied"></result-markup>
+            <result-markup :parsed-arr="sortedlines" :copy-func="copy" :show-normalized="true" :copied="copied"></result-markup>
         </div>
+
+        <details>
+            <summary>配列読みへの変換だけ必要な場合はこちら</summary>
+            <div id="normalize">
+                <div>
+                    <input type="checkbox" id="removeNoise" v-model="removeNoise">
+                    <label for="removeNoise">カタカナ・数字・アルファベット以外を削除する</label>
+                </div>
+                <div class="ui">
+                    <textarea placeholder="paste here!" v-model="content"></textarea>
+                </div>
+                <div class="ui">
+                    <textarea placeholder="result" readonly v-model="converted"></textarea>
+                    <copy-button :copy-func="copy" :copied="copied"></copy-button>
+                </div>
+            </div>
+        </details>
+
         <img src="./image/img_sort.png">
     </section>
     <!-- ///////////////////////////////////////////////////////////////
@@ -198,23 +200,28 @@
         import {Sorter} from "./src/sort/src.js";
 
 
-        const tableForReading = {
+        const tableWithReading = {
             props: {
                 parsedArr: {
                     type: Array,
                     require: true
                 }
             },
+            inject: ["showNormalized"],
             template: `
             <table>
                 <thead>
-                    <tr><th>項目</th><th>読み</th><th>配列読み</th></tr>
+                    <tr>
+                        <th>項目</th>
+                        <th>読み</th>
+                        <th v-if="showNormalized">配列読み</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(p, idx) in parsedArr" :key="idx">
                         <td>{{ p.item }}</td>
                         <td>{{ p.reading }}</td>
-                        <td>{{ p.normalized }}</td>
+                        <td v-if="showNormalized">{{ p.normalized }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -247,18 +254,27 @@
                     type: Function,
                     require: true
                 },
+                showNormalized: {
+                    type: Boolean,
+                    default: false
+                },
                 copied: {
                     type: Boolean
                 }
             },
             components: {
-                "table-for-reading": tableForReading,
+                "table-with-reading": tableWithReading,
                 "copy-button": copyButton
+            },
+            provide: function() {
+                return {
+                    "showNormalized": this.showNormalized
+                }
             },
             template: `
             <div v-if="parsedArr.length">
                 <div class="result-markup limit-height">
-                    <table-for-reading :parsed-arr="parsedArr"></table-for-reading>
+                    <table-with-reading :parsed-arr="parsedArr"></table-with-reading>
                 </div>
                 <copy-button :copy-func="copyFunc" :copied="copied"></copy-button>
             </div>
@@ -310,7 +326,7 @@
                                 sorter.addData(
                                     parsed.item,
                                     parsed.reading,
-                                    parsed.normalized
+                                    Reading.normalize(parsed.reading, true)
                                 );
                             });
                             sorter.execute().forEach(x => this.parsedArr.push(x));
@@ -378,7 +394,6 @@
             data: function () {
                 return {
                     content: "",
-                    removeNoise: true,
                     parsedArr: [],
                     message: "",
                     copied: false,
@@ -410,7 +425,7 @@
                             this.message = "解析失敗…やり直してみてください！";
                         }
                         else {
-                            new Reading(tokenizer, this.removeNoise).parseLines(this.contentLines).forEach(x => {
+                            new Reading(tokenizer).parseLines(this.contentLines).forEach(x => {
                                 this.parsedArr.push(x);
                             });
                             this.resetMsg();
@@ -418,12 +433,67 @@
                     });
                 },
                 copy: function(){
-                    const joined = this.parsedArr.map(x => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
+                    const joined = this.parsedArr.map(x => `${x.item}\t${x.reading}`).join("\n");
                     Util.copyToClipboard(joined);
                     this.copied = true;
                 }
             }
         }).mount("#getReading");
+
+
+        ///////////////////////////////////////////////////////////////
+        // 並べ替え
+        ///////////////////////////////////////////////////////////////
+
+        const vmSort = Vue.createApp({
+            data: function () {
+                return {
+                    content: "",
+                    sortedlines: [],
+                    copied: false,
+                }
+            },
+            computed: {
+                contentLines: function() {
+                    return this.content.split(/\n/).map(line => String(line));
+                },
+                parsedLines: function() {
+                    return this.contentLines.filter(line => line.trim().length > 0).map(line => {
+                        const [item, reading, ...rest] = line.split("\t").map(x => x.trim());
+                        return {
+                            "item": item,
+                            "reading": reading
+                        };
+                    });
+                }
+            },
+            components: {
+                "result-markup": resultMarkup
+            },
+            methods: {
+                reset: function() {
+                    this.sortedlines = [];
+                    this.copied = false;
+                },
+                sortLines: function() {
+                    this.reset();
+                    const sorter = new Sorter();
+                    this.parsedLines.forEach(x => sorter.addData(
+                        x.item,
+                        x.reading,
+                        Reading.normalize(x.reading, true)
+                    ));
+                    sorter.execute().forEach(x => {
+                        this.sortedlines.push(x);
+                    });
+                },
+                copy: function() {
+                    const joined = this.sortedlines.map(x => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
+                    Util.copyToClipboard(joined);
+                    this.copied = true;
+                }
+            }
+        }).mount("#sort");
 
         // 配列よみ変換
         const vmNormalize = Vue.createApp({
@@ -455,49 +525,7 @@
             }
         }).mount("#normalize");
 
-
-        ///////////////////////////////////////////////////////////////
-        // 並べ替え
-        ///////////////////////////////////////////////////////////////
-
-        const vmSort = Vue.createApp({
-            data: function () {
-                return {
-                    content: "",
-                    sortedlines: [],
-                    copied: false,
-                }
-            },
-            computed: {
-                contentLines: function() {
-                    return this.content.split(/\n/).map(line => String(line));
-                },
-            },
-            components: {
-                "result-markup": resultMarkup
-            },
-            methods: {
-                reset: function() {
-                    this.sortedlines = [];
-                    this.copied = false;
-                },
-                sortLines: function() {
-                    this.reset();
-                    const sorter = new Sorter();
-                    sorter.fromTsvLines(this.contentLines);
-                    sorter.execute().forEach(x => {
-                        this.sortedlines.push(x);
-                    });
-                },
-                copy: function() {
-                    const joined = this.sortedlines.map(x => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
-                    Util.copyToClipboard(joined);
-                    this.copied = true;
-                }
-            }
-        }).mount("#sort");
-
-    </script>
+</script>
 </body>
 
 </html>
