@@ -325,8 +325,7 @@
                             new Reading(tokenizer).parseLines(grouper.getGroupedLines()).forEach(parsed => {
                                 sorter.addData(
                                     parsed.item,
-                                    parsed.reading,
-                                    Reading.normalize(parsed.reading, true)
+                                    parsed.reading
                                 );
                             });
                             sorter.execute().forEach(x => this.parsedArr.push(x));
@@ -480,8 +479,7 @@
                     const sorter = new Sorter();
                     this.parsedLines.forEach(x => sorter.addData(
                         x.item,
-                        x.reading,
-                        Reading.normalize(x.reading, true)
+                        x.reading
                     ));
                     sorter.execute().forEach(x => {
                         this.sortedlines.push(x);
@@ -506,7 +504,7 @@
             },
             computed: {
                 converted: function() {
-                    return Reading.normalize(this.content, this.removeNoise);
+                    return Sorter.normalize(this.content, this.removeNoise);
                 }
             },
             methods: {
