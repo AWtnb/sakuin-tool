@@ -27,7 +27,8 @@
                     <button @click="format">実行</button>
                 </div>
                 <ul>
-                    <li>項目とノンブルの間を2倍アキに統一します。</li>
+                    <li><strong>長い行が折り返されて改行になっている箇所</strong>、<strong>項目とノンブル間が2倍アキになっていない箇所</strong>は先に手動で整形してください。</li>
+                    <li>見よ項目の矢印の前のアキを1倍モノに統一します。</li>
                     <li>連続するノンブルを示すダーシの種類を統一します。</li>
                     <li>子項目のダーシの種類を統一します。</li>
                 </ul>
@@ -186,10 +187,6 @@
             }
         }).mount("#preformat");
 
-        function isIndented(s) {
-           return s.trimStart() != s;
-        }
-
         function completeChildEntry(lines) {
             const trimmedLines = lines.filter(x => String(x).trim());
             const stack = [];
@@ -198,7 +195,7 @@
             parentStack.push(new Entry(trimmedLines[0]).name);
             for (let i = 1; i < trimmedLines.length; i++) {
                 const cur = String(trimmedLines[i]);
-                if (isIndented(cur) && cur.indexOf("\u2015\u2015") != -1) {
+                if (cur.indexOf("\u2015\u2015") != -1) {
                     const completed = cur.trimStart().replace("\u2015\u2015", parentStack.at(-1));
                     stack.push(completed);
                 }

@@ -35,7 +35,7 @@ class EntryName {
     }
 
     getBasename() {
-        return this.name.replace(this.reg, "").trim();
+        return this.name.replace(this.reg, "").trim().replace(/\u3000{1,2}/, "");
     }
 
     getSource() {
@@ -45,6 +45,14 @@ class EntryName {
             return inner.replace(/\uff0c/g, ",").split(",").map(x => String(x).trim()).filter(Boolean);
         }
         return [];
+    }
+
+    getReferTo() {
+        const refElems = this.name.split("→").map(x => String(x).trim()).filter(Boolean);
+        if (refElems.length == 2) {
+            return refElems.at(-1);
+        }
+        return ""
     }
 
 }
@@ -60,7 +68,7 @@ export class Entry {
         this.elems = this.rawStr.split(this.separator).filter(Boolean).map(x => String(x));
 
         this.name = ""; // 項目名
-        this.basename = ""; // 項目名から括弧を除いた部分（見よ項目の場合は「見よ元」部分）
+        this.basename = ""; // 項目名から括弧を除いた部分（見よ項目の場合は「見よ元」部分）。項目の文字間はアキツメル。
         this.address = ""; // ノンブルの集合部分
         this.referredFrom = []; // カッコ内に付記された「見よ元」情報
         this.referTo = ""; // 見よ先
@@ -99,17 +107,11 @@ export class Entry {
         if (s.trim().length < 1) {
             return;
         }
-
         this.name = ((this.isChild)? "\u3000" : "") + s.trim();
-        const refElems = this.name.split("→").map(x => String(x).trim()).filter(Boolean);
-        if (refElems.length == 2) {
-            this.isReference = true;
-            this.referTo = refElems.at(-1);
-            this.basename = refElems[0];
-            return;
-        }
 
         const nm = new EntryName(this.name);
+        this.referTo = nm.getReferTo();
+        this.isReference = this.referTo.length > 0;
         this.basename = nm.getBasename();
         this.referredFrom = nm.getSource();
 

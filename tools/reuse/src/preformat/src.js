@@ -7,13 +7,13 @@ export class IndexLine {
 
     constructor(s) {
         this.text = String(s);
-        this.formatSpace();
+        this.text = this.text.replace(/\s+→/g, "\u3000→"); // 矢印の前は1倍アキに
 
         const entry = new Entry(this.text);
 
         if (entry.isChild) {
             const reg = new RegExp(`^${barsPattern}+|${barsPattern}+$`);
-            this.name = "\u3000" + entry.name.trim().replace(reg, "――");
+            this.name = "\u3000" + entry.name.trim().replace(reg, "\u2015\u2015");
         }
         else {
             this.name = entry.name;
@@ -23,19 +23,11 @@ export class IndexLine {
         this.address = entry.address.replace(reg, "\u2013");
     }
 
-    formatSpace() {
-        const origin = this.text;
-        this.text = this.text.replace(/\u3000/g, "\u3000\u3000").replace(/\u3000+/g, "\u3000\u3000"); // 全部2倍アキに
-        this.text = this.text.replace(/\u3000\u3000→/g, "\u3000→"); // 矢印の後は1倍アキに
-        this.text = this.text.replace(/(?<=.{2,})\u3000\u3000(?!\d)/, "\u3000"); // 項目3文字目以降にあるアキは1倍（例：イドラッ　蘇倶　　12）
-        this.text = this.text.replace(/\u3000\u3000(?!\d)/g, ""); // 残っている2倍アキは不要
-        if (origin.startsWith("\u3000") || origin.startsWith(" ")) {
-            this.text = "\u3000" + this.text.trim();
-        }
-    }
-
     getFormattedLine() {
-        return (this.name + "\u3000\u3000" + this.address).trimEnd();
+        if (this.address.length > 0) {
+            return (this.name + "\u3000\u3000" + this.address);
+        }
+        return this.name;
     }
 
 }
