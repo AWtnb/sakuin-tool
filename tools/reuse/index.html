@@ -192,16 +192,16 @@
             const stack = [];
             const parentStack = [];
             stack.push(trimmedLines[0]);
-            parentStack.push(new Entry(trimmedLines[0]).name);
+            parentStack.push(new Entry(trimmedLines[0]).basename);
             for (let i = 1; i < trimmedLines.length; i++) {
                 const cur = String(trimmedLines[i]);
                 if (cur.indexOf("\u2015\u2015") != -1) {
-                    const completed = cur.trimStart().replace("\u2015\u2015", parentStack.at(-1));
+                    const completed = cur.trim().replace("\u2015\u2015", parentStack.at(-1));
                     stack.push(completed);
                 }
                 else {
                     stack.push(cur);
-                    parentStack.push(new Entry(cur).name);
+                    parentStack.push(new Entry(cur).basename);
                 }
             }
             return stack;
