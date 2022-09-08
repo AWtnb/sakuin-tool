@@ -109,7 +109,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.js"></script>
     <script type="module">
 
-        import {NombreAdjuster, EntryLine} from "./src.js";
+        import {EntryLines} from "./src.js";
 
         import {Util} from "../../assets/common.js";
 
@@ -133,15 +133,6 @@
         // ノンブル加算減算
         ////////////////////////////////////////////////////
 
-        const modifiedAddress = {
-            props: {
-                address: {
-                    type: Object,
-                    require: true
-                }
-            },
-            template: `<span :style="{color: address.color}">{{ address.text }}</span>`
-        };
         const addressDiff = {
             props: {
                 diffDetails: {
@@ -149,13 +140,10 @@
                     require: true
                 }
             },
-            components: {
-                "modified-address": modifiedAddress
-            },
             template: `
-            <span v-for="(adr, idx) in diffDetails" :key="idx">
-                <del style="color:#bbb;">{{ adr.before }}</del>
-                <modified-address :address="adr"></modified-address>
+            <span v-for="(dtl, idx) in diffDetails" :key="idx">
+                <del style="color:#bbb;">{{ dtl.before }}</del>
+                <span :style="{color: dtl.color}">{{ dtl.text }}</span>
                 <span v-if="diffDetails.length - 1 > idx">, </span>
             </span>
             `
@@ -180,7 +168,10 @@
                 },
                 adjusted: function() {
                     return this.adjustedArr.map(x => {
-                        return `${x.name}\u3000\u3000${x.nombres.join(", ")}`.trimEnd();
+                        if (x.newNombres.length) {
+                            return `${x.name}\u3000\u3000${x.newNombres.join(", ")}`;
+                        }
+                        return x.name;
                     }).join("\n");
                 },
             },
@@ -197,20 +188,13 @@
                 },
                 adjust: function() {
                     this.reset();
-                    const adjuster = new NombreAdjuster(this.start, this.end, this.delta);
-                    this.contentLines.forEach(line => {
-                        const entryLine = new EntryLine(line, adjuster);
-                        this.adjustedArr.push({
-                            "name": entryLine.name,
-                            "nombres": entryLine.adjustedNombres
+                    const eLines = new EntryLines(this.start, this.end, this.delta);
+                    eLines.load(this.contentLines).forEach(eLine => this.adjustedArr.push(eLine));
+                    this.adjustedArr.filter(x => x.comparison.modified).forEach(x => {
+                        this.diffArr.push({
+                            "name": x.name,
+                            "detail": x.comparison.detail
                         });
-                        const comparison = entryLine.compareAddress();
-                        if (comparison.modified) {
-                            this.diffArr.push({
-                                "name": entryLine.name,
-                                "detail": comparison.detail
-                            });
-                        }
                     });
                     if (this.diffArr.length) {
                         this.message = this.diffArr.length + "件の変更があります。"
