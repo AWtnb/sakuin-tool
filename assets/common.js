@@ -162,7 +162,7 @@ export class AddressHandler {
     }
 
     parse() {
-        this.rawElements.map(elem => {
+        this.rawElements.forEach(elem => {
             const nbr = String(elem);
             if (nbr.indexOf("-") != -1) {
                 const [start, end, ...rest] = nbr.split("-");
