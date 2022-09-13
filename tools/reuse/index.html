@@ -188,20 +188,24 @@
         }).mount("#preformat");
 
         function resolveChildEntry(lines) {
-            const trimmedLines = lines.filter(x => String(x).trim());
             const stack = [];
             const parentStack = [];
-            stack.push(trimmedLines[0]);
-            parentStack.push(new Entry(trimmedLines[0]).basename);
-            for (let i = 1; i < trimmedLines.length; i++) {
-                const cur = String(trimmedLines[i]);
-                if (cur.indexOf("\u2015\u2015") != -1) {
-                    const resolved = cur.trim().replace("\u2015\u2015", parentStack.at(-1));
-                    stack.push(resolved);
+            stack.push(lines[0]);
+            parentStack.push(new Entry(lines[0]).basename);
+            for (let i = 1; i < lines.length; i++) {
+                const cur = new Entry(lines[i]);
+                const basename = cur.basename;
+                if (basename.startsWith("\u2015\u2015")) {
+                    const resolved = parentStack.at(-1) + basename.substring(2);
+                    stack.push(resolved + "\u3000\u3000" + cur.address);
+                }
+                else if (basename.endsWith("\u2015\u2015")) {
+                    const resolved = basename.substring(0, basename.length - 2) + parentStack.at(-1);
+                    stack.push(resolved + "\u3000\u3000" + cur.address);
                 }
                 else {
-                    stack.push(cur);
-                    parentStack.push(new Entry(cur).basename);
+                    stack.push(cur.rawStr);
+                    parentStack.push(basename);
                 }
             }
             return stack;
@@ -219,6 +223,9 @@
                 contentLines: function() {
                     return this.content.split(/\n/).map(line => String(line));
                 },
+                pureLines: function() {
+                    return this.contentLines.filter(line => line.trim()).map(line => line.trim());
+                },
                 formatted: function() {
                     return this.fmtArr.join("\n");
                 },
@@ -233,7 +240,7 @@
                 },
                 format: function() {
                     this.reset();
-                    resolveChildEntry(this.contentLines).forEach(x => {
+                    resolveChildEntry(this.pureLines).forEach(x => {
                         this.fmtArr.push(x);
                     });
                 },
