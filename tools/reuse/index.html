@@ -57,7 +57,7 @@
         /////////////////////////////////////////////////////////////// -->
         <section>
             <h2>子項目の復元</h2>
-            <div id="completeChild">
+            <div id="resolveChild">
                 <div class="ui">
                     <textarea placeholder="paste here!" v-model="content"></textarea>
                     <button @click="format">実行</button>
@@ -67,7 +67,7 @@
                     <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
             </div>
-            <img src="./image/img_complete.png">
+            <img src="./image/img_resolve.png">
         </section>
         <!-- ///////////////////////////////////////////////////////////////
 
@@ -187,7 +187,7 @@
             }
         }).mount("#preformat");
 
-        function completeChildEntry(lines) {
+        function resolveChildEntry(lines) {
             const trimmedLines = lines.filter(x => String(x).trim());
             const stack = [];
             const parentStack = [];
@@ -196,8 +196,8 @@
             for (let i = 1; i < trimmedLines.length; i++) {
                 const cur = String(trimmedLines[i]);
                 if (cur.indexOf("\u2015\u2015") != -1) {
-                    const completed = cur.trim().replace("\u2015\u2015", parentStack.at(-1));
-                    stack.push(completed);
+                    const resolved = cur.trim().replace("\u2015\u2015", parentStack.at(-1));
+                    stack.push(resolved);
                 }
                 else {
                     stack.push(cur);
@@ -207,7 +207,7 @@
             return stack;
         }
 
-        const vmComplete = Vue.createApp({
+        const vmresolve = Vue.createApp({
             data: function () {
                 return {
                     content: "",
@@ -233,7 +233,7 @@
                 },
                 format: function() {
                     this.reset();
-                    completeChildEntry(this.contentLines).forEach(x => {
+                    resolveChildEntry(this.contentLines).forEach(x => {
                         this.fmtArr.push(x);
                     });
                 },
@@ -242,7 +242,7 @@
                     this.copied = true;
                 }
             }
-        }).mount("#completeChild");
+        }).mount("#resolveChild");
 
         function releaseGrouping(lines) {
             const stack = [];
