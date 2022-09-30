@@ -1,5 +1,5 @@
 const getAddress = (s) => {
-    const m = String(s).match(/[\d,\u2013]+$/);
+    const m = String(s).match(/\d[\d,\u2013]*$/);
     if (m) {
         return m[0];
     }
@@ -11,7 +11,7 @@ const BARS = ["\u2010", "\u2011", "\u2012", "\u2013", "\u2014", "\u2015", "\uFF0
 const trimAddress = (s) => {
     let fmt = s.split(",")[0];
     fmt = fmt.replace(/\d+$/, "");
-    if (BARS.includes(fmt.at(-1))) {
+    if (BARS.includes(fmt.at(-1)) && fmt.at(-2).match(/\d/)) {
         fmt = fmt.replace(/.$/, "");
         fmt = fmt.replace(/\d+$/, "");
     }
@@ -30,36 +30,36 @@ class BarHandler {
         });
         return fmt.replace(/\u002d+/g, to);
     }
-    getStart() {
-        let start = 0;
+    getHeaderLen() {
+        let len = 0;
         for (let i = 0; i < this.rawStr.length; i++) {
             if (this.valiation.includes(this.rawStr[i])) {
-                start += 1;
+                len += 1;
             }
             else {
                 break;
             }
         }
-        return start;
+        return len;
     }
-    getEnd() {
-        let end = this.rawStr.length;
+    getTrailerLen() {
+        let len = 0;
         for (let i = this.rawStr.length - 1; 0 <= i; i--) {
-            if (this.valiation.includes(this.rawStr.at(i))) {
-                end += -1;
+            if (this.valiation.includes(this.rawStr[i])) {
+                len += 1;
             }
             else {
                 break;
             }
         }
-        return end;
+        return len;
     }
     formatChildEntry() {
-        const s = this.getStart();
-        const prefix = (s > 0)? "\u2015\u2015" : "";
-        const e = this.getEnd();
-        const suffix = (e < this.rawStr.length)? "\u2015\u2015" : "";
-        return prefix + this.rawStr.slice(s, e) + suffix;
+        const hLen = this.getHeaderLen();
+        const prefix = (hLen > 0)? "\u2015\u2015" : "";
+        const tLen = this.getTrailerLen();
+        const suffix = (tLen > 0)? "\u2015\u2015" : "";
+        return prefix + this.rawStr.slice(hLen, this.rawStr.length - tLen) + suffix;
     }
 }
 
@@ -67,7 +67,7 @@ class BarHandler {
 export class IndexLine {
 
     constructor(s) {
-        this.isChild = s.startsWith(" ") || s.startsWith("\u3000");
+        this.prefix = (s.startsWith(" ") || s.startsWith("\u3000"))? "\u3000" : "";
         const pureStr = String(s).replace(/\uff0c/g, ",").replace(/\s+/g, "");
         const adr = getAddress(new BarHandler(pureStr).format());
         if (adr.length > 0) {
@@ -86,7 +86,7 @@ export class IndexLine {
     }
 
     getFormattedLine() {
-        const name = ((this.isChild) ? "\u3000" : "") + new BarHandler(this.name).formatChildEntry();
+        const name = this.prefix + (new BarHandler(this.name).formatChildEntry());
         if (this.address.length > 0) {
             return (name + "\u3000\u3000" + this.address);
         }
