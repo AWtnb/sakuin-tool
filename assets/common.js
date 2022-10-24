@@ -123,32 +123,36 @@ class EntryAddress {
 
     constructor(s, hyphenated=false) {
         this.hyphenated = hyphenated;
+        this.origin = s;
         this.display = {
-            "text": s.trim(),
-            "prefix": "",
-            "suffix": "",
+            "text": this.origin.trim(),
+            "prefix": this.getPrefix(),
+            "suffix": this.getSuffix(),
         };
-        this.setPrefix();
-        this.setSuffix();
         this.intValue = Number(this.display.text.replace(/[^\d]/g, ""));
     }
 
-    setPrefix() {
-        const s = this.display.text;
-        if (isNaN(s[0])) {
-            this.display.prefix = s.split(/\d+/)[0];
+    getPrefix() {
+        const s = this.origin;
+        if (isNaN(s.at(0))) {
+            return s.split(/\d+/).at(0);
         }
+        return "";
     }
 
-    setSuffix() {
-        const s = this.display.text;
+    getSuffix() {
+        const s = this.origin;
         if (isNaN(s.at(-1))) {
-            this.display.suffix = s.split(/\d+/).at(-1);
+            return s.split(/\d+/).at(-1);
         }
+        return "";
     }
 
 }
-
+(() => {
+    console.log(new EntryAddress("34"));
+    console.log(new EntryAddress("【89】"));
+})();
 
 export class AddressHandler {
 
