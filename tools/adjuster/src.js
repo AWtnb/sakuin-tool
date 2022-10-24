@@ -29,30 +29,36 @@ const compareNombres = (nombresA, nombresB) => {
     };
 }
 
-export class EntryLines {
+class AddressAdjuster {
     constructor(start, end, delta) {
         this.start = start;
         this.end = end;
         this.delta = delta;
     }
-
     adjust(entry) {
         if (Number(this.start) <= entry.intValue && entry.intValue <= Number(this.end)) {
             return (entry.display.prefix + (entry.intValue + Number(this.delta)) + entry.display.suffix);
         }
         return entry.display.text;
     }
+}
 
-    load(lines) {
-        return lines.map(line => {
+export class EntryLines {
+    constructor(lines, start, end, delta) {
+        this.lines = lines;
+        this.adjuster = new AddressAdjuster(start, end, delta);
+    }
+
+    adjust() {
+        return this.lines.map(line => {
             const entry = new Entry(line);
             const orgNombres = new AddressHandler(entry.address).rawElements;
             const newNombres = orgNombres.map(orgNbr => {
                 const parsed = new AddressHandler(orgNbr).nombres;
                 if (parsed.length > 1) { // 範囲指定のノンブルだった場合
-                    return this.adjust(parsed[0]) + "\u2013" + this.adjust(parsed.at(-1));
+                    return this.adjuster.adjust(parsed[0]) + "\u2013" + this.adjuster.adjust(parsed.at(-1));
                 }
-                return this.adjust(parsed[0]);
+                return this.adjuster.adjust(parsed[0]);
             });
             return {
                 "name": entry.name,

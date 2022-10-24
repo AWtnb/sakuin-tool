@@ -188,8 +188,8 @@
                 },
                 adjust: function() {
                     this.reset();
-                    const eLines = new EntryLines(this.start, this.end, this.delta);
-                    eLines.load(this.contentLines).forEach(eLine => this.adjustedArr.push(eLine));
+                    const eLines = new EntryLines(this.contentLines, this.start, this.end, this.delta);
+                    this.adjustedArr = eLines.adjust();
                     this.adjustedArr.filter(x => x.comparison.modified).forEach(x => {
                         this.diffArr.push({
                             "name": x.name,
