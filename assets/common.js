@@ -149,10 +149,6 @@ class EntryAddress {
     }
 
 }
-(() => {
-    console.log(new EntryAddress("34"));
-    console.log(new EntryAddress("【89】"));
-})();
 
 export class AddressHandler {
 
