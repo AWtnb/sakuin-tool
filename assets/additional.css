@@ -87,3 +87,7 @@ button.done::after {
 table {
     margin-bottom: 4rem;
 }
+
+input[type="checkbox"] {
+    margin: .25em;
+}
