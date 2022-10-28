@@ -88,6 +88,6 @@ table {
     margin-bottom: 4rem;
 }
 
-input[type="checkbox"] {
+input[type="radio"], input[type="checkbox"] {
     margin: .25em;
 }
