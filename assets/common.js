@@ -38,6 +38,10 @@ class EntryName {
         return this.name.replace(this.reg, "").trim().replace(/\u3000{1,2}/, "");
     }
 
+    getRefBasename() {
+        return this.name.split("→")[0].trim();
+    }
+
     getSource() {
         const m = this.name.match(this.reg);
         if (m) {
@@ -112,7 +116,7 @@ export class Entry {
         const nm = new EntryName(this.name);
         this.referTo = nm.getReferTo();
         this.isReference = this.referTo.length > 0;
-        this.basename = nm.getBasename();
+        this.basename = nm.getRefBasename();
         this.referredFrom = nm.getSource();
 
     }
