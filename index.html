@@ -88,7 +88,7 @@
             <ul>
                 <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
             </ul>
-            <div>{{message}}</div>
+            <div v-cloak>{{message}}</div>
             <result-markup :parsed-arr="parsedArr" :copy-func="copy" :show-normalized="true" :copied="copied"></result-markup>
         </div>
 
@@ -134,7 +134,7 @@
             <div class="ui">
                 <textarea placeholder="paste here!" v-model="content"></textarea>
                 <button @click="execute">実行</button>
-                <p>{{message}}</p>
+                <p v-cloak>{{message}}</p>
             </div>
             <result-markup :parsed-arr="parsedArr" :copy-func="copy" :copied="copied"></result-markup>
         </div>

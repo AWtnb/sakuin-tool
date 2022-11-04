@@ -42,7 +42,7 @@
                     <textarea placeholder="result" readonly v-model="adjusted"></textarea>
                     <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
-                <div class="result-markup">
+                <div class="result-markup" v-cloak>
                     <div v-if="diffArr.length">
                         <h4>{{message}}</h4>
                         <ul>

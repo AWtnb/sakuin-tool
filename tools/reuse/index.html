@@ -36,7 +36,7 @@
                     <textarea placeholder="result" readonly v-model="formatted"></textarea>
                     <copy-button :copy-func="copy" :copied="copied"></copy-button>
                 </div>
-                <div class="result-markup">
+                <div class="result-markup" v-cloak>
                     <div v-if="modified.length">
                         <h4>{{message}}</h4>
                         <ol><li v-for="(fmt, idx) in modified" :key="idx">
@@ -81,7 +81,7 @@
                     <textarea placeholder="paste here!" v-model="content"></textarea>
                     <button @click="release">実行</button>
                 </div>
-                <div v-if="released.length">
+                <div v-if="released.length" v-cloak>
                     <div class="result-markup limit-height">
                         <table>
                             <thead>

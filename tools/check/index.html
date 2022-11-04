@@ -41,7 +41,7 @@
                     <div v-if="adjacent.length">
                         <ref-adjacent :adjacent-refs="adjacent"></ref-adjacent>
                     </div>
-                    <div v-if="isPerfect">{{message}}</div>
+                    <div v-if="isPerfect" v-cloak>{{message}}</div>
                 </div>
             </div>
         </section>
@@ -65,7 +65,7 @@
 
                 </div>
                 <div v-if="found.length">
-                    <div class="result-markup">
+                    <div class="result-markup" v-cloak>
                         <table>
                             <thead><tr><th>項目</th><th>子項目候補</th></tr>
                             </thead>
@@ -99,7 +99,7 @@
 
                 <strong>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</strong>
 
-                <div class="result-markup">
+                <div class="result-markup" v-cloak>
                     <div v-if="problems.length">
                         <h6>修正の必要があります！</h6>
                         <ul>

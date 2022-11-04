@@ -22,7 +22,7 @@
                     <textarea placeholder="paste here!" v-model="content"></textarea>
                     <button @click="generate">実行</button>
                 </div>
-                <div v-if="lines.length">
+                <div v-if="lines.length" v-cloak>
                     <div class="result-markup limit-height">
                         <table>
                             <thead>
@@ -80,7 +80,7 @@
                     </ul>
                 </div>
 
-                <div v-if="lines.length">
+                <div v-if="lines.length" v-cloak>
                     <div class="result-markup limit-height">
                         <table>
                             <thead>
