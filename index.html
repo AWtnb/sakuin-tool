@@ -68,33 +68,15 @@
         <div class="repo-link"><a href="https://github.com/AWtnb/sakuin-tool">Github repo.</a></div>
     </div>
 
-    <section class="fullauto">
-
-        <h1>sakuin-tool</h1>
-        <details>
-            <summary>注意事項</summary>
-            <ul>
-                <li>本ツールでの索引整形は一定の法則にしたがって機械的に一括処理しています。</li>
-                <li>例外的なデータには対応できません。精度にも限界がありますので<strong>必ず目でも校正してください。</strong></li>
-                <li>本ツールが外部にデータを送信することは一切ありません。</li>
-            </ul>
-        </details>
-        <div id="fullauto">
-            <img src="./image/img_auto.png">
-            <div class="ui">
-                <textarea placeholder="paste here!" v-model="content"></textarea>
-                <button @click="execute">実行</button>
-            </div>
-            <ul>
-                <li>先に子項目を作成していると正しく名寄せやソートが行われません。</li>
-            </ul>
-            <div v-cloak>{{message}}</div>
-            <result-markup :parsed-arr="parsedArr" :copy-func="copy" :show-normalized="true" :copied="copied"></result-markup>
-        </div>
-
-        <div class="scroll-navi">マニュアルモードはスクロール</div>
-
-    </section>
+    <h1>sakuin-tool</h1>
+    <details>
+        <summary>注意事項</summary>
+        <ul>
+            <li>本ツールでの索引整形は一定の法則にしたがって機械的に一括処理しています。</li>
+            <li>例外的なデータには対応できません。精度にも限界がありますので<strong>必ず目でも校正してください。</strong></li>
+            <li>本ツールが外部にデータを送信することは一切ありません。</li>
+        </ul>
+    </details>
     <!-- ///////////////////////////////////////////////////////////////
 
         名寄せ
@@ -231,6 +213,7 @@
                         <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
                     </ul>
                 </li>
+                <li><strong>1列目が最終的な索引になります。</strong></li>
             </ul>
             <result-markup :parsed-arr="sortedlines" :copy-func="copy" :show-normalized="true" :copied="copied"></result-markup>
         </div>
@@ -353,66 +336,6 @@
         };
 
         ///////////////////////////////////////////////////////////////
-        // 全自動
-        ///////////////////////////////////////////////////////////////
-
-        const vmFullauto = Vue.createApp({
-            data: function() {
-                return {
-                    content: "",
-                    message: "",
-                    parsedArr: [],
-                    copied: false
-                }
-            },
-            computed: {
-                contentLines: function() {
-                    return this.content.split(/\n/).map(line => String(line));
-                },
-            },
-            components: {
-                "result-markup": resultMarkup
-            },
-            methods: {
-                resetMsg: function(){
-                    this.message = "";
-                },
-                reset: function(){
-                    this.parsedArr = [];
-                    this.resetMsg();
-                    this.copied = false;
-                },
-                execute: function(){
-                    this.reset();
-                    this.message ="よみがな計算中…";
-                    const grouper = new Grouper(this.contentLines);
-                    const sorter = new Sorter();
-                    kuromoji.builder({ dicPath: KUROMOJI_DICT }).build((err, tokenizer) => {
-                        if (err) {
-                            console.log(err);
-                            this.message = "解析失敗…やり直してみてください！";
-                        }
-                        else {
-                            new Reading(tokenizer).parseLines(grouper.getGroupedLines()).forEach(parsed => {
-                                sorter.addData(
-                                    parsed.item,
-                                    parsed.reading
-                                );
-                            });
-                            sorter.execute().forEach(x => this.parsedArr.push(x));
-                            this.resetMsg();
-                        }
-                    });
-                },
-                copy: function(){
-                    const joined = this.parsedArr.map(x => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
-                    Util.copyToClipboard(joined);
-                    this.copied = true;
-                }
-            }
-        }).mount("#fullauto")
-
-        ///////////////////////////////////////////////////////////////
         // 名寄せ
         ///////////////////////////////////////////////////////////////
 
@@ -455,61 +378,6 @@
                 }
             }
         }).mount("#grouping");
-
-        ///////////////////////////////////////////////////////////////
-        // 読み取得
-        ///////////////////////////////////////////////////////////////
-
-        const vmGetReading = Vue.createApp({
-            data: function () {
-                return {
-                    content: "",
-                    parsedArr: [],
-                    message: "",
-                    copied: false,
-                }
-            },
-            computed: {
-                contentLines: function() {
-                    return this.content.split(/\n/).map(line => String(line));
-                },
-            },
-            components: {
-                "result-markup": resultMarkup
-            },
-            methods: {
-                resetMsg: function(){
-                    this.message = "";
-                },
-                reset: function(){
-                    this.parsedArr = [];
-                    this.resetMsg();
-                    this.copied = false;
-                },
-                execute: function(){
-                    this.reset();
-                    this.message ="よみがな計算中…";
-                    kuromoji.builder({ dicPath: KUROMOJI_DICT }).build((err, tokenizer) => {
-                        if (err) {
-                            console.log(err);
-                            this.message = "解析失敗…やり直してみてください！";
-                        }
-                        else {
-                            new Reading(tokenizer).parseLines(this.contentLines).forEach(x => {
-                                this.parsedArr.push(x);
-                            });
-                            this.resetMsg();
-                        }
-                    });
-                },
-                copy: function(){
-                    const joined = this.parsedArr.map(x => `${x.item}\t${x.reading}`).join("\n");
-                    Util.copyToClipboard(joined);
-                    this.copied = true;
-                }
-            }
-        }).mount("#getReading");
-
 
         ///////////////////////////////////////////////////////////////
         // 並べ替え
