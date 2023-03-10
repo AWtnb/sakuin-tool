@@ -1,4 +1,4 @@
-import {AddressHandler} from "../../assets/common.js";
+import {AddressHandler} from "../../assets/entryHandler.js";
 
 export class Grouper {
 

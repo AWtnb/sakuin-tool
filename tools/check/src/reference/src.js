@@ -1,4 +1,4 @@
-import {Entry} from "../../../../assets/common.js";
+import {Entry} from "../../../../assets/entryHandler.js";
 
 export class ReferenceChecker {
 

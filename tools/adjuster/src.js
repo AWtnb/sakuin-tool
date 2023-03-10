@@ -1,4 +1,4 @@
-import {Entry, AddressHandler} from "../../assets/common.js";
+import {Entry, AddressHandler} from "../../assets/entryHandler.js";
 
 const pruneNaN = (s) =>  {
     if (isNaN(Number(s))) {
