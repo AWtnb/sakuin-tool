@@ -17,8 +17,10 @@
     <CopyButton :copyStr="resultStr" />
   </div>
 
-  <div><img src="@/assets/Group/group.png" alt="" /></div>
-  <em>ノンブルの<span style="color: red">並び</span>、<span style="color: blue">重複</span>、<span style="color: green">連続</span>を整理。記号での装飾にも対応。</em>
+  <div
+    ><img src="@/assets/Group/group.png" alt="" />
+    <em>ノンブルの<span style="color: red">並び</span>、<span style="color: blue">重複</span>、<span style="color: green">連続</span>を整理。記号での装飾にも対応。</em>
+  </div>
 </template>
 
 <script>

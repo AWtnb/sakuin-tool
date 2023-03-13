@@ -1,7 +1,4 @@
-nav {
-  padding: 30px;
-}
-
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP&display=swap");
 nav a {
   font-weight: bold;
   color: #6b8096;
@@ -12,7 +9,8 @@ nav a.router-link-exact-active {
 }
 
 code {
-  font-family: ui-monospace, Consolas, monospace;
+  font-family: "IBM Plex Sans JP", ui-monospace, Consolas, monospace;
+  font-size: 0.85em;
 }
 
 hr {
@@ -27,4 +25,13 @@ hr {
 
 img {
   max-width: 600px;
+  box-shadow: 1px 1px 5px 1px #ccc;
+}
+img ~ em {
+  font-style: normal;
+  display: block;
+  line-height: 1.25;
+  margin-top: -1rem;
+  margin-left: 1rem;
+  color: #333;
 }
