@@ -1,0 +1,135 @@
+<template>
+  <h2>並べ替え</h2>
+  <textarea v-model="content"></textarea>
+  <button @click="executeSort">実行</button>
+
+  <ul>
+    <li><code>名寄せした索引項目</code>と<code>読み</code>の2列を貼り付けてください。</li>
+    <li
+      >内部で<code>読み</code>の情報を<code>配列読み</code>に変換して並べ替えます。
+      <ul>
+        <li>最優先は<code>配列読み</code>の情報。</li>
+        <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+        <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+      </ul>
+    </li>
+    <li><strong>1列目が最終的な索引になります。</strong></li>
+  </ul>
+
+  <div v-if="sortedLines.length">
+    <div class="limit-height">
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>読み</th>
+            <th>配列読み</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(p, idx) in sortedLines" :key="idx">
+            <td>{{ p.item }}</td>
+            <td>{{ p.reading }}</td>
+            <td>{{ p.normalized }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <CopyButton :copyStr="resultStr" />
+  </div>
+
+  <details>
+    <summary>配列読みへの変換だけ必要な場合はこちら</summary>
+    <Normalize />
+  </details>
+
+  <div><img src="@/assets/Sort/sort.png" alt="" /></div>
+</template>
+
+<script>
+import { normalizeReading } from "@/helpers/utils";
+
+const comparer = (a, b) => {
+  const aLower = String(a).toLowerCase();
+  const bLower = String(b).toLowerCase();
+  if (aLower > bLower) return 1;
+  if (aLower < bLower) return -1;
+  return 0;
+};
+
+export class Sorter {
+  constructor() {
+    this.parsedLines = [];
+  }
+
+  addData(item, reading) {
+    this.parsedLines.push({
+      item: item,
+      reading: reading,
+      normalized: normalizeReading(reading, true),
+    });
+  }
+
+  execute() {
+    return this.parsedLines
+      .sort((a, b) => {
+        return comparer(a.item, b.item);
+      })
+      .sort((a, b) => {
+        return comparer(a.reading, b.reading);
+      })
+      .sort((a, b) => {
+        return comparer(a.normalized, b.normalized);
+      });
+  }
+}
+
+import CopyButton from "@/components/CopyButton.vue";
+import Normalize from "@/components/Normalize.vue";
+
+export default {
+  name: "Sort",
+  data: function () {
+    return {
+      content: "",
+      sortedLines: [],
+    };
+  },
+  components: {
+    CopyButton,
+    Normalize,
+  },
+  computed: {
+    contentLines: function () {
+      return this.content.split(/\n/).map((line) => String(line));
+    },
+    parsedLines: function () {
+      return this.contentLines
+        .filter((line) => line.trim().length > 0)
+        .map((line) => {
+          const [item, reading, ...rest] = line.split("\t").map((x) => x.trim());
+          return {
+            item: item,
+            reading: reading,
+          };
+        });
+    },
+    resultStr: function () {
+      return this.sortedLines.map((x) => `${x.item}\t${x.reading}\t${x.normalized}`).join("\n");
+    },
+  },
+  methods: {
+    reset: function () {
+      this.sortedLines = [];
+    },
+    executeSort: function () {
+      this.reset();
+      const sorter = new Sorter();
+      this.parsedLines.forEach((x) => sorter.addData(x.item, x.reading));
+      sorter.execute().forEach((x) => {
+        this.sortedLines.push(x);
+      });
+    },
+  },
+};
+</script>
