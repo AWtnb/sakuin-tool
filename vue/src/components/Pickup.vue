@@ -67,7 +67,7 @@ const generateTemplate = (lines) => {
 import CopyButton from "@/components/CopyButton.vue";
 
 export default {
-  name: "Prepare",
+  name: "Pickup",
   data: function () {
     return {
       content: "",
