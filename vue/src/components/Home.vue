@@ -1,4 +1,5 @@
 <template>
+  <h1>索引ツール</h1>
   <p>索引の整形／再利用に便利なツールをまとめています。</p>
   <details>
     <summary>注意事項</summary>
@@ -24,6 +25,7 @@
           ><code>Check</code>メニューで並べ替えたデータをチェックする<ul>
             <li>見よ項目のチェック</li>
             <li>子項目候補のチェック</li>
+            <li>微調整時は<code>Adjust</code>メニュー</li>
           </ul></li
         ></ol
       ></li
