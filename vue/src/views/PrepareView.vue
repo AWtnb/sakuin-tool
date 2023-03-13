@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import Pickup from '/src/components/Pickup.vue'
-import Preformat from '/src/components/Preformat.vue'
+import Pickup from '@/components/Pickup.vue'
+import Preformat from '@/components/Preformat.vue'
 
 export default {
   name: 'PrepareView',

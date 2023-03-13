@@ -23,24 +23,24 @@
     <CopyButton :copyStr="resultStr" />
   </div>
 
-  <div><img src="/src/assets/Pickup/newtemplate.png" alt="" /></div>
+  <div><img src="@/assets/Pickup/newtemplate.png" alt="" /></div>
   <ul>
     <li><code>個数</code>列：見よ項目がある場合、見よ先項目とのペアで1つとカウント</li>
   </ul>
   <details>
     <summary>TIPS：条件付き書式の設定</summary>
-    <img src="/src/assets/Pickup/generate-index.png" />
+    <img src="@/assets/Pickup/generate-index.png" />
     <p><code>index</code>列に条件付き書式で<code>偶数の場合に背景色変更</code>という設定をするとページの変わり目が見やすくなり便利です。</p>
     <ul>
       <li>ルールの種類：<code>数式を使用して、書式設定するセルを決定</code></li>
       <li>数式：<code>=MOD($B1,2)=0</code></li>
     </ul>
-    <img src="/src/assets/Pickup/generate-index-rule.png" />
+    <img src="@/assets/Pickup/generate-index-rule.png" />
   </details>
 </template>
 
 <script>
-import { Util } from "/src/helpers/utils";
+import { Util } from "@/helpers/utils";
 
 const generateTemplate = (lines) => {
   const stack = [];
@@ -64,7 +64,7 @@ const generateTemplate = (lines) => {
   return stack;
 };
 
-import CopyButton from "/src/components/CopyButton.vue";
+import CopyButton from "@/components/CopyButton.vue";
 
 export default {
   name: "Prepare",

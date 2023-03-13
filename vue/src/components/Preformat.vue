@@ -31,11 +31,11 @@
     <CopyButton :copyStr="resultStr" />
   </div>
 
-  <div><img src="/src/assets/Preformat/preformat.png" alt="" /></div>
+  <div><img src="@/assets/Preformat/preformat.png" alt="" /></div>
 </template>
 
 <script>
-import { Util } from "/src/helpers/utils.js";
+import { Util } from "@/helpers/utils.js";
 
 const formatIndexTemplate = (lines) => {
   const stack = [];
@@ -65,7 +65,7 @@ const formatIndexTemplate = (lines) => {
   return stack;
 };
 
-import CopyButton from "/src/components/CopyButton.vue";
+import CopyButton from "@/components/CopyButton.vue";
 
 export default {
   name: "Preformat",
