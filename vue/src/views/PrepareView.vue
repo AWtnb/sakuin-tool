@@ -12,7 +12,7 @@ import Pickup from '/src/components/Pickup.vue'
 import Preformat from '/src/components/Preformat.vue'
 
 export default {
-  name: 'PickupView',
+  name: 'PrepareView',
   components: {
     Pickup,
     Preformat
