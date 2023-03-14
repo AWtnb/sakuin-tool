@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import DetailList from '@/components/DetailList.vue';
+import DetailList from '@/components/CheckRefs/DetailList.vue';
 
 export default {
   name: "RefLostFrom",

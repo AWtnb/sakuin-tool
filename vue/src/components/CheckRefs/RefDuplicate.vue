@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import DuplicateTable from "@/components/DuplicateTable.vue";
+import DuplicateTable from "@/components/CheckRefs/DuplicateTable.vue";
 
 export default {
   name: "RefDuplicate",

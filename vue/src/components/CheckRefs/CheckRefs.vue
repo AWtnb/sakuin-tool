@@ -27,10 +27,10 @@
 import { ReferenceChecker } from "@/helpers/referenceChecker";
 import { GroupChecker } from "@/helpers/groupChecker";
 
-import RefLostTo from "@/components/RefLostTo.vue";
-import RefLostFrom from "@/components/RefLostFrom.vue";
-import RefDuplicate from "@/components/RefDuplicate.vue";
-import RefAdjacent from "@/components/RefAdjacent.vue";
+import RefLostTo from "@/components/CheckRefs/RefLostTo.vue";
+import RefLostFrom from "@/components/CheckRefs/RefLostFrom.vue";
+import RefDuplicate from "@/components/CheckRefs/RefDuplicate.vue";
+import RefAdjacent from "@/components/CheckRefs/RefAdjacent.vue";
 
 export default {
   name: "CheckRefs",

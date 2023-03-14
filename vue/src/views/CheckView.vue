@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import CheckRefs from '@/components/CheckRefs.vue'
+import CheckRefs from '@/components/CheckRefs/CheckRefs.vue'
 
 export default {
   name: 'CheckView',
