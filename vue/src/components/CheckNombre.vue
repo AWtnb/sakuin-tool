@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { AddressChecker } from "@/helpers/entryHandler.js";
+import { AddressChecker } from "@/helpers/addressChecker.js";
 
 const grepInvalidNombreLine = (lines) => {
   return lines
