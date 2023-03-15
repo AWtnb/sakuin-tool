@@ -2,22 +2,24 @@
   <div class="adjust">
     <h1>微調整</h1>
     <PlusMinus />
-    <hr>
+    <hr />
     <JaConv />
+    <hr />
+    <Romanize />
   </div>
 </template>
 
 <script>
 import PlusMinus from "@/components/AdjustNombre/PlusMinus.vue";
 import JaConv from "@/components/JaConv.vue";
-// import CheckNombre from "@/components/CheckNombre.vue";
+import Romanize from "@/components/Romanize.vue";
 
 export default {
   name: "AdjustView",
   components: {
     PlusMinus,
     JaConv,
-    // CheckNombre,
+    Romanize,
   },
 };
 </script>
