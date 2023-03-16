@@ -1,7 +1,6 @@
 <template>
   <h2>並べ替え</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeSort">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeSort" />
 
   <ul>
     <li><code>名寄せした索引項目</code>と<code>読み</code>の2列を貼り付けてください。</li>
@@ -29,8 +28,8 @@
         <tbody>
           <tr v-for="(p, idx) in sortedLines" :key="idx">
             <td>{{ p.item }}</td>
-            <td>{{ p.reading }}</td>
-            <td>{{ p.normalized }}</td>
+            <td class="reading">{{ p.reading }}</td>
+            <td class="normalized-reading">{{ p.normalized }}</td>
           </tr>
         </tbody>
       </table>
@@ -83,6 +82,7 @@ export class Sorter {
 
 import CopyButton from "@/components/CopyButton.vue";
 import Normalize from "@/components/Normalize.vue";
+import PasteBox from "@/components/PasteBox.vue";
 
 export default {
   name: "Sort",
@@ -95,6 +95,7 @@ export default {
   components: {
     CopyButton,
     Normalize,
+    PasteBox,
   },
   computed: {
     contentLines: function () {
@@ -130,3 +131,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.reading,
+.normalized-reading {
+  color: #ccc;
+}
+</style>

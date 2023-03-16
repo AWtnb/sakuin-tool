@@ -1,7 +1,6 @@
 <template>
   <h2>子項目の復元</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeFormat">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat"/>
 
   <ResultBox :result="resultStr" />
   <div><img src="@/assets/ResolveChild/resolveChild.png" alt="" /> </div>
@@ -32,6 +31,7 @@ const resolveChildEntry = (lines) => {
   return stack;
 };
 
+import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 export default {
@@ -43,6 +43,7 @@ export default {
     };
   },
   components: {
+    PasteBox,
     ResultBox,
   },
   computed: {

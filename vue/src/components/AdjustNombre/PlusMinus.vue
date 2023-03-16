@@ -6,8 +6,7 @@
     <li>増分 <input type="number" v-model="delta" /></li>
   </ul>
 
-  <textarea v-model="content"></textarea>
-  <button @click="executeAdjust">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeAdjust" />
 
   <ResultBox :result="resultStr" />
 
@@ -24,6 +23,7 @@
 
 <script>
 import AddressDiff from "@/components/AdjustNombre/AddressDiff.vue";
+import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 import { EntryLines } from "@/helpers/addressAdjuster.js";

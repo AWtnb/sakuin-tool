@@ -1,7 +1,6 @@
 <template>
   <h2>名開き</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeFormat">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
   <div class="limit-height" v-if="released.length" v-cloak>
     <table>
@@ -47,7 +46,9 @@ const ungroupEntries = (lines) => {
     });
   return stack;
 };
+
 import CopyButton from "@/components/CopyButton.vue";
+import PasteBox from "@/components/PasteBox.vue";
 
 export default {
   name: "Ungroup",
@@ -59,6 +60,7 @@ export default {
   },
   components: {
     CopyButton,
+    PasteBox
   },
   computed: {
     contentLines: function () {

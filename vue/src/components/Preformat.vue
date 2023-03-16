@@ -1,7 +1,7 @@
 <template>
   <h2>入力済テンプレートの整形</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeFormat">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
+
   <ul>
     <li>項目を左列に、ページを右列に配置</li>
     <li
@@ -66,6 +66,7 @@ const formatIndexTemplate = (lines) => {
 };
 
 import CopyButton from "@/components/CopyButton.vue";
+import PasteBox from "@/components/PasteBox.vue";
 
 export default {
   name: "Preformat",
@@ -77,6 +78,7 @@ export default {
   },
   components: {
     CopyButton,
+    PasteBox
   },
   computed: {
     contentLines: function () {

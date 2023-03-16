@@ -1,7 +1,6 @@
 <template>
   <h2>子項目候補をチェックする</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeCheck">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeCheck" />
 
   <div> <input type="radio" id="search-tail" value="tail" v-model="picked" /><label for="search-tail">末尾一致</label> <input type="radio" id="search-head" value="head" v-model="picked" /><label for="search-head">先頭一致</label> <input type="radio" id="search-all" value="all" v-model="picked" /><label for="search-all">両方</label> </div>
 
@@ -32,6 +31,7 @@
 </template>
 
 <script>
+import PasteBox from "@/components/PasteBox.vue";
 import { CheckChild } from "@/helpers/checkChild.js";
 
 export default {
@@ -42,6 +42,9 @@ export default {
       picked: "all",
       found: [],
     };
+  },
+  components: {
+    PasteBox,
   },
   computed: {
     contentLines: function () {

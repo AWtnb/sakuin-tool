@@ -1,7 +1,6 @@
 <template>
   <h2>名寄せ</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeGrouping">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGrouping" />
 
   <div>
     <input type="checkbox" id="isLeft" v-model="isLeft" />
@@ -22,6 +21,7 @@
 
 <script>
 import { Grouper } from "@/helpers/grouper";
+import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 export default {
@@ -35,6 +35,7 @@ export default {
     };
   },
   components: {
+    PasteBox,
     ResultBox,
   },
   computed: {

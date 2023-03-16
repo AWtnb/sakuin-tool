@@ -1,9 +1,8 @@
 <template>
   <h2>ノンブルの並びをチェックする</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeCheck">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeCheck" />
 
-  <strong>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</strong>
+  <p><strong>ノンブルに半角数字以外が含まれている場合は正しく判定できません。</strong></p>
 
   <div>
     <strong class="warning" v-if="message">{{ message }}</strong>
@@ -19,6 +18,7 @@
 </template>
 
 <script>
+import PasteBox from "@/components/PasteBox.vue";
 import { AddressChecker } from "@/helpers/addressChecker.js";
 
 const grepInvalidNombreLine = (lines) => {
@@ -47,6 +47,9 @@ export default {
       message: "",
       problems: [],
     };
+  },
+  components: {
+    PasteBox
   },
   computed: {
     contentLines: function () {

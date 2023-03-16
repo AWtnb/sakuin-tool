@@ -1,7 +1,6 @@
 <template>
   <h2>見よ項目の対応チェック</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeCheck">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeCheck" />
 
   <div>
     <div v-if="lostTo.length">
@@ -27,6 +26,7 @@
 import { ReferenceChecker } from "@/helpers/referenceChecker";
 import { GroupChecker } from "@/helpers/groupChecker";
 
+import PasteBox from "@/components/PasteBox.vue";
 import RefLostTo from "@/components/CheckRefs/RefLostTo.vue";
 import RefLostFrom from "@/components/CheckRefs/RefLostFrom.vue";
 import RefDuplicate from "@/components/CheckRefs/RefDuplicate.vue";
@@ -46,6 +46,7 @@ export default {
     };
   },
   components: {
+    PasteBox,
     RefLostTo,
     RefLostFrom,
     RefDuplicate,

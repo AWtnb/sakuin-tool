@@ -1,7 +1,6 @@
 <template>
   <h2>ゲラから抽出した索引データの整形</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeFormat">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
   <ul>
     <li
@@ -45,6 +44,7 @@ const formatOldIndex = (lines) => {
     });
 };
 
+import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 export default {
@@ -57,6 +57,7 @@ export default {
     };
   },
   components: {
+    PasteBox,
     ResultBox,
   },
   computed: {

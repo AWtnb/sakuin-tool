@@ -1,7 +1,6 @@
 <template>
   <h2>索引拾いのテンプレート生成</h2>
-  <textarea v-model="content"></textarea>
-  <button @click="executeGenerate">実行</button>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGenerate" />
 
   <div v-if="lines.length" v-cloak>
     <div class="limit-height">
@@ -65,6 +64,7 @@ const generateTemplate = (lines) => {
 };
 
 import CopyButton from "@/components/CopyButton.vue";
+import PasteBox from "@/components/PasteBox.vue";
 
 export default {
   name: "Pickup",
@@ -76,6 +76,7 @@ export default {
   },
   components: {
     CopyButton,
+    PasteBox
   },
   computed: {
     contentLines: function () {
