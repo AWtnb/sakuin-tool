@@ -5,21 +5,21 @@
     <hr />
     <ResolveChild />
     <hr />
-    <!-- <Romanize /> -->
+    <Ungroup />
   </div>
 </template>
 
 <script>
 import FormatOld from "@/components/FormatOld.vue";
 import ResolveChild from "@/components/ResolveChild.vue";
-// import Romanize from "@/components/Romanize.vue";
+import Ungroup from "@/components/Ungroup.vue";
 
 export default {
   name: "ReuseView",
   components: {
     FormatOld,
     ResolveChild,
-    // Romanize,
+    Ungroup,
   },
 };
 </script>
