@@ -11,16 +11,15 @@
 
   <ResultBox :result="resultStr" />
 
-  <div v-if="diffArr.length" v-cloak>
+  <div v-cloak>
     <h4>{{ message }}</h4>
-    <ul>
+    <ul v-if="diffArr.length">
       <li v-for="(diff, idx) in diffArr" :key="idx">
         <span>{{ diff.name }}&#12288;&#12288;</span>
         <AddressDiff :diff-details="diff.detail" />
       </li>
     </ul>
   </div>
-  <div v-else>{{ message }}</div>
 </template>
 
 <script>
@@ -44,6 +43,7 @@ export default {
   },
   components: {
     AddressDiff,
+    PasteBox,
     ResultBox,
   },
   computed: {
