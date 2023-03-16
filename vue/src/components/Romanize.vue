@@ -1,8 +1,7 @@
 <template>
   <h2>ローマ字に変換</h2>
   <textarea v-model="content"></textarea>
-  <textarea placeholder="result" readonly v-model="resultStr"></textarea>
-  <CopyButton :copyStr="resultStr" />
+  <ResultBox :result="resultStr" />
   <ul>
     <li
       >ヘボン式ローマ字に従っています。
@@ -22,7 +21,7 @@
 
 <script>
 import { Util } from "@/helpers/utils.js";
-import CopyButton from "@/components/CopyButton.vue";
+import ResultBox from "@/components/ResultBox.vue";
 
 const romanMap = new Map();
 [
@@ -125,7 +124,7 @@ export default {
     };
   },
   components: {
-    CopyButton,
+    ResultBox,
   },
   computed: {
     resultStr: function () {

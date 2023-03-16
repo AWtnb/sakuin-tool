@@ -9,8 +9,7 @@
   <textarea v-model="content"></textarea>
   <button @click="executeAdjust">実行</button>
 
-  <textarea placeholder="result" readonly v-model="resultStr"></textarea>
-  <CopyButton :copyStr="resultStr" />
+  <ResultBox :result="resultStr" />
 
   <div v-if="diffArr.length" v-cloak>
     <h4>{{ message }}</h4>
@@ -26,7 +25,7 @@
 
 <script>
 import AddressDiff from "@/components/AdjustNombre/AddressDiff.vue";
-import CopyButton from "@/components/CopyButton.vue";
+import ResultBox from "@/components/ResultBox.vue";
 
 import { EntryLines } from "@/helpers/addressAdjuster.js";
 
@@ -45,7 +44,7 @@ export default {
   },
   components: {
     AddressDiff,
-    CopyButton,
+    ResultBox,
   },
   computed: {
     contentLines: function () {

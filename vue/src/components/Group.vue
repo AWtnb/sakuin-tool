@@ -12,10 +12,7 @@
     <label for="isOrdered">連続している項目のみ名寄せする</label>
   </div>
 
-  <div class="ui">
-    <textarea placeholder="result" readonly v-model="resultStr"></textarea>
-    <CopyButton :copyStr="resultStr" />
-  </div>
+  <ResultBox :result="resultStr" />
 
   <div
     ><img src="@/assets/Group/group.png" alt="" />
@@ -25,7 +22,7 @@
 
 <script>
 import { Grouper } from "@/helpers/grouper";
-import CopyButton from "@/components/CopyButton.vue";
+import ResultBox from "@/components/ResultBox.vue";
 
 export default {
   name: "Group",
@@ -38,7 +35,7 @@ export default {
     };
   },
   components: {
-    CopyButton,
+    ResultBox,
   },
   computed: {
     contentLines: function () {

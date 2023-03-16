@@ -15,8 +15,7 @@
     <li>子項目のダーシの種類を<code>&horbar;&horbar;</code>（2倍ダーシ）に統一します。</li>
   </ul>
 
-  <textarea placeholder="result" readonly v-model="resultStr"></textarea>
-  <CopyButton :copyStr="resultStr" />
+  <ResultBox :result="resultStr" />
 
   <div v-cloak>
     <h4>{{ message }}</h4>
@@ -46,7 +45,7 @@ const formatOldIndex = (lines) => {
     });
 };
 
-import CopyButton from "@/components/CopyButton.vue";
+import ResultBox from "@/components/ResultBox.vue";
 
 export default {
   name: "FormatOld",
@@ -58,7 +57,7 @@ export default {
     };
   },
   components: {
-    CopyButton,
+    ResultBox,
   },
   computed: {
     contentLines: function () {

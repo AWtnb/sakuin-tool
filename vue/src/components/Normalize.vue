@@ -1,16 +1,18 @@
 <template>
-  <div>
-    <input type="checkbox" id="removeNoise" v-model="removeNoise" />
-    <label for="removeNoise">カタカナ・数字・アルファベット以外を削除する</label>
-  </div>
-  <textarea placeholder="paste here!" v-model="content"></textarea>
-  <textarea placeholder="result" readonly v-model="resultStr"></textarea>
-  <copyButton :copyStr="resultStr" />
+  <details>
+    <summary>配列読みへの変換だけ必要な場合はこちら</summary>
+    <div>
+      <input type="checkbox" id="removeNoise" v-model="removeNoise" />
+      <label for="removeNoise">カタカナ・数字・アルファベット以外を削除する</label>
+    </div>
+    <textarea placeholder="paste here!" v-model="content"></textarea>
+    <ResultBox :result="resultStr" />
+  </details>
 </template>
 
 <script>
 import { normalizeReading } from "@/helpers/utils";
-import CopyButton from "@/components/CopyButton.vue";
+import ResultBox from "@/components/ResultBox.vue";
 
 export default {
   name: "Normalize",
@@ -21,7 +23,7 @@ export default {
     };
   },
   components: {
-    CopyButton,
+    ResultBox,
   },
   computed: {
     resultStr: function () {

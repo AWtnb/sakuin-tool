@@ -1,13 +1,12 @@
 <template>
   <h2>カタカナひらがな相互変換</h2>
   <textarea v-model="content"></textarea>
-  <textarea placeholder="result" readonly v-model="resultStr"></textarea>
-  <CopyButton :copyStr="resultStr" />
+  <ResultBox :result="resultStr" />
 </template>
 
 <script>
 import { Util } from "@/helpers/utils.js";
-import CopyButton from "@/components/CopyButton.vue";
+import ResultBox from "@/components/ResultBox.vue";
 
 export default {
   name: "Jaconv",
@@ -17,7 +16,7 @@ export default {
     };
   },
   components: {
-    CopyButton,
+    ResultBox,
   },
   computed: {
     resultStr: function () {

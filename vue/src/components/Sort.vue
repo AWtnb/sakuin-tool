@@ -38,10 +38,7 @@
     <CopyButton :copyStr="resultStr" />
   </div>
 
-  <details>
-    <summary>配列読みへの変換だけ必要な場合はこちら</summary>
-    <Normalize />
-  </details>
+  <Normalize />
 
   <div><img src="@/assets/Sort/sort.png" alt="" /></div>
 </template>

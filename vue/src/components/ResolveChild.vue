@@ -3,8 +3,7 @@
   <textarea v-model="content"></textarea>
   <button @click="executeFormat">実行</button>
 
-  <textarea placeholder="result" readonly v-model="resultStr"></textarea>
-  <CopyButton :copyStr="resultStr" />
+  <ResultBox :result="resultStr" />
   <div><img src="@/assets/ResolveChild/resolveChild.png" alt="" /> </div>
 </template>
 
@@ -33,7 +32,7 @@ const resolveChildEntry = (lines) => {
   return stack;
 };
 
-import CopyButton from "@/components/CopyButton.vue";
+import ResultBox from "@/components/ResultBox.vue";
 
 export default {
   name: "ResolveChild",
@@ -44,7 +43,7 @@ export default {
     };
   },
   components: {
-    CopyButton,
+    ResultBox,
   },
   computed: {
     contentLines: function () {
