@@ -69,9 +69,6 @@ import CopyButton from "@/components/CopyButton.vue";
 
 export default {
   name: "Preformat",
-  props: {
-    msg: String,
-  },
   data: function () {
     return {
       content: "",
