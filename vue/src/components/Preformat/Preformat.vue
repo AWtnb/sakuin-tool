@@ -14,22 +14,7 @@
     </li>
   </ul>
 
-  <div v-if="lines.length" v-cloak>
-    <div class="limit-height">
-      <table>
-        <thead>
-          <tr> <th>項目</th><th>ノンブル</th> </tr>
-        </thead>
-        <tbody
-          ><tr v-for="(item, idx) in lines" :key="idx">
-            <td>{{ item.name }}</td>
-            <td>{{ item.nombre }}</td>
-          </tr></tbody
-        >
-      </table>
-    </div>
-    <CopyButton :copyStr="resultStr" />
-  </div>
+  <FormattedTable :lines="lines" :resultStr="resultStr" />
 
   <div><img src="@/assets/Preformat/preformat.png" alt="" /></div>
 </template>
@@ -67,6 +52,7 @@ const formatIndexTemplate = (lines) => {
 
 import CopyButton from "@/components/CopyButton.vue";
 import PasteBox from "@/components/PasteBox.vue";
+import FormattedTable from "@/components/Preformat/FormattedTable.vue";
 
 export default {
   name: "Preformat",
@@ -78,7 +64,8 @@ export default {
   },
   components: {
     CopyButton,
-    PasteBox
+    PasteBox,
+    FormattedTable,
   },
   computed: {
     contentLines: function () {

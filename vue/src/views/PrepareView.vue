@@ -9,7 +9,7 @@
 
 <script>
 import Pickup from '@/components/Pickup/Pickup.vue'
-import Preformat from '@/components/Preformat.vue'
+import Preformat from '@/components/Preformat/Preformat.vue'
 
 export default {
   name: 'PrepareView',
