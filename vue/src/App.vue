@@ -8,4 +8,16 @@
     <router-link to="/reuse">Reuse</router-link>
   </nav>
   <router-view/>
+  <ToTop/>
 </template>
+
+<script>
+import ToTop from "@/components/ToTop.vue";
+
+export default {
+  name: "App",
+  components: {
+    ToTop,
+  },
+};
+</script>
