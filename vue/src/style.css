@@ -1,4 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP&display=swap");
+
+html {
+  scroll-behavior: smooth;
+}
+
 nav a {
   font-weight: bold;
   color: #6b8096;
