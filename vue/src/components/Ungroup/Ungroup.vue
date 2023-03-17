@@ -2,20 +2,7 @@
   <h2>名開き</h2>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
-  <div class="limit-height" v-if="released.length" v-cloak>
-    <table>
-      <thead>
-        <tr><th>項目</th><th>ノンブル</th></tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, idx) in released" :key="idx">
-          <td>{{ item.name }}</td>
-          <td>{{ item.nombre }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <CopyButton :copyStr="resultStr" />
-  </div>
+  <UngroupedTable :lines="ungroupedLines" :resultStr="resultStr" />
 
   <div><img src="@/assets/Ungroup/ungroup.png" alt="" /> </div>
 </template>
@@ -49,35 +36,37 @@ const ungroupEntries = (lines) => {
 
 import CopyButton from "@/components/CopyButton.vue";
 import PasteBox from "@/components/PasteBox.vue";
+import UngroupedTable from "@/components/Ungroup/UngroupedTable.vue";
 
 export default {
   name: "Ungroup",
   data: function () {
     return {
       content: "",
-      released: [],
+      ungroupedLines: [],
     };
   },
   components: {
     CopyButton,
-    PasteBox
+    PasteBox,
+    UngroupedTable,
   },
   computed: {
     contentLines: function () {
       return this.content.split(/\n/).map((line) => String(line));
     },
     resultStr: function () {
-      return this.released.map((x) => `${x.name}\t${x.nombre}`.trimEnd()).join("\n");
+      return this.ungroupedLines.map((x) => `${x.name}\t${x.nombre}`.trimEnd()).join("\n");
     },
   },
   methods: {
     reset: function () {
-      this.released = [];
+      this.ungroupedLines = [];
     },
     executeFormat: function () {
       this.reset();
       ungroupEntries(this.contentLines).forEach((x, i) => {
-        this.released.push(x);
+        this.ungroupedLines.push(x);
       });
     },
   },

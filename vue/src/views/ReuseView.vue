@@ -12,7 +12,7 @@
 <script>
 import FormatOld from "@/components/FormatOld.vue";
 import ResolveChild from "@/components/ResolveChild.vue";
-import Ungroup from "@/components/Ungroup.vue";
+import Ungroup from "@/components/Ungroup/Ungroup.vue";
 
 export default {
   name: "ReuseView",
