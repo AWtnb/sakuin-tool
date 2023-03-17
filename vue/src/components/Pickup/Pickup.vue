@@ -2,40 +2,13 @@
   <h2>索引拾いのテンプレート生成</h2>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGenerate" />
 
-  <div v-if="lines.length" v-cloak>
-    <div class="limit-height">
-      <table>
-        <thead>
-          <tr> <th>ID</th><th>index</th><th>ページ</th><th>項目</th><th>見よ先</th> </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(line, idx) in lines" :key="idx">
-            <td>{{ line.id }}</td>
-            <td>{{ line.pageIdx }}</td>
-            <td>{{ line.page }}</td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <CopyButton :copyStr="resultStr" />
-  </div>
+  <TemplateTable :lines="lines" />
 
   <div><img src="@/assets/Pickup/newtemplate.png" alt="" /></div>
-  <ul>
-    <li><code>個数</code>列：見よ項目がある場合、見よ先項目とのペアで1つとカウント</li>
-  </ul>
-  <details>
-    <summary>TIPS：条件付き書式の設定</summary>
-    <img src="@/assets/Pickup/generate-index.png" />
-    <p><code>index</code>列に条件付き書式で<code>偶数の場合に背景色変更</code>という設定をするとページの変わり目が見やすくなり便利です。</p>
-    <ul>
-      <li>ルールの種類：<code>数式を使用して、書式設定するセルを決定</code></li>
-      <li>数式：<code>=MOD($B1,2)=0</code></li>
-    </ul>
-    <img src="@/assets/Pickup/generate-index-rule.png" />
-  </details>
+
+  <p><code>個数</code>列は見よ項目がある場合、見よ先項目とのペアで1つとカウントします。</p>
+
+  <ExcelSetting />
 </template>
 
 <script>
@@ -65,6 +38,8 @@ const generateTemplate = (lines) => {
 
 import CopyButton from "@/components/CopyButton.vue";
 import PasteBox from "@/components/PasteBox.vue";
+import TemplateTable from "@/components/Pickup/TemplateTable.vue";
+import ExcelSetting from "@/components/Pickup/ExcelSetting.vue";
 
 export default {
   name: "Pickup",
@@ -76,7 +51,9 @@ export default {
   },
   components: {
     CopyButton,
-    PasteBox
+    PasteBox,
+    TemplateTable,
+    ExcelSetting,
   },
   computed: {
     contentLines: function () {
