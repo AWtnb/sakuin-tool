@@ -2,7 +2,7 @@
   <h2>索引拾いのテンプレート生成</h2>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGenerate" />
 
-  <TemplateTable :lines="lines" />
+  <TemplateTable :lines="lines" :resultStr="resultStr"/>
 
   <div><img src="@/assets/Pickup/newtemplate.png" alt="" /></div>
 

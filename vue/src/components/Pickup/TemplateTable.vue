@@ -27,7 +27,8 @@ import CopyButton from "@/components/CopyButton.vue";
 export default {
   name: "TemplateTable",
   props: {
-    lines: Array
+    lines: Array,
+    resultStr: String
   },
   components: {
     CopyButton,
