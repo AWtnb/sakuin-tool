@@ -12,7 +12,7 @@
 <script>
 import Group from '@/components/Group.vue'
 import Reading from '@/components/Reading.vue'
-import Sort from '@/components/Sort.vue'
+import Sort from '@/components/Sort/Sort.vue'
 
 export default {
   name: 'FormatView',

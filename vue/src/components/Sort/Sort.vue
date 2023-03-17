@@ -15,27 +15,7 @@
     <li><strong>1列目が最終的な索引になります。</strong></li>
   </ul>
 
-  <div v-if="sortedLines.length">
-    <div class="limit-height">
-      <table>
-        <thead>
-          <tr>
-            <th>項目</th>
-            <th>読み</th>
-            <th>配列読み</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(p, idx) in sortedLines" :key="idx">
-            <td>{{ p.item }}</td>
-            <td class="reading">{{ p.reading }}</td>
-            <td class="normalized-reading">{{ p.normalized }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <CopyButton :copyStr="resultStr" />
-  </div>
+  <SortedTable :lines="sortedLines" :resultStr="resultStr" />
 
   <Normalize />
 
@@ -81,7 +61,8 @@ export class Sorter {
 }
 
 import CopyButton from "@/components/CopyButton.vue";
-import Normalize from "@/components/Normalize.vue";
+import Normalize from "@/components/Sort/Normalize.vue";
+import SortedTable from "@/components/Sort/SortedTable.vue";
 import PasteBox from "@/components/PasteBox.vue";
 
 export default {
@@ -95,6 +76,7 @@ export default {
   components: {
     CopyButton,
     Normalize,
+    SortedTable,
     PasteBox,
   },
   computed: {
