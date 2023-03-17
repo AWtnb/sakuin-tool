@@ -11,7 +11,7 @@
 
 <script>
 import CheckRefs from "@/components/CheckRefs/CheckRefs.vue";
-import CheckChild from "@/components/CheckChild.vue";
+import CheckChild from "@/components/CheckChild/CheckChild.vue";
 import CheckNombre from "@/components/CheckNombre.vue";
 
 export default {
