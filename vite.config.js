@@ -10,9 +10,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    outDir: "docs",
-    assetsDir: "./",
-  },
-  base: "./",
+  base: "/sakuin-tool",
 });
