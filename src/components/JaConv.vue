@@ -9,7 +9,7 @@ import { Util } from "@/helpers/utils.js";
 import ResultBox from "@/components/ResultBox.vue";
 
 export default {
-  name: "Jaconv",
+  name: "JaConv",
   data: function () {
     return {
       content: "",
