@@ -36,7 +36,10 @@ img ~ em {
   font-style: normal;
   display: block;
   line-height: 1.25;
-  margin-top: -1rem;
   margin-left: 1rem;
   color: #333;
+}
+
+li img {
+  margin: 14px 0;
 }
