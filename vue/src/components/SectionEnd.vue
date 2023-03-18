@@ -1,25 +1,36 @@
 <template>
   <div class="section-end">
-    <a href="#top">▲TOP</a>
-    <hr>
+    <button @click="toTop">▲TOP</button>
+    <hr />
   </div>
 </template>
 
 <script>
 export default {
   name: "SectionEnd",
+  methods: {
+    toTop: function () {
+      window.scroll({ top: 0, behavior: "smooth" });
+    },
+  },
 };
 </script>
 
 <style scoped>
 .section-end {
   text-align: right;
-  margin-top: 100px;
-  font-size: 18px;
-  font-weight: bold;
+  margin-top: 3em;
 }
 hr {
   margin-top: 1em;
   margin-bottom: 4em;
+}
+button {
+  padding: 0;
+  margin: 0;
+  background: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #42b983;
 }
 </style>
