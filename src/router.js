@@ -33,6 +33,11 @@ const router = createRouter({
       name: "reuse",
       component: () => import("@/views/ReuseView.vue"),
     },
+    {
+      path: "/:paths(.*)*",
+      name: "nothing",
+      redirect: "/",
+    },
   ],
 });
 
