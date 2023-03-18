@@ -1,5 +1,5 @@
 <template>
-  <textarea :value="result" placeholder="result"></textarea>
+  <textarea :value="result" placeholder="result" readonly></textarea>
   <CopyButton :copyStr="result" />
 </template>
 
