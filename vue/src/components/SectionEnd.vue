@@ -1,20 +1,25 @@
 <template>
-  <div class="totop">
+  <div class="section-end">
     <a href="#top">▲TOP</a>
+    <hr>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ToTop",
+  name: "SectionEnd",
 };
 </script>
 
 <style scoped>
-.totop {
+.section-end {
   text-align: right;
   margin-top: 100px;
   font-size: 18px;
   font-weight: bold;
+}
+hr {
+  margin-top: 1em;
+  margin-bottom: 4em;
 }
 </style>
