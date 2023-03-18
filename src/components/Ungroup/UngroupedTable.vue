@@ -1,16 +1,18 @@
 <template>
-  <div class="limit-height" v-if="lines.length" v-cloak>
-    <table>
-      <thead>
-        <tr><th>項目</th><th>ノンブル</th></tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, idx) in lines" :key="idx">
-          <td>{{ item.name }}</td>
-          <td>{{ item.nombre }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div v-if="lines.length" v-cloak>
+    <div class="limit-height">
+      <table>
+        <thead>
+          <tr><th>項目</th><th>ノンブル</th></tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, idx) in lines" :key="idx">
+            <td>{{ item.name }}</td>
+            <td>{{ item.nombre }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <CopyButton :copyStr="resultStr" />
   </div>
 </template>
