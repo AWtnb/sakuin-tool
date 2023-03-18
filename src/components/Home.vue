@@ -43,4 +43,7 @@
 strong {
   color: #ff0062;
 }
+h3::before {
+  content: "■";
+}
 </style>
