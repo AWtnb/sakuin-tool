@@ -4,15 +4,6 @@ html {
   scroll-behavior: smooth;
 }
 
-nav a {
-  font-weight: bold;
-  color: #6b8096;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-
 code {
   font-family: "IBM Plex Sans JP", ui-monospace, Consolas, monospace;
   font-size: 0.85em;
