@@ -30,8 +30,12 @@ export default {
 </script>
 
 <style scoped>
+button {
+  position: relative;
+}
 button.done::after {
+  position: absolute;
   content: "\2714";
-  margin-left: 1em;
+  right: 4px;
 }
 </style>

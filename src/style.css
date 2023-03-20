@@ -43,3 +43,11 @@ img ~ em {
 li img {
   margin: 14px 0;
 }
+
+textarea:not([cols]), textarea:not([rows]) {
+  width: 30rem;
+}
+
+button {
+  min-width: 120px;
+}

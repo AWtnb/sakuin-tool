@@ -1,6 +1,8 @@
 <template>
-  <textarea :value="result" placeholder="result" readonly></textarea>
-  <CopyButton :copyStr="result" />
+  <div class="box">
+    <textarea :value="result" placeholder="result" readonly></textarea>
+    <CopyButton :copyStr="result" />
+  </div>
 </template>
 
 <script>
@@ -18,3 +20,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.box {
+  display: flex;
+  align-items: flex-end;
+}
+</style>

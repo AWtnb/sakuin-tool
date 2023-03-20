@@ -1,6 +1,8 @@
 <template>
-  <textarea @input="onInput" placeholder="paste here!"></textarea>
-  <button @click="onClick">実行！</button>
+  <div class="box">
+    <textarea @input="onInput" placeholder="paste here!"></textarea>
+    <button @click="onClick">実行！</button>
+  </div>
 </template>
 
 <script>
@@ -17,3 +19,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.box {
+  display: flex;
+  align-items: flex-end;
+}
+</style>
