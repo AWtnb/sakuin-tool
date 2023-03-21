@@ -22,6 +22,7 @@ hr {
 img {
   max-width: 600px;
   box-shadow: 1px 1px 5px 1px #ccc;
+  border-radius: 6px;
 }
 img ~ em {
   font-style: normal;
