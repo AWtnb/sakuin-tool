@@ -2,20 +2,23 @@
   <nav>
     <ToggleRevision v-on:updateState="isRevision = $event.target.checked" />
     <div class="menu">
-      <router-link to="/">Home</router-link> |
-      <span v-if="isRevision">
-        <router-link to="/reuse">Reuse</router-link>
+      <router-link to="/"><HomeIcon /></router-link>
+      <span class="detail">
+        <span v-if="isRevision">
+          <router-link to="/reuse">Reuse</router-link>
+        </span>
+        <span v-else>
+          <router-link to="/prepare">Prepare</router-link>
+        </span>
+        → <router-link to="/format">Format</router-link> → <router-link to="/check">Check</router-link> / <router-link to="/adjust">Adjust</router-link>
       </span>
-      <span v-else>
-        <router-link to="/prepare">Prepare</router-link>
-      </span>
-      &#10145; <router-link to="/format">Format</router-link> &#10145; <router-link to="/check">Check</router-link> / <router-link to="/adjust">Adjust</router-link>
     </div>
   </nav>
   <router-view />
 </template>
 
 <script>
+import HomeIcon from "@/components/HomeIcon.vue";
 import ToggleRevision from "@/components/ToggleRevision.vue";
 
 export default {
@@ -26,6 +29,7 @@ export default {
     };
   },
   components: {
+    HomeIcon,
     ToggleRevision,
   },
 };
@@ -33,8 +37,11 @@ export default {
 
 <style scoped>
 .menu {
+  margin-top: 20px;
   padding-bottom: 4px;
   border-bottom: #6b8096 double 4px;
+  display: flex;
+  justify-content: space-between;
 }
 
 nav a {
