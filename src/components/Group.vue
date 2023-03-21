@@ -1,5 +1,10 @@
 <template>
   <h2>名寄せ</h2>
+  <div
+    ><img src="@/assets/Group/group.png" alt="" />
+    <em>ノンブルの<span style="color: red">並び</span>、<span style="color: blue">重複</span>、<span style="color: green">連続</span>を整理。記号での装飾にも対応。</em>
+  </div>
+
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGrouping" />
 
   <div>
@@ -12,11 +17,6 @@
   </div>
 
   <ResultBox :result="resultStr" />
-
-  <div
-    ><img src="@/assets/Group/group.png" alt="" />
-    <em>ノンブルの<span style="color: red">並び</span>、<span style="color: blue">重複</span>、<span style="color: green">連続</span>を整理。記号での装飾にも対応。</em>
-  </div>
 </template>
 
 <script>

@@ -23,6 +23,7 @@ export default {
 
 <style scoped>
 .box {
+  margin: 6px auto;
   display: flex;
   align-items: flex-end;
 }

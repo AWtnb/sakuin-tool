@@ -1,9 +1,7 @@
 <template>
   <h2>よみがな取得</h2>
 
-  <p>外部アプリを使用します。</p>
-  <div><img src="https://github.com/AWtnb/flet_yomi/blob/master/images/demo.png?raw=true" alt="" /></div>
-  <p><a href="https://github.com/AWtnb/flet_yomi">github.com/AWtnb/flet_yomi</a></p>
+  <p><a href="https://github.com/AWtnb/flet_yomi/releases">外部アプリ</a>を使用します。</p>
 
   <DownloadGuide />
 
@@ -43,7 +41,7 @@
 </template>
 
 <script>
-import DownloadGuide from "@/components/DownloadGuide.vue";
+import DownloadGuide from "@/components/Reading/DownloadGuide.vue";
 
 export default {
   name: "Reading",

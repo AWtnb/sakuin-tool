@@ -32,5 +32,7 @@ button {
   font-size: 14px;
   font-weight: bold;
   color: #42b983;
+  min-width: 0;
+  width: fit-content;
 }
 </style>

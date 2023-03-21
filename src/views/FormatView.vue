@@ -13,7 +13,7 @@
 <script>
 import SectionEnd from "@/components/SectionEnd.vue";
 import Group from '@/components/Group.vue'
-import Reading from '@/components/Reading.vue'
+import Reading from '@/components/Reading/Reading.vue'
 import Sort from '@/components/Sort/Sort.vue'
 
 export default {

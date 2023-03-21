@@ -1,5 +1,7 @@
 <template>
   <h2>並べ替え</h2>
+  <div><img src="@/assets/Sort/sort.png" alt="" /></div>
+
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeSort" />
 
   <ul>
@@ -18,8 +20,6 @@
   <SortedTable :lines="sortedLines" :resultStr="resultStr" />
 
   <Normalize />
-
-  <div><img src="@/assets/Sort/sort.png" alt="" /></div>
 </template>
 
 <script>
