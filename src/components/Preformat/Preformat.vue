@@ -1,7 +1,10 @@
 <template>
   <h2>入力済テンプレートの整形</h2>
+
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
+  <h3>整形内容</h3>
   <ul>
     <li>項目を左列に、ページを右列に配置</li>
     <li
@@ -60,6 +63,7 @@ export default {
     return {
       content: "",
       lines: [],
+      skipHeader: true,
     };
   },
   components: {
@@ -69,7 +73,11 @@ export default {
   },
   computed: {
     contentLines: function () {
-      return this.content.split(/\n/).map((line) => String(line));
+      const lines = this.content.split(/\n/).map((line) => String(line));
+      if (this.skipHeader) {
+        return lines.slice(1);
+      }
+      return lines;
     },
     resultStr: function () {
       return this.lines.map((x) => `${x.name}\t${x.nombre}`).join("\n");

@@ -1,8 +1,10 @@
 <template>
   <h2>索引拾いのテンプレート生成</h2>
+
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGenerate" />
 
-  <TemplateTable :lines="lines" :resultStr="resultStr"/>
+  <TemplateTable :lines="lines" :resultStr="resultStr" />
 
   <div><img src="@/assets/Pickup/newtemplate.png" alt="" /></div>
 
@@ -47,6 +49,7 @@ export default {
     return {
       content: "",
       lines: [],
+      skipHeader: true,
     };
   },
   components: {
@@ -57,7 +60,11 @@ export default {
   },
   computed: {
     contentLines: function () {
-      return this.content.split(/\n/).map((line) => String(line));
+      const lines = this.content.split(/\n/).map((line) => String(line));
+      if (this.skipHeader) {
+        return lines.slice(1);
+      }
+      return lines;
     },
     resultStr: function () {
       const conc = ["ID\tindex\tページ\t項目\t見よ先"].concat(this.lines.map((x) => `${x.id}\t${x.pageIdx}\t${x.page}\t\t`));
