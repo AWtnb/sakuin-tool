@@ -17,6 +17,7 @@ hr {
 .limit-height {
   max-height: 300px;
   overflow-y: auto;
+  margin: 12px auto;
 }
 
 img {
