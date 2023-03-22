@@ -2,6 +2,7 @@
   <h2>並べ替え</h2>
   <div><img src="@/assets/Sort/sort.png" alt="" /></div>
 
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeSort" />
 
   <ul>
@@ -37,6 +38,7 @@ export default {
     return {
       content: "",
       sortedArr: [],
+      skipHeader: true,
     };
   },
   components: {
@@ -47,7 +49,11 @@ export default {
   },
   computed: {
     contentLines: function () {
-      return this.content.split(/\n/).map((line) => String(line));
+      const lines = this.content.split(/\n/).map((line) => String(line));
+      if (this.skipHeader) {
+        return lines.slice(1);
+      }
+      return lines;
     },
     parsedLines: function () {
       return this.contentLines
