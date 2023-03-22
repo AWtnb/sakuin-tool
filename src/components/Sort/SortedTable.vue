@@ -1,5 +1,5 @@
 <template>
-  <div v-if="lines.length">
+  <div v-if="sortedArr.length">
     <div class="limit-height">
       <table>
         <thead>
@@ -10,15 +10,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(p, idx) in lines" :key="idx">
-            <td>{{ p.item }}</td>
-            <td class="reading">{{ p.reading }}</td>
-            <td class="normalized-reading">{{ p.normalized }}</td>
+          <tr v-for="(line, idx) in sortedArr" :key="idx">
+            <td>{{ line.item }}</td>
+            <td class="reading">{{ line.reading }}</td>
+            <td class="normalized-reading">{{ line.normalized }}</td>
           </tr>
         </tbody>
       </table>
     </div>
     <CopyButton :copyStr="resultStr" />
+    <label for="asTsv"><input type="checkbox" id="asTsv" v-model="asTsv">3列ともコピーする</label>
   </div>
 </template>
 
@@ -28,8 +29,23 @@ import CopyButton from "@/components/CopyButton.vue";
 export default {
   name: "SorttedTable",
   props: {
-    lines: Array,
-    resultStr: String,
+    sortedArr: Array,
+  },
+  data: function () {
+    return {
+      asTsv: true,
+    };
+  },
+  computed: {
+    resultArr: function () {
+      if (this.asTsv) {
+        return this.sortedArr.map((x) => `${x.item}\t${x.reading}\t${x.normalized}`);
+      }
+      return this.sortedArr.map((x) => x.item);
+    },
+    resultStr: function () {
+      return this.resultArr.join("\n");
+    },
   },
   components: {
     CopyButton,
