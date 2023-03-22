@@ -19,7 +19,7 @@
       </table>
     </div>
     <CopyButton :copyStr="resultStr" />
-    <label for="asTsv"><input type="checkbox" id="asTsv" v-model="asTsv">3列ともコピーする</label>
+    <label><input type="checkbox" v-model="asTsv">3列ともコピーする</label>
   </div>
 </template>
 
