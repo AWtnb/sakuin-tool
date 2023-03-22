@@ -1,5 +1,7 @@
 <template>
   <h2>ゲラから抽出した索引データの整形</h2>
+
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
   <ul>
@@ -54,6 +56,7 @@ export default {
       content: "",
       fmtArr: [],
       message: "",
+      skipHeader: true,
     };
   },
   components: {
@@ -62,7 +65,11 @@ export default {
   },
   computed: {
     contentLines: function () {
-      return this.content.split(/\n/).map((line) => String(line));
+      const lines = this.content.split(/\n/).map((line) => String(line));
+      if (this.skipHeader) {
+        return lines.slice(1);
+      }
+      return lines;
     },
     resultStr: function () {
       return this.fmtArr.map((x) => x.formatted).join("\n");

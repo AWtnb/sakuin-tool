@@ -1,5 +1,7 @@
 <template>
   <h2>子項目の復元</h2>
+
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat"/>
 
   <ResultBox :result="resultStr" />
@@ -40,6 +42,7 @@ export default {
     return {
       content: "",
       fmtArr: [],
+      skipHeader: true,
     };
   },
   components: {
@@ -48,7 +51,11 @@ export default {
   },
   computed: {
     contentLines: function () {
-      return this.content.split(/\n/).map((line) => String(line));
+      const lines = this.content.split(/\n/).map((line) => String(line));
+      if (this.skipHeader) {
+        return lines.slice(1);
+      }
+      return lines;
     },
     pureLines: function () {
       return this.contentLines.filter((line) => line.trim()).map((line) => line.trim());

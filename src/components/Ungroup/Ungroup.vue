@@ -1,5 +1,7 @@
 <template>
   <h2>名開き</h2>
+
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
   <UngroupedTable :lines="ungroupedLines" :resultStr="resultStr" />
@@ -44,6 +46,7 @@ export default {
     return {
       content: "",
       ungroupedLines: [],
+      skipHeader: true,
     };
   },
   components: {
@@ -53,7 +56,11 @@ export default {
   },
   computed: {
     contentLines: function () {
-      return this.content.split(/\n/).map((line) => String(line));
+      const lines = this.content.split(/\n/).map((line) => String(line));
+      if (this.skipHeader) {
+        return lines.slice(1);
+      }
+      return lines;
     },
     resultStr: function () {
       return this.ungroupedLines.map((x) => `${x.name}\t${x.nombre}`.trimEnd()).join("\n");
