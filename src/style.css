@@ -4,6 +4,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  max-width: 680px;
+}
+
 code {
   font-family: "IBM Plex Sans JP", ui-monospace, Consolas, monospace;
   font-size: 0.85em;
@@ -35,10 +39,6 @@ img ~ em {
 
 li img {
   margin: 14px 0;
-}
-
-textarea:not([cols]), textarea:not([rows]) {
-  width: 30rem;
 }
 
 button {
