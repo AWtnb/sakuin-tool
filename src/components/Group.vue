@@ -7,14 +7,9 @@
 
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGrouping" />
 
-  <div>
-    <input type="checkbox" id="isLeft" v-model="isLeft" />
-    <label for="isLeft">ノンブルが左列</label>
-  </div>
-  <div>
-    <input type="checkbox" id="isOrdered" v-model="isOrdered" />
-    <label for="isOrdered">連続している項目のみ名寄せする</label>
-  </div>
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
+  <label><input type="checkbox" v-model="isLeft" />ノンブルが左列</label>
+  <label><input type="checkbox" v-model="isOrdered" />連続している項目のみ名寄せする</label>
 
   <ResultBox :result="resultStr" />
 </template>
@@ -32,6 +27,7 @@ export default {
       lines: [],
       isLeft: false,
       isOrdered: false,
+      skipHeader: true,
     };
   },
   components: {
@@ -40,7 +36,11 @@ export default {
   },
   computed: {
     contentLines: function () {
-      return this.content.split(/\n/).map((line) => String(line));
+      const lines = this.content.split(/\n/).map((line) => String(line));
+      if (this.skipHeader) {
+        return lines.slice(1);
+      }
+      return lines;
     },
     resultStr: function () {
       return this.lines.join("\n");
@@ -60,3 +60,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+label {
+  display: block;
+}
+</style>
