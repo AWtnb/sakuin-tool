@@ -12,7 +12,7 @@
 
 <script>
 import SectionEnd from "@/components/SectionEnd.vue";
-import PlusMinus from "@/components/AdjustNombre/PlusMinus.vue";
+import PlusMinus from "@/components/PlusMinus/PlusMinus.vue";
 import JaConv from "@/components/JaConv.vue";
 import Romanize from "@/components/Romanize.vue";
 

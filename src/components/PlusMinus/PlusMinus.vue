@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import AddressDiff from "@/components/AdjustNombre/AddressDiff.vue";
+import AddressDiff from "@/components/PlusMinus/AddressDiff.vue";
 import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
