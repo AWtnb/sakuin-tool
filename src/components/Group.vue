@@ -29,9 +29,7 @@ const reset = () => {
 const executeGrouping = () => {
   reset();
   const grouper = new Grouper(contentLines.value, isLeft.value);
-  grouper.getGroupedLines(isOrdered.value).forEach((x) => {
-    groupedLines.value.push(x);
-  });
+  groupedLines.value = grouper.getGroupedLines(isOrdered.value);
 };
 </script>
 
