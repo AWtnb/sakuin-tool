@@ -1,3 +1,40 @@
+<script setup>
+import { ref, computed } from "vue";
+
+import { Grouper } from "@/helpers/grouper";
+import PasteBox from "@/components/PasteBox.vue";
+import ResultBox from "@/components/ResultBox.vue";
+
+const content = ref("");
+const groupedLines = ref([]);
+const isLeft = ref(false);
+const isOrdered = ref(false);
+const skipHeader = ref(true);
+
+const contentLines = computed(() => {
+  const lines = content.value.split(/\n/).map((line) => String(line));
+  if (skipHeader.value) {
+    return lines.slice(1);
+  }
+  return lines;
+});
+const resultStr = computed(() => {
+  return groupedLines.value.join("\n");
+});
+
+const reset = () => {
+  groupedLines.value = [];
+};
+
+const executeGrouping = () => {
+  reset();
+  const grouper = new Grouper(contentLines.value, isLeft.value);
+  grouper.getGroupedLines(isOrdered.value).forEach((x) => {
+    groupedLines.value.push(x);
+  });
+};
+</script>
+
 <template>
   <h2>名寄せ</h2>
   <div
@@ -13,53 +50,6 @@
 
   <ResultBox :result="resultStr" />
 </template>
-
-<script>
-import { Grouper } from "@/helpers/grouper";
-import PasteBox from "@/components/PasteBox.vue";
-import ResultBox from "@/components/ResultBox.vue";
-
-export default {
-  name: "Group",
-  data: function () {
-    return {
-      content: "",
-      lines: [],
-      isLeft: false,
-      isOrdered: false,
-      skipHeader: true,
-    };
-  },
-  components: {
-    PasteBox,
-    ResultBox,
-  },
-  computed: {
-    contentLines: function () {
-      const lines = this.content.split(/\n/).map((line) => String(line));
-      if (this.skipHeader) {
-        return lines.slice(1);
-      }
-      return lines;
-    },
-    resultStr: function () {
-      return this.lines.join("\n");
-    },
-  },
-  methods: {
-    reset: function () {
-      this.lines = [];
-    },
-    executeGrouping: function () {
-      this.reset();
-      const grouper = new Grouper(this.contentLines, this.isLeft);
-      grouper.getGroupedLines(this.isOrdered).forEach((x) => {
-        this.lines.push(x);
-      });
-    },
-  },
-};
-</script>
 
 <style scoped>
 label {
