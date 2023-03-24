@@ -1,6 +1,8 @@
 <template>
-  <h3>{{ msg }}</h3>
-  <DuplicateTable :detailsArr="duplicateRefs" />
+  <div v-if="duplicateRefs.length">
+    <h3>{{ msg }}</h3>
+    <DuplicateTable :detailsArr="duplicateRefs" />
+  </div>
 </template>
 
 <script>

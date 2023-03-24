@@ -3,21 +3,11 @@
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeCheck" />
 
   <div>
-    <div v-if="lostTo.length">
-      <RefLostTo :lostTo="lostTo"/>
-    </div>
-    <div v-if="lostFrom.length">
-      <RefLostFrom :lostFrom="lostFrom"/>
-    </div>
-    <div v-if="ungrouped.length">
-      <RefDuplicate :duplicateRefs="ungrouped" msg="見よ項目から参照されている項目の名寄せが不十分です！"/>
-    </div>
-    <div v-if="conflicts.length">
-      <RefDuplicate :duplicateRefs="conflicts" msg="見よ項目が本項目として残っています！"/>
-    </div>
-    <div v-if="adjacent.length">
-      <RefAdjacent :adjacentRefs="adjacent"/>
-    </div>
+    <RefLostTo :lostTo="lostTo"/>
+    <RefLostFrom :lostFrom="lostFrom"/>
+    <RefDuplicate :duplicateRefs="ungrouped" msg="見よ項目から参照されている項目の名寄せが不十分です！"/>
+    <RefDuplicate :duplicateRefs="conflicts" msg="見よ項目が本項目として残っています！"/>
+    <RefAdjacent :adjacentRefs="adjacent"/>
     <div v-if="isPerfect" v-cloak>{{ message }}</div>
   </div>
 </template>
