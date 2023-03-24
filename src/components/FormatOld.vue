@@ -21,13 +21,9 @@ const formatOldIndex = (lines) => {
 const content = ref("");
 const fmtArr = ref([]);
 const message = ref("");
-const skipHeader = ref(true);
 
 const contentLines = computed(() => {
   const lines = content.value.split(/\n/).map((line) => String(line));
-  if (skipHeader.value) {
-    return lines.slice(1);
-  }
   return lines;
 });
 
@@ -57,7 +53,6 @@ const executeFormat = () => {
 <template>
   <h2>ゲラから抽出した索引データの整形</h2>
 
-  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
   <ul>
