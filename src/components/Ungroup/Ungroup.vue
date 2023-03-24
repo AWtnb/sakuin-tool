@@ -1,16 +1,10 @@
-<template>
-  <h2>名開き</h2>
+<script setup>
+import { ref, computed } from "vue";
 
-  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
-
-  <UngroupedTable :lines="ungroupedLines" :resultStr="resultStr" />
-
-  <div><img src="@/assets/Ungroup/ungroup.png" alt="" /> </div>
-</template>
-
-<script>
 import { Entry, AddressHandler } from "@/helpers/entryHandler.js";
+
+import PasteBox from "@/components/PasteBox.vue";
+import UngroupedTable from "@/components/Ungroup/UngroupedTable.vue";
 
 const ungroupEntries = (lines) => {
   const stack = [];
@@ -36,46 +30,33 @@ const ungroupEntries = (lines) => {
   return stack;
 };
 
-import CopyButton from "@/components/CopyButton.vue";
-import PasteBox from "@/components/PasteBox.vue";
-import UngroupedTable from "@/components/Ungroup/UngroupedTable.vue";
+const content = ref("");
+const ungroupedLines = ref([]);
 
-export default {
-  name: "Ungroup",
-  data: function () {
-    return {
-      content: "",
-      ungroupedLines: [],
-      skipHeader: true,
-    };
-  },
-  components: {
-    CopyButton,
-    PasteBox,
-    UngroupedTable,
-  },
-  computed: {
-    contentLines: function () {
-      const lines = this.content.split(/\n/).map((line) => String(line));
-      if (this.skipHeader) {
-        return lines.slice(1);
-      }
-      return lines;
-    },
-    resultStr: function () {
-      return this.ungroupedLines.map((x) => `${x.name}\t${x.nombre}`.trimEnd()).join("\n");
-    },
-  },
-  methods: {
-    reset: function () {
-      this.ungroupedLines = [];
-    },
-    executeFormat: function () {
-      this.reset();
-      ungroupEntries(this.contentLines).forEach((x, i) => {
-        this.ungroupedLines.push(x);
-      });
-    },
-  },
+const contentLines = computed(() => {
+  const lines = content.value.split(/\n/).map((line) => String(line));
+  return lines;
+});
+
+const resultStr = computed(() => {
+  return ungroupedLines.value.map((x) => `${x.name}\t${x.nombre}`.trimEnd()).join("\n");
+});
+
+const reset = () => {
+  ungroupedLines.value = [];
+};
+const executeFormat = () => {
+  reset();
+  ungroupedLines.value = ungroupEntries(contentLines.value);
 };
 </script>
+
+<template>
+  <h2>名開き</h2>
+
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
+
+  <UngroupedTable :lines="ungroupedLines" :resultStr="resultStr" />
+
+  <div><img src="@/assets/Ungroup/ungroup.png" alt="" /> </div>
+</template>
