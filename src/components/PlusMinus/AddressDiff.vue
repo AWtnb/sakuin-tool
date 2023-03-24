@@ -1,6 +1,6 @@
 <template>
   <span v-for="(dtl, idx) in diffDetails" :key="idx">
-    <del style="color: #bbb">{{ dtl.before }}</del>
+    <del>{{ dtl.before }}</del>
     <span :style="{ color: dtl.color }">{{ dtl.text }}</span>
     <span v-if="!dtl.isEnd">, </span>
   </span>
@@ -17,3 +17,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+del {
+  color: #bbb;
+}
+</style>
