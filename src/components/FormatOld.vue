@@ -1,3 +1,59 @@
+<script setup>
+import { ref, computed } from "vue";
+
+import { OldIndexLine } from "@/helpers/oldIndexLine.js";
+
+import PasteBox from "@/components/PasteBox.vue";
+import ResultBox from "@/components/ResultBox.vue";
+
+const formatOldIndex = (lines) => {
+  return lines
+    .map((line) => String(line).trimEnd().replace(/\t/, "\u3000\u3000"))
+    .map((line) => {
+      const fmt = new OldIndexLine(line).getFormattedLine();
+      return {
+        formatted: fmt,
+        original: line,
+      };
+    });
+};
+
+const content = ref("");
+const fmtArr = ref([]);
+const message = ref("");
+const skipHeader = ref(true);
+
+const contentLines = computed(() => {
+  const lines = content.value.split(/\n/).map((line) => String(line));
+  if (skipHeader.value) {
+    return lines.slice(1);
+  }
+  return lines;
+});
+
+const resultStr = computed(() => {
+  return fmtArr.value.map((x) => x.formatted).join("\n");
+});
+
+const modified = computed(() => {
+  return fmtArr.value.filter((x) => x.formatted != x.original);
+});
+
+const reset = () => {
+  fmtArr.value = [];
+};
+
+const executeFormat = () => {
+  reset();
+  fmtArr.value = formatOldIndex(contentLines.value);
+  if (modified.value.length > 0) {
+    message.value = modified.value.length + "箇所を修正しました！";
+  } else {
+    message.value = "問題のある箇所は見当たりませんでした！";
+  }
+};
+</script>
+
 <template>
   <h2>ゲラから抽出した索引データの整形</h2>
 
@@ -22,7 +78,7 @@
     <h4>{{ message }}</h4>
     <ol v-if="modified.length"
       ><li v-for="(fmt, idx) in modified" :key="idx">
-        <ul>
+        <ul class="detail">
           <li class="original">{{ fmt.original }}</li>
           <li class="formatted">{{ fmt.formatted }}</li>
         </ul>
@@ -31,73 +87,13 @@
   </div>
 </template>
 
-<script>
-import { OldIndexLine } from "@/helpers/oldIndexLine.js";
-
-const formatOldIndex = (lines) => {
-  return lines
-    .map((line) => String(line).trimEnd().replace(/\t/, "\u3000\u3000"))
-    .map((line) => {
-      const fmt = new OldIndexLine(line).getFormattedLine();
-      return {
-        formatted: fmt,
-        original: line,
-      };
-    });
-};
-
-import PasteBox from "@/components/PasteBox.vue";
-import ResultBox from "@/components/ResultBox.vue";
-
-export default {
-  name: "FormatOld",
-  data: function () {
-    return {
-      content: "",
-      fmtArr: [],
-      message: "",
-      skipHeader: true,
-    };
-  },
-  components: {
-    PasteBox,
-    ResultBox,
-  },
-  computed: {
-    contentLines: function () {
-      const lines = this.content.split(/\n/).map((line) => String(line));
-      if (this.skipHeader) {
-        return lines.slice(1);
-      }
-      return lines;
-    },
-    resultStr: function () {
-      return this.fmtArr.map((x) => x.formatted).join("\n");
-    },
-    modified: function () {
-      return this.fmtArr.filter((x) => x.formatted != x.original);
-    },
-  },
-  methods: {
-    reset: function () {
-      this.fmtArr = [];
-    },
-    executeFormat: function () {
-      this.reset();
-      formatOldIndex(this.contentLines).forEach((x) => {
-        this.fmtArr.push(x);
-      });
-      if (this.modified.length > 0) {
-        this.message = this.modified.length + "箇所を修正しました！";
-      } else {
-        this.message = "問題のある箇所は見当たりませんでした！";
-      }
-    },
-  },
-};
-</script>
-
 <style scoped>
+.detail {
+  padding-left: 0;
+}
+.detail li {
+  list-style: none;
+}
 .original {
   color: gray;
 }
