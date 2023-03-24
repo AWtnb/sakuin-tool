@@ -1,3 +1,25 @@
+<script setup>
+import { ref, computed } from "vue";
+import CopyButton from "@/components/CopyButton.vue";
+
+const props = defineProps({
+  sortedArr: Array,
+});
+
+const asTsv = ref(true);
+
+const resultArr = computed(() => {
+  if (asTsv.value) {
+    return props.sortedArr.map((x) => `${x.item}\t${x.reading}\t${x.normalized}`);
+  }
+  return props.sortedArr.map((x) => x.item);
+});
+
+const resultStr = computed(() => {
+  return resultArr.value.join("\n");
+});
+</script>
+
 <template>
   <div v-if="sortedArr.length">
     <div class="limit-height">
@@ -19,39 +41,9 @@
       </table>
     </div>
     <CopyButton :copyStr="resultStr" />
-    <label><input type="checkbox" v-model="asTsv">3列ともコピーする</label>
+    <label><input type="checkbox" v-model="asTsv" />3列ともコピーする</label>
   </div>
 </template>
-
-<script>
-import CopyButton from "@/components/CopyButton.vue";
-
-export default {
-  name: "SorttedTable",
-  props: {
-    sortedArr: Array,
-  },
-  data: function () {
-    return {
-      asTsv: true,
-    };
-  },
-  computed: {
-    resultArr: function () {
-      if (this.asTsv) {
-        return this.sortedArr.map((x) => `${x.item}\t${x.reading}\t${x.normalized}`);
-      }
-      return this.sortedArr.map((x) => x.item);
-    },
-    resultStr: function () {
-      return this.resultArr.join("\n");
-    },
-  },
-  components: {
-    CopyButton,
-  },
-};
-</script>
 
 <style scoped>
 .reading,
