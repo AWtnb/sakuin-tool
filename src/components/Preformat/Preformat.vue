@@ -1,29 +1,10 @@
-<template>
-  <h2>入力済テンプレートの整形</h2>
+<script setup>
+import { ref, computed } from "vue";
 
-  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
-
-  <h3>整形内容</h3>
-  <ul>
-    <li>項目を左列に、ページを右列に配置</li>
-    <li
-      ><code>見よ先</code>が入力されている場合：
-      <ul>
-        <li><code>　→</code>でつないで見よ項目を作成</li>
-        <li>ノンブルを削除</li>
-        <li>代わりに同じノンブルで見よ先項目を作成</li>
-      </ul>
-    </li>
-  </ul>
-
-  <FormattedTable :lines="lines" :resultStr="resultStr" />
-
-  <div><img src="@/assets/Preformat/preformat.png" alt="" /></div>
-</template>
-
-<script>
 import { Util } from "@/helpers/utils.js";
+
+import PasteBox from "@/components/PasteBox.vue";
+import FormattedTable from "@/components/Preformat/FormattedTable.vue";
 
 const formatIndexTemplate = (lines) => {
   const stack = [];
@@ -53,46 +34,51 @@ const formatIndexTemplate = (lines) => {
   return stack;
 };
 
-import CopyButton from "@/components/CopyButton.vue";
-import PasteBox from "@/components/PasteBox.vue";
-import FormattedTable from "@/components/Preformat/FormattedTable.vue";
+const content = ref("");
+const tableRows = ref([]);
+const skipHeader = ref(true);
 
-export default {
-  name: "Preformat",
-  data: function () {
-    return {
-      content: "",
-      lines: [],
-      skipHeader: true,
-    };
-  },
-  components: {
-    CopyButton,
-    PasteBox,
-    FormattedTable,
-  },
-  computed: {
-    contentLines: function () {
-      const lines = this.content.split(/\n/).map((line) => String(line));
-      if (this.skipHeader) {
-        return lines.slice(1);
-      }
-      return lines;
-    },
-    resultStr: function () {
-      return this.lines.map((x) => `${x.name}\t${x.nombre}`).join("\n");
-    },
-  },
-  methods: {
-    reset: function () {
-      this.lines = [];
-    },
-    executeFormat: function () {
-      this.reset();
-      formatIndexTemplate(this.contentLines).forEach((x) => {
-        this.lines.push(x);
-      });
-    },
-  },
+const contentLines = computed(() => {
+  const lines = content.value.split(/\n/).map((line) => String(line));
+  if (skipHeader.value) {
+    return lines.slice(1);
+  }
+  return lines;
+});
+
+const resultStr = computed(() => {
+  return tableRows.value.map((x) => `${x.name}\t${x.nombre}`).join("\n");
+});
+
+const reset = () => {
+  tableRows.value = [];
+};
+const executeFormat = () => {
+  reset();
+  tableRows.value = formatIndexTemplate(contentLines.value);
 };
 </script>
+
+<template>
+  <h2>入力済テンプレートの整形</h2>
+
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
+
+  <h3>整形内容</h3>
+  <ul>
+    <li>項目を左列に、ページを右列に配置</li>
+    <li
+      ><code>見よ先</code>が入力されている場合：
+      <ul>
+        <li><code>　→</code>でつないで見よ項目を作成</li>
+        <li>ノンブルを削除</li>
+        <li>代わりに同じノンブルで見よ先項目を作成</li>
+      </ul>
+    </li>
+  </ul>
+
+  <FormattedTable :lines="tableRows" :resultStr="resultStr" />
+
+  <div><img src="@/assets/Preformat/preformat.png" alt="" /></div>
+</template>
