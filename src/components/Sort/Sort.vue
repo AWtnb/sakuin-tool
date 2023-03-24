@@ -1,3 +1,48 @@
+<script setup>
+import { ref, computed } from "vue";
+
+import Normalize from "@/components/Sort/Normalize.vue";
+import SortedTable from "@/components/Sort/SortedTable.vue";
+import PasteBox from "@/components/PasteBox.vue";
+
+import { Sorter } from "@/helpers/sorter";
+
+const content = ref("");
+const sortedArr = ref([]);
+const skipHeader = ref(true);
+
+const contentLines = computed(() => {
+  const lines = content.value.split(/\n/).map((line) => String(line));
+  if (skipHeader.value) {
+    return lines.slice(1);
+  }
+  return lines;
+});
+
+const parsedLines = computed(() => {
+  return contentLines.value
+    .filter((line) => line.trim().length > 0)
+    .map((line) => {
+      const [item, reading, ...rest] = line.split("\t").map((x) => x.trim());
+      return {
+        item: item,
+        reading: reading,
+      };
+    });
+});
+
+const reset = () => {
+  sortedArr.value = [];
+};
+
+const executeSort = () => {
+  reset();
+  const sorter = new Sorter();
+  parsedLines.value.forEach((x) => sorter.addData(x.item, x.reading));
+  sortedArr.value = sorter.execute();
+};
+</script>
+
 <template>
   <h2>並べ替え</h2>
   <div><img src="@/assets/Sort/sort.png" alt="" /></div>
@@ -22,66 +67,6 @@
 
   <Normalize />
 </template>
-
-<script>
-
-import CopyButton from "@/components/CopyButton.vue";
-import Normalize from "@/components/Sort/Normalize.vue";
-import SortedTable from "@/components/Sort/SortedTable.vue";
-import PasteBox from "@/components/PasteBox.vue";
-
-import { Sorter } from "@/helpers/sorter";
-
-export default {
-  name: "Sort",
-  data: function () {
-    return {
-      content: "",
-      sortedArr: [],
-      skipHeader: true,
-    };
-  },
-  components: {
-    CopyButton,
-    Normalize,
-    SortedTable,
-    PasteBox,
-  },
-  computed: {
-    contentLines: function () {
-      const lines = this.content.split(/\n/).map((line) => String(line));
-      if (this.skipHeader) {
-        return lines.slice(1);
-      }
-      return lines;
-    },
-    parsedLines: function () {
-      return this.contentLines
-        .filter((line) => line.trim().length > 0)
-        .map((line) => {
-          const [item, reading, ...rest] = line.split("\t").map((x) => x.trim());
-          return {
-            item: item,
-            reading: reading,
-          };
-        });
-    },
-  },
-  methods: {
-    reset: function () {
-      this.sortedLines = [];
-    },
-    executeSort: function () {
-      this.reset();
-      const sorter = new Sorter();
-      this.parsedLines.forEach((x) => sorter.addData(x.item, x.reading));
-      sorter.execute().forEach((x) => {
-        this.sortedArr.push(x);
-      });
-    },
-  },
-};
-</script>
 
 <style scoped>
 .reading,
