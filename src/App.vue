@@ -1,3 +1,10 @@
+<script setup>
+import { ref } from "vue";
+import HomeIcon from "@/components/HomeIcon.vue";
+import ToggleRevision from "@/components/ToggleRevision.vue";
+const isRevision = ref(false);
+</script>
+
 <template>
   <nav>
     <ToggleRevision v-on:updateState="isRevision = $event.target.checked" />
@@ -16,24 +23,6 @@
   </nav>
   <router-view />
 </template>
-
-<script>
-import HomeIcon from "@/components/HomeIcon.vue";
-import ToggleRevision from "@/components/ToggleRevision.vue";
-
-export default {
-  name: "App",
-  data: function () {
-    return {
-      isRevision: false,
-    };
-  },
-  components: {
-    HomeIcon,
-    ToggleRevision,
-  },
-};
-</script>
 
 <style scoped>
 .menu {
