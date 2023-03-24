@@ -37,23 +37,16 @@ const reset = () => {
 
 const executeCheck = () => {
   reset();
+
   const refChecker = new ReferenceChecker(contentLines.value);
-  refChecker.goalLostReference().forEach((x) => {
-    lostTo.value.push(x);
-  });
-  refChecker.requiredFromReference().forEach((x) => {
-    lostFrom.value.push(x);
-  });
-  refChecker.findAdjacent().forEach((x) => {
-    adjacent.value.push(x);
-  });
+  lostTo.value = refChecker.goalLostReference();
+  lostFrom.value = refChecker.requiredFromReference();
+  adjacent.value = refChecker.findAdjacent();
+
   const groupChecker = new GroupChecker(contentLines.value);
-  groupChecker.getUngrouped().forEach((x) => {
-    ungrouped.value.push(x);
-  });
-  groupChecker.getConflicting().forEach((x) => {
-    conflicts.value.push(x);
-  });
+  ungrouped.value = groupChecker.getUngrouped();
+  conflicts.value = groupChecker.getConflicting();
+
   if (isPerfect.value) {
     message.value = "問題は見当たりません！ 完璧かもしれません！";
   }
