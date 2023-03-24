@@ -1,3 +1,59 @@
+<script setup>
+import { ref, computed } from "vue";
+
+import AddressDiff from "@/components/PlusMinus/AddressDiff.vue";
+import PasteBox from "@/components/PasteBox.vue";
+import ResultBox from "@/components/ResultBox.vue";
+
+import { EntryLines } from "@/helpers/addressAdjuster.js";
+
+const content = ref("");
+const start = ref(1);
+const end = ref(999);
+const delta = ref(1);
+const adjustedArr = ref([]);
+const diffArr = ref([]);
+const message = ref("");
+
+const contentLines = computed(() => {
+  return content.value.split(/\n/).map((line) => String(line));
+});
+
+const resultStr = computed(() => {
+  return adjustedArr.value
+    .map((x) => {
+      if (x.newNombres.length) {
+        return `${x.name}\u3000\u3000${x.newNombres.join(", ")}`;
+      }
+      return x.name;
+    })
+    .join("\n");
+});
+
+const reset = () => {
+  message.value = "";
+  adjustedArr.value = [];
+  diffArr.value = [];
+};
+
+const executeAdjust = () => {
+  reset();
+  const eLines = new EntryLines(contentLines.value, start.value, end.value, delta.value);
+  adjustedArr.value = eLines.adjust();
+  diffArr.value = adjustedArr.value
+    .filter((x) => x.comparison.modified)
+    .map((x) => ({
+      name: x.name,
+      detail: x.comparison.detail,
+    }));
+  if (diffArr.value.length) {
+    message.value = diffArr.value.length + "件の変更があります。";
+  } else {
+    message.value = "修正箇所はありません。";
+  }
+};
+</script>
+
 <template>
   <h2>ノンブル加算減算</h2>
   <ul class="config">
@@ -21,80 +77,15 @@
   </div>
 </template>
 
-<script>
-import AddressDiff from "@/components/PlusMinus/AddressDiff.vue";
-import PasteBox from "@/components/PasteBox.vue";
-import ResultBox from "@/components/ResultBox.vue";
-
-import { EntryLines } from "@/helpers/addressAdjuster.js";
-
-export default {
-  name: "PlusMinus",
-  data: function () {
-    return {
-      content: "",
-      start: 1,
-      end: 999,
-      delta: 1,
-      adjustedArr: [],
-      diffArr: [],
-      message: "",
-    };
-  },
-  components: {
-    AddressDiff,
-    PasteBox,
-    ResultBox,
-  },
-  computed: {
-    contentLines: function () {
-      return this.content.split(/\n/).map((line) => String(line));
-    },
-    resultStr: function () {
-      return this.adjustedArr
-        .map((x) => {
-          if (x.newNombres.length) {
-            return `${x.name}\u3000\u3000${x.newNombres.join(", ")}`;
-          }
-          return x.name;
-        })
-        .join("\n");
-    },
-  },
-  methods: {
-    reset: function () {
-      this.message = "";
-      this.adjustedArr = [];
-      this.diffArr = [];
-    },
-    executeAdjust: function () {
-      this.reset();
-      const eLines = new EntryLines(this.contentLines, this.start, this.end, this.delta);
-      this.adjustedArr = eLines.adjust();
-      this.adjustedArr
-        .filter((x) => x.comparison.modified)
-        .forEach((x) => {
-          this.diffArr.push({
-            name: x.name,
-            detail: x.comparison.detail,
-          });
-        });
-      if (this.diffArr.length) {
-        this.message = this.diffArr.length + "件の変更があります。";
-      } else {
-        this.message = "修正箇所はありません。";
-      }
-    },
-  },
-};
-</script>
-
 <style scoped>
 ul.config {
   display: flex;
   padding-left: 0;
 }
 ul.config li {
-  margin-left: 1rem;
+  margin: auto 1rem;
+}
+li input {
+  width: 100px;
 }
 </style>
