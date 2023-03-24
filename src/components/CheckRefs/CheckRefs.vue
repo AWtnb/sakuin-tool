@@ -1,18 +1,6 @@
-<template>
-  <h2>見よ項目の対応チェック</h2>
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeCheck" />
+<script setup>
+import { ref, computed } from "vue";
 
-  <div>
-    <RefLostTo :lostTo="lostTo"/>
-    <RefLostFrom :lostFrom="lostFrom"/>
-    <RefDuplicate :duplicateRefs="ungrouped" msg="見よ項目から参照されている項目の名寄せが不十分です！"/>
-    <RefDuplicate :duplicateRefs="conflicts" msg="見よ項目が本項目として残っています！"/>
-    <RefAdjacent :adjacentRefs="adjacent"/>
-    <div v-if="isPerfect" v-cloak>{{ message }}</div>
-  </div>
-</template>
-
-<script>
 import { ReferenceChecker } from "@/helpers/referenceChecker";
 import { GroupChecker } from "@/helpers/groupChecker";
 
@@ -22,66 +10,66 @@ import RefLostFrom from "@/components/CheckRefs/RefLostFrom.vue";
 import RefDuplicate from "@/components/CheckRefs/RefDuplicate.vue";
 import RefAdjacent from "@/components/CheckRefs/RefAdjacent.vue";
 
-export default {
-  name: "CheckRefs",
-  data: function () {
-    return {
-      content: "",
-      lostTo: [],
-      lostFrom: [],
-      adjacent: [],
-      ungrouped: [],
-      conflicts: [],
-      message: "",
-    };
-  },
-  components: {
-    PasteBox,
-    RefLostTo,
-    RefLostFrom,
-    RefDuplicate,
-    RefAdjacent,
-  },
-  computed: {
-    contentLines: function () {
-      return this.content.split(/\n/).map((line) => String(line));
-    },
-    isPerfect: function () {
-      return this.lostTo.length + this.lostFrom.length + this.adjacent.length + this.ungrouped.length + this.conflicts.length == 0;
-    },
-  },
-  methods: {
-    reset: function () {
-      this.lostTo = [];
-      this.lostFrom = [];
-      this.adjacent = [];
-      this.ungrouped = [];
-      this.conflicts = [];
-      this.message = "";
-    },
-    executeCheck: function () {
-      this.reset();
-      const refChecker = new ReferenceChecker(this.contentLines);
-      refChecker.goalLostReference().forEach((x) => {
-        this.lostTo.push(x);
-      });
-      refChecker.requiredFromReference().forEach((x) => {
-        this.lostFrom.push(x);
-      });
-      refChecker.findAdjacent().forEach((x) => {
-        this.adjacent.push(x);
-      });
-      const groupChecker = new GroupChecker(this.contentLines);
-      groupChecker.getUngrouped().forEach((x) => {
-        this.ungrouped.push(x);
-      });
-      groupChecker.getConflicting().forEach((x) => {
-        this.conflicts.push(x);
-      });
-      if (this.isPerfect) {
-        this.message = "問題は見当たりません！ 完璧かもしれません！";
-      }
-    },
-  },
+const content = ref("");
+const lostTo = ref([]);
+const lostFrom = ref([]);
+const adjacent = ref([]);
+const ungrouped = ref([]);
+const conflicts = ref([]);
+const message = ref("");
+
+const contentLines = computed(() => {
+  return content.value.split(/\n/).map((line) => String(line));
+});
+
+const isPerfect = computed(() => {
+  return lostTo.value.length + lostFrom.value.length + adjacent.value.length + ungrouped.value.length + conflicts.value.length == 0;
+});
+
+const reset = () => {
+  lostTo.value = [];
+  lostFrom.value = [];
+  adjacent.value = [];
+  ungrouped.value = [];
+  conflicts.value = [];
+  message.value = "";
+};
+
+const executeCheck = () => {
+  reset();
+  const refChecker = new ReferenceChecker(contentLines.value);
+  refChecker.goalLostReference().forEach((x) => {
+    lostTo.value.push(x);
+  });
+  refChecker.requiredFromReference().forEach((x) => {
+    lostFrom.value.push(x);
+  });
+  refChecker.findAdjacent().forEach((x) => {
+    adjacent.value.push(x);
+  });
+  const groupChecker = new GroupChecker(contentLines.value);
+  groupChecker.getUngrouped().forEach((x) => {
+    ungrouped.value.push(x);
+  });
+  groupChecker.getConflicting().forEach((x) => {
+    conflicts.value.push(x);
+  });
+  if (isPerfect.value) {
+    message.value = "問題は見当たりません！ 完璧かもしれません！";
+  }
 };
 </script>
+
+<template>
+  <h2>見よ項目の対応チェック</h2>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeCheck" />
+
+  <div>
+    <RefLostTo :lostTo="lostTo" />
+    <RefLostFrom :lostFrom="lostFrom" />
+    <RefDuplicate :duplicateRefs="ungrouped" msg="見よ項目から参照されている項目の名寄せが不十分です！" />
+    <RefDuplicate :duplicateRefs="conflicts" msg="見よ項目が本項目として残っています！" />
+    <RefAdjacent :adjacentRefs="adjacent" />
+    <div v-if="isPerfect" v-cloak>{{ message }}</div>
+  </div>
+</template>
