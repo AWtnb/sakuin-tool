@@ -1,7 +1,11 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import beforePath from "@/assets/Pickup/NewTemplate/before.png";
+import afterPath from "@/assets/Pickup/NewTemplate/after.png";
+
 import { toHalfWidth, arrayOfLines } from "@/helpers/utils";
+import BeforeAfter from "@/components/BeforeAfter.vue";
 import PasteBox from "@/components/PasteBox.vue";
 import TemplateTable from "@/components/Pickup/TemplateTable.vue";
 import ExcelSetting from "@/components/Pickup/ExcelSetting.vue";
@@ -64,9 +68,9 @@ const executeGenerate = () => {
 
   <TemplateTable :lines="tableRows" :resultStr="resultStr" />
 
-  <div><img src="@/assets/Pickup/newtemplate.png" alt="" /></div>
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath"/>
 
-  <p><code>個数</code>列は見よ項目がある場合、見よ先項目とのペアで1つとカウントします。</p>
+  <p>※<code>個数</code>列は見よ項目がある場合、見よ先項目とのペアで1つとカウントします。</p>
 
   <ExcelSetting />
 </template>
