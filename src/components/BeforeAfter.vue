@@ -25,6 +25,7 @@ export default {
   display: flex;
   justify-content: space-evenly;
   align-items: flex-start;
+  margin: 20px auto;
 }
 .arrow::before {
   display: block;

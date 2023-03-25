@@ -8,6 +8,12 @@ body {
   max-width: 680px;
 }
 
+h1 {
+  font-weight: bold;
+  font-size: 3rem;
+  margin-bottom: 1.5em;
+}
+
 code {
   font-family: "IBM Plex Sans JP", ui-monospace, Consolas, monospace;
   font-size: 0.85em;
