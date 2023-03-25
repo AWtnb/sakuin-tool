@@ -59,7 +59,7 @@ const convertMap = new Map();
 ].forEach((x) => convertMap.set(...x));
 
 export const normalizeReading = (s, removeNoise) => {
-  let katakana = Util.toHalfWidth(Util.toKatakana(s));
+  let katakana = toHalfWidth(toKatakana(s));
   for (let k of convertMap.keys()) {
     katakana = katakana.replaceAll(k, convertMap.get(k));
   }
