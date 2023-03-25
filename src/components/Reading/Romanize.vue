@@ -104,22 +104,24 @@ const resultStr = computed(() => {
 </script>
 
 <template>
-  <h2>ローマ字に変換</h2>
-  <textarea v-model="content"></textarea>
-  <ResultBox :result="resultStr" />
-  <ul>
-    <li
-      >ヘボン式ローマ字に従っています。
-      <ul>
-        <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
-      </ul>
-    </li>
-    <li
-      >変換できなかった文字はそのまま表示します。
-      <ul>
-        <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
-        <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
-      </ul>
-    </li>
-  </ul>
+  <details>
+    <summary>ローマ字に変換</summary>
+    <ul>
+      <li
+        >ヘボン式ローマ字に従っています。
+        <ul>
+          <li>拗音は「ゃ」「ゅ」「ょ」にのみ対応しています。</li>
+        </ul>
+      </li>
+      <li
+        >変換できなかった文字はそのまま表示します。
+        <ul>
+          <li>長音（ー）ならびに「ぁ」「ぃ」「ぅ」「ぇ」「ぉ」には非対応です。</li>
+          <li>日本語に登場する頻度の低い「ヴ」や、その他の表記が定まらないケースにも非対応です。</li>
+        </ul>
+      </li>
+    </ul>
+    <textarea v-model="content"></textarea>
+    <ResultBox :result="resultStr" />
+  </details>
 </template>

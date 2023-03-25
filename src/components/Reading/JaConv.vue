@@ -16,7 +16,9 @@ const resultStr = computed(() => {
 </script>
 
 <template>
-  <h2>カタカナひらがな相互変換</h2>
-  <textarea v-model="content"></textarea>
-  <ResultBox :result="resultStr" />
+  <details>
+    <summary>カタカナひらがな相互変換</summary>
+    <textarea v-model="content"></textarea>
+    <ResultBox :result="resultStr" />
+  </details>
 </template>

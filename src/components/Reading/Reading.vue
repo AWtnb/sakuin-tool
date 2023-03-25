@@ -1,3 +1,9 @@
+<script setup>
+import DownloadGuide from "@/components/Reading/DownloadGuide.vue";
+import JaConv from "@/components/Reading/JaConv.vue";
+import Romanize from "@/components/Reading/Romanize.vue";
+</script>
+
 <template>
   <h2>よみがな取得</h2>
 
@@ -31,6 +37,10 @@
     <li><strong>この先使用するのは左の2列だけです。</strong>3列目を見ながら、変換にミスがあれば2列目を修正していきます。</li>
   </ul>
 
+  <JaConv />
+
+  <Romanize />
+
   <h4>3. 必要な列をコピーする</h4>
   <div><img src="@/assets/Reading/yomi_demo03.png" alt="" /></div>
   <p>読みがなのチェック・修正が終わったら、左2列をコピーして以降のステップ（並べ替え）に進んでください。</p>
@@ -39,14 +49,3 @@
     <li>配列読みは次の並べ替えのステップで自動生成します。</li>
   </ul>
 </template>
-
-<script>
-import DownloadGuide from "@/components/Reading/DownloadGuide.vue";
-
-export default {
-  name: "Reading",
-  components: {
-    DownloadGuide,
-  },
-};
-</script>
