@@ -1,6 +1,10 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import beforePath from "@/assets/Preformat/before.png";
+import afterPath from "@/assets/Preformat/after.png";
+import BeforeAfter from "@/components/BeforeAfter.vue";
+
 import { toHalfWidth, arrayOfLines } from "@/helpers/utils.js";
 
 import PasteBox from "@/components/PasteBox.vue";
@@ -80,5 +84,6 @@ const executeFormat = () => {
 
   <FormattedTable :lines="tableRows" :resultStr="resultStr" />
 
-  <div><img src="@/assets/Preformat/preformat.png" alt="" /></div>
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath"/>
+
 </template>
