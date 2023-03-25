@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
-import { Util } from "@/helpers/utils.js";
+import { toKatakana } from "@/helpers/utils.js";
 import ResultBox from "@/components/ResultBox.vue";
 
 const romanMap = new Map();
@@ -84,7 +84,7 @@ const romanMap = new Map();
 ].forEach((x) => romanMap.set(...x));
 
 const romanize = (s) => {
-  let converted = Util.toKatakana(s);
+  let converted = toKatakana(s);
   for (let k of romanMap.keys()) {
     const reg = new RegExp(k, "g");
     converted = converted.replace(reg, romanMap.get(k));

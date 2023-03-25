@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
-import { Util } from "@/helpers/utils.js";
+import { toHalfWidth } from "@/helpers/utils.js";
 
 import PasteBox from "@/components/PasteBox.vue";
 import FormattedTable from "@/components/Preformat/FormattedTable.vue";
@@ -12,7 +12,7 @@ const formatIndexTemplate = (lines) => {
     .filter((x) => x.trim())
     .forEach((line) => {
       const [nombre, name, referTo, ...rest] = line.split("\t").map((x) => x.trim());
-      const nStr = String(Util.toHalfWidth(nombre));
+      const nStr = String(toHalfWidth(nombre));
       if (String(referTo).length > 0) {
         stack.push({
           nombre: "",

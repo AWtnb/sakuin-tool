@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
-import { Util } from "@/helpers/utils";
+import { toHalfWidth } from "@/helpers/utils";
 import PasteBox from "@/components/PasteBox.vue";
 import TemplateTable from "@/components/Pickup/TemplateTable.vue";
 import ExcelSetting from "@/components/Pickup/ExcelSetting.vue";
@@ -13,7 +13,7 @@ const generateTemplate = (lines) => {
     .filter((line) => line)
     .forEach((line) => {
       const [page, counter, ...rest] = line.split("\t");
-      const nItem = Util.toHalfWidth(counter);
+      const nItem = toHalfWidth(counter);
       if (Number(nItem) > 0) {
         pageIdx += 1;
         for (let i = 0; i < Number(nItem); i++) {
