@@ -1,6 +1,10 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import beforePath from "@/assets/ResolveChild/before.png";
+import afterPath from "@/assets/ResolveChild/after.png";
+import BeforeAfter from "@/components/BeforeAfter.vue";
+
 import { arrayOfLines } from "@/helpers/utils.js";
 import { Entry } from "@/helpers/entryHandler.js";
 import PasteBox from "@/components/PasteBox.vue";
@@ -43,21 +47,21 @@ const resultStr = computed(() => {
   return fmtArr.value.join("\n");
 });
 
-
 const reset = () => {
   fmtArr.value = [];
-}
+};
 const executeFormat = () => {
   reset();
   fmtArr.value = resolveChildEntry(pureLines.value);
-}
+};
 </script>
 
 <template>
   <h2>子項目の復元</h2>
 
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
+
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
   <ResultBox :result="resultStr" />
-  <div><img src="@/assets/ResolveChild/resolveChild.png" alt="" /> </div>
 </template>
