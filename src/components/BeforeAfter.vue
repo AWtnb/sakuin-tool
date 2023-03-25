@@ -24,8 +24,7 @@ export default {
 .box {
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  padding: 10px 0;
+  padding: 20px;
   align-items: flex-start;
 }
 .arrow::before {
