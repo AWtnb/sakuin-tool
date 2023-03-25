@@ -66,8 +66,7 @@ const executeFormat = () => {
 <template>
   <h2>入力済テンプレートの整形</h2>
 
-  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
 
   <h3>整形内容</h3>
   <ul>
@@ -82,8 +81,8 @@ const executeFormat = () => {
     </li>
   </ul>
 
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
+
   <FormattedTable :lines="tableRows" :resultStr="resultStr" />
-
-  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath"/>
-
 </template>

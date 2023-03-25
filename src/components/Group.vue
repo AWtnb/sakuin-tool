@@ -45,11 +45,11 @@ const executeGrouping = () => {
 
   <p>ノンブルの<span style="color: red">並び</span>、<span style="color: blue">重複</span>、<span style="color: green">連続</span>を整理します。記号での装飾にも対応。</p>
 
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGrouping" />
-
   <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <label><input type="checkbox" v-model="isLeft" />ノンブルが左列</label>
   <label><input type="checkbox" v-model="isOrdered" />連続している項目のみ名寄せする</label>
+
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGrouping" />
 
   <ResultBox :result="resultStr" />
 </template>

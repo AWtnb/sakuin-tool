@@ -51,24 +51,17 @@ const executeSort = () => {
 <template>
   <h2>並べ替え</h2>
 
-  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath"/>
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
+
+  <p><code>読み</code>の情報を<code>配列読み</code>に変換して並べ替えます。<strong>1列目が最終的な索引になります。</strong></p>
+  <ul>
+    <li>最優先は<code>配列読み</code>の情報。</li>
+    <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+    <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
+  </ul>
 
   <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeSort" />
-
-  <ul>
-    <li><code>名寄せした索引項目</code>と<code>読み</code>の2列を貼り付けてください。</li>
-    <li
-      >内部で<code>読み</code>の情報を<code>配列読み</code>に変換して並べ替えます。
-      <ul>
-        <li>最優先は<code>配列読み</code>の情報。</li>
-        <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
-        <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
-      </ul>
-    </li>
-    <li><strong>1列目が最終的な索引になります。</strong></li>
-  </ul>
-
   <SortedTable :sortedArr="sortedArr" />
 
   <Normalize />

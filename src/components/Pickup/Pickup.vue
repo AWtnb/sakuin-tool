@@ -57,20 +57,18 @@ const executeGenerate = () => {
   reset();
   tableRows.value = generateTemplate(contentLines.value);
 };
-
 </script>
 
 <template>
   <h2>索引拾いのテンプレート生成</h2>
 
-  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGenerate" />
-
-  <TemplateTable :lines="tableRows" :resultStr="resultStr" />
-
-  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath"/>
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
 
   <p>※<code>個数</code>列は見よ項目がある場合、見よ先項目とのペアで1つとカウントします。</p>
+
+  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGenerate" />
+  <TemplateTable :lines="tableRows" :resultStr="resultStr" />
 
   <ExcelSetting />
 </template>

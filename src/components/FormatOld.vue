@@ -51,9 +51,6 @@ const executeFormat = () => {
 
 <template>
   <h2>ゲラから抽出した索引データの整形</h2>
-
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
-
   <ul>
     <li
       ><strong>ゲラからテキストを抽出すると長い行が折り返されて改行になっていることがあります。</strong
@@ -65,6 +62,8 @@ const executeFormat = () => {
     <li>連続するノンブルを示すダーシの種類を<code>&ndash;</code>（enダーシ）に統一します。</li>
     <li>子項目のダーシの種類を<code>&horbar;&horbar;</code>（2倍ダーシ）に統一します。</li>
   </ul>
+
+  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
   <ResultBox :result="resultStr" />
 
