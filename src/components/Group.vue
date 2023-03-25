@@ -1,6 +1,10 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import beforePath from "@/assets/Group/before.png";
+import afterPath from "@/assets/Group/after.png";
+import BeforeAfter from "@/components/BeforeAfter.vue";
+
 import { arrayOfLines } from "@/helpers/utils.js";
 import { Grouper } from "@/helpers/grouper";
 import PasteBox from "@/components/PasteBox.vue";
@@ -36,10 +40,10 @@ const executeGrouping = () => {
 
 <template>
   <h2>名寄せ</h2>
-  <div
-    ><img src="@/assets/Group/group.png" alt="" />
-    <em>ノンブルの<span style="color: red">並び</span>、<span style="color: blue">重複</span>、<span style="color: green">連続</span>を整理。記号での装飾にも対応。</em>
-  </div>
+
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
+
+  <p>ノンブルの<span style="color: red">並び</span>、<span style="color: blue">重複</span>、<span style="color: green">連続</span>を整理します。記号での装飾にも対応。</p>
 
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGrouping" />
 
