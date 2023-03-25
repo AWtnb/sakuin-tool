@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import { arrayOfLines } from "@/helpers/utils.js";
 import AddressDiff from "@/components/PlusMinus/AddressDiff.vue";
 import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
@@ -16,7 +17,7 @@ const diffArr = ref([]);
 const message = ref("");
 
 const contentLines = computed(() => {
-  return content.value.split(/\n/).map((line) => String(line));
+  return arrayOfLines(content.value);
 });
 
 const resultStr = computed(() => {

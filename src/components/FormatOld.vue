@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import { arrayOfLines } from "@/helpers/utils.js";
 import { OldIndexLine } from "@/helpers/oldIndexLine.js";
-
 import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
@@ -23,8 +23,7 @@ const fmtArr = ref([]);
 const message = ref("");
 
 const contentLines = computed(() => {
-  const lines = content.value.split(/\n/).map((line) => String(line));
-  return lines;
+  return arrayOfLines(content.value);
 });
 
 const resultStr = computed(() => {

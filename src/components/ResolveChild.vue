@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import { arrayOfLines } from "@/helpers/utils.js";
 import { Entry } from "@/helpers/entryHandler.js";
-
 import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
@@ -32,8 +32,7 @@ const content = ref("");
 const fmtArr = ref([]);
 
 const contentLines = computed(() => {
-  const lines = content.value.split(/\n/).map((line) => String(line));
-  return lines;
+  return arrayOfLines(content.value);
 });
 
 const pureLines = computed(() => {

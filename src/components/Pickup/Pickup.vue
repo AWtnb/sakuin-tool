@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
-import { toHalfWidth } from "@/helpers/utils";
+import { toHalfWidth, arrayOfLines } from "@/helpers/utils";
 import PasteBox from "@/components/PasteBox.vue";
 import TemplateTable from "@/components/Pickup/TemplateTable.vue";
 import ExcelSetting from "@/components/Pickup/ExcelSetting.vue";
@@ -33,7 +33,7 @@ const tableRows = ref([]);
 const skipHeader = ref(true);
 
 const contentLines = computed(() => {
-  const lines = content.value.split(/\n/).map((line) => String(line));
+  const lines = arrayOfLines(content.value);
   if (skipHeader.value) {
     return lines.slice(1);
   }

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
-import { toHalfWidth } from "@/helpers/utils.js";
+import { toHalfWidth, arrayOfLines } from "@/helpers/utils.js";
 
 import PasteBox from "@/components/PasteBox.vue";
 import FormattedTable from "@/components/Preformat/FormattedTable.vue";
@@ -39,7 +39,7 @@ const tableRows = ref([]);
 const skipHeader = ref(true);
 
 const contentLines = computed(() => {
-  const lines = content.value.split(/\n/).map((line) => String(line));
+  const lines = arrayOfLines(content.value);
   if (skipHeader.value) {
     return lines.slice(1);
   }

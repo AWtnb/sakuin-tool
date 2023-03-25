@@ -68,3 +68,7 @@ export const normalizeReading = (s, removeNoise) => {
   }
   return katakana;
 };
+
+export const arrayOfLines = (str) => {
+  return str.split(/\n/).map((line) => String(line));
+}

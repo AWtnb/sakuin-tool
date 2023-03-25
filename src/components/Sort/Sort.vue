@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import { arrayOfLines } from "@/helpers/utils.js";
 import Normalize from "@/components/Sort/Normalize.vue";
 import SortedTable from "@/components/Sort/SortedTable.vue";
 import PasteBox from "@/components/PasteBox.vue";
@@ -12,7 +13,7 @@ const sortedArr = ref([]);
 const skipHeader = ref(true);
 
 const contentLines = computed(() => {
-  const lines = content.value.split(/\n/).map((line) => String(line));
+  const lines = arrayOfLines(content.value);
   if (skipHeader.value) {
     return lines.slice(1);
   }

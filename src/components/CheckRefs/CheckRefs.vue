@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import { arrayOfLines } from "@/helpers/utils.js";
 import { ReferenceChecker } from "@/helpers/referenceChecker";
 import { GroupChecker } from "@/helpers/groupChecker";
 
@@ -19,7 +20,7 @@ const conflicts = ref([]);
 const message = ref("");
 
 const contentLines = computed(() => {
-  return content.value.split(/\n/).map((line) => String(line));
+  return arrayOfLines(content.value);
 });
 
 const isPerfect = computed(() => {

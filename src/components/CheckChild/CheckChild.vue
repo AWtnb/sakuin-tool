@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import { arrayOfLines } from "@/helpers/utils.js";
 import PasteBox from "@/components/PasteBox.vue";
 import FoundTable from "@/components/CheckChild/FoundTable.vue";
 import { CheckChild } from "@/helpers/checkChild.js";
@@ -10,7 +11,7 @@ const picked = ref("all");
 const found = ref([]);
 
 const contentLines = computed(() => {
-  return content.value.split(/\n/).map((line) => String(line));
+  return arrayOfLines(content.value);
 });
 
 const reset = () => {
