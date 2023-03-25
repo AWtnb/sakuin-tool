@@ -32,10 +32,10 @@ export default {
   content: "▶";
   font-size: 4em;
   font-weight: bold;
-  padding-top: 1em;
+  padding-top: .5em;
 }
 img {
-  max-width: 45%;
+  max-width: 40%;
   object-fit: scale-down;
 }
 </style>
