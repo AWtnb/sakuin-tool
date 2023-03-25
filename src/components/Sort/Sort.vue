@@ -1,6 +1,10 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import beforePath from "@/assets/Sort/before.png";
+import afterPath from "@/assets/Sort/after.png";
+import BeforeAfter from "@/components/BeforeAfter.vue";
+
 import { arrayOfLines } from "@/helpers/utils.js";
 import Normalize from "@/components/Sort/Normalize.vue";
 import SortedTable from "@/components/Sort/SortedTable.vue";
@@ -46,7 +50,8 @@ const executeSort = () => {
 
 <template>
   <h2>並べ替え</h2>
-  <div><img src="@/assets/Sort/sort.png" alt="" /></div>
+
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath"/>
 
   <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeSort" />
