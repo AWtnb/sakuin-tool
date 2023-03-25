@@ -1,6 +1,10 @@
 <script setup>
 import { ref, computed } from "vue";
 
+import beforePath from "@/assets/Ungroup/before.png";
+import afterPath from "@/assets/Ungroup/after.png";
+import BeforeAfter from "@/components/BeforeAfter.vue";
+
 import { arrayOfLines } from "@/helpers/utils.js";
 import { Entry, AddressHandler } from "@/helpers/entryHandler.js";
 
@@ -54,9 +58,12 @@ const executeFormat = () => {
 <template>
   <h2>名開き</h2>
 
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath"/>
+
+  <p>※項目とノンブルが Excel 上で2列に分かれていても大丈夫です。</p>
+
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
 
   <UngroupedTable :lines="ungroupedLines" :resultStr="resultStr" />
 
-  <div><img src="@/assets/Ungroup/ungroup.png" alt="" /> </div>
 </template>
