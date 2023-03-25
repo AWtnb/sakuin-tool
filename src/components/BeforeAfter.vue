@@ -23,8 +23,7 @@ export default {
 <style scoped>
 .box {
   display: flex;
-  justify-content: space-between;
-  padding: 20px;
+  justify-content: space-evenly;
   align-items: flex-start;
 }
 .arrow::before {
