@@ -1,19 +1,17 @@
 <script setup>
-import { ref } from "vue";
 import DetailList from "@/components/CheckRefs/DetailList.vue";
+import IgnorableArea from "@/components/CheckRefs/IgnorableArea.vue";
 
 const props = defineProps({
   lostFrom: Array,
 });
-
-const isIgnorable = ref(false);
 </script>
 
 <template>
   <div v-if="lostFrom.length">
     <h3>参照元として括弧書きされているのに見よ項目がないものがあります！</h3>
-    <label><input type="checkbox" v-model="isIgnorable" />無視する</label>
-    <div v-if="!isIgnorable">
+
+    <IgnorableArea>
       <table>
         <thead
           ><tr>
@@ -28,7 +26,7 @@ const isIgnorable = ref(false);
           </tr>
         </tbody>
       </table>
-    </div>
+    </IgnorableArea>
   </div>
 </template>
 

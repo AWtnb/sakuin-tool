@@ -1,22 +1,20 @@
 <script setup>
-import { ref } from "vue";
 import DuplicateTable from "@/components/CheckRefs/DuplicateTable.vue";
+import IgnorableArea from "@/components/CheckRefs/IgnorableArea.vue";
 
 const props = defineProps({
   msg: String,
   duplicateRefs: Array,
 });
 
-const isIgnorable = ref(false);
 </script>
 
 <template>
   <div v-if="duplicateRefs.length">
     <h3>{{ msg }}</h3>
-    <label><input type="checkbox" v-model="isIgnorable" />無視する</label>
-    <div v-if="!isIgnorable">
+    <IgnorableArea>
       <DuplicateTable :detailsArr="duplicateRefs" />
-    </div>
+    </IgnorableArea>
   </div>
 </template>
 
