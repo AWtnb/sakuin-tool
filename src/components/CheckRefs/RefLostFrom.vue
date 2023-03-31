@@ -9,7 +9,7 @@ const props = defineProps({
 
 <template>
   <div v-if="lostFrom.length">
-    <h3>参照元として括弧書きされているのに見よ項目がないものがあります！</h3>
+    <h3>見よ項目が足りません：</h3>
 
     <IgnorableArea>
       <table>

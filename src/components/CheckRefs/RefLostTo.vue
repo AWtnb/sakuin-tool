@@ -7,7 +7,7 @@ const props = defineProps({
 
 <template>
   <div v-if="lostTo.length">
-    <h3>見よ項目があるのに参照先に括弧で付記されていないものがあります！</h3>
+    <h3>見よ先の括弧書きが足りません：</h3>
     <IgnorableArea>
       <table>
         <thead

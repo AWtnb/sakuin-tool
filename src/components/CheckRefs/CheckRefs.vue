@@ -61,8 +61,8 @@ const executeCheck = () => {
   <div>
     <RefLostTo :lostTo="lostTo" />
     <RefLostFrom :lostFrom="lostFrom" />
-    <RefDuplicate :duplicateRefs="ungrouped" msg="見よ項目から参照されている項目の名寄せが不十分です！" />
-    <RefDuplicate :duplicateRefs="conflicts" msg="見よ項目が本項目として残っています！" />
+    <RefDuplicate :duplicateRefs="ungrouped" msg="名寄せが不十分です：" />
+    <RefDuplicate :duplicateRefs="conflicts" msg="見よ項目が本項目として残っています：" />
     <RefAdjacent :adjacentRefs="adjacent" />
     <div v-if="isPerfect" v-cloak>{{ message }}</div>
   </div>

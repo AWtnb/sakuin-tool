@@ -10,7 +10,7 @@ const props = defineProps({
 
 <template>
   <div v-if="adjacentRefs.length">
-    <h3>見よ項目と見よ先項目が隣接しているものがあります！</h3>
+    <h3>見よ項目のすぐ隣に見よ先項目があります：</h3>
     <IgnorableArea>
       <DetailList :details="adjacentRefs" />
     </IgnorableArea>
