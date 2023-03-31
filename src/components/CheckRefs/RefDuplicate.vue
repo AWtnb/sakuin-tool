@@ -1,27 +1,22 @@
+<script setup>
+import { ref } from "vue";
+import DuplicateTable from "@/components/CheckRefs/DuplicateTable.vue";
+
+const props = defineProps({
+  msg: String,
+  duplicateRefs: Array,
+});
+
+const isIgnorable = ref(false);
+</script>
+
 <template>
   <div v-if="duplicateRefs.length">
     <h3>{{ msg }}</h3>
-    <DuplicateTable :detailsArr="duplicateRefs" />
+    <label><input type="checkbox" v-model="isIgnorable" />無視する</label>
+    <div v-if="!isIgnorable">
+      <DuplicateTable :detailsArr="duplicateRefs" />
+    </div>
   </div>
 </template>
 
-<script>
-import DuplicateTable from "@/components/CheckRefs/DuplicateTable.vue";
-
-export default {
-  name: "RefDuplicate",
-  props: {
-    msg: {
-      type: String,
-      require: true,
-    },
-    duplicateRefs: {
-      type: Array,
-      require: true,
-    },
-  },
-  components: {
-    DuplicateTable,
-  },
-};
-</script>

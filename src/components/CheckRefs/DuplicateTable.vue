@@ -1,3 +1,10 @@
+<script setup>
+import DetailList from "@/components/CheckRefs/DetailList.vue";
+const props = defineProps({
+  detailsArr: Array,
+});
+</script>
+
 <template>
   <table>
     <thead
@@ -12,20 +19,3 @@
     </tbody>
   </table>
 </template>
-
-<script>
-import DetailList from "@/components/CheckRefs/DetailList.vue";
-
-export default {
-  name: "DuplicateTable",
-  props: {
-    detailsArr: {
-      type: Array,
-      require: true,
-    },
-  },
-  components: {
-    DetailList,
-  },
-};
-</script>
