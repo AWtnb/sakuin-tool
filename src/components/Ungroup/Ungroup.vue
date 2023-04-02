@@ -6,7 +6,8 @@ import afterPath from "@/assets/Ungroup/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
-import { Entry, AddressHandler } from "@/helpers/entryHandler.js";
+import { AddressHandler } from "@/helpers/addressHandler.js";
+import { Entry } from "@/helpers/entryHandler.js";
 
 import PasteBox from "@/components/PasteBox.vue";
 import UngroupedTable from "@/components/Ungroup/UngroupedTable.vue";

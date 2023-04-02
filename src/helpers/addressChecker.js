@@ -1,4 +1,5 @@
-import { Entry, AddressHandler } from "@/helpers/entryHandler.js";
+import { Entry } from "@/helpers/entryHandler.js";
+import { AddressHandler } from "@/helpers/addressHandler.js";
 
 export class AddressChecker {
   constructor(s) {

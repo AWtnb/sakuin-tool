@@ -1,4 +1,4 @@
-import { AddressHandler } from "@/helpers/entryHandler";
+import { AddressHandler } from "@/helpers/addressHandler";
 
 export class Grouper {
 
