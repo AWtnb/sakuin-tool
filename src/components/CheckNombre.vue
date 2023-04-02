@@ -51,8 +51,6 @@ const executeCheck = () => {
   <h2>ノンブルの並びをチェックする</h2>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeCheck" />
 
-  <p>※ノンブルに半角数字以外が含まれている場合は正しく判定できません。</p>
-
   <strong class="warning" v-if="message">{{ message }}</strong>
   <ul v-if="problems.length">
     <li v-for="(problem, idx) in problems" :key="idx">
@@ -69,3 +67,4 @@ strong.warning {
   color: red;
 }
 </style>
+
