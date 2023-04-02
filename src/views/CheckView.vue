@@ -2,7 +2,6 @@
 import SectionEnd from "@/components/SectionEnd.vue";
 import CheckRefs from "@/components/CheckRefs/CheckRefs.vue";
 import CheckChild from "@/components/CheckChild/CheckChild.vue";
-import CheckNombre from "@/components/CheckNombre.vue";
 </script>
 
 <template>
@@ -11,8 +10,6 @@ import CheckNombre from "@/components/CheckNombre.vue";
     <CheckRefs />
     <SectionEnd />
     <CheckChild />
-    <SectionEnd />
-    <CheckNombre />
     <SectionEnd />
   </div>
 </template>
