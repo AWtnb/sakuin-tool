@@ -1,6 +1,6 @@
 <script setup>
-import DuplicateTable from "@/components/CheckRefs/DuplicateTable.vue";
-import IgnorableArea from "@/components/CheckRefs/IgnorableArea.vue";
+import DuplicateTable from "@/components/Sort/CheckGroup/DuplicateTable.vue";
+import IgnorableArea from "@/components/IgnorableArea.vue";
 
 const props = defineProps({
   msg: String,

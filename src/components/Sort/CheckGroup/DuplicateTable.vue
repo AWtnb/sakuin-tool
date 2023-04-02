@@ -1,5 +1,5 @@
 <script setup>
-import DetailList from "@/components/CheckRefs/DetailList.vue";
+import SimpleList from "@/components/SimpleList.vue";
 const props = defineProps({
   detailsArr: Array,
 });
@@ -14,7 +14,7 @@ const props = defineProps({
     >
     <tbody>
       <tr v-for="(details, idx) in detailsArr" :key="idx">
-        <td><detail-list :details="details"></detail-list></td>
+        <td><SimpleList :arr="details" /></td>
       </tr>
     </tbody>
   </table>

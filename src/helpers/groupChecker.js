@@ -1,7 +1,9 @@
+import { arrayOfLines } from "@/helpers/utils.js";
 import { Entry } from "@/helpers/entry";
 
 export class GroupChecker {
-  constructor(lines) {
+  constructor(s) {
+    const lines = arrayOfLines(s);
     this.entries = lines.filter((x) => String(x).trim()).map((line) => new Entry(line));
     this.refs = this.entries.filter((entry) => entry.isReference);
     this.nonRefs = this.entries.filter((entry) => !entry.isReference);

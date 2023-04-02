@@ -4,6 +4,7 @@ import CopyButton from "@/components/CopyButton.vue";
 
 import FindNecessarySrc from "@/components/Sort/FindNecessarySrc.vue";
 import FindAdjacent from "@/components/Sort/FindAdjacent.vue";
+import CheckGroup from "@/components/Sort/CheckGroup/CheckGroup.vue";
 
 const props = defineProps({
   sortedArr: Array,
@@ -46,9 +47,12 @@ const resultStr = computed(() => {
     </div>
     <CopyButton :copyStr="resultStr" />
     <label><input type="checkbox" v-model="asTsv" />3列ともコピーする</label>
+
     <FindNecessarySrc :result="finalIndexStr" />
     <FindAdjacent :result="finalIndexStr" />
-  </div>
+    <CheckGroup :result="finalIndexStr"/>
+
+</div>
 </template>
 
 <style scoped>
