@@ -2,9 +2,10 @@
 import { ref, computed } from "vue";
 import CopyButton from "@/components/CopyButton.vue";
 
-import FindNecessarySrc from "@/components/Sort/FindNecessarySrc.vue";
-import FindAdjacent from "@/components/Sort/FindAdjacent.vue";
-import CheckGroup from "@/components/Sort/CheckGroup/CheckGroup.vue";
+import FindNecessarySrc from "@/components/Sort/Checker/FindNecessarySrc.vue";
+import FindAdjacent from "@/components/Sort/Checker/FindAdjacent.vue";
+import CheckConflict from "@/components/Sort/Checker/CheckConflict.vue";
+import CheckUngrouped from "@/components/Sort/Checker/CheckUngrouped.vue";
 
 const props = defineProps({
   sortedArr: Array,
@@ -50,7 +51,8 @@ const resultStr = computed(() => {
 
     <FindNecessarySrc :result="finalIndexStr" />
     <FindAdjacent :result="finalIndexStr" />
-    <CheckGroup :result="finalIndexStr"/>
+    <CheckUngrouped :result="finalIndexStr"/>
+    <CheckConflict :result="finalIndexStr"/>
 
 </div>
 </template>

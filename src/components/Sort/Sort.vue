@@ -7,7 +7,7 @@ import BeforeAfter from "@/components/BeforeAfter.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import Normalize from "@/components/Sort/Normalize.vue";
-import SortedTable from "@/components/Sort/SortedTable.vue";
+import SortedTable from "@/components/Sort/SortResult.vue";
 import PasteBox from "@/components/PasteBox.vue";
 
 import { Sorter } from "@/helpers/sorter";
