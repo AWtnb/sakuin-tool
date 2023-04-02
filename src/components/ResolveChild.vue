@@ -6,7 +6,7 @@ import afterPath from "@/assets/ResolveChild/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
-import { Entry } from "@/helpers/entryHandler.js";
+import { Entry } from "@/helpers/entry.js";
 import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
 

@@ -1,4 +1,4 @@
-import { Entry } from "@/helpers/entryHandler";
+import { Entry } from "@/helpers/entry";
 
 export class GroupChecker {
   constructor(lines) {

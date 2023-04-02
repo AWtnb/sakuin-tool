@@ -7,7 +7,7 @@ import BeforeAfter from "@/components/BeforeAfter.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import { AddressHandler } from "@/helpers/addressHandler.js";
-import { Entry } from "@/helpers/entryHandler.js";
+import { Entry } from "@/helpers/entry.js";
 
 import PasteBox from "@/components/PasteBox.vue";
 import UngroupedTable from "@/components/Ungroup/UngroupedTable.vue";

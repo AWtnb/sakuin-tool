@@ -1,4 +1,4 @@
-import { Entry } from "@/helpers/entryHandler.js";
+import { Entry } from "@/helpers/entry.js";
 import { AddressHandler } from "@/helpers/addressHandler.js";
 
 export class AddressChecker {
