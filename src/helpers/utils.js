@@ -70,5 +70,8 @@ export const normalizeReading = (s, removeNoise) => {
 };
 
 export const arrayOfLines = (str) => {
+  if (str.length < 1) {
+    return [];
+  }
   return str.split(/\n/).map((line) => String(line));
 }

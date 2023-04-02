@@ -1,7 +1,9 @@
 import { Entry } from "@/helpers/entry";
+import { arrayOfLines } from "@/helpers/utils.js";
 
 export class ReferenceChecker {
-  constructor(lines) {
+  constructor(s) {
+    const lines = arrayOfLines(s);
     this.entries = lines.filter((x) => String(x).trim()).map((line) => new Entry(line));
     this.refs = this.entries.filter((entry) => entry.isReference);
     this.nonRefs = this.entries.filter((entry) => !entry.isReference);
@@ -26,7 +28,7 @@ export class ReferenceChecker {
       .filter(Boolean);
   }
 
-  requiredFromReference() {
+  findNecessaryRefs() {
     // 参照元として括弧書きされているのに見よ項目がないものを探す
     return this.referred
       .map((refed) => {
