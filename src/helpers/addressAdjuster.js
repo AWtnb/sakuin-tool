@@ -43,7 +43,7 @@ class AddressAdjuster {
     if (Number(this.start) <= entry.intValue && entry.intValue <= Number(this.end)) {
       return entry.adjust(this.delta);
     }
-    return entry.displayText;
+    return entry.text;
   }
 }
 

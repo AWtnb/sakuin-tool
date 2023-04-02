@@ -1,12 +1,12 @@
 class Nombre {
   constructor(s, hyphenated = false) {
-    this.displayText = s.trim();
+    this.text = s.trim();
     this.hyphenated = hyphenated;
-    this.intValue = Number(this.displayText.replace(/[^\d]/g, ""));
+    this.intValue = Number(this.text.replace(/[^\d]/g, ""));
   }
 
   getPrefix() {
-    const s = this.displayText;
+    const s = this.text;
     if (isNaN(s.at(0))) {
       return s.split(/\d+/).at(0);
     }
@@ -14,7 +14,7 @@ class Nombre {
   }
 
   getSuffix() {
-    const s = this.displayText;
+    const s = this.text;
     if (isNaN(s.at(-1))) {
       return s.split(/\d+/).at(-1);
     }
@@ -70,7 +70,7 @@ export class AddressHandler {
     const next1 = this.nombres[startIdx + 1];
     const next2 = this.nombres[startIdx + 2];
     if (focus.intValue + 1 == next1.intValue && focus.intValue + 2 == next2.intValue) {
-      if (String(next1.displayText).match(/^\d+$/)) {
+      if (String(next1.text).match(/^\d+$/)) {
         return true;
       }
     }
@@ -79,17 +79,17 @@ export class AddressHandler {
 
   order() {
     const ns = this.nombres;
-    this.nombres = ns.filter((x) => x.displayText).sort((a, b) => a.intValue - b.intValue);
+    this.nombres = ns.filter((x) => x.text).sort((a, b) => a.intValue - b.intValue);
   }
 
   unify() {
     const ns = this.nombres;
     const stack = [];
     this.nombres = ns.filter((nbr) => {
-      if (stack.includes(nbr.displayText)) {
+      if (stack.includes(nbr.text)) {
         return false;
       }
-      stack.push(nbr.displayText);
+      stack.push(nbr.text);
       return true;
     });
   }
@@ -116,7 +116,7 @@ export class AddressHandler {
     });
     this.nombres = stack.map((x) => {
       if (x.isHyphen) {
-        x.item.displayText = "\u2013";
+        x.item.text = "\u2013";
       }
       return x.item;
     });
@@ -128,7 +128,7 @@ export class AddressHandler {
     this.unify();
     this.hyphenate();
     return this.nombres
-      .map((p) => p.displayText)
+      .map((p) => p.text)
       .join(", ")
       .replace(/, (\u2013, )+/g, "\u2013");
   }
