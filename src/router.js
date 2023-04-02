@@ -19,11 +19,6 @@ const router = createRouter({
       component: () => import("@/views/FormatView.vue"),
     },
     {
-      path: "/check",
-      name: "check",
-      component: () => import("@/views/CheckView.vue"),
-    },
-    {
       path: "/adjust",
       name: "adjust",
       component: () => import("@/views/AdjustView.vue"),

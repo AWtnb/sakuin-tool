@@ -17,7 +17,7 @@ const isRevision = ref(false);
         <span v-else>
           <router-link to="/prepare">Prepare</router-link>
         </span>
-        → <router-link to="/format">Format</router-link> → <router-link to="/check">Check</router-link> / <router-link to="/adjust">Adjust</router-link>
+        → <router-link to="/format">Format</router-link> | <router-link to="/adjust">Adjust</router-link>
       </span>
     </div>
   </nav>
