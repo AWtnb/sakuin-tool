@@ -28,7 +28,7 @@ const ungroupEntries = (lines) => {
         new AddressHandler(entry.address).nombres.forEach((nombre) => {
           stack.push({
             name: entry.name,
-            nombre: nombre.display.text,
+            nombre: nombre.displayText,
           });
         });
       }

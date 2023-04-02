@@ -1,17 +1,12 @@
-class EntryAddress {
+class Nombre {
   constructor(s, hyphenated = false) {
+    this.displayText = s.trim();
     this.hyphenated = hyphenated;
-    this.origin = s;
-    this.display = {
-      text: this.origin.trim(),
-      prefix: this.getPrefix(),
-      suffix: this.getSuffix(),
-    };
-    this.intValue = Number(this.display.text.replace(/[^\d]/g, ""));
+    this.intValue = Number(this.displayText.replace(/[^\d]/g, ""));
   }
 
   getPrefix() {
-    const s = this.origin;
+    const s = this.displayText;
     if (isNaN(s.at(0))) {
       return s.split(/\d+/).at(0);
     }
@@ -19,11 +14,15 @@ class EntryAddress {
   }
 
   getSuffix() {
-    const s = this.origin;
+    const s = this.displayText;
     if (isNaN(s.at(-1))) {
       return s.split(/\d+/).at(-1);
     }
     return "";
+  }
+
+  adjust(delta) {
+    return this.getPrefix() + (this.intValue + Number(delta)) + this.getSuffix();
   }
 }
 
@@ -49,16 +48,16 @@ export class AddressHandler {
       const nbr = String(elem);
       if (nbr.indexOf("-") != -1) {
         const [start, end, ...rest] = nbr.split("-");
-        const s = new EntryAddress(start, false);
-        const e = new EntryAddress(end, false);
+        const s = new Nombre(start, false);
+        const e = new Nombre(end, false);
         this.nombres.push(s);
         for (let i = s.intValue + 1; i < e.intValue; i++) {
-          const n = new EntryAddress(String(i), true);
+          const n = new Nombre(String(i), true);
           this.nombres.push(n);
         }
         this.nombres.push(e);
       } else {
-        this.nombres.push(new EntryAddress(nbr, false));
+        this.nombres.push(new Nombre(nbr, false));
       }
     });
   }
@@ -71,7 +70,7 @@ export class AddressHandler {
     const next1 = this.nombres[startIdx + 1];
     const next2 = this.nombres[startIdx + 2];
     if (focus.intValue + 1 == next1.intValue && focus.intValue + 2 == next2.intValue) {
-      if (String(next1.display.text).match(/^\d+$/)) {
+      if (String(next1.displayText).match(/^\d+$/)) {
         return true;
       }
     }
@@ -80,17 +79,17 @@ export class AddressHandler {
 
   order() {
     const ns = this.nombres;
-    this.nombres = ns.filter((x) => x.display.text).sort((a, b) => a.intValue - b.intValue);
+    this.nombres = ns.filter((x) => x.displayText).sort((a, b) => a.intValue - b.intValue);
   }
 
   unify() {
     const ns = this.nombres;
     const stack = [];
     this.nombres = ns.filter((nbr) => {
-      if (stack.includes(nbr.display.text)) {
+      if (stack.includes(nbr.displayText)) {
         return false;
       }
-      stack.push(nbr.display.text);
+      stack.push(nbr.displayText);
       return true;
     });
   }
@@ -117,7 +116,7 @@ export class AddressHandler {
     });
     this.nombres = stack.map((x) => {
       if (x.isHyphen) {
-        x.item.display.text = "\u2013";
+        x.item.displayText = "\u2013";
       }
       return x.item;
     });
@@ -129,7 +128,7 @@ export class AddressHandler {
     this.unify();
     this.hyphenate();
     return this.nombres
-      .map((p) => p.display.text)
+      .map((p) => p.displayText)
       .join(", ")
       .replace(/, (\u2013, )+/g, "\u2013");
   }

@@ -41,9 +41,9 @@ class AddressAdjuster {
   }
   adjust(entry) {
     if (Number(this.start) <= entry.intValue && entry.intValue <= Number(this.end)) {
-      return entry.display.prefix + (entry.intValue + Number(this.delta)) + entry.display.suffix;
+      return entry.adjust(this.delta);
     }
-    return entry.display.text;
+    return entry.displayText;
   }
 }
 
