@@ -40,27 +40,86 @@ class EntryName {
   }
 }
 
+/**
+ * Entry of book index
+ * @class
+ */
 export class Entry {
+  /**
+   * constructor
+   * @param {String} s 対象の文字列
+   * @param {String} separator 項目名とノンブル間の区切り文字
+   */
   constructor(s, separator = "\u3000\u3000") {
+    /**
+     * 元の文字列
+     * @type {String} rawStr
+     */
     this.rawStr = s;
-    this.isChild = s.trim().length > 0 && s.trimStart() != s; // 子項目かどうか
 
+    /**
+     * 子項目かどうか
+     * @type {Boolean}
+     */
+    this.isChild = s.trim().length > 0 && s.trimStart() != s;
+
+    /**
+     * 項目名とノンブル間の区切り文字
+     * @type {String}
+     */
     this.separator = separator;
+
+    /**
+     * separator で区切った各要素
+     * @type {string[]}
+     */
     this.elems = this.rawStr
       .split(this.separator)
       .filter(Boolean)
       .map((x) => String(x));
 
-    this.name = ""; // 項目名
-    this.basename = ""; // 項目名から括弧を除いた部分（見よ項目の場合は「見よ元」部分）。項目の文字間はアキツメル。
-    this.address = ""; // ノンブルの集合部分
-    this.referredFrom = []; // カッコ内に付記された「見よ元」情報
-    this.referTo = ""; // 見よ先
-    this.isReference = false; // 見よ項目かどうか
+    /**
+     * 項目名
+     * @type {String}
+     */
+    this.name = "";
+
+    /**
+     * 項目名から括弧を除いた部分（見よ項目の場合は「見よ元」部分）。項目の文字間はアキツメル。
+     * @type {String}
+     */
+    this.basename = "";
+
+    /**
+     * ノンブルの集合部分
+     * @type {String}
+     */
+    this.address = "";
+
+    /**
+     * カッコ内に付記された「見よ元」情報
+     * @type {String[]}
+     */
+    this.referredFrom = [];
+
+    /**
+     * 見よ先
+     * @type {String}
+     */
+    this.referTo = "";
+
+    /**
+     * 見よ項目かどうか
+     * @type {Boolean}
+     */
+    this.isReference = false;
 
     this.parse();
   }
 
+  /**
+   * 初期値を設定する
+   */
   parse() {
     if (this.elems.length >= 2) {
       const sides = (() => {
