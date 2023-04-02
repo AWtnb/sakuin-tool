@@ -40,7 +40,7 @@ const executeCheck = () => {
   reset();
 
   const refChecker = new ReferenceChecker(contentLines.value);
-  lostTo.value = refChecker.goalLostReference();
+  lostTo.value = refChecker.findNecessarySrc();
   lostFrom.value = refChecker.findNecessaryRefs();
   adjacent.value = refChecker.findAdjacent();
 

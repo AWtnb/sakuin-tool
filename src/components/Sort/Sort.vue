@@ -51,6 +51,8 @@ const executeSort = () => {
 <template>
   <h2>並べ替え</h2>
 
+  <Normalize />
+
   <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
 
   <p><code>読み</code>の情報を<code>配列読み</code>に変換して並べ替えます。<strong>1列目が最終的な索引になります。</strong></p>
@@ -62,9 +64,9 @@ const executeSort = () => {
 
   <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeSort" />
+
   <SortedTable :sortedArr="sortedArr" />
 
-  <Normalize />
 </template>
 
 <style scoped>

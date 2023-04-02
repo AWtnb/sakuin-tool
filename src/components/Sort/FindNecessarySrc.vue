@@ -10,7 +10,7 @@ const props = defineProps({
 
 const lostTo = computed(() => {
   const checker = new ReferenceChecker(props.result);
-  return checker.goalLostReference();
+  return checker.findNecessarySrc();
 });
 </script>
 

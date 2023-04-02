@@ -10,7 +10,7 @@ export class ReferenceChecker {
     this.referred = this.entries.filter((entry) => entry.referredFrom.length > 0);
   }
 
-  goalLostReference() {
+  findNecessarySrc() {
     // 見よ項目があるのに参照先に括弧で付記されていないものを探す
     return this.refs
       .map((ref) => {
@@ -20,6 +20,7 @@ export class ReferenceChecker {
         if (grep.length > 0) {
           return null;
         }
+        // そもそも項目がないときと、項目はあってもカッコ書きがないときを考慮する必要あり
         return {
           problem: ref.name,
           require: `${ref.referTo}\uff08${ref.basename}\uff09`,
