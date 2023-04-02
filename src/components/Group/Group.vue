@@ -5,17 +5,14 @@ import beforePath from "@/assets/Group/before.png";
 import afterPath from "@/assets/Group/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
+import FindNecessaryRefs from "@/components/Group/FindNecessaryRefs.vue";
+
 import { arrayOfLines } from "@/helpers/utils.js";
 import { Grouper } from "@/helpers/grouper";
 import PasteBox from "@/components/PasteBox.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 const content = ref("");
-const groupedLines = ref([]);
-const isLeft = ref(false);
-const isOrdered = ref(false);
-const skipHeader = ref(true);
-
 const contentLines = computed(() => {
   const lines = arrayOfLines(content.value);
   if (skipHeader.value) {
@@ -23,9 +20,12 @@ const contentLines = computed(() => {
   }
   return lines;
 });
-const resultStr = computed(() => {
-  return groupedLines.value.join("\n");
-});
+
+const isLeft = ref(false);
+const isOrdered = ref(false);
+const skipHeader = ref(true);
+
+const groupedLines = ref([]);
 
 const reset = () => {
   groupedLines.value = [];
@@ -36,6 +36,10 @@ const executeGrouping = () => {
   const grouper = new Grouper(contentLines.value, isLeft.value);
   groupedLines.value = grouper.getGroupedLines(isOrdered.value);
 };
+
+const resultStr = computed(() => {
+  return groupedLines.value.join("\n");
+});
 </script>
 
 <template>
@@ -52,6 +56,9 @@ const executeGrouping = () => {
   <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGrouping" />
 
   <ResultBox :result="resultStr" />
+
+  <FindNecessaryRefs :result="resultStr" />
+
 </template>
 
 <style scoped>
@@ -59,3 +66,4 @@ label {
   display: block;
 }
 </style>
+

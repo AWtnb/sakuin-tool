@@ -41,7 +41,7 @@ const executeCheck = () => {
 
   const refChecker = new ReferenceChecker(contentLines.value);
   lostTo.value = refChecker.goalLostReference();
-  lostFrom.value = refChecker.requiredFromReference();
+  lostFrom.value = refChecker.findNecessaryRefs();
   adjacent.value = refChecker.findAdjacent();
 
   const groupChecker = new GroupChecker(contentLines.value);
