@@ -7,39 +7,43 @@ import BeforeAfter from "@/components/BeforeAfter.vue";
 
 import { toHalfWidth, arrayOfLines } from "@/helpers/utils.js";
 
-import PasteBox from "@/components/PasteBox.vue";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import FormattedTable from "@/components/Preformat/FormattedTable.vue";
 
 const formatIndexTemplate = (lines) => {
   const stack = [];
   lines
     .filter((x) => x.trim())
-    .forEach((line) => {
-      const [nombre, name, referTo, ...rest] = line.split("\t").map((x) => x.trim());
-      const nStr = String(toHalfWidth(nombre));
-      if (String(referTo).length > 0) {
-        stack.push({
-          nombre: "",
-          name: `${name}\u3000→${referTo}`,
-        });
-        stack.push({
-          nombre: nStr,
-          name: `${referTo}\uff08${name}\uff09`,
-        });
-      } else {
-        if (String(name).length > 0) {
-          stack.push({
-            nombre: nStr,
-            name: name,
-          });
-        }
+    .map((line) => line.split("\t"))
+    .filter((elems) => elems.length > 2)
+    .map((elems) => elems.map((elem) => elem.trim()))
+    .forEach((elems) => {
+      const nombre = toHalfWidth(elems[0]);
+      const name = elems[1];
+      const referTo = elems[2];
+      if (nombre.length < 1 || name.length < 1) {
+        return;
       }
+      if (referTo.length < 1) {
+        stack.push({
+          nombre: nombre,
+          name: name,
+        });
+        return;
+      }
+      stack.push({
+        nombre: "",
+        name: `${name}\u3000→${referTo}`,
+      });
+      stack.push({
+        nombre: nombre,
+        name: `${referTo}\uff08${name}\uff09`,
+      });
     });
   return stack;
 };
 
 const content = ref("");
-const tableRows = ref([]);
 const skipHeader = ref(true);
 
 const contentLines = computed(() => {
@@ -50,17 +54,13 @@ const contentLines = computed(() => {
   return lines;
 });
 
+const tableRows = computed(() => {
+  return formatIndexTemplate(contentLines.value);
+});
+
 const resultStr = computed(() => {
   return tableRows.value.map((x) => `${x.name}\t${x.nombre}`).join("\n");
 });
-
-const reset = () => {
-  tableRows.value = [];
-};
-const executeFormat = () => {
-  reset();
-  tableRows.value = formatIndexTemplate(contentLines.value);
-};
 </script>
 
 <template>
@@ -82,7 +82,8 @@ const executeFormat = () => {
   </ul>
 
   <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
+  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
 
   <FormattedTable :lines="tableRows" :resultStr="resultStr" />
 </template>
+
