@@ -2,7 +2,6 @@
 import SectionEnd from "@/components/SectionEnd.vue";
 import CheckChild from "@/components/CheckChild/CheckChild.vue";
 import PlusMinus from "@/components/PlusMinus/PlusMinus.vue";
-import CheckNombre from "@/components/CheckNombre.vue";
 </script>
 
 <template>
@@ -11,8 +10,6 @@ import CheckNombre from "@/components/CheckNombre.vue";
     <CheckChild />
     <SectionEnd />
     <PlusMinus />
-    <SectionEnd />
-    <CheckNombre />
     <SectionEnd />
   </div>
 </template>

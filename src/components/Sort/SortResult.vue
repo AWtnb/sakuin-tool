@@ -2,16 +2,11 @@
 import { ref, computed } from "vue";
 import CopyButton from "@/components/CopyButton.vue";
 
-import FindNecessarySrc from "@/components/Sort/Checker/FindNecessarySrc.vue";
-import FindAdjacent from "@/components/Sort/Checker/FindAdjacent.vue";
-import CheckConflict from "@/components/Sort/Checker/CheckConflict.vue";
-import CheckUngrouped from "@/components/Sort/Checker/CheckUngrouped.vue";
-
 const props = defineProps({
   sortedArr: Array,
 });
 
-const asTsv = ref(true);
+const asTsv = ref(false);
 
 const finalIndexStr = computed(() => {
   return props.sortedArr.map((x) => x.item).join("\n");
@@ -23,7 +18,6 @@ const resultStr = computed(() => {
   }
   return finalIndexStr.value;
 });
-
 </script>
 
 <template>
@@ -48,13 +42,7 @@ const resultStr = computed(() => {
     </div>
     <CopyButton :copyStr="resultStr" />
     <label><input type="checkbox" v-model="asTsv" />3列ともコピーする</label>
-
-    <FindNecessarySrc :result="finalIndexStr" />
-    <FindAdjacent :result="finalIndexStr" />
-    <CheckUngrouped :result="finalIndexStr"/>
-    <CheckConflict :result="finalIndexStr"/>
-
-</div>
+  </div>
 </template>
 
 <style scoped>
