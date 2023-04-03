@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import { OldIndexLine } from "@/helpers/oldIndexLine.js";
-import PasteBox from "@/components/PasteBox.vue";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 const formatOldIndex = (lines) => {
@@ -19,11 +19,13 @@ const formatOldIndex = (lines) => {
 };
 
 const content = ref("");
-const fmtArr = ref([]);
-const message = ref("");
 
 const contentLines = computed(() => {
   return arrayOfLines(content.value);
+});
+
+const fmtArr = computed(() => {
+  return formatOldIndex(contentLines.value);
 });
 
 const resultStr = computed(() => {
@@ -34,19 +36,15 @@ const modified = computed(() => {
   return fmtArr.value.filter((x) => x.formatted != x.original);
 });
 
-const reset = () => {
-  fmtArr.value = [];
-};
-
-const executeFormat = () => {
-  reset();
-  fmtArr.value = formatOldIndex(contentLines.value);
-  if (modified.value.length > 0) {
-    message.value = modified.value.length + "箇所を修正しました！";
-  } else {
-    message.value = "問題のある箇所は見当たりませんでした！";
+const message = computed(() => {
+  if (content.value.length < 1) {
+    return "";
   }
-};
+  if (modified.value.length > 0) {
+    return modified.value.length + "箇所を修正しました！";
+  }
+  return "問題のある箇所は見当たりませんでした！";
+});
 </script>
 
 <template>
@@ -63,7 +61,7 @@ const executeFormat = () => {
     <li>子項目のダーシの種類を<code>&horbar;&horbar;</code>（2倍ダーシ）に統一します。</li>
   </ul>
 
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
+  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
 
   <ResultBox :result="resultStr" />
 
@@ -94,3 +92,4 @@ const executeFormat = () => {
   color: red;
 }
 </style>
+
