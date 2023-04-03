@@ -6,7 +6,7 @@ import afterPath from "@/assets/Pickup/NewTemplate/after.png";
 
 import { toHalfWidth, arrayOfLines } from "@/helpers/utils";
 import BeforeAfter from "@/components/BeforeAfter.vue";
-import PasteBox from "@/components/PasteBox.vue";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import TemplateTable from "@/components/Pickup/TemplateTable.vue";
 import ExcelSetting from "@/components/Pickup/ExcelSetting.vue";
 
@@ -16,11 +16,19 @@ const generateTemplate = (lines) => {
   lines
     .filter((line) => line)
     .forEach((line) => {
-      const [page, counter, ...rest] = line.split("\t");
-      const nItem = toHalfWidth(counter);
-      if (Number(nItem) > 0) {
+      const elems = line.split("\t");
+      if (elems.length < 2) {
+        return;
+      }
+      const page = elems[0].trim();
+      const counter = elems[1].trim();
+      if (page.length < 1 || counter.length < 1) {
+        return;
+      }
+      const nItem = Number(toHalfWidth(counter));
+      if (nItem > 0) {
         pageIdx += 1;
-        for (let i = 0; i < Number(nItem); i++) {
+        for (let i = 0; i < nItem; i++) {
           stack.push({
             id: String(stack.length + 1),
             pageIdx: String(pageIdx),
@@ -33,7 +41,6 @@ const generateTemplate = (lines) => {
 };
 
 const content = ref("");
-const tableRows = ref([]);
 const skipHeader = ref(true);
 
 const contentLines = computed(() => {
@@ -49,14 +56,9 @@ const resultStr = computed(() => {
   return conc.join("\n");
 });
 
-const reset = () => {
-  tableRows.value = [];
-};
-
-const executeGenerate = () => {
-  reset();
-  tableRows.value = generateTemplate(contentLines.value);
-};
+const tableRows = computed(() => {
+  return generateTemplate(contentLines.value);
+});
 </script>
 
 <template>
@@ -67,8 +69,11 @@ const executeGenerate = () => {
   <p>※<code>個数</code>列は見よ項目がある場合、見よ先項目とのペアで1つとカウントします。</p>
 
   <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGenerate" />
+
+  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
+
   <TemplateTable :lines="tableRows" :resultStr="resultStr" />
 
   <ExcelSetting />
 </template>
+
