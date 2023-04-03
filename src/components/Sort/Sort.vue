@@ -8,12 +8,11 @@ import BeforeAfter from "@/components/BeforeAfter.vue";
 import { arrayOfLines } from "@/helpers/utils.js";
 import Normalize from "@/components/Sort/Normalize.vue";
 import SortedTable from "@/components/Sort/SortResult.vue";
-import PasteBox from "@/components/PasteBox.vue";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 
 import { Sorter } from "@/helpers/sorter";
 
 const content = ref("");
-const sortedArr = ref([]);
 const skipHeader = ref(true);
 
 const contentLines = computed(() => {
@@ -28,24 +27,27 @@ const parsedLines = computed(() => {
   return contentLines.value
     .filter((line) => line.trim().length > 0)
     .map((line) => {
-      const [item, reading, ...rest] = line.split("\t").map((x) => x.trim());
+      const elems = line.split("\t");
+      if (elems.length < 2) {
+        return null;
+      }
+      const item = elems[0].trim();
+      const reading = elems[1].trim();
+      if (item.length < 1 || reading.length < 1) {
+        return null;
+      }
       return {
         item: item,
         reading: reading,
       };
-    });
+    }).filter(Boolean);
 });
 
-const reset = () => {
-  sortedArr.value = [];
-};
-
-const executeSort = () => {
-  reset();
+const sortedArr = computed(() => {
   const sorter = new Sorter();
   parsedLines.value.forEach((x) => sorter.addData(x.item, x.reading));
-  sortedArr.value = sorter.execute();
-};
+  return sorter.execute();
+});
 </script>
 
 <template>
@@ -63,10 +65,10 @@ const executeSort = () => {
   </ul>
 
   <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeSort" />
+
+  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
 
   <SortedTable :sortedArr="sortedArr" />
-
 </template>
 
 <style scoped>
@@ -75,3 +77,4 @@ const executeSort = () => {
   color: #ccc;
 }
 </style>
+
