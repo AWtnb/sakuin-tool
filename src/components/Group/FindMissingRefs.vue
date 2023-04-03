@@ -12,7 +12,7 @@ const props = defineProps({
 
 const lostFrom = computed(() => {
   const checker = new ReferenceChecker(props.result);
-  return checker.findNecessaryRefs();
+  return checker.findMissingRefs();
 });
 </script>
 

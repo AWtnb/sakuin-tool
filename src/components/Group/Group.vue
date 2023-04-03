@@ -5,7 +5,7 @@ import beforePath from "@/assets/Group/before.png";
 import afterPath from "@/assets/Group/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
-import FindNecessaryRefs from "@/components/Group/FindNecessaryRefs.vue";
+import FindMissingRefs from "@/components/Group/FindMissingRefs.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import { Grouper } from "@/helpers/grouper";
@@ -50,7 +50,7 @@ const resultStr = computed(() => {
 
   <ResultBox :result="resultStr" />
 
-  <FindNecessaryRefs :result="resultStr" />
+  <FindMissingRefs :result="resultStr" />
 </template>
 
 <style scoped>

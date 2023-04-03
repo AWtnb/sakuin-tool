@@ -10,8 +10,10 @@ export class ReferenceChecker {
     this.referred = this.entries.filter((entry) => entry.referredFrom.length > 0);
   }
 
-  findNecessarySrc() {
-    // 見よ項目があるのに参照先に括弧で付記されていないものを探す
+  /**
+   * 見よ項目があるのに参照先に括弧で付記されていないものを探す
+   */
+  findMissingRefferdFrom() {
     return this.refs
       .map((ref) => {
         const grep = this.nonRefs.filter((entry) => {
@@ -20,7 +22,6 @@ export class ReferenceChecker {
         if (grep.length > 0) {
           return null;
         }
-        // そもそも項目がないときと、項目はあってもカッコ書きがないときを考慮する必要あり
         return {
           problem: ref.name,
           require: `${ref.referTo}\uff08${ref.basename}\uff09`,
@@ -29,8 +30,10 @@ export class ReferenceChecker {
       .filter(Boolean);
   }
 
-  findNecessaryRefs() {
-    // 参照元として括弧書きされているのに見よ項目がないものを探す
+  /**
+   * 参照元として括弧書きされているのに見よ項目がないものを探す
+   */
+  findMissingRefs() {
     return this.referred
       .map((refed) => {
         const required = refed.referredFrom.filter((s) => {
@@ -48,8 +51,10 @@ export class ReferenceChecker {
       .filter(Boolean);
   }
 
+  /**
+   * 見よ項目と見よ先項目が隣接しているものを探す
+   */
   findAdjacent() {
-    // 見よ項目と見よ先項目が隣接しているものを探す
     const stack = [];
     this.entries.forEach((entry, idx) => {
       // filter で要素数を減らしてしまうとインデックスで参照できなくなるので注意

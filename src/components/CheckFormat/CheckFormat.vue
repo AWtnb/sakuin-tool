@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 
-import FindNecessarySrc from "@/components/CheckFormat/FindNecessarySrc.vue";
+import FindMissingRefferdFrom from "@/components/CheckFormat/FindMissingRefferdFrom.vue";
 import FindAdjacent from "@/components/CheckFormat/FindAdjacent.vue";
 import CheckConflict from "@/components/CheckFormat/CheckConflict.vue";
 import CheckUngrouped from "@/components/CheckFormat/CheckUngrouped.vue";
@@ -34,7 +34,7 @@ const msg = computed(() => {
   <p><strong>{{ msg }}</strong></p>
 
   <CheckAddress :result="content" v-on:checkFinished="addressProblem = $event" />
-  <FindNecessarySrc :result="content" v-on:checkFinished="referenceMissingProblem = $event" />
+  <FindMissingRefferdFrom :result="content" v-on:checkFinished="referenceMissingProblem = $event" />
   <CheckUngrouped :result="content" v-on:checkFinished="groupProblem = $event" />
   <FindAdjacent :result="content" v-on:checkFinished="adjacentProblem = $event" />
   <CheckConflict :result="content" v-on:checkFinished="referenceConflictProblem = $event" />

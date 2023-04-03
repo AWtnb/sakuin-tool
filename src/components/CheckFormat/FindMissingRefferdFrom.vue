@@ -12,7 +12,7 @@ const emits = defineEmits(["checkFinished"]);
 
 const lostTo = computed(() => {
   const checker = new ReferenceChecker(props.result);
-  const found = checker.findNecessarySrc();
+  const found = checker.findMissingRefferdFrom();
   emits("checkFinished", found.length);
   return found;
 });
