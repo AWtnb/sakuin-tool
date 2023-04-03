@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import AddressDiff from "@/components/PlusMinus/AddressDiff.vue";
-import PasteBox from "@/components/PasteBox.vue";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 import { EntryLines } from "@/helpers/addressAdjuster.js";
@@ -12,12 +12,33 @@ const content = ref("");
 const start = ref(1);
 const end = ref(999);
 const delta = ref(1);
-const adjustedArr = ref([]);
-const diffArr = ref([]);
-const message = ref("");
 
 const contentLines = computed(() => {
   return arrayOfLines(content.value);
+});
+
+const adjustedArr = computed(() => {
+  const eLines = new EntryLines(contentLines.value, start.value, end.value, delta.value);
+  return eLines.adjust();
+});
+
+const diffArr = computed(() => {
+  return adjustedArr.value
+    .filter((x) => x.comparison.modified)
+    .map((x) => ({
+      name: x.name,
+      detail: x.comparison.detail,
+    }));
+});
+
+const message = computed(() => {
+  if (content.value.length < 1) {
+    return "";
+  }
+  if (diffArr.value.length) {
+    return diffArr.value.length + "件の変更があります。";
+  }
+  return "修正箇所はありません。";
 });
 
 const resultStr = computed(() => {
@@ -30,29 +51,6 @@ const resultStr = computed(() => {
     })
     .join("\n");
 });
-
-const reset = () => {
-  message.value = "";
-  adjustedArr.value = [];
-  diffArr.value = [];
-};
-
-const executeAdjust = () => {
-  reset();
-  const eLines = new EntryLines(contentLines.value, start.value, end.value, delta.value);
-  adjustedArr.value = eLines.adjust();
-  diffArr.value = adjustedArr.value
-    .filter((x) => x.comparison.modified)
-    .map((x) => ({
-      name: x.name,
-      detail: x.comparison.detail,
-    }));
-  if (diffArr.value.length) {
-    message.value = diffArr.value.length + "件の変更があります。";
-  } else {
-    message.value = "修正箇所はありません。";
-  }
-};
 </script>
 
 <template>
@@ -63,7 +61,7 @@ const executeAdjust = () => {
     <li>増分 <input type="number" v-model="delta" /></li>
   </ul>
 
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeAdjust" />
+  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
 
   <ResultBox :result="resultStr" />
 
@@ -90,3 +88,4 @@ li input {
   width: 100px;
 }
 </style>
+
