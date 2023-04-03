@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
-import PasteBox from "@/components/PasteBox.vue";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import { AddressChecker } from "@/helpers/addressChecker.js";
 
 const grepInvalidNombreLine = (lines) => {
@@ -24,32 +24,29 @@ const grepInvalidNombreLine = (lines) => {
 };
 
 const content = ref("");
-const message = ref("");
-const problems = ref([]);
 
 const contentLines = computed(() => {
   return arrayOfLines(content.value);
 });
 
-const reset = () => {
-  message.value = "";
-  problems.value = [];
-};
-
-const executeCheck = () => {
-  reset();
-  problems.value = grepInvalidNombreLine(contentLines.value);
-  if (!problems.value.length) {
-    message.value = "問題は見当たりません！";
-  } else {
-    message.value = "修正の必要があります！";
+const message = computed(() => {
+  if (content.value.length < 1) {
+    return "";
   }
-};
+  if (problems.value.length) {
+    return "修正の必要があります！";
+  }
+  return "問題は見当たりません！";
+});
+
+const problems = computed(() => {
+  return grepInvalidNombreLine(contentLines.value);
+});
 </script>
 
 <template>
   <h2>ノンブルの並びをチェックする</h2>
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeCheck" />
+  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
 
   <strong class="warning" v-if="message">{{ message }}</strong>
   <ul v-if="problems.length">
