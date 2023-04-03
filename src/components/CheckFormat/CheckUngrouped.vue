@@ -10,9 +10,13 @@ const props = defineProps({
   result: String,
 });
 
+const emits = defineEmits(["checkFinished"]);
+
 const ungrouped = computed(() => {
   const checker = new GroupChecker(props.result);
-  return checker.getUngrouped();
+  const found = checker.getUngrouped();
+  emits("checkFinished", found.length);
+  return found;
 });
 </script>
 
@@ -24,3 +28,4 @@ const ungrouped = computed(() => {
     </IgnorableArea>
   </div>
 </template>
+

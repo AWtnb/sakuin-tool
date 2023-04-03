@@ -9,11 +9,14 @@ const props = defineProps({
   result: String,
 });
 
+const emits = defineEmits(["checkFinished"]);
+
 const adjacentRefs = computed(() => {
   const checker = new ReferenceChecker(props.result);
-  return checker.findAdjacent();
+  const found = checker.findAdjacent();
+  emits("checkFinished", found.length);
+  return found;
 });
-
 </script>
 
 <template>

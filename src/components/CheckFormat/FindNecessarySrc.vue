@@ -8,9 +8,13 @@ const props = defineProps({
   result: String,
 });
 
+const emits = defineEmits(["checkFinished"]);
+
 const lostTo = computed(() => {
   const checker = new ReferenceChecker(props.result);
-  return checker.findNecessarySrc();
+  const found = checker.findNecessarySrc();
+  emits("checkFinished", found.length);
+  return found;
 });
 </script>
 

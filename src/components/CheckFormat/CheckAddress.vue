@@ -29,8 +29,12 @@ const grepInvalidNombreLine = (s) => {
     .filter(Boolean);
 };
 
+const emits = defineEmits(["checkFinished"]);
+
 const problems = computed(() => {
-  return grepInvalidNombreLine(props.result);
+  const found = grepInvalidNombreLine(props.result);
+  emits("checkFinished", found.length);
+  return found;
 });
 </script>
 

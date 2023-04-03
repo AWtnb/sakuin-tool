@@ -10,9 +10,13 @@ const props = defineProps({
   result: String,
 });
 
+const emits = defineEmits(["checkFinished"]);
+
 const conflicts = computed(() => {
   const checker = new GroupChecker(props.result);
-  return checker.getConflicting();
+  const found = checker.getConflicting();
+  emits("checkFinished", found.length);
+  return found;
 });
 </script>
 
@@ -24,3 +28,4 @@ const conflicts = computed(() => {
     </IgnorableArea>
   </div>
 </template>
+
