@@ -7,10 +7,13 @@ import BeforeAfter from "@/components/BeforeAfter.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import { Entry } from "@/helpers/entry.js";
-import PasteBox from "@/components/PasteBox.vue";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 const resolveChildEntry = (lines) => {
+  if (lines.length < 1) {
+    return [];
+  }
   const stack = [];
   const parentStack = [];
   stack.push(lines[0]);
@@ -33,7 +36,6 @@ const resolveChildEntry = (lines) => {
 };
 
 const content = ref("");
-const fmtArr = ref([]);
 
 const contentLines = computed(() => {
   return arrayOfLines(content.value);
@@ -43,17 +45,13 @@ const pureLines = computed(() => {
   return contentLines.value.map((line) => line.trim()).filter((line) => line.length);
 });
 
+const fmtArr = computed(() => {
+  return resolveChildEntry(pureLines.value);
+});
+
 const resultStr = computed(() => {
   return fmtArr.value.join("\n");
 });
-
-const reset = () => {
-  fmtArr.value = [];
-};
-const executeFormat = () => {
-  reset();
-  fmtArr.value = resolveChildEntry(pureLines.value);
-};
 </script>
 
 <template>
@@ -61,7 +59,8 @@ const executeFormat = () => {
 
   <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
 
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
+  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
 
   <ResultBox :result="resultStr" />
 </template>
+
