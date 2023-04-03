@@ -50,3 +50,7 @@ li img {
 button {
   min-width: 120px;
 }
+
+textarea {
+  tab-size: 4rem;
+}
