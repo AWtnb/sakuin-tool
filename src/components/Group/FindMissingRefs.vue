@@ -10,14 +10,14 @@ const props = defineProps({
   result: String,
 });
 
-const lostFrom = computed(() => {
+const missingRefs = computed(() => {
   const checker = new ReferenceChecker(props.result);
   return checker.findMissingRefs();
 });
 </script>
 
 <template>
-  <div v-if="lostFrom.length">
+  <div v-if="missingRefs.length">
     <h3>見よ項目が足りません：</h3>
 
     <IgnorableArea>
@@ -29,7 +29,7 @@ const lostFrom = computed(() => {
           </tr></thead
         >
         <tbody>
-          <tr v-for="(lf, idx) in lostFrom" :key="idx">
+          <tr v-for="(lf, idx) in missingRefs" :key="idx">
             <td>{{ lf.problem }}</td>
             <td><SimpleList :arr="lf.require" /></td>
           </tr>
