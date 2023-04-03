@@ -9,7 +9,7 @@ import { arrayOfLines } from "@/helpers/utils.js";
 import { AddressHandler } from "@/helpers/addressHandler.js";
 import { Entry } from "@/helpers/entry.js";
 
-import PasteBox from "@/components/PasteBox.vue";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import UngroupedTable from "@/components/Ungroup/UngroupedTable.vue";
 
 const ungroupEntries = (lines) => {
@@ -24,47 +24,42 @@ const ungroupEntries = (lines) => {
           name: entry.name,
           nombre: "",
         });
-      } else {
-        new AddressHandler(entry.address).nombres.forEach((nombre) => {
-          stack.push({
-            name: entry.name,
-            nombre: nombre.text,
-          });
-        });
+        return;
       }
+      new AddressHandler(entry.address).nombres.forEach((nombre) => {
+        stack.push({
+          name: entry.name,
+          nombre: nombre.text,
+        });
+      });
     });
   return stack;
 };
 
 const content = ref("");
-const ungroupedLines = ref([]);
 
 const contentLines = computed(() => {
   return arrayOfLines(content.value);
 });
 
+const ungroupedLines = computed(() => {
+  return ungroupEntries(contentLines.value);
+});
+
 const resultStr = computed(() => {
   return ungroupedLines.value.map((x) => `${x.name}\t${x.nombre}`.trimEnd()).join("\n");
 });
-
-const reset = () => {
-  ungroupedLines.value = [];
-};
-const executeFormat = () => {
-  reset();
-  ungroupedLines.value = ungroupEntries(contentLines.value);
-};
 </script>
 
 <template>
   <h2>名開き</h2>
 
-  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath"/>
+  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
 
   <p>※項目とノンブルが Excel 上で2列に分かれていても大丈夫です。</p>
 
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeFormat" />
+  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
 
   <UngroupedTable :lines="ungroupedLines" :resultStr="resultStr" />
-
 </template>
+
