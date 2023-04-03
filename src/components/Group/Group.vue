@@ -9,7 +9,7 @@ import FindNecessaryRefs from "@/components/Group/FindNecessaryRefs.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import { Grouper } from "@/helpers/grouper";
-import PasteBox from "@/components/PasteBox.vue";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 const content = ref("");
@@ -25,17 +25,10 @@ const isLeft = ref(false);
 const isOrdered = ref(false);
 const skipHeader = ref(true);
 
-const groupedLines = ref([]);
-
-const reset = () => {
-  groupedLines.value = [];
-};
-
-const executeGrouping = () => {
-  reset();
+const groupedLines = computed(() => {
   const grouper = new Grouper(contentLines.value, isLeft.value);
-  groupedLines.value = grouper.getGroupedLines(isOrdered.value);
-};
+  return grouper.getGroupedLines(isOrdered.value);
+});
 
 const resultStr = computed(() => {
   return groupedLines.value.join("\n");
@@ -53,17 +46,17 @@ const resultStr = computed(() => {
   <label><input type="checkbox" v-model="isLeft" />ノンブルが左列</label>
   <label><input type="checkbox" v-model="isOrdered" />連続している項目のみ名寄せする</label>
 
-  <PasteBox v-on:updateContent="content = $event.target.value" v-on:buttonClicked="executeGrouping" />
+  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
 
   <ResultBox :result="resultStr" />
 
   <FindNecessaryRefs :result="resultStr" />
-
 </template>
 
 <style scoped>
 label {
   display: block;
+  width: fit-content;
 }
 </style>
 
