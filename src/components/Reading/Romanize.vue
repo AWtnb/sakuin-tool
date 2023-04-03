@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 
 import { toKatakana } from "@/helpers/utils.js";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 const romanMap = new Map();
@@ -121,7 +122,7 @@ const resultStr = computed(() => {
         </ul>
       </li>
     </ul>
-    <textarea v-model="content"></textarea>
+    <SimpleTextarea v-on:updateContent="content = $event.target.value" />
     <ResultBox :result="resultStr" />
   </details>
 </template>

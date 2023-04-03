@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 
 import { toHiragana, toKatakana } from "@/helpers/utils.js";
+import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
 const content = ref("");
@@ -18,7 +19,7 @@ const resultStr = computed(() => {
 <template>
   <details>
     <summary>カタカナひらがな相互変換</summary>
-    <textarea v-model="content"></textarea>
+    <SimpleTextarea v-on:updateContent="content = $event.target.value" />
     <ResultBox :result="resultStr" />
   </details>
 </template>
