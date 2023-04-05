@@ -19,7 +19,7 @@ const resultStr = computed(() => {
 <template>
   <details>
     <summary>カタカナひらがな相互変換</summary>
-    <SimpleTextarea v-on:updateContent="content = $event.target.value" />
+    <SimpleTextarea v-on:update-content="content = $event.target.value" />
     <ResultBox :result="resultStr" />
   </details>
 </template>

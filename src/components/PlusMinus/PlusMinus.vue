@@ -61,7 +61,7 @@ const resultStr = computed(() => {
     <li>増分 <input type="number" v-model="delta" /></li>
   </ul>
 
-  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
+  <SimpleTextarea v-on:update-content="content = $event.target.value" />
 
   <ResultBox :result="resultStr" />
 

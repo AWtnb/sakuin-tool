@@ -58,7 +58,7 @@ const resultStr = computed(() => {
 
   <p>※項目とノンブルが Excel 上で2列に分かれていても大丈夫です。</p>
 
-  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
+  <SimpleTextarea v-on:update-content="content = $event.target.value" />
 
   <UngroupedTable :lines="ungroupedLines" :resultStr="resultStr" />
 </template>

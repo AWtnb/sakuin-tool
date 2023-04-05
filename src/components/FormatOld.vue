@@ -61,7 +61,7 @@ const message = computed(() => {
     <li>子項目のダーシの種類を<code>&horbar;&horbar;</code>（2倍ダーシ）に統一します。</li>
   </ul>
 
-  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
+  <SimpleTextarea v-on:update-content="content = $event.target.value" />
 
   <ResultBox :result="resultStr" />
 

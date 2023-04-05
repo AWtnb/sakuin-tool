@@ -66,7 +66,7 @@ watch(
   <label><input type="checkbox" v-model="isLeft" />ノンブルが左列</label>
   <label><input type="checkbox" v-model="isOrdered" />連続している項目のみ名寄せする</label>
 
-  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
+  <SimpleTextarea v-on:update-content="content = $event.target.value" />
 
   <ResultBox :result="resultStr" />
 

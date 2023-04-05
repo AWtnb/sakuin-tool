@@ -29,7 +29,7 @@ const msg = computed(() => {
 <template>
   <h2>体裁チェック</h2>
 
-  <SimpleTextarea v-on:updateContent="content = $event.target.value" />
+  <SimpleTextarea v-on:update-content="content = $event.target.value" />
 
   <p><strong>{{ msg }}</strong></p>
 
