@@ -13,7 +13,7 @@ import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import { Sorter } from "@/helpers/sorter";
 
 const content = ref("");
-const skipHeader = ref(true);
+const skipHeader = ref(false);
 
 const contentLines = computed(() => {
   const lines = arrayOfLines(content.value);
