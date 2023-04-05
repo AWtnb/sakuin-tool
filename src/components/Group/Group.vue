@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 import beforePath from "@/assets/Group/before.png";
 import afterPath from "@/assets/Group/after.png";
@@ -25,14 +25,34 @@ const isLeft = ref(false);
 const isOrdered = ref(false);
 const skipHeader = ref(true);
 
-const groupedLines = computed(() => {
+const groupedStr = computed(() => {
   const grouper = new Grouper(contentLines.value, isLeft.value);
-  return grouper.getGroupedLines(isOrdered.value);
+  return grouper.getGroupedLines(isOrdered.value).join("\n");
 });
 
+const additionalEntries = ref("");
+
 const resultStr = computed(() => {
-  return groupedLines.value.join("\n");
+  if (additionalEntries.value.length < 1) {
+    return groupedStr.value;
+  }
+  return groupedStr.value + "\n" + additionalEntries.value;
 });
+
+const catchUpdate = (evt) => {
+  if (evt.isChecked) {
+    additionalEntries.value = evt.refItems.join("\n");
+  } else {
+    additionalEntries.value = "";
+  }
+};
+
+watch(
+  () => groupedStr.value,
+  () => {
+    additionalEntries.value = "";
+  }
+);
 </script>
 
 <template>
@@ -50,7 +70,7 @@ const resultStr = computed(() => {
 
   <ResultBox :result="resultStr" />
 
-  <FindMissingRefs :result="resultStr" />
+  <FindMissingRefs :checkTarget="groupedStr" v-on:updateUserChoice="catchUpdate" />
 </template>
 
 <style scoped>
