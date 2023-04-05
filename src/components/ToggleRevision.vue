@@ -1,27 +1,24 @@
+<script setup>
+import { ref } from "vue";
+const emits = defineEmits(["updateState"]);
+const isRevision = ref(false);
+const onChange = () => {
+  emits("updateState", { isRevision: isRevision.value });
+};
+</script>
+
 <template>
   <span class="revision-label">改訂版：</span>
   <label class="switch__label">
-    <input type="checkbox" class="switch__input" v-on:change="onChange" />
+    <input type="checkbox" class="switch__input" v-on:change="onChange" v-model="isRevision" />
     <span class="switch__content"></span>
     <span class="switch__circle"></span>
   </label>
 </template>
 
-<script>
-export default {
-  name: "ToggleRevision",
-  emits: ["updateState"],
-  methods: {
-    onChange: function (evt) {
-      this.$emit("updateState", evt);
-    },
-  },
-};
-</script>
-
 <style scoped>
 .revision-label {
-  font-size: .95em;
+  font-size: 0.95em;
 }
 
 /* https://sdesignlabo.com/web/togglebutton/ */
@@ -98,3 +95,4 @@ export default {
   height: 100%;
 }
 </style>
+

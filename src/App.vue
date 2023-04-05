@@ -3,11 +3,15 @@ import { ref } from "vue";
 import HomeIcon from "@/components/HomeIcon.vue";
 import ToggleRevision from "@/components/ToggleRevision.vue";
 const isRevision = ref(false);
+
+const listener = (evt) => {
+  isRevision.value = evt.isRevision;
+};
 </script>
 
 <template>
   <nav>
-    <ToggleRevision v-on:updateState="isRevision = $event.target.checked" />
+    <ToggleRevision v-on:update-state="listener" />
     <div class="menu">
       <router-link to="/"><HomeIcon /></router-link>
       <span class="detail">
@@ -42,3 +46,4 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
+
