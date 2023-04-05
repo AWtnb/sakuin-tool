@@ -66,7 +66,7 @@ const sortedArr = computed(() => {
 
   <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
 
-  <SimpleTextarea v-on:update-content="content = $event.target.value" />
+  <SimpleTextarea v-on:update-content="content = $event.content" />
 
   <SortedTable :sortedArr="sortedArr" />
 </template>

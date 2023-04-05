@@ -22,7 +22,7 @@ const found = computed(() => {
 <template>
   <h2>子項目候補をチェックする</h2>
 
-  <SimpleTextarea v-on:update-content="content = $event.target.value" />
+  <SimpleTextarea v-on:update-content="content = $event.content" />
 
   <div>
     <label><input type="radio" value="tail" v-model="picked" />末尾一致</label>

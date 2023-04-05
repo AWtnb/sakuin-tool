@@ -1,14 +1,16 @@
 <script setup>
-const emits = defineEmits(["updateContent"]);
+import { ref } from "vue";
 
-const onInput = (evt) => {
-  emits("updateContent", evt);
+const emits = defineEmits(["updateContent"]);
+const content = ref("");
+const onInput = () => {
+  emits("updateContent", { content: content.value });
 };
 </script>
 
 <template>
   <div class="box">
-    <textarea @input="onInput" placeholder="paste here!"></textarea>
+    <textarea @input="onInput" v-model="content" placeholder="paste here!"></textarea>
   </div>
 </template>
 
@@ -17,3 +19,4 @@ const onInput = (evt) => {
   margin: 6px auto;
 }
 </style>
+
