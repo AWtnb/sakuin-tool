@@ -17,7 +17,7 @@ const emits = defineEmits(["toggleAccept"]);
 
 const onChange = () => {
   emits("toggleAccept", {
-    refItems: props.require,
+    refItems: props.refItem.require,
     isChecked: isApply.value,
   });
 };
