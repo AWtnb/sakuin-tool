@@ -39,7 +39,7 @@ const resultStr = computed(() => {
   return groupedStr.value + "\n" + additionalEntries.value;
 });
 
-const catchUpdate = (evt) => {
+const toggleAcceptAll = (evt) => {
   if (evt.isChecked) {
     additionalEntries.value = evt.refItems.join("\n");
   } else {
@@ -70,7 +70,7 @@ watch(
 
   <ResultBox :result="resultStr" />
 
-  <FindMissingRefs :checkTarget="groupedStr" v-on:updateUserChoice="catchUpdate" />
+  <FindMissingRefs :checkTarget="groupedStr" v-on:toggleAcceptAll="toggleAcceptAll" />
 </template>
 
 <style scoped>

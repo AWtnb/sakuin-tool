@@ -20,10 +20,10 @@ const possibleRefs = computed(() => {
   return missingRefs.value.map((x) => x.require).flat();
 });
 
-const emits = defineEmits(["updateUserChoice"]);
+const emits = defineEmits(["toggleAcceptAll", "selectAcceptable"]);
 
 const onChange = () => {
-  emits("updateUserChoice", {
+  emits("toggleAcceptAll", {
     refItems: possibleRefs.value,
     isChecked: acceptAllSuggestion.value,
   });
@@ -46,7 +46,7 @@ watch(
     <table>
       <thead
         ><tr>
-          <th>項目</th>
+          <th>括弧のある項目</th>
           <th>必要な見よ項目</th>
           <th>追加する</th>
         </tr></thead
