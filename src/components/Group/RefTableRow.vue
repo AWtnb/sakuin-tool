@@ -33,7 +33,7 @@ watch(
 <template>
   <tr :class="{ blur: isBlur }">
     <td>{{ refItem.problem }}</td>
-    <td><SimpleList :arr="refItem.require" /></td>
+    <td class="required"><SimpleList :arr="refItem.require" /></td>
     <td><input type="checkbox" v-model="isApply" v-on:change="onChange" :disabled="determined" /> </td>
   </tr>
 </template>
@@ -41,6 +41,9 @@ watch(
 <style scoped>
 .blur {
   color: #aaa;
+}
+.required {
+  color: #fa2448;
 }
 td {
   vertical-align: middle;
