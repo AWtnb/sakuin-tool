@@ -1,38 +1,30 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 import RefTableRow from "@/components/Group/RefTableRow.vue";
 
-import { ReferenceChecker } from "@/helpers/referenceChecker";
-
 const props = defineProps({
-  checkTarget: String,
-});
-
-const missingRefs = computed(() => {
-  const checker = new ReferenceChecker(props.checkTarget);
-  return checker.findMissingRefs();
+  missingRefs: Array,
 });
 
 const acceptAllSuggestion = ref(false);
 
-const possibleRefs = computed(() => {
-  return missingRefs.value.map((x) => x.require).flat();
-});
+const emits = defineEmits(["acceptAllToggled", "acceptToggled"]);
 
-const emits = defineEmits(["toggleAcceptAll", "selectAcceptable"]);
-
-const onChange = () => {
-  emits("toggleAcceptAll", {
-    refItems: possibleRefs.value,
+const onAcceptAllToggled = () => {
+  emits("acceptAllToggled", {
     isChecked: acceptAllSuggestion.value,
   });
 };
 
+const onAcceptToggled = (evt) => {
+  emits("acceptToggled", evt);
+};
+
 watch(
-  () => props.checkTarget,
+  () => props.missingRefs,
   () => {
-    if (missingRefs.value.length) {
+    if (props.missingRefs.length) {
       acceptAllSuggestion.value = false;
     }
   }
@@ -42,7 +34,7 @@ watch(
 <template>
   <div v-if="missingRefs.length">
     <h3>見よ項目が足りません：</h3>
-    <label> <input type="checkbox" v-model="acceptAllSuggestion" v-on:change="onChange" />まとめて追加する </label>
+    <label> <input type="checkbox" v-model="acceptAllSuggestion" v-on:change="onAcceptAllToggled" />まとめて追加する </label>
     <table>
       <thead
         ><tr>
@@ -52,7 +44,7 @@ watch(
         </tr></thead
       >
       <tbody>
-        <RefTableRow v-for="(itm, idx) in missingRefs" :key="idx" :determined="acceptAllSuggestion" :refItem="itm" />
+        <RefTableRow v-for="(itm, idx) in missingRefs" :key="idx" :determined="acceptAllSuggestion" :refItem="itm" v-on:acceptToggled="onAcceptToggled" />
       </tbody>
     </table>
   </div>

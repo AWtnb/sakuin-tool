@@ -11,6 +11,7 @@ import { arrayOfLines } from "@/helpers/utils.js";
 import { Grouper } from "@/helpers/grouper";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
+import { ReferenceChecker } from "@/helpers/referenceChecker";
 
 const content = ref("");
 const contentLines = computed(() => {
@@ -30,27 +31,55 @@ const groupedStr = computed(() => {
   return grouper.getGroupedLines(isOrdered.value).join("\n");
 });
 
-const additionalEntries = ref("");
+const missingRefs = computed(() => {
+  const checker = new ReferenceChecker(groupedStr.value);
+  return checker.findMissingRefs();
+});
+
+const possibleRefs = computed(() => {
+  return missingRefs.value.map((x) => x.require).flat();
+});
+
+const acceptAllSuggestion = ref(false);
+
+const onAcceptAllToggled = (evt) => {
+  acceptAllSuggestion.value = evt.isChecked;
+};
+
+const userSelection = ref([]);
+
+const onAcceptToggled = (evt) => {
+  evt.refItems.forEach((x) => {
+    if (evt.isChecked) {
+      userSelection.value.push(x);
+    } else {
+      const found = userSelection.value.indexOf(x);
+      userSelection.value.splice(found, 1);
+    }
+  });
+};
+
+const additionalEntries = computed(() => {
+  if (acceptAllSuggestion.value) {
+    return possibleRefs.value;
+  }
+  if (userSelection.value.length) {
+    return userSelection.value;
+  }
+  return [];
+});
 
 const resultStr = computed(() => {
   if (additionalEntries.value.length < 1) {
     return groupedStr.value;
   }
-  return groupedStr.value + "\n" + additionalEntries.value;
+  return groupedStr.value + "\n" + additionalEntries.value.join("\n");
 });
-
-const toggleAcceptAll = (evt) => {
-  if (evt.isChecked) {
-    additionalEntries.value = evt.refItems.join("\n");
-  } else {
-    additionalEntries.value = "";
-  }
-};
 
 watch(
   () => groupedStr.value,
   () => {
-    additionalEntries.value = "";
+    acceptAllSuggestion.value = false;
   }
 );
 </script>
@@ -70,7 +99,7 @@ watch(
 
   <ResultBox :result="resultStr" />
 
-  <FindMissingRefs :checkTarget="groupedStr" v-on:toggleAcceptAll="toggleAcceptAll" />
+  <FindMissingRefs :missingRefs="missingRefs" v-on:acceptAllToggled="onAcceptAllToggled" v-on:acceptToggled="onAcceptToggled" />
 </template>
 
 <style scoped>

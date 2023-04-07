@@ -4,6 +4,7 @@ import SimpleList from "@/components/SimpleList.vue";
 
 const props = defineProps({
   determined: Boolean,
+  idx: Number,
   refItem: Object,
 });
 
@@ -13,10 +14,10 @@ const isBlur = computed(() => {
   return props.determined || isApply.value;
 });
 
-const emits = defineEmits(["toggleAccept"]);
+const emits = defineEmits(["acceptToggled"]);
 
 const onChange = () => {
-  emits("toggleAccept", {
+  emits("acceptToggled", {
     refItems: props.refItem.require,
     isChecked: isApply.value,
   });
