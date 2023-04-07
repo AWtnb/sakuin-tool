@@ -1,10 +1,9 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import SimpleList from "@/components/SimpleList.vue";
 
 const props = defineProps({
   determined: Boolean,
-  idx: Number,
   refItem: Object,
 });
 
@@ -22,6 +21,13 @@ const onChange = () => {
     isChecked: isApply.value,
   });
 };
+
+watch(
+  () => props.refItem,
+  () => {
+    isApply.value = false;
+  }
+);
 </script>
 
 <template>

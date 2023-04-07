@@ -79,6 +79,7 @@ const resultStr = computed(() => {
 watch(
   () => groupedStr.value,
   () => {
+    userSelection.value = [];
     acceptAllSuggestion.value = false;
   }
 );
