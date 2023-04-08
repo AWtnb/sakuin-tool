@@ -17,8 +17,11 @@ const onAcceptAllToggled = () => {
   });
 };
 
-const onAcceptToggled = (evt) => {
-  emits("acceptToggled", evt);
+const onAcceptToggled = (evt, idx) => {
+  emits("acceptToggled", {
+    isChecked: evt.isChecked,
+    idx: idx
+  });
 };
 
 watch(
@@ -44,7 +47,7 @@ watch(
         </tr></thead
       >
       <tbody>
-        <RefTableRow v-for="(itm, idx) in missingRefs" :key="idx" :determined="acceptAllSuggestion" :refItem="itm" v-on:acceptToggled="onAcceptToggled" />
+        <RefTableRow v-for="(itm, idx) in missingRefs" :key="idx" :determined="acceptAllSuggestion" :refItem="itm" v-on:acceptToggled="onAcceptToggled($event, idx)" />
       </tbody>
     </table>
   </div>

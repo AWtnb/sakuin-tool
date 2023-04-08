@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from "vue";
+import { reactive, ref, computed, watch } from "vue";
 
 import beforePath from "@/assets/Group/before.png";
 import afterPath from "@/assets/Group/after.png";
@@ -36,32 +36,28 @@ const missingRefs = computed(() => {
   return checker.findMissingRefs();
 });
 
-const possibleRefs = computed(() => {
-  return missingRefs.value.map((x) => x.require).flat();
-});
-
 const acceptAllSuggestion = ref(false);
 
 const onAcceptAllToggled = (evt) => {
   acceptAllSuggestion.value = evt.isChecked;
 };
 
-const userSelection = ref([]);
+const userSelectionStatus = reactive(new Map());
+
+const userSelection = computed(() => {
+  return missingRefs.value
+    .filter((_, i) => userSelectionStatus.has(i) && userSelectionStatus.get(i))
+    .map((x) => x.require)
+    .flat();
+});
 
 const onAcceptToggled = (evt) => {
-  evt.refItems.forEach((x) => {
-    if (evt.isChecked) {
-      userSelection.value.push(x);
-    } else {
-      const found = userSelection.value.indexOf(x);
-      userSelection.value.splice(found, 1);
-    }
-  });
+  userSelectionStatus.set(evt.idx, evt.isChecked);
 };
 
 const additionalEntries = computed(() => {
   if (acceptAllSuggestion.value) {
-    return possibleRefs.value;
+    return missingRefs.value.map((x) => x.require).flat();
   }
   if (userSelection.value.length) {
     return userSelection.value;
@@ -79,7 +75,9 @@ const resultStr = computed(() => {
 watch(
   () => groupedStr.value,
   () => {
-    userSelection.value = [];
+    Array.from(userSelectionStatus.keys()).forEach((key) => {
+      userSelectionStatus.set(key, false);
+    });
     acceptAllSuggestion.value = false;
   }
 );

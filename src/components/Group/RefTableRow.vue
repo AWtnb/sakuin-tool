@@ -17,7 +17,6 @@ const emits = defineEmits(["acceptToggled"]);
 
 const onChange = () => {
   emits("acceptToggled", {
-    refItems: props.refItem.require,
     isChecked: isApply.value,
   });
 };
