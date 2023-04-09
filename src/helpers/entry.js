@@ -5,10 +5,11 @@ class EntryName {
   }
 
   getBasename() {
-    return this.name
-      .replace(this.reg, "")
-      .trim()
-      .replace(/\u3000{1,2}/, "");
+    const t = this.name.replace(this.reg, "").trim();
+    if (this.getReferTo().length) {
+      return t.split("→")[0].trim().replace(/\u3000{1,2}/, "");
+    }
+    return t.replace(/\u3000{1,2}/, "");
   }
 
   getRefBasename() {
@@ -22,19 +23,16 @@ class EntryName {
       return inner
         .replace(/\uff0c/g, ",")
         .split(",")
-        .map((x) => String(x).trim())
+        .map((x) => x.trim())
         .filter(Boolean);
     }
     return [];
   }
 
   getReferTo() {
-    const refElems = this.name
-      .split("→")
-      .map((x) => String(x).trim())
-      .filter(Boolean);
+    const refElems = this.name.split("→").filter((x) => x.trim().length > 0);
     if (refElems.length == 2) {
-      return refElems.at(-1);
+      return refElems.at(-1).trim();
     }
     return "";
   }
@@ -82,80 +80,84 @@ export class Entry {
      * 項目名
      * @type {String}
      */
-    this.name = "";
+    this.name = this.getName();
+
+    const enrtyName = new EntryName(this.name);
 
     /**
-     * 項目名から括弧を除いた部分（見よ項目の場合は「見よ元」部分）。項目の文字間はアキツメル。
+     * 項目名から括弧を除いた部分。
+     * - 項目の文字間および前後の空白は削除。
+     * - 子項目の場合はインデントの空白文字を除いた部分。
+     * - 見よ項目の場合は「見よ元」部分。
      * @type {String}
      */
-    this.basename = "";
+    this.basename = enrtyName.getBasename();
 
     /**
      * ノンブルの集合部分
      * @type {String}
      */
-    this.address = "";
+    this.address = this.getAddress();
 
     /**
      * カッコ内に付記された「見よ元」情報
      * @type {String[]}
      */
-    this.referredFrom = [];
+    this.referredFrom = enrtyName.getSource();
 
     /**
      * 見よ先
      * @type {String}
      */
-    this.referTo = "";
+    this.referTo = enrtyName.getReferTo();
 
     /**
      * 見よ項目かどうか
      * @type {Boolean}
      */
-    this.isReference = false;
-
-    this.parse();
+    this.isReference = this.referTo.length && this.name.length && this.address.length < 1;
   }
 
   /**
-   * 初期値を設定する
+   * 入力文字列を separator で分割した「左側」を返す。
+   * @returns String
    */
-  parse() {
+  getLeftSide() {
     if (this.elems.length >= 2) {
-      const sides = (() => {
-        if (this.elems.length > 2) {
-          return {
-            left: this.elems.slice(0, -1).join(this.separator),
-            right: this.elems.at(-1),
-          };
-        }
-        return {
-          left: this.elems[0],
-          right: this.elems[1],
-        };
-      })();
-      this.name = (this.isChild ? "\u3000" : "") + sides.left.trim();
-      this.address = sides.right.trim();
-      const nm = new EntryName(this.name);
-      this.basename = nm.getBasename();
-      this.referredFrom = nm.getSource();
-      return;
+      if (this.elems.length > 2) {
+        return this.elems.slice(0, -1).join(this.separator);
+      }
+      return this.elems[0];
     }
-
-    if (this.elems.length < 1) {
-      return;
+    if (this.elems.length == 1) {
+      return this.elems[0];
     }
+    return "";
+  }
 
-    const s = this.elems[0];
-    if (s.trim().length < 1) {
-      return;
+  getName() {
+    const t = this.getLeftSide().trim();
+    if (t.length < 1) {
+      return "";
     }
-    this.name = (this.isChild ? "\u3000" : "") + s.trim();
+    return (this.isChild ? "\u3000" : "") + t;
+  }
 
-    const nm = new EntryName(this.name);
-    this.referTo = nm.getReferTo();
-    this.isReference = this.referTo.length > 0;
-    this.basename = nm.getRefBasename();
-    this.referredFrom = nm.getSource();
+  /**
+   * 入力文字列を separator で分割した「右側」を返す。
+   * @returns String
+   */
+  getRightSide() {
+    if (this.elems.length >= 2) {
+      if (this.elems.length > 2) {
+        return this.elems.at(-1);
+      }
+      return this.elems[1];
+    }
+    return "";
+  }
+
+  getAddress() {
+    return this.getRightSide().trim();
   }
 }
