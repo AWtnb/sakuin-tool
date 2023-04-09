@@ -13,7 +13,7 @@ export class ReferenceChecker {
   /**
    * 見よ項目があるのに参照先に括弧で付記されていないものを探す
    */
-  findMissingRefferdFrom() {
+  findMissingBackLink() {
     return this.refs
       .map((ref) => {
         const grep = this.nonRefs.filter((entry) => {

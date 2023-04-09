@@ -10,16 +10,16 @@ const props = defineProps({
 
 const emits = defineEmits(["checkFinished"]);
 
-const missingRefferdFrom = computed(() => {
+const missingBackLink = computed(() => {
   const checker = new ReferenceChecker(props.result);
-  const found = checker.findMissingRefferdFrom();
+  const found = checker.findMissingBackLink();
   emits("checkFinished", found.length);
   return found;
 });
 </script>
 
 <template>
-  <div v-if="missingRefferdFrom.length">
+  <div v-if="missingBackLink.length">
     <h3>見よ先の括弧書きが足りません：</h3>
     <IgnorableArea>
       <table>
@@ -30,7 +30,7 @@ const missingRefferdFrom = computed(() => {
           </tr></thead
         >
         <tbody>
-          <tr v-for="(lt, idx) in missingRefferdFrom" :key="idx">
+          <tr v-for="(lt, idx) in missingBackLink" :key="idx">
             <td>{{ lt.problem }}</td>
             <td>{{ lt.require }}</td>
           </tr>
