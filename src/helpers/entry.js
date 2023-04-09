@@ -103,7 +103,7 @@ export class Entry {
      * カッコ内に付記された「見よ元」情報
      * @type {String[]}
      */
-    this.referredFrom = enrtyName.getSource();
+    this.backLink = enrtyName.getSource();
 
     /**
      * 見よ先

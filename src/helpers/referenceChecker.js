@@ -7,7 +7,7 @@ export class ReferenceChecker {
     this.entries = lines.filter((x) => String(x).trim()).map((line) => new Entry(line));
     this.refs = this.entries.filter((entry) => entry.isReference);
     this.nonRefs = this.entries.filter((entry) => !entry.isReference);
-    this.referred = this.entries.filter((entry) => entry.referredFrom.length > 0);
+    this.referred = this.entries.filter((entry) => entry.backLink.length > 0);
   }
 
   /**
@@ -17,7 +17,7 @@ export class ReferenceChecker {
     return this.refs
       .map((ref) => {
         const grep = this.nonRefs.filter((entry) => {
-          return entry.basename == ref.referTo && entry.referredFrom.includes(ref.basename);
+          return entry.basename == ref.referTo && entry.backLink.includes(ref.basename);
         });
         if (grep.length > 0) {
           return null;
@@ -36,7 +36,7 @@ export class ReferenceChecker {
   findMissingRefs() {
     return this.referred
       .map((refed) => {
-        const required = refed.referredFrom.filter((s) => {
+        const required = refed.backLink.filter((s) => {
           const correctRefs = this.refs.filter((entry) => entry.basename == s && entry.referTo == refed.basename);
           return correctRefs.length < 1;
         });
@@ -60,11 +60,11 @@ export class ReferenceChecker {
       // filter で要素数を減らしてしまうとインデックスで参照できなくなるので注意
       if (entry.isReference) {
         const previous = this.entries[idx - 1];
-        if (previous && !previous.isReference && previous.referredFrom.includes(entry.basename)) {
+        if (previous && !previous.isReference && previous.backLink.includes(entry.basename)) {
           stack.push(entry);
         }
         const next = this.entries[idx + 1];
-        if (next && !next.isReference && next.referredFrom.includes(entry.basename)) {
+        if (next && !next.isReference && next.backLink.includes(entry.basename)) {
           stack.push(entry);
         }
       }

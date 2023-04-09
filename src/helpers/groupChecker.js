@@ -8,12 +8,13 @@ export class GroupChecker {
     this.refs = this.entries.filter((entry) => entry.isReference);
     this.nonRefs = this.entries.filter((entry) => !entry.isReference);
     this.mainEntries = this.nonRefs.filter((entry) => !entry.isChild);
-    this.referred = this.entries.filter((entry) => entry.referredFrom.length > 0);
-    this.nonReferred = this.entries.filter((entry) => entry.referredFrom.length < 1);
   }
 
+  /**
+   * basename が同じものが2つ以上ないか（括弧の有無だけで別項目扱いになっていないか）探す
+   * @returns Array
+   */
   getUngrouped() {
-    // basename が同じものが2つ以上ないか（括弧の有無だけで別項目扱いになっていないか）探す
     const stack = [];
     this.mainEntries.forEach((entry) => {
       const target = entry.basename;
@@ -31,8 +32,11 @@ export class GroupChecker {
     return stack.map((x) => x.detail);
   }
 
+  /**
+   * 本項目として残っている見よ項目を探す
+   * @returns Array
+   */
   getConflicting() {
-    // 本項目として残っている見よ項目を探す
     return this.refs
       .map((entry) => {
         const target = entry.basename;
