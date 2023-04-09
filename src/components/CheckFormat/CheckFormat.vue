@@ -33,10 +33,10 @@ const msg = computed(() => {
 
   <p><strong>{{ msg }}</strong></p>
 
+  <CheckUngrouped :result="content" v-on:checkFinished="groupProblem = $event" />
   <CheckAddress :result="content" v-on:checkFinished="addressProblem = $event" />
   <FindMissingRefferdFrom :result="content" v-on:checkFinished="referenceMissingProblem = $event" />
-  <CheckUngrouped :result="content" v-on:checkFinished="groupProblem = $event" />
-  <FindAdjacent :result="content" v-on:checkFinished="adjacentProblem = $event" />
   <CheckConflict :result="content" v-on:checkFinished="referenceConflictProblem = $event" />
+  <FindAdjacent :result="content" v-on:checkFinished="adjacentProblem = $event" />
 </template>
 
