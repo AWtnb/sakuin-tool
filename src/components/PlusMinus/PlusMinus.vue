@@ -6,7 +6,7 @@ import AddressDiff from "@/components/PlusMinus/AddressDiff.vue";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
-import { EntryLines } from "@/helpers/addressAdjuster.js";
+import { AddressAdjuster } from "@/helpers/addressAdjuster.js";
 
 const content = ref("");
 const start = ref(1);
@@ -18,8 +18,8 @@ const contentLines = computed(() => {
 });
 
 const adjustedArr = computed(() => {
-  const eLines = new EntryLines(contentLines.value, start.value, end.value, delta.value);
-  return eLines.adjust();
+  const adjuster = new AddressAdjuster(start.value, end.value, delta.value);
+  return adjuster.apply(contentLines.value);
 });
 
 const diffArr = computed(() => {
