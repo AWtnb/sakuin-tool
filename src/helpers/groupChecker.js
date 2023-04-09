@@ -18,18 +18,16 @@ export class GroupChecker {
     const stack = [];
     this.mainEntries.forEach((entry) => {
       const target = entry.basename;
-      const grep = this.mainEntries.filter((e) => e.basename == target);
+      const grep = this.mainEntries.filter((ent) => ent.basename == target).map((ent) => ent.rawStr);
       if (grep.length == 1) {
         return;
       }
-      if (!stack.map((x) => x.id).includes(target)) {
-        stack.push({
-          id: target,
-          detail: grep.map((entry) => entry.rawStr),
-        });
-      }
+      stack.push(grep);
     });
-    return stack.map((x) => x.detail);
+    const uniq = stack.filter((elem, idx, self) => {
+      return idx === self.findIndex((x) => x.join("") === elem.join(""));
+    });
+    return uniq;
   }
 
   /**
