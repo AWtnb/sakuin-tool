@@ -27,9 +27,10 @@ const ungroupEntries = (lines) => {
         return;
       }
       new AddressHandler(entry.address).nombres.forEach((nombre) => {
+        const n = (nombre.hyphenated)? String(nombre.intValue) : nombre.getText()
         stack.push({
           name: entry.name,
-          nombre: nombre.text,
+          nombre: n,
         });
       });
     });

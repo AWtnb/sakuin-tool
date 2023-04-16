@@ -1,18 +1,11 @@
 import { Entry } from "@/helpers/entry.js";
 import { AddressHandler } from "@/helpers/addressHandler.js";
 
-const pruneNaN = (s) => {
-  if (isNaN(Number(s))) {
-    return s.replace(/[^\d]/g, "");
-  }
-  return s;
-};
-
 const compareNombres = (nombresA, nombresB) => {
   const detail = nombresA.map((nbrA, idx) => {
     const nbrB = nombresB[idx];
     const isEnd = idx == nombresA.length - 1;
-    if (pruneNaN(nbrA) != pruneNaN(nbrB)) {
+    if (nbrA != nbrB) {
       return {
         text: nbrB,
         before: nbrA,
@@ -40,24 +33,14 @@ export class AddressAdjuster {
     this.delta = Number(delta);
   }
 
-  adjustNombre(nombre) {
-    if (this.start <= nombre.intValue && nombre.intValue <= this.end) {
-      return nombre.adjust(this.delta);
-    }
-    return nombre.text;
-  }
-
   apply(lines) {
     return lines.map((line) => {
       const entry = new Entry(line);
-      const orgNombres = new AddressHandler(entry.address).rawElements;
-      const newNombres = orgNombres.map((orgNbr) => {
-        const parsed = new AddressHandler(orgNbr).nombres;
-        if (parsed.length > 1) {
-          return this.adjustNombre(parsed[0]) + "\u2013" + this.adjustNombre(parsed.at(-1));
-        }
-        return this.adjustNombre(parsed[0]);
-      });
+      const address = new AddressHandler(entry.address);
+      const orgin = address.formatAll();
+      const orgNombres = orgin.split(", ");
+      const adjusted = address.adjust(this.start, this.end, this.delta);
+      const newNombres = adjusted.split(", ");
       return {
         name: entry.name,
         newNombres: newNombres,
