@@ -7,7 +7,7 @@ class Nombre {
 
   getPrefix() {
     const s = this.text;
-    if (isNaN(s.at(0))) {
+    if (s.length && isNaN(s.at(0))) {
       return s.split(/\d+/).at(0);
     }
     return "";
@@ -15,7 +15,7 @@ class Nombre {
 
   getSuffix() {
     const s = this.text;
-    if (isNaN(s.at(-1))) {
+    if (s.length && isNaN(s.at(-1))) {
       return s.split(/\d+/).at(-1);
     }
     return "";
@@ -35,31 +35,32 @@ export class AddressHandler {
       .replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, function (m) {
         return String.fromCharCode(m.charCodeAt(0) - 0xfee0);
       });
+    this.nombres = [];
+
     this.rawElements = sanitized
       .split(",")
       .map((x) => x.trim())
       .filter(Boolean);
-    this.nombres = [];
-    this.parse();
+    this.rawElements.forEach((elem) => {
+      if (elem.indexOf("-") != -1) {
+        this.setRangedNombre(elem);
+        return;
+      }
+      this.nombres.push(new Nombre(elem, false));
+    });
   }
 
-  parse() {
-    this.rawElements.forEach((elem) => {
-      const nbr = String(elem);
-      if (nbr.indexOf("-") != -1) {
-        const [start, end, ...rest] = nbr.split("-");
-        const s = new Nombre(start, false);
-        const e = new Nombre(end, false);
-        this.nombres.push(s);
-        for (let i = s.intValue + 1; i < e.intValue; i++) {
-          const n = new Nombre(String(i), true);
-          this.nombres.push(n);
-        }
-        this.nombres.push(e);
-      } else {
-        this.nombres.push(new Nombre(nbr, false));
+  setRangedNombre(s) {
+    const [start, end, ..._] = s.split("-");
+    if (start.length && end.length) {
+      const startNbr = new Nombre(start, false);
+      const endNbr = new Nombre(end, false);
+      this.nombres.push(startNbr);
+      for (let i = startNbr.intValue + 1; i < endNbr.intValue; i++) {
+        this.nombres.push(new Nombre(String(i), true));
       }
-    });
+      this.nombres.push(endNbr);
+    }
   }
 
   beginsConsecutiveTriplet(startIdx) {
