@@ -57,15 +57,16 @@ const resultStr = computed(() => {
     <div class="main-content">
       <table>
         <tbody>
-          <CountRow :nombreIdx="idx" v-for="(_, idx) in maxRow" :key="idx" v-on:updateCounter="setCount" />
+          <CountRow :nombreIdx="idx" :limit="maxRow" v-for="(_, idx) in maxRow" :key="idx" v-on:updateCounter="setCount" />
         </tbody>
       </table>
     </div>
   </div>
 
   <ul>
-    <li>Tab キーと上下キーで入力すると楽です</li>
-    <li>見よ項目があれば見よ先項目とのペアで1つとカウント</li>
+    <li>上下キーでカウントを上下させられます</li>
+    <li>左右キーで入力欄を移動できます</li>
+    <li>見よ項目があれば見よ先項目とのペアで1つとカウントします</li>
   </ul>
 
   <TemplateTable :rows="workTemplate" :resultStr="resultStr" />
