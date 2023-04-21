@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import PossibleList from "@/components/CheckChild/PossibleList.vue";
+import PossibleList from "./PossibleList.vue";
 export default {
   name: "FoundTable",
   components: {

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 
-import RefTableRow from "@/components/Group/RefTableRow.vue";
+import RefTableRow from "./RefTableRow.vue";
 
 const props = defineProps({
   missingRefs: Array,

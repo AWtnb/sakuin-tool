@@ -3,11 +3,11 @@ import { ref, computed } from "vue";
 
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 
-import FindMissingBackLink from "@/components/CheckFormat/FindMissingBackLink.vue";
-import FindAdjacent from "@/components/CheckFormat/FindAdjacent.vue";
-import CheckConflict from "@/components/CheckFormat/CheckConflict.vue";
-import CheckUngrouped from "@/components/CheckFormat/CheckUngrouped.vue";
-import CheckAddress from "@/components/CheckFormat/CheckAddress.vue";
+import FindMissingBackLink from "./FindMissingBackLink.vue";
+import FindAdjacent from "./FindAdjacent.vue";
+import CheckConflict from "./CheckConflict.vue";
+import CheckUngrouped from "./CheckUngrouped.vue";
+import CheckAddress from "./CheckAddress.vue";
 
 const content = ref("");
 

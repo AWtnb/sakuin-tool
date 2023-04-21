@@ -10,7 +10,7 @@ import { AddressHandler } from "@/helpers/addressHandler.js";
 import { Entry } from "@/helpers/entry.js";
 
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
-import UngroupedTable from "@/components/Ungroup/UngroupedTable.vue";
+import UngroupedTable from "./UngroupedTable.vue";
 
 const ungroupEntries = (lines) => {
   const stack = [];

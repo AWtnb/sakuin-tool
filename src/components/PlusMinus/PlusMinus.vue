@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
-import AddressDiff from "@/components/PlusMinus/AddressDiff.vue";
+import AddressDiff from "./AddressDiff.vue";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 

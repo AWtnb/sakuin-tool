@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 
-import DuplicateTable from "@/components/CheckFormat/DuplicateTable.vue";
+import DuplicateTable from "./DuplicateTable.vue";
 import IgnorableArea from "@/components/IgnorableArea.vue";
 
 import { GroupChecker } from "@/helpers/groupChecker";

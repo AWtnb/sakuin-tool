@@ -6,8 +6,8 @@ import afterPath from "@/assets/Sort/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
-import Normalize from "@/components/Sort/Normalize.vue";
-import SortedTable from "@/components/Sort/SortResult.vue";
+import Normalize from "./Normalize.vue";
+import SortedTable from "./SortResult.vue";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 
 import { Sorter } from "@/helpers/sorter";

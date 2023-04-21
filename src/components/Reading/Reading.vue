@@ -1,7 +1,7 @@
 <script setup>
-import DownloadGuide from "@/components/Reading/DownloadGuide.vue";
-import JaConv from "@/components/Reading/JaConv.vue";
-import Romanize from "@/components/Reading/Romanize.vue";
+import DownloadGuide from "./DownloadGuide.vue";
+import JaConv from "./JaConv.vue";
+import Romanize from "./Romanize.vue";
 </script>
 
 <template>

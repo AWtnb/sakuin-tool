@@ -5,7 +5,7 @@ import beforePath from "@/assets/Group/before.png";
 import afterPath from "@/assets/Group/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
-import FindMissingRefs from "@/components/Group/FindMissingRefs.vue";
+import FindMissingRefs from "./FindMissingRefs.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import { Grouper } from "@/helpers/grouper";

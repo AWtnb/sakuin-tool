@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
-import FoundTable from "@/components/CheckChild/FoundTable.vue";
+import FoundTable from "./FoundTable.vue";
 import { CheckChild } from "@/helpers/checkChild.js";
 
 const content = ref("");

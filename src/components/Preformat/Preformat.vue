@@ -8,7 +8,7 @@ import BeforeAfter from "@/components/BeforeAfter.vue";
 import { toHalfWidth, arrayOfLines } from "@/helpers/utils.js";
 
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
-import FormattedTable from "@/components/Preformat/FormattedTable.vue";
+import FormattedTable from "./FormattedTable.vue";
 
 const formatIndexTemplate = (lines) => {
   const stack = [];

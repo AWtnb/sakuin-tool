@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import Definition from "@/components/Home/Definition.vue";
-import Steps from "@/components/Home/Steps.vue";
+import Definition from "./Definition.vue";
+import Steps from "./Steps.vue";
 export default {
   name: "Home",
   components: {

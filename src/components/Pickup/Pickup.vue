@@ -7,8 +7,8 @@ import afterPath from "@/assets/Pickup/NewTemplate/after.png";
 import { toHalfWidth, arrayOfLines } from "@/helpers/utils";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
-import TemplateTable from "@/components/Pickup/TemplateTable.vue";
-import ExcelSetting from "@/components/Pickup/ExcelSetting.vue";
+import TemplateTable from "./TemplateTable.vue";
+import ExcelSetting from "./ExcelSetting.vue";
 
 const generateTemplate = (lines) => {
   const stack = [];
