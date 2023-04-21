@@ -1,13 +1,13 @@
 <script setup>
 import { reactive, ref, computed } from "vue";
 
-import afterPath from "@/assets/Pickup/NewTemplate/after.png";
+import afterPath from "@/assets/Pickup/template-image.png";
 
 import TemplateTable from "./TemplateTable.vue";
 import ExcelSetting from "./ExcelSetting.vue";
 import CountRow from "./CountRow.vue";
 
-const maxRow = ref(100);
+const maxRow = ref(250);
 
 const countMap = reactive(new Map());
 
@@ -44,7 +44,7 @@ const resultStr = computed(() => {
   <h2>索引拾いのテンプレート生成</h2>
 
   <p><img :src="afterPath" /></p>
-  <p>Excel 上に記入するためのテンプレートを作ります。<br />先にカウントしておくことで、入力作業に集中しやすくなります。</p>
+  <p>ゲラ上にマーカーを引いた項目を Excel に記入するためのテンプレートを作ります。<br />先にカウントしておくことで、入力作業に集中することができます。</p>
 
   <label>総ページ数<input type="number" min="1" v-model="maxRow" :disabled="workTemplate.length" /></label>
 
@@ -75,7 +75,7 @@ const resultStr = computed(() => {
 
 <style scoped>
 img {
-  max-width: 300px;
+  max-width: 400px;
 }
 .wrapper {
   border: 2px solid #bdbdbd;
