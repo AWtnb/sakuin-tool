@@ -81,6 +81,9 @@ img {
   border: 2px solid #bdbdbd;
   border-radius: 4px;
 }
+.wrapper table {
+  margin: 0;
+}
 .wrapper .only-header {
   background-color: #bdbdbd;
 }
