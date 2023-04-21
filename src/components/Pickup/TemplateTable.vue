@@ -1,15 +1,24 @@
+<script setup>
+import CopyButton from "@/components/CopyButton.vue";
+
+const props = defineProps({
+  rows: Array,
+  resultStr: String,
+});
+</script>
+
 <template>
-  <div v-if="lines.length" v-cloak>
+  <div v-if="rows.length" v-cloak>
     <div class="limit-height">
       <table>
         <thead>
           <tr> <th>ID</th><th>index</th><th>ページ</th><th>項目</th><th>見よ先</th> </tr>
         </thead>
         <tbody>
-          <tr v-for="(line, idx) in lines" :key="idx">
-            <td>{{ line.id }}</td>
-            <td>{{ line.pageIdx }}</td>
-            <td>{{ line.page }}</td>
+          <tr v-for="(row, idx) in rows" :key="idx">
+            <td class="meta-info">{{ row.id }}</td>
+            <td class="meta-info">{{ row.idx }}</td>
+            <td>{{ row.nombre }}</td>
             <td></td>
             <td></td>
           </tr>
@@ -20,18 +29,8 @@
   </div>
 </template>
 
-<script>
-
-import CopyButton from "@/components/CopyButton.vue";
-
-export default {
-  name: "TemplateTable",
-  props: {
-    lines: Array,
-    resultStr: String
-  },
-  components: {
-    CopyButton,
-  },
-};
-</script>
+<style scoped>
+.meta-info {
+  color: #aaa;
+}
+</style>

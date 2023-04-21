@@ -1,79 +1,95 @@
 <script setup>
-import { ref, computed } from "vue";
+import { reactive, ref, computed } from "vue";
 
-import beforePath from "@/assets/Pickup/NewTemplate/before.png";
 import afterPath from "@/assets/Pickup/NewTemplate/after.png";
 
-import { toHalfWidth, arrayOfLines } from "@/helpers/utils";
-import BeforeAfter from "@/components/BeforeAfter.vue";
-import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import TemplateTable from "./TemplateTable.vue";
 import ExcelSetting from "./ExcelSetting.vue";
+import CountRow from "./CountRow.vue";
 
-const generateTemplate = (lines) => {
+const maxRow = ref(100);
+
+const countMap = reactive(new Map());
+
+const setCount = (evt) => {
+  countMap.set(evt.nombre, evt.counter);
+};
+
+const workTemplate = computed(() => {
   const stack = [];
-  let pageIdx = 0;
-  lines
-    .filter((line) => line)
-    .forEach((line) => {
-      const elems = line.split("\t");
-      if (elems.length < 2) {
-        return;
-      }
-      const page = elems[0].trim();
-      const counter = elems[1].trim();
-      if (page.length < 1 || counter.length < 1) {
-        return;
-      }
-      const nItem = Number(toHalfWidth(counter));
-      if (nItem > 0) {
-        pageIdx += 1;
-        for (let i = 0; i < nItem; i++) {
-          stack.push({
-            id: String(stack.length + 1),
-            pageIdx: String(pageIdx),
-            page: String(page),
-          });
-        }
+  let id = 0;
+  Array.from(countMap.keys())
+    .filter((key) => countMap.get(key) > 0)
+    .forEach((key, idx) => {
+      for (let i = 0; i < countMap.get(key); i++) {
+        id += 1;
+        stack.push({
+          id: id,
+          idx: idx + 1,
+          nombre: key,
+        });
       }
     });
   return stack;
-};
-
-const content = ref("");
-const skipHeader = ref(true);
-
-const contentLines = computed(() => {
-  const lines = arrayOfLines(content.value);
-  if (skipHeader.value) {
-    return lines.slice(1);
-  }
-  return lines;
 });
 
 const resultStr = computed(() => {
-  const conc = ["ID\tindex\tページ\t項目\t見よ先"].concat(tableRows.value.map((x) => `${x.id}\t${x.pageIdx}\t${x.page}\t\t`));
+  const header = ["ID", "index", "ページ", "項目", "見よ先"].join("\t");
+  const conc = [header].concat(workTemplate.value.map((x) => `${x.id}\t${x.idx}\t${x.nombre}\t\t`));
   return conc.join("\n");
-});
-
-const tableRows = computed(() => {
-  return generateTemplate(contentLines.value);
 });
 </script>
 
 <template>
   <h2>索引拾いのテンプレート生成</h2>
 
-  <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
+  <p><img :src="afterPath" /></p>
+  <p>Excel 上に記入するためのテンプレートを作ります。<br />先にカウントしておくことで、入力作業に集中しやすくなります。</p>
 
-  <p>※<code>個数</code>列は見よ項目がある場合、見よ先項目とのペアで1つとカウントします。</p>
+  <label>総ページ数<input type="number" min="1" v-model="maxRow" :disabled="workTemplate.length" /></label>
 
-  <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
+  <div class="wrapper">
+    <table class="only-header">
+      <thead>
+        <tr> <th>ページ</th> <th>個数</th> </tr>
+      </thead>
+    </table>
+    <div class="main-content">
+      <table>
+        <tbody>
+          <CountRow :nombreIdx="idx" v-for="(_, idx) in maxRow" :key="idx" v-on:updateCounter="setCount" />
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-  <SimpleTextarea v-on:update-content="content = $event.content" />
+  <ul>
+    <li>Tab キーと上下キーで入力すると楽です</li>
+    <li>見よ項目があれば見よ先項目とのペアで1つとカウント</li>
+  </ul>
 
-  <TemplateTable :lines="tableRows" :resultStr="resultStr" />
+  <TemplateTable :rows="workTemplate" :resultStr="resultStr" />
 
   <ExcelSetting />
 </template>
+
+<style scoped>
+img {
+  max-width: 300px;
+}
+.wrapper {
+  border: 2px solid #bdbdbd;
+  border-radius: 4px;
+}
+.wrapper .only-header {
+  background-color: #bdbdbd;
+}
+.wrapper .only-header th {
+  text-align: center;
+}
+.wrapper .main-content {
+  overflow: auto;
+  height: 250px;
+}
+</style>
 
