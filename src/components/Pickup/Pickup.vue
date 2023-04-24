@@ -7,7 +7,16 @@ import TemplateTable from "./TemplateTable.vue";
 import ExcelSetting from "./ExcelSetting.vue";
 import CountRow from "./CountRow.vue";
 
+const minRow = ref(1);
 const maxRow = ref(250);
+
+const sequence = computed(() => {
+  const stack = [];
+  for (let i = minRow.value - 1; i < maxRow.value; i++) {
+    stack.push(i);
+  }
+  return stack;
+});
 
 const countMap = reactive(new Map());
 
@@ -46,7 +55,9 @@ const resultStr = computed(() => {
   <p><img :src="afterPath" /></p>
   <p>ゲラ上にマーカーを引いた項目を Excel に記入するためのテンプレートを作ります。<br />先にカウントしておくことで、入力作業に集中することができます。</p>
 
-  <label>総ページ数<input type="number" min="1" v-model="maxRow" :disabled="workTemplate.length" /></label>
+  <label>開始ページ<input type="number" min="1" v-model="minRow" :disabled="workTemplate.length" /></label>
+
+  <label>終了ページ<input type="number" min="1" v-model="maxRow" :disabled="workTemplate.length" /></label>
 
   <div class="wrapper">
     <table class="only-header">
@@ -57,14 +68,14 @@ const resultStr = computed(() => {
     <div class="main-content">
       <table>
         <tbody>
-          <CountRow :nombreIdx="idx" :limit="maxRow" v-for="(_, idx) in maxRow" :key="idx" v-on:updateCounter="setCount" />
+          <CountRow :nombreIdx="seq" :maxRow="maxRow" v-for="(seq, idx) in sequence" :key="idx" v-on:updateCounter="setCount" />
         </tbody>
       </table>
     </div>
   </div>
 
   <ul>
-    <li>上下キーでカウントを上下させられます</li>
+    <li>上下キーでカウントを増減させられます</li>
     <li>左右キーで入力欄を移動できます</li>
     <li>見よ項目があれば見よ先項目とのペアで1つとカウントします</li>
   </ul>

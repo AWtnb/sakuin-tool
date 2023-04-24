@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 
 const props = defineProps({
-  limit: Number,
+  maxRow: Number,
   nombreIdx: Number,
 });
 
@@ -21,7 +21,7 @@ const onInput = () => {
 const toNext = (evt) => {
   const tabIdx = Number(evt.target.getAttribute("tabindex"));
   const to = tabIdx + 1;
-  if (buffer + props.limit <= to) {
+  if (buffer + props.maxRow <= to) {
     return;
   }
   const elem = document.querySelector(`[tabindex="${to}"]`);
@@ -42,16 +42,21 @@ const toPrevious = (evt) => {
     elem.select();
   }
 };
+
+const isFocused = ref(false);
 </script>
 
 <template>
-  <tr>
+  <tr :class="{ focused: isFocused }">
     <td class="nombre">{{ nombre }}</td>
-    <td class="ui"><input type="number" min="0" v-model="counter" @input="onInput" @keyup.right="toNext" @keyup.left="toPrevious" :tabindex="tabindex" /></td>
+    <td class="ui"><input type="number" min="0" v-model="counter" @input="onInput" @keyup.right="toNext" @keyup.left="toPrevious" :tabindex="tabindex" @focus="isFocused = true" @blur="isFocused = false" /></td>
   </tr>
 </template>
 
 <style scoped>
+.focused {
+  background-color: #f0f04d;
+}
 input {
   border: 1px solid gray;
   text-align: right;
