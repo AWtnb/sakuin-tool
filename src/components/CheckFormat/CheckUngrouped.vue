@@ -15,7 +15,10 @@ const emits = defineEmits(["checkFinished"]);
 const ungrouped = computed(() => {
   const checker = new GroupChecker(props.result);
   const found = checker.getUngrouped();
-  emits("checkFinished", found.length);
+  emits("checkFinished", {
+    problem: "ungrouped",
+    count: found.length
+  });
   return found;
 });
 </script>

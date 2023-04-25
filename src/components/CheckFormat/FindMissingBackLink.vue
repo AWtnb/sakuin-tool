@@ -13,7 +13,10 @@ const emits = defineEmits(["checkFinished"]);
 const missingBackLink = computed(() => {
   const checker = new ReferenceChecker(props.result);
   const found = checker.findMissingBackLink();
-  emits("checkFinished", found.length);
+  emits("checkFinished", {
+    problem: "missingBackLink",
+    count: found.length
+  });
   return found;
 });
 </script>

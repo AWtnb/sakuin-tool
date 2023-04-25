@@ -14,7 +14,10 @@ const emits = defineEmits(["checkFinished"]);
 const adjacentRefs = computed(() => {
   const checker = new ReferenceChecker(props.result);
   const found = checker.findAdjacent();
-  emits("checkFinished", found.length);
+  emits("checkFinished", {
+    problem: "adjacent",
+    count: found.length
+  });
   return found;
 });
 </script>

@@ -15,7 +15,10 @@ const emits = defineEmits(["checkFinished"]);
 const conflicts = computed(() => {
   const checker = new GroupChecker(props.result);
   const found = checker.getConflicting();
-  emits("checkFinished", found.length);
+  emits("checkFinished", {
+    problem: "conflictReference",
+    count: found.length
+  });
   return found;
 });
 </script>

@@ -33,7 +33,10 @@ const emits = defineEmits(["checkFinished"]);
 
 const problems = computed(() => {
   const found = grepInvalidNombreLine(props.result);
-  emits("checkFinished", found.length);
+  emits("checkFinished", {
+    problem: "invalidAddress",
+    count: found.length
+  });
   return found;
 });
 </script>
