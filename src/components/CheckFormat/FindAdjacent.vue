@@ -6,13 +6,13 @@ import IgnorableArea from "@/components/IgnorableArea.vue";
 import { ReferenceChecker } from "@/helpers/referenceChecker";
 
 const props = defineProps({
-  target: String,
+  result: String,
 });
 
 const emits = defineEmits(["checkFinished"]);
 
 const adjacentRefs = computed(() => {
-  const checker = new ReferenceChecker(props.target);
+  const checker = new ReferenceChecker(props.result);
   const found = checker.findAdjacent();
   emits("checkFinished", found.length);
   return found;
