@@ -21,28 +21,26 @@ const resultStr = computed(() => {
 </script>
 
 <template>
-  <div v-if="sortedArr.length">
-    <div class="limit-height">
-      <table>
-        <thead>
-          <tr>
-            <th>項目</th>
-            <th>読み</th>
-            <th>配列読み</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(line, idx) in sortedArr" :key="idx">
-            <td>{{ line.item }}</td>
-            <td class="reading">{{ line.reading }}</td>
-            <td class="normalized-reading">{{ line.normalized }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <CopyButton :copyStr="resultStr" />
-    <label><input type="checkbox" v-model="asTsv" />3列ともコピーする</label>
+  <div class="limit-height">
+    <table>
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>読み</th>
+          <th>配列読み</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(line, idx) in sortedArr" :key="idx">
+          <td>{{ line.item }}</td>
+          <td class="reading">{{ line.reading }}</td>
+          <td class="normalized-reading">{{ line.normalized }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+  <CopyButton :copyStr="resultStr" />
+  <label><input type="checkbox" v-model="asTsv" />3列ともコピーする</label>
 </template>
 
 <style scoped>

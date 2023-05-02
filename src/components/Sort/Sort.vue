@@ -7,7 +7,7 @@ import BeforeAfter from "@/components/BeforeAfter.vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
 import Normalize from "./Normalize.vue";
-import SortedTable from "./SortResult.vue";
+import SortResult from "./SortResult.vue";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 
 import { Sorter } from "@/helpers/sorter";
@@ -43,9 +43,14 @@ const parsedLines = computed(() => {
     }).filter(Boolean);
 });
 
+const withHeading = ref(true);
+
 const sortedArr = computed(() => {
   const sorter = new Sorter();
   parsedLines.value.forEach((x) => sorter.addData(x.item, x.reading));
+  if (withHeading.value) {
+    sorter.addHeading();
+  }
   return sorter.execute();
 });
 </script>
@@ -65,10 +70,13 @@ const sortedArr = computed(() => {
   </ul>
 
   <label><input type="checkbox" v-model="skipHeader" />先頭行をスキップする</label>
+  <label><input type="checkbox" v-model="withHeading" />見出しを追加する</label>
 
   <SimpleTextarea v-on:update-content="content = $event.content" />
 
-  <SortedTable :sortedArr="sortedArr" />
+  <div v-if="contentLines.length">
+    <SortResult :sortedArr="sortedArr" />
+  </div>
 </template>
 
 <style scoped>

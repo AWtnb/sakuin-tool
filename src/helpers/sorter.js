@@ -21,6 +21,16 @@ export class Sorter {
     });
   }
 
+  addHeading() {
+    "あかさたなはまやらわ".split("").forEach((a) => {
+      this.parsedLines.push({
+        item: "■" + a + "行",
+        reading: "",
+        normalized: normalizeReading(a),
+      });
+    });
+  }
+
   execute() {
     return this.parsedLines
       .sort((a, b) => {
