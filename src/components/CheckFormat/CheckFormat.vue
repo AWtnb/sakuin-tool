@@ -5,6 +5,7 @@ import SimpleTextarea from "@/components/SimpleTextarea.vue";
 
 import FindMissingBackLink from "./FindMissingBackLink.vue";
 import FindAdjacent from "./FindAdjacent.vue";
+import CheckMissingRef from "./CheckMissingRef.vue";
 import CheckConflict from "./CheckConflict.vue";
 import CheckUngrouped from "./CheckUngrouped.vue";
 import CheckAddress from "./CheckAddress.vue";
@@ -41,6 +42,7 @@ const msg = computed(() => {
     <strong>{{ msg }}</strong>
   </p>
 
+  <CheckMissingRef :result="content" v-on:checkFinished="storeProblem" />
   <CheckUngrouped :result="content" v-on:checkFinished="storeProblem" />
   <CheckAddress :result="content" v-on:checkFinished="storeProblem" />
   <FindMissingBackLink :result="content" v-on:checkFinished="storeProblem" />
