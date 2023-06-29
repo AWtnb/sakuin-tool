@@ -7,7 +7,7 @@ import Romanize from "./Romanize.vue";
 <template>
   <h2>よみがな取得</h2>
 
-  <p><a href="https://github.com/AWtnb/flet_yomi/releases">外部アプリ</a>を使用します。</p>
+  <p><a href="https://github.com/AWtnb/flet-yomi/releases">外部アプリ</a>を使用します。</p>
 
   <DownloadGuide />
 

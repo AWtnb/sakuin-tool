@@ -2,7 +2,7 @@
   <details>
     <summary>ダウンロード方法（初回のみ）</summary>
     <div><img src="@/assets/Reading/yomi_dl_release.png" alt="" /></div>
-    <p><a href="https://github.com/AWtnb/flet_yomi/releases">リリースページ</a>の一番上に表示されている exe ファイルをクリックするとダウンロードが始まります。100MB を超える巨大なファイルなので、余裕のある回線をご利用ください。</p>
+    <p><a href="https://github.com/AWtnb/flet-yomi/releases">リリースページ</a>の一番上に表示されている exe ファイルをクリックするとダウンロードが始まります。100MB を超える巨大なファイルなので、余裕のある回線をご利用ください。</p>
 
     <h3>ダウンロード後の流れ</h3>
     <p>個人開発のアプリなのでダウンロード時に警告が表示されます（下記は Microsoft Edge の例）。信頼していただければ、下記の手順で有効化してください。</p>
