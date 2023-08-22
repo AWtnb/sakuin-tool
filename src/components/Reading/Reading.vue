@@ -14,17 +14,15 @@ import Romanize from "./Romanize.vue";
   <h3>1. 名寄せした索引項目の読み情報を取得する</h3>
   <div><img src="@/assets/Reading/yomi_demo01.png" alt="" /></div>
   <p>名寄せが済んだ索引をテキストボックスに貼り付けて<code>GO!</code>のボタンをクリックすると読み情報が取得されます。</p>
+  <p>結果は「元の文字」「読みがな」「解析の詳細」の3列です。</p>
 
-  <ul>
-    <li>結果は「元の文字」「読みがな」「解析の詳細」の3列です。</li>
-    <li
-      >オプションの意味：
-      <ul>
-        <li><code>Skip inside: () / []</code>：括弧内の文字（見よ元項目の情報など）を無視します。</li>
-        <li><code>Skip nombles or reference (for book index)</code>：ノンブル情報（全角空白2個の後ろにある数字）、見よ先情報（<code>　→</code>の後ろにある文字）を無視します。</li>
-      </ul>
-    </li>
-  </ul>
+  <details
+    ><summary>オプションの意味</summary>
+    <ul>
+      <li><code>Skip inside: () / []</code>：括弧内の文字（見よ元項目の情報など）を無視します。</li>
+      <li><code>Skip nombles or reference (for book index)</code>：ノンブル情報（全角空白2個の後ろにある数字）、見よ先情報（<code>　→</code>の後ろにある文字）を無視します。</li>
+    </ul>
+  </details>
 
   <h3>2. 結果を Microsoft Excel に貼り付けてチェックする</h3>
   <div><img src="@/assets/Reading/yomi_demo02.png" alt="" /></div>
