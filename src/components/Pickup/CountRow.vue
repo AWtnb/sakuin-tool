@@ -60,6 +60,7 @@ const isFocused = ref(false);
 input {
   border: 1px solid gray;
   text-align: right;
+  width: 100%;
 }
 .nombre {
   vertical-align: middle;
