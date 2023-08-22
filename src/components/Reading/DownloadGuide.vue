@@ -60,9 +60,4 @@ h3 {
 ol {
   margin: 2rem auto;
 }
-
-ol li::marker {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
 </style>
