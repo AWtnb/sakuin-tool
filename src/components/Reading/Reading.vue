@@ -11,9 +11,7 @@ import Romanize from "./Romanize.vue";
 
   <DownloadGuide />
 
-  <h3>作業手順</h3>
-
-  <h4>1. 名寄せした索引項目の読み情報を取得する</h4>
+  <h3>1. 名寄せした索引項目の読み情報を取得する</h3>
   <div><img src="@/assets/Reading/yomi_demo01.png" alt="" /></div>
   <p>名寄せが済んだ索引をテキストボックスに貼り付けて<code>GO!</code>のボタンをクリックすると読み情報が取得されます。</p>
 
@@ -28,7 +26,7 @@ import Romanize from "./Romanize.vue";
     </li>
   </ul>
 
-  <h4>2. 結果を Microsoft Excel に貼り付けてチェックする</h4>
+  <h3>2. 結果を Microsoft Excel に貼り付けてチェックする</h3>
   <div><img src="@/assets/Reading/yomi_demo02.png" alt="" /></div>
   <p><code>COPY!</code>ボタンで変換結果をコピーします。Excel を開いて貼り付けると楽にチェックできます。</p>
 
@@ -41,7 +39,7 @@ import Romanize from "./Romanize.vue";
 
   <Romanize />
 
-  <h4>3. 必要な列をコピーする</h4>
+  <h3>3. 必要な列をコピーする</h3>
   <div><img src="@/assets/Reading/yomi_demo03.png" alt="" /></div>
   <p>読みがなのチェック・修正が終わったら、左2列をコピーして以降のステップ（並べ替え）に進んでください。</p>
 

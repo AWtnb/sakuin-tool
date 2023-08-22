@@ -1,22 +1,45 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP&family=Noto+Sans+JP:wght@400;700&display=swap");
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 body {
+  font-family: "Noto Sans JP", sans-serif;
   max-width: 680px;
+  padding-bottom: 40vh;
 }
 
 h1 {
   font-weight: bold;
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-bottom: 1.5em;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-top: 6rem;
+  margin-bottom: 6rem;
+  border-left: 8px solid #d0cfcf;
+  padding: 4px 0.25em;
+  line-height: 1.5;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-top: 6rem;
+  margin-bottom: 4rem;
+}
+
+p,
+li {
+  line-height: 2;
 }
 
 code {
   font-family: "IBM Plex Sans JP", ui-monospace, Consolas, monospace;
-  font-size: 0.85em;
+  font-size: 0.95em;
 }
 
 hr {
@@ -34,6 +57,7 @@ img {
   max-width: 600px;
   box-shadow: 1px 1px 5px 1px #ccc;
   border-radius: 6px;
+  margin: 1.75rem auto;
 }
 img ~ em {
   font-style: normal;

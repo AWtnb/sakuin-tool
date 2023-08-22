@@ -30,7 +30,7 @@
     </ol>
 
     <h3>初回起動時</h3>
-    <p>おそらく初回の起動時に、Windows からの警告が表示されます。同じく信頼していただけましたら、下記の手順で有効化してください。</p>
+    <p>おそらく初回の起動時に、Windows からの警告が表示されます。有効化するには下記の操作をしてください。</p>
 
     <ol>
       <li
@@ -50,3 +50,19 @@ export default {
   name: "DownloadGuide",
 };
 </script>
+
+<style scoped>
+h3 {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+}
+
+ol {
+  margin: 2rem auto;
+}
+
+ol li::marker {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+</style>
