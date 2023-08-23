@@ -1,10 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+const props = defineProps({
+  state: Boolean,
+});
 const emits = defineEmits(["updateState"]);
 const isRevision = ref(false);
 const onChange = () => {
   emits("updateState", { isRevision: isRevision.value });
 };
+
+watch(
+  () => props.state,
+  () => (isRevision.value = props.state)
+);
 </script>
 
 <template>
@@ -95,4 +103,3 @@ const onChange = () => {
   height: 100%;
 }
 </style>
-

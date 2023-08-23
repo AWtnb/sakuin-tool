@@ -1,7 +1,14 @@
 <script setup>
+import { onMounted } from "vue";
+
 import SectionEnd from "@/components/SectionEnd.vue";
 import Pickup from "@/components/Pickup/Pickup.vue";
 import Preformat from "@/components/Preformat/Preformat.vue";
+
+const emits = defineEmits(["updateState"]);
+onMounted(() => {
+  emits("updateState", { isRevision: false });
+});
 </script>
 
 <template>

@@ -11,7 +11,7 @@ const listener = (evt) => {
 
 <template>
   <nav>
-    <ToggleRevision v-on:update-state="listener" />
+    <ToggleRevision v-on:update-state="listener" :state="isRevision" />
     <div class="menu">
       <router-link to="/"><HomeIcon /></router-link>
       <span class="detail">
@@ -25,7 +25,7 @@ const listener = (evt) => {
       </span>
     </div>
   </nav>
-  <router-view />
+  <router-view v-on:update-state="listener" />
 </template>
 
 <style scoped>
@@ -46,4 +46,3 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
-
