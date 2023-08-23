@@ -3,18 +3,18 @@
   <h3>新規に作成するとき</h3>
 
   <ol>
-    <li><code>Prepare</code>メニューから索引を Excel に拾うための雛形を作る </li>
+    <li><router-link to="/prepare">Prepare</router-link>メニューから索引を Excel に拾うための雛形を作る </li>
     <li>作成した Excel 上に索引を記入していく</li>
     <li
-      ><code>Format</code>メニューで拾ったデータを整形する<ol>
+      ><router-link to="/format">Format</router-link>メニューで拾ったデータを整形する<ol>
         <li>項目ごとに名寄せする</li>
         <li>名寄せした状態に対して読み仮名を取得する</li>
         <li>配列読みで並べ替える→<strong>ひとまず完成！</strong></li>
       </ol></li
-    ><li>微調整時は<code>Adjust</code>メニュー</li></ol
+    ><li>微調整時は<router-link to="/adjust">Adjust</router-link>メニュー</li></ol
   >
 
-  <h3>旧版データがあるとき：<code>Reuse</code>メニュー</h3>
+  <h3>旧版データがあるとき：<router-link to="/reuse">Reuse</router-link>メニュー</h3>
 
   <ol>
     <li>データの事前整形</li>
@@ -33,5 +33,8 @@ export default {
 strong {
   color: #ff0062;
 }
+a {
+  color: #42b983;
+  font-weight: bold;
+}
 </style>
-
