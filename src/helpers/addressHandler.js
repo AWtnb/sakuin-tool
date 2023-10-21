@@ -29,6 +29,9 @@ class Nombre {
     if (this.hyphenated) {
       return "\u2013";
     }
+    if (this.intValue === 0) {
+      return this.rawStr;
+    }
     return this.getPrefix() + String(this.intValue) + this.getSuffix();
   }
 
