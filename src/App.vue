@@ -25,7 +25,7 @@ const listener = (evt) => {
       </span>
     </div>
   </nav>
-  <router-view v-on:update-state="listener" />
+  <router-view v-on:update-state="listener" class="component-content" />
 </template>
 
 <style scoped>
@@ -35,6 +35,14 @@ const listener = (evt) => {
   border-bottom: #6b8096 double 4px;
   display: flex;
   justify-content: space-between;
+}
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: white;
+  padding: 8px 0;
 }
 
 nav a {
