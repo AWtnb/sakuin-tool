@@ -13,7 +13,7 @@ body {
 
 #app {
   position: relative;
-  max-width: 680px;
+  max-width: calc(100% - 2 * 80px);
   padding: 0 8px 40vh 8px;
   margin: 0 auto;
 }
