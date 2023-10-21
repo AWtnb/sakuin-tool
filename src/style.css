@@ -74,6 +74,7 @@ img {
   box-shadow: 1px 1px 5px 1px #ccc;
   border-radius: 6px;
   margin: 1.75rem auto;
+  display: block;
 }
 
 ol li::marker {
