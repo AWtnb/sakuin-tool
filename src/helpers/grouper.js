@@ -22,6 +22,14 @@ export class Grouper {
         this.groupedLines = [];
     }
 
+    getItems() {
+        return this.linesParsed.map(x => x.Item);
+    }
+
+    getAddresses() {
+        return this.linesParsed.map(x => x.Address);
+    }
+
     group() {
         const map = new Map()
         this.linesParsed.forEach(lp => {
