@@ -34,8 +34,6 @@ const msg = computed(() => {
 </script>
 
 <template>
-  <h2>体裁チェック</h2>
-
   <SimpleTextarea v-on:update-content="content = $event.content" />
 
   <p>
