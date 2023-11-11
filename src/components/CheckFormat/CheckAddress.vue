@@ -47,8 +47,12 @@ const problems = computed(() => {
 
 <template>
   <div v-if="problems.length">
-    <h3>ノンブルの並びに問題があります：</h3>
+    <h3>ノンブルに修正提案があります：</h3>
     <IgnorableArea>
+      <ul class="note">
+        <li><del>青の箇所</del>を削除して、<ins>赤の箇所</ins>を追記すると正しいノンブル形式になります。</li>
+        <li>マウスを使って、<del>青の箇所</del>を飛ばして文字選択できます（文字選択を無効化しています）。</li>
+      </ul>
       <ul>
         <li v-for="(problem, idx) in problems" :key="idx">
           <LineDiff :from="problem.origial" :to="problem.formatted" />
@@ -57,3 +61,30 @@ const problems = computed(() => {
     </IgnorableArea>
   </div>
 </template>
+
+<style scoped>
+ul.note {
+  font-size: 0.8em;
+  border: 1px solid gray;
+  border-radius: 4px;
+  max-width: 90%;
+  margin: 8px auto;
+  padding-left: 1.5em;
+}
+ul.note li {
+  list-style: circle;
+}
+
+ins {
+  border-radius: 4px;
+  background: #ffbebe;
+  border: 1px solid tomato;
+  text-decoration: none;
+}
+del {
+  background: #a4e5ff;
+  border: 1px solid #05374b;
+  color: #929292;
+  text-decoration: none;
+}
+</style>
