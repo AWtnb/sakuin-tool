@@ -7,7 +7,10 @@ class EntryName {
   getBasename() {
     const t = this.name.replace(this.reg, "").trim();
     if (this.getReferTo().length) {
-      return t.split("→")[0].trim().replace(/\u3000{1,2}/, "");
+      return t
+        .split("→")[0]
+        .trim()
+        .replace(/\u3000{1,2}/, "");
     }
     return t.replace(/\u3000{1,2}/, "");
   }
@@ -97,7 +100,7 @@ export class Entry {
      * ノンブルの集合部分
      * @type {String}
      */
-    this.address = this.getAddress();
+    this.address = this.getRightSide().trim();
 
     /**
      * カッコ内に付記された「見よ元」情報
@@ -155,9 +158,5 @@ export class Entry {
       return this.elems[1];
     }
     return "";
-  }
-
-  getAddress() {
-    return this.getRightSide().trim();
   }
 }
