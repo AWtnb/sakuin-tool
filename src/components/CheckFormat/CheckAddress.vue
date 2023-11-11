@@ -2,26 +2,30 @@
 import { computed } from "vue";
 
 import IgnorableArea from "@/components/IgnorableArea.vue";
+import LineDiff from "@/components/LineDiff/LineDiff.vue";
 
-import { AddressChecker } from "@/helpers/addressChecker.js";
+import { Entry } from "@/helpers/entry.js";
+import { AddressHandler } from "@/helpers/addressHandler.js";
+
 import { arrayOfLines } from "@/helpers/utils";
 
 const props = defineProps({
   result: String,
 });
 
-const grepInvalidNombreLine = (s) => {
+const grepInvalidAddress = (s) => {
   const lines = arrayOfLines(s);
   return lines
     .filter((x) => String(x).trim())
     .map((line) => {
-      const checker = new AddressChecker(line);
-      checker.checkSort();
-      checker.checkHyphen();
-      if (checker.problems.length > 0) {
+      const entry = new Entry(line);
+      const handler = new AddressHandler(entry.address);
+      if (handler.unsorted() || handler.unHyphened()) {
+        const prefix = entry.name + entry.separator;
         return {
           line: line,
-          detail: checker.problems,
+          origial: prefix + entry.address,
+          formatted: prefix + handler.formatAll(),
         };
       }
       return null;
@@ -32,10 +36,10 @@ const grepInvalidNombreLine = (s) => {
 const emits = defineEmits(["checkFinished"]);
 
 const problems = computed(() => {
-  const found = grepInvalidNombreLine(props.result);
+  const found = grepInvalidAddress(props.result);
   emits("checkFinished", {
     problem: "invalidAddress",
-    count: found.length
+    count: found.length,
   });
   return found;
 });
@@ -47,19 +51,9 @@ const problems = computed(() => {
     <IgnorableArea>
       <ul>
         <li v-for="(problem, idx) in problems" :key="idx">
-          <span>{{ problem.line }}</span>
-          <span v-for="(p, idx) in problem.detail" :key="idx">
-            <span :style="{ color: p.color }">←{{ p.text }}</span>
-          </span>
+          <LineDiff :from="problem.origial" :to="problem.formatted" />
         </li>
       </ul>
     </IgnorableArea>
   </div>
 </template>
-
-<style scoped>
-strong.warning {
-  color: red;
-}
-</style>
-
