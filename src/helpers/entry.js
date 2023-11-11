@@ -103,6 +103,12 @@ export class Entry {
     this.address = this.getRightSide().trim();
 
     /**
+     * 最終的な全体の文字列
+     * @type {String}
+     */
+    this.getFullname = this.name + this.separator + this.address;
+
+    /**
      * カッコ内に付記された「見よ元」情報
      * @type {String[]}
      */
