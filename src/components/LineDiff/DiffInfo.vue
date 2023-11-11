@@ -16,6 +16,7 @@ ins {
   border-radius: 4px;
   background: #ffbebe;
   border: 1px solid tomato;
+  text-decoration: none;
 }
 del {
   background: #a4e5ff;
