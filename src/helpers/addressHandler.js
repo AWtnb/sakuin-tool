@@ -174,14 +174,4 @@ export class AddressHandler {
     }
     return false;
   }
-
-  isFormatted() {
-    if (this.unsorted()) {
-      return false;
-    }
-    if (this.unHyphened()) {
-      return false;
-    }
-    return true;
-  }
 }
