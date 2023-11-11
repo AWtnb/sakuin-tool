@@ -147,4 +147,41 @@ export class AddressHandler {
     const n2a = new NombresToAddress(newNombres);
     return n2a.getText();
   }
+
+  unsorted() {
+    if (this.nombres.length < 2) {
+      return false;
+    }
+    for (let i = 0; i < this.nombres.length - 1; i++) {
+      if (this.nombres[i].intValue >= this.nombres[i + 1].intValue) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  unHyphened() {
+    if (this.nombres.length < 3) {
+      return false;
+    }
+    for (let i = 0; i < this.nombres.length - 2; i++) {
+      const current = this.nombres[i];
+      const next1 = this.nombres[i + 1];
+      const next2 = this.nombres[i + 2];
+      if (current.intValue + 1 == next1.intValue && current.intValue + 2 == next2.intValue && !next1.hyphenated) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isFormatted() {
+    if (this.unsorted()) {
+      return false;
+    }
+    if (this.unHyphened()) {
+      return false;
+    }
+    return true;
+  }
 }
