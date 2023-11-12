@@ -2,9 +2,9 @@
 import { ref, computed } from "vue";
 
 import { arrayOfLines } from "@/helpers/utils.js";
-import AddressDiff from "./AddressDiff.vue";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
+import LineDiff from "@/components/LineDiff/LineDiff.vue";
 
 import { AddressAdjuster } from "@/helpers/addressAdjuster.js";
 
@@ -22,34 +22,22 @@ const adjustedArr = computed(() => {
   return adjuster.apply(contentLines.value);
 });
 
-const diffArr = computed(() => {
-  return adjustedArr.value
-    .filter((x) => x.comparison.modified)
-    .map((x) => ({
-      name: x.name,
-      detail: x.comparison.detail,
-    }));
+const modifiedLines = computed(() => {
+  return adjustedArr.value.filter((x) => x.isModified);
 });
 
 const message = computed(() => {
   if (content.value.length < 1) {
     return "";
   }
-  if (diffArr.value.length) {
-    return diffArr.value.length + "件の変更があります。";
+  if (modifiedLines.value.length) {
+    return modifiedLines.value.length + "件の変更があります。";
   }
   return "修正箇所はありません。";
 });
 
 const resultStr = computed(() => {
-  return adjustedArr.value
-    .map((x) => {
-      if (x.newNombres.length) {
-        return `${x.name}\u3000\u3000${x.newNombres.join(", ")}`;
-      }
-      return x.name;
-    })
-    .join("\n");
+  return adjustedArr.value.map((x) => x.adjusted).join("\n");
 });
 </script>
 
@@ -67,10 +55,9 @@ const resultStr = computed(() => {
 
   <div v-cloak>
     <h4>{{ message }}</h4>
-    <ul v-if="diffArr.length">
-      <li v-for="(diff, idx) in diffArr" :key="idx">
-        <span>{{ diff.name }}&#12288;&#12288;</span>
-        <AddressDiff :diff-details="diff.detail" />
+    <ul v-if="modifiedLines.length">
+      <li v-for="(line, idx) in modifiedLines" :key="idx">
+        <LineDiff :from="line.origin" :to="line.adjusted" />
       </li>
     </ul>
   </div>
@@ -88,4 +75,3 @@ li input {
   width: 100px;
 }
 </style>
-
