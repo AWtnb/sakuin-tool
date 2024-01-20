@@ -14,7 +14,7 @@ const resultStr = computed(() => {
 
 <template>
   <details>
-    <summary>配列読みへの変換だけ必要な場合はこちら</summary>
+    <summary>排列読みへの変換だけ必要な場合はこちら</summary>
     <label><input type="checkbox" v-model="removeNoise" />カタカナ・数字・アルファベット以外を削除する</label>
     <textarea placeholder="paste here!" v-model="content"></textarea>
     <ResultBox :result="resultStr" />

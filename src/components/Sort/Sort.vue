@@ -62,10 +62,10 @@ const sortedArr = computed(() => {
 
   <BeforeAfter :beforePath="beforePath" :afterPath="afterPath" />
 
-  <p><code>読み</code>の情報を<code>配列読み</code>に変換して並べ替えます。<strong>1列目が最終的な索引になります。</strong></p>
+  <p><code>読み</code>の情報を<code>排列読み</code>に変換して並べ替えます。<strong>1列目が最終的な索引になります。</strong></p>
   <ul>
-    <li>最優先は<code>配列読み</code>の情報。</li>
-    <li><code>配列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
+    <li>最優先は<code>排列読み</code>の情報。</li>
+    <li><code>排列読み</code>が同じ場合は<code>読み</code>で昇順ソート。</li>
     <li><code>読み</code>も同じ場合は<code>項目</code>の文字コード昇順（同じ文字種がまとまります）。</li>
   </ul>
 

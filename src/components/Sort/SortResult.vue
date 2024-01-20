@@ -27,7 +27,7 @@ const resultStr = computed(() => {
         <tr>
           <th>項目</th>
           <th>読み</th>
-          <th>配列読み</th>
+          <th>排列読み</th>
         </tr>
       </thead>
       <tbody>

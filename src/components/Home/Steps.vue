@@ -9,7 +9,7 @@
       ><router-link to="/format">Format</router-link>メニューで拾ったデータを整形する<ol>
         <li>項目ごとに名寄せする</li>
         <li>名寄せした状態に対して読み仮名を取得する</li>
-        <li>配列読みで並べ替える→<strong>ひとまず完成！</strong></li>
+        <li>排列読みで並べ替える→<strong>ひとまず完成！</strong></li>
       </ol></li
     ><li>微調整時は<router-link to="/adjust">Adjust</router-link>メニュー</li></ol
   >
