@@ -44,16 +44,21 @@ const toPrevious = (evt) => {
 };
 
 const isFocused = ref(false);
+
+const hasNombre = computed(() => 0 < counter.value);
 </script>
 
 <template>
   <tr :class="{ focused: isFocused }">
-    <td class="nombre">{{ nombre }}</td>
+    <td class="nombre" :class="{ zeroitem: !hasNombre }">{{ nombre }}</td>
     <td class="ui"><input type="number" min="0" v-model="counter" @input="onInput" @keyup.right="toNext" @keyup.left="toPrevious" :tabindex="tabindex" @focus="isFocused = true" @blur="isFocused = false" /></td>
   </tr>
 </template>
 
 <style scoped>
+.zeroitem {
+  color: #afafaf;
+}
 .focused {
   background-color: #f0f04d;
 }
