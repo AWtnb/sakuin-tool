@@ -28,6 +28,15 @@ const workTemplate = computed(() => {
   const stack = [];
   let id = 0;
   Array.from(countMap.keys())
+    .sort((a, b) => {
+      if (a < b) {
+        return -1;
+      }
+      if (b < a) {
+        return 1;
+      }
+      return 0;
+    })
     .filter((key) => countMap.get(key) > 0)
     .forEach((key, idx) => {
       for (let i = 0; i < countMap.get(key); i++) {
@@ -107,4 +116,3 @@ img {
   height: 250px;
 }
 </style>
-
