@@ -24,7 +24,7 @@ class EntryName {
     if (m) {
       const inner = m[0].slice(1, -1).trim();
       return inner
-        .replace(/\uff0c/g, ",")
+        .replace(/[\uff0c\uff1b\u003b]/g, ",")
         .split(",")
         .map((x) => x.trim())
         .filter(Boolean);
