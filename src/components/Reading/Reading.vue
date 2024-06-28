@@ -25,8 +25,11 @@ import Romanize from "./Romanize.vue";
   </details>
 
   <h3>2. 結果を Microsoft Excel に貼り付けてチェックする</h3>
-  <div><img src="@/assets/Reading/yomi_demo02.png" alt="" /></div>
   <p><code>COPY!</code>ボタンで変換結果をコピーします。Excel を開いて貼り付けると楽にチェックできます。</p>
+  <div>
+    <img src="@/assets/Reading/yomi_demo02.png" alt="" />
+    <span class="caption">正しくは「前操作期 ゼンソウサキ」「淡蒼球内節 タンソウキュウナイセツ」</span>
+  </div>
 
   <ul>
     <li>一番右の列で、どの単語をどう読んでいるのかがわかります。</li>
@@ -45,3 +48,14 @@ import Romanize from "./Romanize.vue";
     <li>排列読みは次の並べ替えのステップで自動生成します。</li>
   </ul>
 </template>
+
+<style scoped>
+img + .caption {
+  font-size: 0.9rem;
+  color: #666;
+  display: block;
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+</style>
