@@ -51,7 +51,7 @@ const hasNombre = computed(() => 0 < counter.value);
 <template>
   <tr :class="{ focused: isFocused }">
     <td class="nombre" :class="{ zeroitem: !hasNombre }">{{ nombre }}</td>
-    <td class="ui"><input type="number" min="0" v-model="counter" @input="onInput" @keyup.right="toNext" @keyup.left="toPrevious" :tabindex="tabindex" @focus="isFocused = true" @blur="isFocused = false" /></td>
+    <td class="ui"><input type="number" min="0" v-model="counter" @input="onInput" @keyup.right="toNext" @keyup.left="toPrevious" :tabindex="tabindex" @focus="isFocused = true" @blur="isFocused = false" @wheel="$event.target.blur()" /></td>
   </tr>
 </template>
 
