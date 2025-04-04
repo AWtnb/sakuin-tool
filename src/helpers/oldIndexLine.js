@@ -1,4 +1,4 @@
-const toAddressOnly = (s) => {
+const getAddress = (s) => {
   const m = String(s).match(/\u3000\u3000\d/);
   if (m) {
     return s.replace(/^.+\u3000(?=\d)/, "");
@@ -6,9 +6,7 @@ const toAddressOnly = (s) => {
   return "";
 };
 
-const BARS = ["\u2010", "\u2011", "\u2012", "\u2013", "\u2014", "\u2015", "\uFF0D", "\u2500", "\u002d"];
-
-const toNameOnly = (s) => {
+const getName = (s) => {
   const m = String(s).match(/\u3000\u3000\d/);
   if (m) {
     return s.replace(/\u3000\u3000\d.*/, "");
@@ -16,22 +14,16 @@ const toNameOnly = (s) => {
   return "";
 };
 
+const POSSIBLE_BARS = ["\u2010", "\u2011", "\u2012", "\u2013", "\u2014", "\u2015", "\uFF0D", "\u2500", "\u002d"];
+
 class BarHandler {
   constructor(s) {
-    this.valiation = BARS;
     this.rawStr = s;
-  }
-  format(to = "\u2013") {
-    let fmt = this.rawStr;
-    this.valiation.forEach((b) => {
-      fmt = fmt.replaceAll(b, "\u002d");
-    });
-    return fmt.replace(/\u002d+/g, to);
   }
   getHeaderLen() {
     let len = 0;
     for (let i = 0; i < this.rawStr.length; i++) {
-      if (this.valiation.includes(this.rawStr[i])) {
+      if (POSSIBLE_BARS.includes(this.rawStr[i])) {
         len += 1;
       } else {
         break;
@@ -42,7 +34,7 @@ class BarHandler {
   getTrailerLen() {
     let len = 0;
     for (let i = this.rawStr.length - 1; 0 <= i; i--) {
-      if (this.valiation.includes(this.rawStr[i])) {
+      if (POSSIBLE_BARS.includes(this.rawStr[i])) {
         len += 1;
       } else {
         break;
@@ -82,23 +74,38 @@ const removeNoisySpaces = (s) => {
 export class OldIndexLine {
   constructor(s) {
     this.prefix = s.startsWith(" ") || s.startsWith("\u3000") ? "\u3000" : "";
-    const pureStr = removeNoisySpaces(String(s).replace(/\uff0c/g, ","));
-    const adr = toAddressOnly(new BarHandler(pureStr).format());
-    if (adr.length > 0) {
-      this.address = adr.replaceAll(",", ", ").replace(/, {2,}/g, ", ");
-      this.name = toNameOnly(pureStr);
+    const baseLine = removeNoisySpaces(s);
+
+    let a = getAddress(baseLine);
+    if (0 < a.length) {
+      POSSIBLE_BARS.forEach((b) => {
+        a = a.replaceAll(b, "\u002d");
+      });
+      a = a.replace(/\u002d+/g, "\u2013");
+      a = a
+        .replaceAll(",", ", ")
+        .replace(/, {2,}/g, ", ")
+        .trimEnd();
+      this.address = a;
+      this.name = getName(baseLine);
+      this.separator = "\u3000".repeat(2);
+      return;
+    }
+
+    const i = baseLine.lastIndexOf("→");
+    if (i != -1) {
+      this.name = baseLine.substring(0, i).trim();
+      this.separator = "\u3000→";
+      this.address = baseLine.substring(i + 1).trim();
       return;
     }
 
     this.address = "";
-    this.name = pureStr.replace(/(?<!\u3000)→/g, "\u3000→");
+    this.separator = "";
+    this.name = baseLine;
   }
 
   getFormattedLine() {
-    const name = this.prefix + new BarHandler(this.name).formatChildEntry();
-    if (this.address.length > 0) {
-      return name + "\u3000\u3000" + this.address;
-    }
-    return name;
+    return this.prefix + new BarHandler(this.name).formatChildEntry() + this.separator + this.address;
   }
 }

@@ -59,6 +59,7 @@ const message = computed(() => {
     <li>見よ項目の矢印の前のアキを1倍モノに統一します。</li>
     <li>連続するノンブルを示すダーシの種類を<code>&ndash;</code>（enダーシ）に統一します。</li>
     <li>子項目のダーシの種類を<code>&horbar;&horbar;</code>（2倍ダーシ）に統一します。</li>
+    <li>英数の前後に入る不要なスペースを除去します。</li>
   </ul>
 
   <SimpleTextarea v-on:update-content="content = $event.content" />
