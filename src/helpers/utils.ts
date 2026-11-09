@@ -18,8 +18,7 @@ export const toHiragana = (str: string): string => {
   });
 };
 
-const convertMap = new Map<string, string>();
-[
+const convertMap = new Map<string, string>([
   ["ァ", "ア"],
   ["ィ", "イ"],
   ["ゥ", "ウ"],
@@ -56,7 +55,7 @@ const convertMap = new Map<string, string>();
   ["ュ", "ユ"],
   ["ョ", "ヨ"],
   ["ー", ""],
-].forEach(([source, replacement]) => convertMap.set(source, replacement));
+]);
 
 export const normalizeReading = (s: string, removeNoise = false): string => {
   let katakana = toHalfWidth(toKatakana(s));
@@ -64,7 +63,10 @@ export const normalizeReading = (s: string, removeNoise = false): string => {
     katakana = katakana.replaceAll(source, replacement);
   }
   if (removeNoise) {
-    return katakana.replace(/[^ァ-ヴa-zA-Z\uff41-\uff5a\uff21-\uff3a0-9\uff10-\uff19\r\n]/g, "");
+    return katakana.replace(
+      /[^ァ-ヴa-zA-Z\uff41-\uff5a\uff21-\uff3a0-9\uff10-\uff19\r\n]/g,
+      "",
+    );
   }
   return katakana;
 };
@@ -74,4 +76,4 @@ export const arrayOfLines = (str: string): string[] => {
     return [];
   }
   return str.split(/\n/).map((line) => String(line));
-}
+};
