@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import CopyButton from "@/components/CopyButton.vue";
 
-const props = defineProps({
-  sortedArr: Array,
-});
+import type { SortLine } from "@/helpers/sorter";
+
+const props = defineProps<{ sortedArr: SortLine[] }>();
 
 const asTsv = ref(false);
 
@@ -49,4 +49,3 @@ const resultStr = computed(() => {
   color: #ccc;
 }
 </style>
-

@@ -9,11 +9,8 @@
   </ul>
 </template>
 
-<script>
-export default {
-  name: "PossibleList",
-  props: {
-    children: Array,
-  },
-};
+<script setup lang="ts">
+import type { ChildCandidate } from "@/helpers/checkChild";
+
+defineProps<{ children: ChildCandidate[] }>();
 </script>

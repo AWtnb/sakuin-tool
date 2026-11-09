@@ -1,4 +1,4 @@
-const getAddress = (s) => {
+const getAddress = (s: string): string => {
   const m = String(s).match(/\u3000\u3000\d/);
   if (m) {
     return s.replace(/^.+\u3000(?=\d)/, "");
@@ -6,7 +6,7 @@ const getAddress = (s) => {
   return "";
 };
 
-const getName = (s) => {
+const getName = (s: string): string => {
   const m = String(s).match(/\u3000\u3000\d/);
   if (m) {
     return s.replace(/\u3000\u3000\d.*/, "");
@@ -17,10 +17,12 @@ const getName = (s) => {
 const POSSIBLE_BARS = ["\u2010", "\u2011", "\u2012", "\u2013", "\u2014", "\u2015", "\uFF0D", "\u2500", "\u002d"];
 
 class BarHandler {
-  constructor(s) {
+  private readonly rawStr: string;
+
+  constructor(s: string) {
     this.rawStr = s;
   }
-  getHeaderLen() {
+  getHeaderLen(): number {
     let len = 0;
     for (let i = 0; i < this.rawStr.length; i++) {
       if (POSSIBLE_BARS.includes(this.rawStr[i])) {
@@ -31,7 +33,7 @@ class BarHandler {
     }
     return len;
   }
-  getTrailerLen() {
+  getTrailerLen(): number {
     let len = 0;
     for (let i = this.rawStr.length - 1; 0 <= i; i--) {
       if (POSSIBLE_BARS.includes(this.rawStr[i])) {
@@ -42,7 +44,7 @@ class BarHandler {
     }
     return len;
   }
-  formatChildEntry() {
+  formatChildEntry(): string {
     const hLen = this.getHeaderLen();
     const prefix = hLen > 0 ? "\u2015\u2015" : "";
     const tLen = this.getTrailerLen();
@@ -63,7 +65,7 @@ class BarHandler {
   - 非ASCII文字と英数の間の半角空白
 
 */
-const removeNoisySpaces = (s) => {
+const removeNoisySpaces = (s: string): string => {
   return s
     .trim()
     .replace(/(?<=[\u3001-\u30ff\u4e00-\u9fff\uff01-\uff5e]) +(?=[\u3001-\u30ff\u4e00-\u9fff\uff01-\uff5e])/g, "")
@@ -72,7 +74,12 @@ const removeNoisySpaces = (s) => {
 };
 
 export class OldIndexLine {
-  constructor(s) {
+  readonly prefix: string;
+  readonly address: string;
+  readonly name: string;
+  readonly separator: string;
+
+  constructor(s: string) {
     this.prefix = s.startsWith(" ") || s.startsWith("\u3000") ? "\u3000" : "";
     const baseLine = removeNoisySpaces(s);
 
@@ -105,7 +112,7 @@ export class OldIndexLine {
     this.name = baseLine;
   }
 
-  getFormattedLine() {
+  getFormattedLine(): string {
     return this.prefix + new BarHandler(this.name).formatChildEntry() + this.separator + this.address;
   }
 }

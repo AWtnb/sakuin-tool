@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
-import { arrayOfLines } from "@/helpers/utils.js";
+import { arrayOfLines } from "@/helpers/utils";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import FoundTable from "./FoundTable.vue";
-import { CheckChild } from "@/helpers/checkChild.js";
+import { CheckChild } from "@/helpers/checkChild";
 
 const content = ref("");
 const picked = ref("all");

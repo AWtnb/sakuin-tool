@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { reactive, ref, computed } from "vue";
 
 import afterPath from "@/assets/Pickup/template-image.png";
@@ -11,21 +11,21 @@ const minRow = ref(1);
 const maxRow = ref(250);
 
 const sequence = computed(() => {
-  const stack = [];
+  const stack: number[] = [];
   for (let i = minRow.value - 1; i < maxRow.value; i++) {
     stack.push(i);
   }
   return stack;
 });
 
-const countMap = reactive(new Map());
+const countMap = reactive(new Map<number, number>());
 
-const setCount = (evt) => {
+const setCount = (evt: { nombre: number; counter: number }) => {
   countMap.set(evt.nombre, evt.counter);
 };
 
 const workTemplate = computed(() => {
-  const stack = [];
+  const stack: { id: number; idx: number; nombre: number }[] = [];
   let id = 0;
   Array.from(countMap.keys())
     .sort((a, b) => {
@@ -37,9 +37,10 @@ const workTemplate = computed(() => {
       }
       return 0;
     })
-    .filter((key) => countMap.get(key) > 0)
+    .filter((key) => 0 < (countMap.get(key) ?? 0))
     .forEach((key, idx) => {
-      for (let i = 0; i < countMap.get(key); i++) {
+      const count = countMap.get(key) ?? 0;
+      for (let i = 0; i < count; i++) {
         id += 1;
         stack.push({
           id: id,
@@ -64,9 +65,9 @@ const resultStr = computed(() => {
   <p><img :src="afterPath" /></p>
   <p>ゲラ上にマーカーを引いた項目を Excel に記入するためのテンプレートを作ります。<br />先にカウントしておくことで、入力作業に集中することができます。</p>
 
-  <label>開始ページ<input type="number" min="1" v-model="minRow" :disabled="workTemplate.length" /></label>
+  <label>開始ページ<input type="number" min="1" v-model="minRow" :disabled="0 < workTemplate.length" /></label>
 
-  <label>終了ページ<input type="number" min="1" v-model="maxRow" :disabled="workTemplate.length" /></label>
+  <label>終了ページ<input type="number" min="1" v-model="maxRow" :disabled="0 < workTemplate.length" /></label>
 
   <div class="wrapper">
     <table class="only-header">

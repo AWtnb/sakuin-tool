@@ -1,15 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
 
 import RefTableRow from "./RefTableRow.vue";
 
-const props = defineProps({
-  missingRefs: Array,
-});
+const props = defineProps<{ missingRefs: { problem: string; require: string[] }[] }>();
 
 const acceptAllSuggestion = ref(false);
 
-const emits = defineEmits(["acceptAllToggled", "acceptToggled"]);
+const emits = defineEmits<{
+  acceptAllToggled: [event: { isChecked: boolean }];
+  acceptToggled: [event: { isChecked: boolean; idx: number }];
+}>();
 
 const onAcceptAllToggled = () => {
   emits("acceptAllToggled", {
@@ -17,7 +18,7 @@ const onAcceptAllToggled = () => {
   });
 };
 
-const onAcceptToggled = (evt, idx) => {
+const onAcceptToggled = (evt: { isChecked: boolean }, idx: number) => {
   emits("acceptToggled", {
     isChecked: evt.isChecked,
     idx: idx
@@ -58,4 +59,3 @@ h3 {
   margin-top: 0;
 }
 </style>
-

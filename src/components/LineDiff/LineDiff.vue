@@ -1,13 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import DiffInfo from "./DiffInfo.vue";
 
 import DiffMatchPatch from "diff-match-patch";
 
-const props = defineProps({
-  from: String,
-  to: String,
-});
+const props = defineProps<{ from: string; to: string }>();
 
 const diffs = computed(() => {
   const dmp = new DiffMatchPatch();

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { reactive, ref, computed, watch } from "vue";
 
 import beforePath from "@/assets/Group/before.png";
@@ -7,7 +7,7 @@ import BeforeAfter from "@/components/BeforeAfter.vue";
 
 import FindMissingRefs from "./FindMissingRefs.vue";
 
-import { arrayOfLines } from "@/helpers/utils.js";
+import { arrayOfLines } from "@/helpers/utils";
 import { Grouper } from "@/helpers/grouper";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
@@ -38,11 +38,11 @@ const missingRefs = computed(() => {
 
 const acceptAllSuggestion = ref(false);
 
-const onAcceptAllToggled = (evt) => {
+const onAcceptAllToggled = (evt: { isChecked: boolean }) => {
   acceptAllSuggestion.value = evt.isChecked;
 };
 
-const userSelectionStatus = reactive(new Map());
+const userSelectionStatus = reactive(new Map<number, boolean>());
 
 const userSelection = computed(() => {
   return missingRefs.value
@@ -51,7 +51,7 @@ const userSelection = computed(() => {
     .flat();
 });
 
-const onAcceptToggled = (evt) => {
+const onAcceptToggled = (evt: { idx: number; isChecked: boolean }) => {
   userSelectionStatus.set(evt.idx, evt.isChecked);
 };
 
@@ -107,4 +107,3 @@ label {
   width: fit-content;
 }
 </style>
-

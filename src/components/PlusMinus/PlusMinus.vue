@@ -1,12 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
-import { arrayOfLines } from "@/helpers/utils.js";
+import { arrayOfLines } from "@/helpers/utils";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 import LineDiff from "@/components/LineDiff/LineDiff.vue";
 
-import { AddressAdjuster } from "@/helpers/addressAdjuster.js";
+import { AddressAdjuster } from "@/helpers/addressAdjuster";
 
 const content = ref("");
 const start = ref(1);

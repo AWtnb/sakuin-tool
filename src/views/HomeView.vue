@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SectionEnd from "@/components/SectionEnd.vue";
 import Home from "@/components/Home/Home.vue";
 </script>

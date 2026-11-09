@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SectionEnd from "@/components/SectionEnd.vue";
 import Group from "@/components/Group/Group.vue";
 import Reading from "@/components/Reading/Reading.vue";

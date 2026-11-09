@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import SimpleList from "@/components/SimpleList.vue";
 
-const props = defineProps({
-  determined: Boolean,
-  refItem: Object,
-});
+const props = defineProps<{
+  determined: boolean;
+  refItem: { problem: string; require: string[] };
+}>();
 
 const isApply = ref(false);
 
@@ -13,7 +13,7 @@ const isBlur = computed(() => {
   return props.determined || isApply.value;
 });
 
-const emits = defineEmits(["acceptToggled"]);
+const emits = defineEmits<{ acceptToggled: [event: { isChecked: boolean }] }>();
 
 const onChange = () => {
   emits("acceptToggled", {
@@ -48,4 +48,3 @@ td {
   vertical-align: middle;
 }
 </style>
-

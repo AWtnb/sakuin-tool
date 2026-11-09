@@ -18,15 +18,9 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import PossibleList from "./PossibleList.vue";
-export default {
-  name: "FoundTable",
-  components: {
-    PossibleList,
-  },
-  props: {
-    found: Array,
-  },
-};
+import type { PossibleEntryGroup } from "@/helpers/checkChild";
+
+defineProps<{ found: PossibleEntryGroup[] }>();
 </script>

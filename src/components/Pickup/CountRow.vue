@@ -1,10 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
-const props = defineProps({
-  maxRow: Number,
-  nombreIdx: Number,
-});
+const props = defineProps<{ maxRow: number; nombreIdx: number }>();
 
 const buffer = 1000;
 
@@ -18,25 +15,31 @@ const onInput = () => {
   emits("updateCounter", { nombre: nombre.value, counter: counter.value });
 };
 
-const toNext = (evt) => {
+const toNext = (evt: KeyboardEvent) => {
+  if (!(evt.target instanceof HTMLInputElement)) {
+    return;
+  }
   const tabIdx = Number(evt.target.getAttribute("tabindex"));
   const to = tabIdx + 1;
   if (buffer + props.maxRow <= to) {
     return;
   }
-  const elem = document.querySelector(`[tabindex="${to}"]`);
+  const elem = document.querySelector<HTMLInputElement>(`[tabindex="${to}"]`);
   if (elem) {
     elem.focus();
     elem.select();
   }
 };
-const toPrevious = (evt) => {
+const toPrevious = (evt: KeyboardEvent) => {
+  if (!(evt.target instanceof HTMLInputElement)) {
+    return;
+  }
   const tabIdx = Number(evt.target.getAttribute("tabindex"));
   const to = tabIdx - 1;
   if (to < buffer) {
     return;
   }
-  const elem = document.querySelector(`[tabindex="${to}"]`);
+  const elem = document.querySelector<HTMLInputElement>(`[tabindex="${to}"]`);
   if (elem) {
     elem.focus();
     elem.select();
@@ -46,12 +49,17 @@ const toPrevious = (evt) => {
 const isFocused = ref(false);
 
 const hasNombre = computed(() => 0 < counter.value);
+const onWheel = (evt: WheelEvent) => {
+  if (evt.target instanceof HTMLInputElement) {
+    evt.target.blur();
+  }
+};
 </script>
 
 <template>
   <tr :class="{ focused: isFocused }">
     <td class="nombre" :class="{ zeroitem: !hasNombre }">{{ nombre }}</td>
-    <td class="ui"><input type="number" min="0" v-model="counter" @input="onInput" @keyup.right="toNext" @keyup.left="toPrevious" :tabindex="tabindex" @focus="isFocused = true" @blur="isFocused = false" @wheel="$event.target.blur()" /></td>
+    <td class="ui"><input type="number" min="0" v-model="counter" @input="onInput" @keyup.right="toNext" @keyup.left="toPrevious" :tabindex="tabindex" @focus="isFocused = true" @blur="isFocused = false" @wheel="onWheel" /></td>
   </tr>
 </template>
 

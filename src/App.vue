@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import HomeIcon from "@/components/HomeIcon.vue";
 import ToggleRevision from "@/components/ToggleRevision.vue";
 const isRevision = ref(false);
 
-const listener = (evt) => {
+const listener = (evt: { isRevision: boolean }) => {
   isRevision.value = evt.isRevision;
 };
 </script>

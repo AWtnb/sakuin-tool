@@ -1,8 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import SimpleList from "@/components/SimpleList.vue";
-const props = defineProps({
-  detailsArr: Array,
-});
+defineProps<{ detailsArr: string[][] }>();
 </script>
 
 <template>

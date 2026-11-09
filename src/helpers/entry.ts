@@ -1,25 +1,28 @@
 class EntryName {
-  constructor(s) {
+  private readonly reg: RegExp;
+  private readonly name: string;
+
+  constructor(s: string) {
     this.reg = new RegExp("(\uff08.+?\uff09|\uff3b.+?\uff3d|\\(.+?\\)|\\[.+?\\])$");
     this.name = s;
   }
 
-  getBasename() {
+  getBasename(): string {
     const t = this.name.replace(this.reg, "").trim();
     if (this.getReferTo().length) {
       return t
         .split("→")[0]
-        .trim()
-        .replace(/\u3000{1,2}/, "");
+        ?.trim()
+        .replace(/\u3000{1,2}/, "") ?? "";
     }
     return t.replace(/\u3000{1,2}/, "");
   }
 
-  getRefBasename() {
+  getRefBasename(): string {
     return this.name.split("→")[0].trim();
   }
 
-  getSource() {
+  getSource(): string[] {
     const m = this.name.match(this.reg);
     if (m) {
       const inner = m[0].slice(1, -1).trim();
@@ -32,10 +35,10 @@ class EntryName {
     return [];
   }
 
-  getReferTo() {
+  getReferTo(): string {
     const refElems = this.name.split("→").filter((x) => x.trim().length > 0);
     if (refElems.length == 2) {
-      return refElems.at(-1).trim();
+      return refElems.at(-1)?.trim() ?? "";
     }
     return "";
   }
@@ -46,12 +49,24 @@ class EntryName {
  * @class
  */
 export class Entry {
+  readonly rawStr: string;
+  readonly isChild: boolean;
+  readonly separator: string;
+  readonly elems: string[];
+  readonly name: string;
+  readonly basename: string;
+  readonly address: string;
+  readonly getFullname: string;
+  readonly backLink: string[];
+  readonly referTo: string;
+  readonly isReference: boolean;
+
   /**
    * constructor
    * @param {String} s 対象の文字列
    * @param {String} separator 項目名とノンブル間の区切り文字
    */
-  constructor(s, separator = "\u3000\u3000") {
+  constructor(s: string, separator = "\u3000\u3000") {
     /**
      * 元の文字列
      * @type {String} rawStr
@@ -85,7 +100,7 @@ export class Entry {
      */
     this.name = this.getName();
 
-    const enrtyName = new EntryName(this.name);
+    const entryName = new EntryName(this.name);
 
     /**
      * 項目名から括弧を除いた部分。
@@ -94,7 +109,7 @@ export class Entry {
      * - 見よ項目の場合は「見よ元」部分。
      * @type {String}
      */
-    this.basename = enrtyName.getBasename();
+    this.basename = entryName.getBasename();
 
     /**
      * ノンブルの集合部分
@@ -112,39 +127,39 @@ export class Entry {
      * カッコ内に付記された「見よ元」情報
      * @type {String[]}
      */
-    this.backLink = enrtyName.getSource();
+    this.backLink = entryName.getSource();
 
     /**
      * 見よ先
      * @type {String}
      */
-    this.referTo = enrtyName.getReferTo();
+    this.referTo = entryName.getReferTo();
 
     /**
      * 見よ項目かどうか
      * @type {Boolean}
      */
-    this.isReference = this.referTo.length && this.name.length && this.address.length < 1;
+    this.isReference = 0 < this.referTo.length && 0 < this.name.length && this.address.length < 1;
   }
 
   /**
    * 入力文字列を separator で分割した「左側」を返す。
    * @returns String
    */
-  getLeftSide() {
+  getLeftSide(): string {
     if (this.elems.length >= 2) {
       if (this.elems.length > 2) {
         return this.elems.slice(0, -1).join(this.separator);
       }
-      return this.elems[0];
+      return this.elems[0] ?? "";
     }
     if (this.elems.length == 1) {
-      return this.elems[0];
+      return this.elems[0] ?? "";
     }
     return "";
   }
 
-  getName() {
+  getName(): string {
     const t = this.getLeftSide().trim();
     if (t.length < 1) {
       return "";
@@ -156,12 +171,12 @@ export class Entry {
    * 入力文字列を separator で分割した「右側」を返す。
    * @returns String
    */
-  getRightSide() {
+  getRightSide(): string {
     if (this.elems.length >= 2) {
       if (this.elems.length > 2) {
-        return this.elems.at(-1);
+        return this.elems.at(-1) ?? "";
       }
-      return this.elems[1];
+      return this.elems[1] ?? "";
     }
     return "";
   }

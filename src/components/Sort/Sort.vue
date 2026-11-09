@@ -1,16 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
 import beforePath from "@/assets/Sort/before.png";
 import afterPath from "@/assets/Sort/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
-import { arrayOfLines } from "@/helpers/utils.js";
+import { arrayOfLines } from "@/helpers/utils";
 import Normalize from "./Normalize.vue";
 import SortResult from "./SortResult.vue";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 
 import { Sorter } from "@/helpers/sorter";
+
+interface ParsedLine {
+  item: string;
+  reading: string;
+}
 
 const content = ref("");
 const skipHeader = ref(false);
@@ -40,7 +45,7 @@ const parsedLines = computed(() => {
         item: item,
         reading: reading,
       };
-    }).filter(Boolean);
+    }).filter((line): line is ParsedLine => line !== null);
 });
 
 const withHeading = ref(true);
@@ -85,4 +90,3 @@ const sortedArr = computed(() => {
   color: #ccc;
 }
 </style>
-

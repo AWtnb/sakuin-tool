@@ -1,39 +1,36 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
 import IgnorableArea from "@/components/IgnorableArea.vue";
 import LineDiff from "@/components/LineDiff/LineDiff.vue";
 
-import { Entry } from "@/helpers/entry.js";
-import { AddressHandler } from "@/helpers/addressHandler.js";
+import { Entry } from "@/helpers/entry";
+import { AddressHandler } from "@/helpers/addressHandler";
 
 import { arrayOfLines } from "@/helpers/utils";
 
-const props = defineProps({
-  result: String,
-});
+const props = defineProps<{ result: string }>();
 
-const grepInvalidAddress = (s) => {
+const grepInvalidAddress = (s: string): { line: string; origial: string; formatted: string }[] => {
   const lines = arrayOfLines(s);
   return lines
     .filter((x) => String(x).trim())
-    .map((line) => {
+    .flatMap((line) => {
       const entry = new Entry(line);
       const handler = new AddressHandler(entry.address);
       if (handler.unsorted() || handler.unHyphened()) {
         const prefix = entry.name + entry.separator;
-        return {
+        return [{
           line: line,
           origial: prefix + entry.address,
           formatted: prefix + handler.formatAll(),
-        };
+        }];
       }
-      return null;
-    })
-    .filter(Boolean);
+      return [];
+    });
 };
 
-const emits = defineEmits(["checkFinished"]);
+const emits = defineEmits<{ checkFinished: [event: { problem: string; count: number }] }>();
 
 const problems = computed(() => {
   const found = grepInvalidAddress(props.result);

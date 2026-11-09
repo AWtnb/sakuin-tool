@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SectionEnd from "@/components/SectionEnd.vue";
 import CheckChild from "@/components/CheckChild/CheckChild.vue";
 import PlusMinus from "@/components/PlusMinus/PlusMinus.vue";

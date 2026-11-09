@@ -1,31 +1,35 @@
 class Nombre {
-  constructor(s, hyphenated = false) {
+  rawStr: string;
+  hyphenated: boolean;
+  intValue: number;
+
+  constructor(s: string, hyphenated = false) {
     this.rawStr = s.trim();
     this.hyphenated = hyphenated;
     this.intValue = Number(this.rawStr.replace(/[^\d]/g, ""));
   }
 
-  getPrefix() {
+  getPrefix(): string {
     const s = this.rawStr;
-    if (s.length && isNaN(s.at(0))) {
-      return s.split(/\d+/).at(0);
+    if (s.length && Number.isNaN(Number(s.charAt(0)))) {
+      return s.split(/\d+/).at(0) ?? "";
     }
     return "";
   }
 
-  getSuffix() {
+  getSuffix(): string {
     const s = this.rawStr;
-    if (s.length && isNaN(s.at(-1))) {
-      return s.split(/\d+/).at(-1);
+    if (s.length && Number.isNaN(Number(s.charAt(s.length - 1)))) {
+      return s.split(/\d+/).at(-1) ?? "";
     }
     return "";
   }
 
-  adjust(delta) {
+  adjust(delta: number): void {
     this.intValue += Number(delta);
   }
 
-  getText() {
+  getText(): string {
     if (this.hyphenated) {
       return "\u2013";
     }
@@ -35,45 +39,49 @@ class Nombre {
     return this.getPrefix() + String(this.intValue) + this.getSuffix();
   }
 
-  getId() {
+  getId(): string {
     return `text:${this.getText()}-value:${this.intValue}`;
   }
 }
 
 class NombresToAddress {
-  constructor(nombres) {
+  nombres: Nombre[];
+
+  constructor(nombres: Nombre[]) {
     this.nombres = nombres;
   }
 
-  order() {
+  order(): void {
     const ns = this.nombres;
     this.nombres = ns.filter((x) => x.getText()).sort((a, b) => a.intValue - b.intValue);
   }
 
-  unify() {
-    const ns = this.nombres;
-    const stack = [];
-    this.nombres = ns.filter((nbr) => {
-      const id = nbr.getId();
-      if (stack.includes(id)) {
+  unify(): void {
+    const ids = new Set<string>();
+    this.nombres = this.nombres.filter((nombre) => {
+      const id = nombre.getId();
+      if (ids.has(id)) {
         return false;
       }
-      stack.push(id);
+      ids.add(id);
       return true;
     });
   }
 
-  isConsecutiveTriplet(startIdx) {
+  isConsecutiveTriplet(startIdx: number): boolean {
     if (this.nombres.length - 3 < startIdx) {
       return false;
     }
     const focus = this.nombres[startIdx];
     const next1 = this.nombres[startIdx + 1];
     const next2 = this.nombres[startIdx + 2];
+    if (!focus || !next1 || !next2) {
+      return false;
+    }
     return focus.intValue + 1 == next1.intValue && focus.intValue + 2 == next2.intValue && next1.getPrefix().length < 1 && next1.getSuffix().length < 1;
   }
 
-  hyphenate() {
+  hyphenate(): void {
     if (this.nombres.length < 3) {
       return;
     }
@@ -81,10 +89,13 @@ class NombresToAddress {
     for (let i = 0; i < this.nombres.length - 2; i++) {
       this.nombres[i + 1].hyphenated = this.isConsecutiveTriplet(i);
     }
-    this.nombres.at(-1).hyphenated = false;
+    const lastNombre = this.nombres.at(-1);
+    if (lastNombre) {
+      lastNombre.hyphenated = false;
+    }
   }
 
-  getText() {
+  getText(): string {
     return this.nombres
       .map((nbr) => nbr.getText())
       .join(", ")
@@ -93,14 +104,15 @@ class NombresToAddress {
 }
 
 export class AddressHandler {
-  constructor(s) {
-    this.nombres = [];
+  nombres: Nombre[] = [];
+
+  constructor(s: string) {
 
     const sanitized = s
       .replace(/\s/g, "")
       .replace(/\uff0c/g, ",")
       .replace(/[\u002d\u2010\u2011\u2012\u2013\u2014\uFF0D]+/g, "-")
-      .replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, function (m) {
+      .replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, (m) => {
         return String.fromCharCode(m.charCodeAt(0) - 0xfee0);
       });
     sanitized
@@ -116,8 +128,8 @@ export class AddressHandler {
       });
   }
 
-  setRangedNombre(s) {
-    const [start, end, ..._] = s.split("-");
+  setRangedNombre(s: string): void {
+    const [start = "", end = ""] = s.split("-");
     if (start.length && end.length) {
       const startNbr = new Nombre(start, false);
       const endNbr = new Nombre(end, false);
@@ -129,7 +141,7 @@ export class AddressHandler {
     }
   }
 
-  formatAll() {
+  formatAll(): string {
     const n2a = new NombresToAddress(this.nombres);
     n2a.order();
     n2a.unify();
@@ -137,7 +149,7 @@ export class AddressHandler {
     return n2a.getText();
   }
 
-  adjust(start, end, delta) {
+  adjust(start: number, end: number, delta: number): string {
     const newNombres = this.nombres.map((nombre) => {
       if (start <= nombre.intValue && nombre.intValue <= end && start) {
         nombre.adjust(delta);
@@ -148,7 +160,7 @@ export class AddressHandler {
     return n2a.getText();
   }
 
-  unsorted() {
+  unsorted(): boolean {
     if (this.nombres.length < 2) {
       return false;
     }
@@ -160,7 +172,7 @@ export class AddressHandler {
     return false;
   }
 
-  unHyphened() {
+  unHyphened(): boolean {
     if (this.nombres.length < 3) {
       return false;
     }

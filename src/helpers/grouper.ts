@@ -1,7 +1,10 @@
 import { AddressHandler } from "@/helpers/addressHandler";
 
 export class Grouper {
-  constructor(lines, addressOnLeft = false) {
+  linesParsed: { Item: string; Address: string }[];
+  groupedLines: string[] = [];
+
+  constructor(lines: string[], addressOnLeft = false) {
     this.linesParsed = lines
       .filter((line) => line.trim())
       .map((line) => {
@@ -20,19 +23,18 @@ export class Grouper {
           Address: String(elems[1]).trim(),
         };
       });
-    this.groupedLines = [];
   }
 
-  getItems() {
+  getItems(): string[] {
     return this.linesParsed.map((x) => x.Item);
   }
 
-  getAddresses() {
+  getAddresses(): string[] {
     return this.linesParsed.map((x) => x.Address);
   }
 
-  group() {
-    const map = new Map();
+  group(): void {
+    const map = new Map<string, string>();
     this.linesParsed.forEach((lp) => {
       if (map.has(lp.Item)) {
         const concAddress = map.get(lp.Item) + ", " + lp.Address;
@@ -47,8 +49,8 @@ export class Grouper {
     });
   }
 
-  groupByOrder() {
-    const stack = [];
+  groupByOrder(): void {
+    const stack: { Item: string; Address: string }[] = [];
     for (let i = 0; i < this.linesParsed.length; i++) {
       const lp = this.linesParsed[i];
       if (i == 0) {
@@ -75,7 +77,7 @@ export class Grouper {
     });
   }
 
-  getGroupedLines(byOrder = false) {
+  getGroupedLines(byOrder = false): string[] {
     if (byOrder) {
       this.groupByOrder();
     } else {

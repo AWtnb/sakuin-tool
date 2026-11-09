@@ -1,7 +1,25 @@
 import { Entry } from "@/helpers/entry";
 
+export interface ChildCandidate {
+  pre: string;
+  post: string;
+  rest: string;
+}
+
+export interface PossibleEntryGroup {
+  parent: string;
+  children: ChildCandidate[];
+}
+
 class ChildEntry {
-  constructor(s, mode) {
+  name: string;
+  mode: string;
+  modified: boolean;
+  pre: string;
+  post: string;
+  rest: string;
+
+  constructor(s: string, mode: string) {
     this.name = s;
     this.mode = mode;
     this.modified = false;
@@ -10,7 +28,7 @@ class ChildEntry {
     this.post = "";
     this.rest = "";
   }
-  search(target) {
+  search(target: string): void {
     if (this.mode == "all" || this.mode == "head") {
       if (this.name.startsWith(target)) {
         this.pre = target;
@@ -29,7 +47,10 @@ class ChildEntry {
 }
 
 export class CheckChild {
-  constructor(lines, mode = "tail") {
+  readonly mode: string;
+  readonly mainEntries: { name: string; basename: string }[];
+
+  constructor(lines: string[], mode = "tail") {
     this.mode = mode;
     this.mainEntries = lines
       .filter((x) => String(x).trim())
@@ -43,7 +64,7 @@ export class CheckChild {
       });
   }
 
-  findPossibles() {
+  findPossibles(): PossibleEntryGroup[] {
     return this.mainEntries
       .map((entry) => {
         const target = entry.basename;
@@ -57,7 +78,7 @@ export class CheckChild {
             }
             return null;
           })
-          .filter(Boolean);
+          .filter((child): child is ChildEntry => child !== null);
         return {
           parent: entry.name,
           children: possibles,

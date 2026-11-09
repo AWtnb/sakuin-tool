@@ -17,17 +17,11 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import CopyButton from "@/components/CopyButton.vue";
 
-export default {
-  name: "FormattedTable",
-  props: {
-    lines: Array,
-    resultStr: String,
-  },
-  components: {
-    CopyButton,
-  },
-};
+defineProps<{
+  lines: { name: string; nombre: string }[];
+  resultStr: string;
+}>();
 </script>

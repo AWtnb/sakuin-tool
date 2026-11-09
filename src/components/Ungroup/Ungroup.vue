@@ -1,19 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
 import beforePath from "@/assets/Ungroup/before.png";
 import afterPath from "@/assets/Ungroup/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
-import { arrayOfLines } from "@/helpers/utils.js";
-import { AddressHandler } from "@/helpers/addressHandler.js";
-import { Entry } from "@/helpers/entry.js";
+import { arrayOfLines } from "@/helpers/utils";
+import { AddressHandler } from "@/helpers/addressHandler";
+import { Entry } from "@/helpers/entry";
 
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import UngroupedTable from "./UngroupedTable.vue";
 
-const ungroupEntries = (lines) => {
-  const stack = [];
+const ungroupEntries = (lines: string[]): { name: string; nombre: string }[] => {
+  const stack: { name: string; nombre: string }[] = [];
   lines
     .filter((line) => line.trim())
     .map((line) => line.replace("\t", "\u3000\u3000"))
@@ -63,4 +63,3 @@ const resultStr = computed(() => {
 
   <UngroupedTable :lines="ungroupedLines" :resultStr="resultStr" />
 </template>
-

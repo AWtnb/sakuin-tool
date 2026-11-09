@@ -1,12 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
-import { arrayOfLines } from "@/helpers/utils.js";
-import { OldIndexLine } from "@/helpers/oldIndexLine.js";
+import { arrayOfLines } from "@/helpers/utils";
+import { OldIndexLine } from "@/helpers/oldIndexLine";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
-const formatOldIndex = (lines) => {
+const formatOldIndex = (lines: string[]): { formatted: string; original: string }[] => {
   return lines
     .map((line) => String(line).trimEnd().replace(/\t/, "\u3000\u3000"))
     .map((line) => {
@@ -93,4 +93,3 @@ const message = computed(() => {
   color: red;
 }
 </style>
-

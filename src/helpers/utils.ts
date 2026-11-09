@@ -1,24 +1,24 @@
-export const toHalfWidth = (str) => {
-  return str.replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, function (s) {
+export const toHalfWidth = (str: string): string => {
+  return str.replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, (s) => {
     return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
   });
 };
 
-export const toKatakana = (str) => {
-  return str.replace(/[\u3041-\u3096]/g, function (match) {
+export const toKatakana = (str: string): string => {
+  return str.replace(/[\u3041-\u3096]/g, (match) => {
     const chr = match.charCodeAt(0) + 0x60;
     return String.fromCharCode(chr);
   });
 };
 
-export const toHiragana = (str) => {
-  return str.replace(/[\u30a1-\u30f6]/g, function (match) {
+export const toHiragana = (str: string): string => {
+  return str.replace(/[\u30a1-\u30f6]/g, (match) => {
     const chr = match.charCodeAt(0) - 0x60;
     return String.fromCharCode(chr);
   });
 };
 
-const convertMap = new Map();
+const convertMap = new Map<string, string>();
 [
   ["ァ", "ア"],
   ["ィ", "イ"],
@@ -56,12 +56,12 @@ const convertMap = new Map();
   ["ュ", "ユ"],
   ["ョ", "ヨ"],
   ["ー", ""],
-].forEach((x) => convertMap.set(...x));
+].forEach(([source, replacement]) => convertMap.set(source, replacement));
 
-export const normalizeReading = (s, removeNoise) => {
+export const normalizeReading = (s: string, removeNoise = false): string => {
   let katakana = toHalfWidth(toKatakana(s));
-  for (let k of convertMap.keys()) {
-    katakana = katakana.replaceAll(k, convertMap.get(k));
+  for (const [source, replacement] of convertMap) {
+    katakana = katakana.replaceAll(source, replacement);
   }
   if (removeNoise) {
     return katakana.replace(/[^ァ-ヴa-zA-Z\uff41-\uff5a\uff21-\uff3a0-9\uff10-\uff19\r\n]/g, "");
@@ -69,7 +69,7 @@ export const normalizeReading = (s, removeNoise) => {
   return katakana;
 };
 
-export const arrayOfLines = (str) => {
+export const arrayOfLines = (str: string): string[] => {
   if (str.length < 1) {
     return [];
   }

@@ -2,7 +2,7 @@
   <button @click="copy" :class="{ done: copied }">コピー</button>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "CopyButton",
   props: {

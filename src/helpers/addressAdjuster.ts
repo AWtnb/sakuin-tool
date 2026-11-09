@@ -1,14 +1,18 @@
-import { Entry } from "@/helpers/entry.js";
-import { AddressHandler } from "@/helpers/addressHandler.js";
+import { Entry } from "@/helpers/entry";
+import { AddressHandler } from "@/helpers/addressHandler";
 
 export class AddressAdjuster {
-  constructor(start, end, delta) {
+  readonly start: number;
+  readonly end: number;
+  readonly delta: number;
+
+  constructor(start: number | string, end: number | string, delta: number | string) {
     this.start = Number(start);
     this.end = Number(end);
     this.delta = Number(delta);
   }
 
-  apply(lines) {
+  apply(lines: string[]): { origin: string; adjusted: string; isModified: boolean }[] {
     return lines.map((line) => {
       const entry = new Entry(line);
       const handler = new AddressHandler(entry.address);

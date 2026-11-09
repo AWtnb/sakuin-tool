@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { reactive, ref, computed } from "vue";
 
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
@@ -12,8 +12,8 @@ import CheckAddress from "./CheckAddress.vue";
 
 const content = ref("");
 
-const problemMap = reactive(new Map());
-const storeProblem = (evt) => {
+const problemMap = reactive(new Map<string, number>());
+const storeProblem = (evt: { problem: string; count: number }) => {
   problemMap.set(evt.problem, evt.count);
 };
 

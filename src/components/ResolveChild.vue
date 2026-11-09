@@ -1,21 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
 import beforePath from "@/assets/ResolveChild/before.png";
 import afterPath from "@/assets/ResolveChild/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
-import { arrayOfLines } from "@/helpers/utils.js";
-import { Entry } from "@/helpers/entry.js";
+import { arrayOfLines } from "@/helpers/utils";
+import { Entry } from "@/helpers/entry";
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import ResultBox from "@/components/ResultBox.vue";
 
-const resolveChildEntry = (lines) => {
+const resolveChildEntry = (lines: string[]): string[] => {
   if (lines.length < 1) {
     return [];
   }
-  const stack = [];
-  const parentStack = [];
+  const stack: string[] = [];
+  const parentStack: string[] = [];
   stack.push(lines[0]);
   parentStack.push(new Entry(lines[0]).basename);
   for (let i = 1; i < lines.length; i++) {
@@ -63,4 +63,3 @@ const resultStr = computed(() => {
 
   <ResultBox :result="resultStr" />
 </template>
-

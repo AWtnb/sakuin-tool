@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SectionEnd from "@/components/SectionEnd.vue";
 import CheckFormat from "@/components/CheckFormat/CheckFormat.vue";
 </script>

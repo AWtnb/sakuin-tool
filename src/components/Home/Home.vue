@@ -15,7 +15,7 @@
 
 </template>
 
-<script>
+<script lang="ts">
 import Definition from "./Definition.vue";
 import Steps from "./Steps.vue";
 export default {

@@ -2,7 +2,7 @@
   <i class="gg-home"></i>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "HomeIcon",
 };

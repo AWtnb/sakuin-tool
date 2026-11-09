@@ -1,8 +1,13 @@
-import { arrayOfLines } from "@/helpers/utils.js";
+import { arrayOfLines } from "@/helpers/utils";
 import { Entry } from "@/helpers/entry";
 
 export class GroupChecker {
-  constructor(s) {
+  entries: Entry[];
+  refs: Entry[];
+  nonRefs: Entry[];
+  mainEntries: Entry[];
+
+  constructor(s: string) {
     const lines = arrayOfLines(s);
     this.entries = lines.filter((x) => String(x).trim()).map((line) => new Entry(line));
     this.refs = this.entries.filter((entry) => entry.isReference);
@@ -14,8 +19,8 @@ export class GroupChecker {
    * basename が同じものが2つ以上ないか（括弧の有無だけで別項目扱いになっていないか）探す
    * @returns Array
    */
-  getUngrouped() {
-    const stack = [];
+  getUngrouped(): string[][] {
+    const stack: string[][] = [];
     this.mainEntries.forEach((entry) => {
       const target = entry.basename;
       const grep = this.mainEntries.filter((ent) => ent.basename == target).map((ent) => ent.rawStr);
@@ -34,7 +39,7 @@ export class GroupChecker {
    * 本項目として残っている見よ項目を探す
    * @returns Array
    */
-  getConflicting() {
+  getConflicting(): string[][] {
     return this.refs
       .map((entry) => {
         const target = entry.basename;
@@ -44,6 +49,6 @@ export class GroupChecker {
         }
         return [entry.name].concat(grep.map((e) => e.rawStr));
       })
-      .filter(Boolean);
+      .filter((conflict): conflict is string[] => conflict !== null);
   }
 }

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
 import DuplicateTable from "./DuplicateTable.vue";
@@ -6,11 +6,9 @@ import IgnorableArea from "@/components/IgnorableArea.vue";
 
 import { GroupChecker } from "@/helpers/groupChecker";
 
-const props = defineProps({
-  result: String,
-});
+const props = defineProps<{ result: string }>();
 
-const emits = defineEmits(["checkFinished"]);
+const emits = defineEmits<{ checkFinished: [event: { problem: string; count: number }] }>();
 
 const ungrouped = computed(() => {
   const checker = new GroupChecker(props.result);
@@ -31,4 +29,3 @@ const ungrouped = computed(() => {
     </IgnorableArea>
   </div>
 </template>
-

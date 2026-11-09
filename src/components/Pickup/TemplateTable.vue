@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import CopyButton from "@/components/CopyButton.vue";
 
-const props = defineProps({
-  rows: Array,
-  resultStr: String,
-});
+defineProps<{
+  rows: { id: number; idx: number; nombre: number }[];
+  resultStr: string;
+}>();
 </script>
 
 <template>

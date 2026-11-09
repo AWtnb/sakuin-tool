@@ -1,17 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
 import beforePath from "@/assets/Preformat/before.png";
 import afterPath from "@/assets/Preformat/after.png";
 import BeforeAfter from "@/components/BeforeAfter.vue";
 
-import { toHalfWidth, arrayOfLines } from "@/helpers/utils.js";
+import { toHalfWidth, arrayOfLines } from "@/helpers/utils";
 
 import SimpleTextarea from "@/components/SimpleTextarea.vue";
 import FormattedTable from "./FormattedTable.vue";
 
-const formatIndexTemplate = (lines) => {
-  const stack = [];
+const formatIndexTemplate = (lines: string[]): { nombre: string; name: string }[] => {
+  const stack: { nombre: string; name: string }[] = [];
   lines
     .filter((x) => x.trim())
     .map((line) => line.split("\t"))
@@ -86,4 +86,3 @@ const resultStr = computed(() => {
 
   <FormattedTable :lines="tableRows" :resultStr="resultStr" />
 </template>
-

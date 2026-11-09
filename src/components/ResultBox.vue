@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import CopyButton from "@/components/CopyButton.vue";
 
 export default {

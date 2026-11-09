@@ -1,8 +1,5 @@
-<script setup>
-const props = defineProps({
-  state: Number,
-  text: String,
-});
+<script setup lang="ts">
+const props = defineProps<{ state: number; text: string }>();
 </script>
 
 <template>

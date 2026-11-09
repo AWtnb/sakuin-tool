@@ -1,15 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
 import IgnorableArea from "@/components/IgnorableArea.vue";
 import SimpleList from "@/components/SimpleList.vue";
 import { ReferenceChecker } from "@/helpers/referenceChecker";
 
-const props = defineProps({
-  result: String,
-});
+const props = defineProps<{ result: string }>();
 
-const emits = defineEmits(["checkFinished"]);
+const emits = defineEmits<{ checkFinished: [event: { problem: string; count: number }] }>();
 
 const missingRefs = computed(() => {
   const checker = new ReferenceChecker(props.result);

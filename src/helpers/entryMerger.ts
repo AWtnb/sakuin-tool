@@ -1,7 +1,7 @@
-import { Entry } from "@/helpers/entry.js";
+import { Entry } from "@/helpers/entry";
 import { AddressHandler } from "@/helpers/addressHandler";
 
-const getLonger = (strA, strB) => {
+const getLonger = (strA: string, strB: string): string => {
   if (strA.length < strB.length) {
     return strB;
   }
@@ -12,11 +12,13 @@ const getLonger = (strA, strB) => {
 };
 
 export class EntryMerger {
-  constructor(line) {
+  private readonly entry: Entry;
+
+  constructor(line: string) {
     this.entry = new Entry(line);
   }
 
-  with(line) {
+  with(line: string): string {
     const additionalEntry = new Entry(line);
     const newName = this.entry.name.length == additionalEntry.name.length ? this.entry.name : getLonger(this.entry.name, additionalEntry.name);
     const newAddress = this.entry.address + ", " + additionalEntry.address;
