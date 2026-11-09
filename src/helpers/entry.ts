@@ -3,17 +3,21 @@ class EntryName {
   private readonly name: string;
 
   constructor(s: string) {
-    this.reg = new RegExp("(\uff08.+?\uff09|\uff3b.+?\uff3d|\\(.+?\\)|\\[.+?\\])$");
+    this.reg = new RegExp(
+      "(\uff08.+?\uff09|\uff3b.+?\uff3d|\\(.+?\\)|\\[.+?\\])$",
+    );
     this.name = s;
   }
 
   getBasename(): string {
     const t = this.name.replace(this.reg, "").trim();
     if (this.getReferTo().length) {
-      return t
-        .split("→")[0]
-        ?.trim()
-        .replace(/\u3000{1,2}/, "") ?? "";
+      return (
+        t
+          .split("→")[0]
+          ?.trim()
+          .replace(/\u3000{1,2}/, "") ?? ""
+      );
     }
     return t.replace(/\u3000{1,2}/, "");
   }
@@ -66,7 +70,7 @@ export class Entry {
    * @param {String} s 対象の文字列
    * @param {String} separator 項目名とノンブル間の区切り文字
    */
-  constructor(s: string, separator = "\u3000\u3000") {
+  constructor(s: string, separator: string = "\u3000\u3000") {
     /**
      * 元の文字列
      * @type {String} rawStr
@@ -139,7 +143,10 @@ export class Entry {
      * 見よ項目かどうか
      * @type {Boolean}
      */
-    this.isReference = 0 < this.referTo.length && 0 < this.name.length && this.address.length < 1;
+    this.isReference =
+      0 < this.referTo.length &&
+      0 < this.name.length &&
+      this.address.length < 1;
   }
 
   /**

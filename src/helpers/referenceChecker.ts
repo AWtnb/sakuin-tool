@@ -1,15 +1,20 @@
 import { Entry } from "@/helpers/entry";
 import { arrayOfLines } from "@/helpers/utils";
 
+type MissingBackLinkIssue = { problem: string; require: string };
+type MissingRefIssue = { problem: string; require: string[] };
+
 export class ReferenceChecker {
-  entries: Entry[];
-  refs: Entry[];
-  nonRefs: Entry[];
-  referred: Entry[];
+  readonly entries: Entry[];
+  readonly refs: Entry[];
+  readonly nonRefs: Entry[];
+  readonly referred: Entry[];
 
   constructor(s: string) {
     const lines = arrayOfLines(s);
-    this.entries = lines.filter((x) => String(x).trim()).map((line) => new Entry(line));
+    this.entries = lines
+      .filter((line) => String(line).trim())
+      .map((line) => new Entry(line));
     this.refs = this.entries.filter((entry) => entry.isReference);
     this.nonRefs = this.entries.filter((entry) => !entry.isReference);
     this.referred = this.entries.filter((entry) => entry.backLink.length > 0);
@@ -18,42 +23,38 @@ export class ReferenceChecker {
   /**
    * 見よ項目があるのに参照先に括弧で付記されていないものを探す
    */
-  findMissingBackLink(): { problem: string; require: string }[] {
+  findMissingBackLink(): MissingBackLinkIssue[] {
     return this.refs
       .map((ref) => {
-        const grep = this.nonRefs.filter((entry) => {
-          return entry.basename == ref.referTo && entry.backLink.includes(ref.basename);
-        });
-        if (grep.length > 0) {
+        if (this.hasMatchingBackLink(ref)) {
           return null;
         }
+
         return {
           problem: ref.name,
-          require: `${ref.referTo}\uff08${ref.basename}\uff09`,
+          require: `${ref.referTo}（${ref.basename}）`,
         };
       })
-      .filter((result): result is { problem: string; require: string } => result !== null);
+      .filter((result): result is MissingBackLinkIssue => result !== null);
   }
 
   /**
    * 参照元として括弧書きされているのに見よ項目がないものを探す
    */
-  findMissingRefs(): { problem: string; require: string[] }[] {
+  findMissingRefs(): MissingRefIssue[] {
     return this.referred
-      .map((refed) => {
-        const required = refed.backLink.filter((s) => {
-          const correctRefs = this.refs.filter((entry) => entry.basename == s && entry.referTo == refed.basename);
-          return correctRefs.length < 1;
-        });
+      .map((entry) => {
+        const required = this.getMissingReferences(entry);
         if (required.length < 1) {
           return null;
         }
+
         return {
-          problem: refed.name,
-          require: required.map((s) => `${s}\u3000\u2192${refed.basename}`),
+          problem: entry.name,
+          require: required.map((source) => `${source}　→${entry.basename}`),
         };
       })
-      .filter((result): result is { problem: string; require: string[] } => result !== null);
+      .filter((result): result is MissingRefIssue => result !== null);
   }
 
   /**
@@ -61,19 +62,38 @@ export class ReferenceChecker {
    */
   findAdjacent(): string[] {
     const stack: Entry[] = [];
-    this.entries.forEach((entry, idx) => {
+
+    this.entries.forEach((entry, index) => {
       // filter で要素数を減らしてしまうとインデックスで参照できなくなるので注意
-      if (entry.isReference) {
-        const previous = this.entries[idx - 1];
-        if (previous && !previous.isReference && previous.backLink.includes(entry.basename)) {
-          stack.push(entry);
-        }
-        const next = this.entries[idx + 1];
-        if (next && !next.isReference && next.backLink.includes(entry.basename)) {
-          stack.push(entry);
-        }
+      if (!entry.isReference) {
+        return;
+      }
+
+      const previous = this.entries[index - 1];
+      if (previous && !previous.isReference && previous.backLink.includes(entry.basename)) {
+        stack.push(entry);
+      }
+
+      const next = this.entries[index + 1];
+      if (next && !next.isReference && next.backLink.includes(entry.basename)) {
+        stack.push(entry);
       }
     });
+
     return stack.map((entry) => entry.name);
+  }
+
+  private hasMatchingBackLink(ref: Entry): boolean {
+    return this.nonRefs.some(
+      (entry) => entry.basename === ref.referTo && entry.backLink.includes(ref.basename),
+    );
+  }
+
+  private getMissingReferences(entry: Entry): string[] {
+    return entry.backLink.filter((source) => {
+      return !this.refs.some(
+        (ref) => ref.basename === source && ref.referTo === entry.basename,
+      );
+    });
   }
 }
